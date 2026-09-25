@@ -33,10 +33,10 @@ public sealed class FsmCosTests
         public TestBundle(ulong id, params BundleRequest[] dependencies) => (_dependencies, Id) = (dependencies, id);
         public ulong Id { get; }
         public IReadOnlyList<BundleRequest> Dependencies => _dependencies;
-        public Memory<byte> Configuration { get; private set; }
+        public ReadOnlyMemory<byte> Configuration { get; private set; }
         public int ChangesRemaining { get; set; }
         public int ArbitrationCalls { get; private set; }
-        public void Load(MicroBundleLoadContext context) => Configuration = context.TryGetConfiguration(Id, out var value) ? value.ToArray() : ReadOnlyMemory<byte>.Empty;
+        public void Load(MicroBundleLoadContext context) => Configuration = context.TryGetConfiguration(Id, out var value) ? value : ReadOnlyMemory<byte>.Empty;
         public bool Arbitrate(ArbitrationContext context, int roundIndex) { ArbitrationCalls++; if (ChangesRemaining <= 0) return false; ChangesRemaining--; return true; }
     }
 }
