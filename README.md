@@ -2,116 +2,109 @@
 
 **FSM_COS is the composition system.**
 
-It takes a runtime manifest and assembles the MicroBundles, FSM infrastructure, dependencies, configuration, and execution components required by that manifest.
+It takes a runtime manifest and assembles the MicroBundles, dependencies, configuration, and runtime components required by that manifest.
 
-The intended host surface is deliberately small:
+    FSM_COS.Execute(manifest);
 
-```csharp
-FSM_COS.Execute(manifest);
-```
+The same semantic manifest can be assembled by WebForge/WebPage, AnyApp, Desktop Forge, or another host.
 
-The same semantic manifest should be executable by WebForge/WebPage, AnyApp, Desktop Forge, or another host.
+## The assembly boundary
 
-## Position in the stack
+    Runtime Manifest
+          │
+          ▼
+       FSM_COS
+          │
+          ├── resolve MicroBundles
+          ├── resolve dependencies
+          ├── propagate configuration
+          ├── load/install bundles
+          ├── arbitrate toward convergence
+          ▼
+     RuntimeAssembly
 
-```text
-Runtime Manifest
-      │
-      ▼
-   FSM_COS                 composition / assembly
-      │
-      ├── MicroBundles
-      ├── FSM_Layer
-      └── runtime resources
-             │
-             ▼
-          FSM_API
-             │
-             ▼
-      assembled runtime
-```
+FSM_COS is the crane that assembles the machine. It does not become the machine.
 
-FSM_COS is **not** the Experience, renderer, application, web server, or state-machine implementation. It is the crane/factory that assembles what the manifest requests.
+## How it uses the surrounding architecture
+
+| System | Relationship to FSM_COS |
+|---|---|
+| FSM_API | behavioral substrate used by assembled runtimes |
+| FSM_Layer | higher-level composition of FSM primitives when present |
+| MicroBundle | focused unit supplied to the composition |
+| Warehouse | storage/delivery source that can back resolution |
+| Experience | runtime environment represented or made available by the assembly |
+| WebForge | browser manifestation of the assembled result |
+| AnyApp | local host of an assembled runtime |
+| MyVR / Domain | environment in which Experiences are encountered |
+
+FSM_COS does not reimplement these systems. It connects the pieces required by a manifest.
 
 ## The manifest is the center
 
-The manifest is the artifact that says: **this is the runtime I need; assemble it.**
+The RuntimeManifest is the published request for a runtime.
 
-The first alpha keeps the representation understandable. As the Warehouse and runtime architecture mature, the manifest can become progressively more compact and baked.
+Authoring systems may know rich names, ontology, variants, dependencies, provenance, and visual/editor relationships. Those can be validated and baked into compact IDs and configuration before runtime.
 
-The intended path is:
+FSM_COS consumes the resulting machine-oriented request.
 
-```text
-editor intent
-    ↓
-published manifest
-    ↓
-FSM_COS.Execute(manifest)
-    ↓
-resolve → load → configure → arbitrate → assemble
-    ↓
-RuntimeAssembly
-```
+See [Runtime Manifest Theory](docs/MANIFEST_THEORY.md).
 
-Human-readable names belong primarily to authoring/editor time. The runtime path is intended to converge on IDs and compact data.
+## Composition
 
-## MicroBundles
+FSM_COS owns this sequence:
 
-MicroBundles are loaded **because the manifest requires them**.
+1. resolve requested bundles;
+2. resolve their dependency closure;
+3. propagate request configuration;
+4. load each bundle after its dependencies;
+5. arbitrate across the complete loaded set;
+6. return RuntimeAssembly.
 
-Composition owns:
+Configuration is opaque to FSM_COS. The bundle that owns a payload interprets it. This is the foundation for entangled dependency composition.
 
-1. resolving requested MicroBundles;
-2. resolving dependencies;
-3. passing configuration into dependencies;
-4. installing/loading bundles;
-5. running bounded arbitration/convergence;
-6. producing the assembled runtime.
+See [Architecture](docs/ARCHITECTURE.md) and [Arbitration](docs/ARBITRATION.md).
 
-This is where the **entangled dependency** concept belongs: a dependency is not merely a name. A parent can request a dependency together with configuration that must be present when that dependency loads.
+## Convergence
+
+Loading establishes the initial composition. Arbitration lets the installed set reconcile itself.
+
+    load → round → changed? → round → stable
+
+The current maximum is ten rounds. If the composition does not converge, FSM_COS fails rather than returning an unstable assembly.
+
+See [FSM_COS Theory](docs/THEORY.md).
 
 ## Host independence
 
-```csharp
-var assembly = cos.Execute(manifest);
-```
+    RuntimeManifest → FSM_COS → RuntimeAssembly
+                              │
+                 ┌────────────┼────────────┐
+                 ▼            ▼            ▼
+              WebForge      AnyApp     MyVR / Domain
 
-WebForge/WebPage can manifest that assembly in a browser. AnyApp can host it locally. Desktop Forge can assemble the same semantic runtime natively. MyVR/Domain can provide the environment in which the resulting Experience is encountered.
+Composition is not manifestation. A host decides how the assembled runtime is executed and encountered.
 
-The composition contract remains the same.
+## Alpha 1 boundary
 
-## Design boundary
+    manifest
+      → bundle resolution
+      → dependency resolution
+      → configured loading
+      → arbitration
+      → RuntimeAssembly
 
-| System | Responsibility |
-|---|---|
-| FSM_API | state machines and processing primitives |
-| FSM_Layer | composition of FSM primitives into higher-level runtime behavior |
-| FSM_COS | assemble the requested runtime from its manifest |
-| MicroBundle | focused capability/content/behavior unit |
-| Warehouse | storage and delivery of runtime data |
-| AnyApp | local host of an assembled Experience |
-| WebForge | browser/web manifestation and proving ground |
-| MyVR / Domain | environment in which Experiences are encountered |
+Execution scheduling, Warehouse allocation, MetaDev adaptation, rendering, networking, and domain-specific behavior remain outside the core until their composition contracts require them.
 
-FSM_COS should remain focused on **assembly**. It should not become a general-purpose application framework.
+FSM_COS should remain the assembly system, not become a general-purpose application framework.
 
-## Alpha 1 vertical slice
+## Documentation
 
-```text
-manifest
-  → bundle resolution
-  → dependency resolution
-  → configured loading
-  → arbitration
-  → RuntimeAssembly
-```
-
-Execution scheduling, Warehouse allocation, MetaDev adaptation, rendering, networking, and domain-specific behavior stay outside the core until the composition contract requires them.
+- [FSM_COS Theory](docs/THEORY.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Runtime Manifest Theory](docs/MANIFEST_THEORY.md)
+- [Arbitration and Convergence](docs/ARBITRATION.md)
 
 ## Package
 
-`TheSingularityWorkshop.FSM_COS`
-
-Target framework: .NET 8.
-
-License: MIT.
+`TheSingularityWorkshop.FSM_COS` · .NET 8 · MIT
