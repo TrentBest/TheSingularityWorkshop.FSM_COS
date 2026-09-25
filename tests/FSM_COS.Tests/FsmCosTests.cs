@@ -1,3 +1,4 @@
+using Xunit;
 using TheSingularityWorkshop.FSM_COS;
 namespace FSM_COS.Tests;
 public sealed class FsmCosTests
