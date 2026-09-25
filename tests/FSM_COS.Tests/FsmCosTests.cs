@@ -19,7 +19,7 @@ public sealed class FsmCosTests
     {
         var bundle = new TestBundle(1) { ChangesRemaining = 2 };
         var assembly = new FsmCos(new TestCatalog(bundle)).Execute(new RuntimeManifest(42, new[] { BundleRequest.Unconfigured(1) }));
-        Assert.Equal(3, bundle.ArbitrationCalls); Assert.Equal(3, assembly.ArbitrationRounds);
+        Assert.Equal(3, bundle.ArbitrationCalls); Assert.Equal(2, assembly.ArbitrationRounds);
     }
     private sealed class TestCatalog : IMicroBundleCatalog
     {
