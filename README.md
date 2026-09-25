@@ -263,7 +263,7 @@ This repository carries its own architecture and theory. The documents here desc
 **Target:** .NET 8  
 **License:** MIT
 
-The package is published to The Singularity Workshop's GitHub Packages feed by the repository's Actions workflow.
+The package is published to The Singularity Workshop's GitHub Packages feed and NuGet.org by the repository's Actions workflow.
 
 ## Design invariant
 
