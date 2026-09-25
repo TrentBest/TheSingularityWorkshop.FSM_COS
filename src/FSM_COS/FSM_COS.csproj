@@ -10,14 +10,19 @@
     <Company>The Singularity Workshop</Company>
     <Description>Runtime composition substrate for assembling Experiences from FSM infrastructure and MicroBundles.</Description>
     <PackageTags>FSM;runtime;composition;microbundle;experience</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="TheSingularityWorkshop.FSM_API" Version="1.0.13" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="../../docs/*.md" Link="Documentation/%(Filename)%(Extension)" />
+    <None Include="../../README.md" Pack="true" PackagePath="" />
+    <None Include="../../LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="../../docs/*.md" Pack="true" PackagePath="docs/" />
   </ItemGroup>
 </Project>
