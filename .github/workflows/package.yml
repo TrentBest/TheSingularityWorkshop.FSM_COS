@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: read
-  packages: write
 
 jobs:
   package:
@@ -25,11 +24,48 @@ jobs:
       - name: Restore
         run: dotnet restore TheSingularityWorkshop.FSM_COS.sln
 
-      - name: Test
-        run: dotnet test TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore
+      - name: Test with coverage
+        run: dotnet test TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./TestResults/**/coverage.cobertura.xml
+          fail_ci_if_error: true
 
       - name: Pack
         run: dotnet pack src/FSM_COS/FSM_COS.csproj --configuration Release --no-restore --output ./artifacts
 
+      - name: Upload NuGet packages as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fsm-cos-nuget-package
+          path: ./artifacts/*.nupkg
+
       - name: Publish to GitHub Packages
         run: dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/TrentBest/index.json" --api-key "${{ secrets.GITHUB_TOKEN }}" --skip-duplicate
+
+  publish_nuget:
+    needs: package
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v4
+        with:
+          name: fsm-cos-nuget-package
+          path: ./artifacts
+
+      - name: Authenticate with NuGet Trusted Publishing
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: TheSingularityWorkshop
+
+      - name: Publish package to NuGet.org
+        run: dotnet nuget push "./artifacts/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
