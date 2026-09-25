@@ -25,7 +25,7 @@ jobs:
         run: dotnet restore TheSingularityWorkshop.FSM_COS.sln
 
       - name: Test with coverage
-        run: dotnet test TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore --collect:"XPlat Code Coverage" --results-directory ./TestResults
+        run: dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --configuration Release --no-restore --collect:"XPlat Code Coverage;Format=cobertura" --results-directory ./TestResults
 
       - name: Prepare coverage report
         shell: bash
