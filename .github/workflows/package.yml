@@ -27,11 +27,24 @@ jobs:
       - name: Test with coverage
         run: dotnet test TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore --collect:"XPlat Code Coverage" --results-directory ./TestResults
 
+      - name: Prepare coverage report
+        shell: bash
+        run: |
+          coverage_file="$(find ./TestResults -type f -name 'coverage.cobertura.xml' -print -quit)"
+          if [[ -z "$coverage_file" ]]; then
+            echo "No coverage.cobertura.xml file was produced."
+            find ./TestResults -maxdepth 4 -type f -print || true
+            exit 1
+          fi
+          cp "$coverage_file" ./TestResults/coverage.cobertura.xml
+          echo "Prepared coverage report: $coverage_file"
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./TestResults/**/coverage.cobertura.xml
+          slug: TrentBest/TheSingularityWorkshop.FSM_COS
+          files: ./TestResults/coverage.cobertura.xml
           fail_ci_if_error: true
 
       - name: Pack
