@@ -16,4 +16,8 @@
   <ItemGroup>
     <PackageReference Include="TheSingularityWorkshop.FSM_API" Version="1.0.13" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../docs/*.md" Link="Documentation/%(Filename)%(Extension)" />
+  </ItemGroup>
 </Project>
