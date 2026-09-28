@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 700">
+<defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#070b12"/><stop offset="1" stop-color="#111827"/></linearGradient></defs>
+<rect width="1400" height="700" rx="26" fill="url(#bg)"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<text x="70" y="70" fill="#fff" font-size="34" font-weight="700" letter-spacing="3">DEPENDENCY CLOSURE</text>
+<text x="72" y="101" fill="#76cfff" font-size="15" letter-spacing="2">DECLARATIVE REQUEST → ORDERED INSTALLATION</text>
+<g stroke="#31465b" stroke-width="2">
+<rect x="80" y="170" width="520" height="390" rx="24" fill="#0e1622"/>
+<rect x="800" y="170" width="520" height="390" rx="24" fill="#0e1622"/>
+</g>
+<g fill="#fff" text-anchor="middle">
+<text x="340" y="215" font-size="22" font-weight="700">REQUESTED GRAPH</text>
+<text x="1060" y="215" font-size="22" font-weight="700">INSTALLATION ORDER</text>
+</g>
+<g stroke="#76cfff" stroke-width="3" fill="#101925">
+<circle cx="340" cy="285" r="42"/><circle cx="220" cy="395" r="42"/><circle cx="460" cy="395" r="42"/><circle cx="220" cy="500" r="42"/>
+<path d="M312 313L248 368M368 313L432 368M220 437V458"/>
+</g>
+<g fill="#fff" font-size="22" text-anchor="middle" font-weight="700"><text x="340" y="293">A</text><text x="220" y="403">B</text><text x="460" y="403">D</text><text x="220" y="508">C</text></g>
+<g stroke="#ffb84d" stroke-width="3" fill="#111d29">
+<rect x="855" y="250" width="410" height="58" rx="14"/><rect x="855" y="335" width="410" height="58" rx="14"/><rect x="855" y="420" width="410" height="58" rx="14"/><rect x="855" y="505" width="410" height="58" rx="14"/>
+</g>
+<g fill="#fff" font-size="18" text-anchor="middle"><text x="1060" y="287">01 · C — dependency</text><text x="1060" y="372">02 · B — dependency</text><text x="1060" y="457">03 · D — dependency</text><text x="1060" y="542">04 · A — root request</text></g>
+<g fill="#8fa7bc" font-size="15">
+<text x="105" y="610">Depth-first resolution • duplicate IDs skipped • active IDs detect cycles</text>
+<text x="815" y="610">Dependencies load before the bundle that requested them.</text>
+</g>
+<text x="70" y="660" fill="#6e8499" font-size="14" letter-spacing="2">CYCLE = COMPOSITION ERROR • MISSING BUNDLE = COMPOSITION ERROR • NO GUESSING</text>
+</g></svg>
