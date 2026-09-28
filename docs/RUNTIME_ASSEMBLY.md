@@ -1,5 +1,7 @@
 # RuntimeAssembly
 
+> RuntimeAssembly is where FSM_COS stops owning the journey. The deeper rationale is in [FSM_COS Theory](THEORY.md#9-runtimeassembly-is-the-handoff-object).
+
 **RuntimeAssembly is the handoff object produced by FSM_COS.**
 
 ![RuntimeAssembly handoff](assets/runtime-assembly-handoff.svg)
