@@ -1,5 +1,7 @@
 # MicroBundles
 
+> A MicroBundle is a composition unit, not an application. See [FSM_COS Theory](THEORY.md#5-microbundles-are-composition-units) for the architectural reason.
+
 A **MicroBundle** is a focused unit that participates in runtime composition.
 
 “Micro” describes the **focus of responsibility**, not a promise about byte size.
