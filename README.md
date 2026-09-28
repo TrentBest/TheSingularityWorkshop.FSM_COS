@@ -35,6 +35,42 @@ RuntimeAssembly
 
 > **FSM_COS is the crane that assembles the machine. It does not become the machine.**
 
+## What FSM_COS actually is
+
+<p align="center">
+  <img src="docs/assets/fsm-cos-system.svg" alt="FSM_COS composition kernel between authoring and host manifestation">
+</p>
+
+FSM_COS is not simply a bundle loader. It is the **composition kernel**: the layer that turns a published runtime request into a stable assembled composition.
+
+The central distinction is:
+
+> **The manifest says what is requested. FSM_COS determines what must exist together. RuntimeAssembly says that composition is ready for handoff. The host decides what happens next.**
+
+The deeper explanation lives in [FSM_COS Theory](docs/THEORY.md). The README uses that theory as a map and links into it repeatedly so the implementation and the architectural model stay connected.
+
+### The composition boundary
+
+```text
+authoring intent
+      ↓
+Runtime Manifest
+      ↓
+    FSM_COS
+      ├── dependency closure
+      ├── configuration propagation
+      ├── configured loading
+      └── arbitration / convergence
+      ↓
+RuntimeAssembly
+      ↓
+host / manifestation
+```
+
+**FSM_COS assembles the system. It does not become the system.**
+
+See [Theory — what “composition of systems” means](docs/THEORY.md#1-what-does-composition-of-systems-mean) and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md).
+
 ## Why this repository exists
 
 FSM_COS is the repository for the **composition-of-systems boundary** in The Singularity Workshop architecture.
@@ -91,6 +127,8 @@ Those concerns can become inputs, providers, or later composition layers without
 
 The documentation diagrams are deliberately architecture-first: they show where responsibility lives, what crosses the FSM_COS boundary, and where composition stops.
 
+- [FSM_COS system overview](docs/assets/fsm-cos-system.svg)
+- [Composition boundary](docs/assets/composition-boundary.svg)
 - [Composition overview](docs/assets/fsm-cos-overview.svg)
 - [Runtime Manifest publication pipeline](docs/assets/runtime-manifest-pipeline.svg)
 - [Dependency resolution](docs/assets/dependency-resolution.svg)
@@ -122,7 +160,7 @@ That information can be validated and baked into compact machine-oriented IDs an
 
 FSM_COS consumes the published representation.
 
-See [Runtime Manifest Theory](docs/MANIFEST_THEORY.md).
+See [Runtime Manifest Theory](docs/MANIFEST_THEORY.md) and the deeper [FSM_COS Theory](docs/THEORY.md#3-why-the-manifest-exists).
 
 ## MicroBundles
 
@@ -186,6 +224,8 @@ FSM_COS transports the configuration. The bundle that owns it interprets it.
 
 This keeps the composition engine independent from the serialization format and domain meaning of configuration.
 
+When configuration becomes a **serialized representation**, FSM_COS deliberately points downward to **[TheSingularityWorkshop.FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** rather than defining another serializer here. See [FSM_COS Theory — Composition is not serialization](docs/THEORY.md#14-composition-is-not-serialization) and the [FSM_Serialization Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md).
+
 ## Arbitration
 
 Loading establishes the initial composition.
@@ -208,7 +248,7 @@ A bundle returns true when its participation changed the composition and false w
 
 Non-convergence is an error. FSM_COS does not return an assembly that it knows is unstable.
 
-See [Arbitration and Convergence](docs/ARBITRATION.md).
+See [Arbitration and Convergence](docs/ARBITRATION.md) and [FSM_COS Theory — Arbitration is composition negotiation](docs/THEORY.md#8-arbitration-is-composition-negotiation).
 
 ## RuntimeAssembly is the handoff
 
@@ -323,7 +363,7 @@ WebPage / GUI manifestation
 
 WebPage should reference the TheSingularityWorkshop.FSM_COS package and implement the catalog/host boundary around it. Platform-specific lifecycle, browser APIs, GUI rendering, and Experience presentation remain outside FSM_COS.
 
-For the concrete integration contract, see [WebPage Integration](docs/WEBPAGE_INTEGRATION.md).
+For the concrete integration contract, see [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) and [FSM_COS Theory — Same composition, different manifestation](docs/THEORY.md#10-same-composition-different-manifestation).
 
 ## Design invariant
 
@@ -343,6 +383,12 @@ The boundaries can evolve. The responsibility of FSM_COS should remain clear:
 ---
 
 ## 🔗 Resources & Support
+
+### 📦 Get the core packages
+
+- **FSM_API:** [Core NuGet](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_API) · [Source](https://github.com/TrentBest/FSM_API)
+- **FSM_COS:** [NuGet](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) · [Source](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
+- **FSM_Serialization:** [NuGet](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_Serialization) · [Source](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)
 
 ### 📦 Get FSM_API
 
