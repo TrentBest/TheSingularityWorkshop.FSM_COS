@@ -8,11 +8,9 @@ on:
 
 permissions:
   contents: read
-  packages: write
-  id-token: write
 
 jobs:
-  package:
+  build-and-test:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -26,12 +24,23 @@ jobs:
       - name: Restore
         run: dotnet restore TheSingularityWorkshop.FSM_COS.sln
 
+      - name: Build
+        run: dotnet build TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore
+
       - name: Test with coverage
-        run: dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --configuration Release --no-restore --collect:"XPlat Code Coverage;Format=cobertura" --results-directory ./TestResults
+        run: >
+          dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj
+          --configuration Release
+          --no-build
+          --verbosity normal
+          --collect:"XPlat Code Coverage;Format=cobertura"
+          --results-directory ./TestResults
+          --logger "trx;LogFileName=testresults.trx"
 
       - name: Prepare coverage report
         shell: bash
         run: |
+          set -euo pipefail
           coverage_file="$(find ./TestResults -type f -name 'coverage.cobertura.xml' -print -quit)"
           if [[ -z "$coverage_file" ]]; then
             echo "No coverage.cobertura.xml file was produced."
@@ -50,25 +59,40 @@ jobs:
           fail_ci_if_error: true
 
       - name: Pack
-        run: dotnet pack src/FSM_COS/FSM_COS.csproj --configuration Release --no-restore --output ./artifacts
+        run: dotnet pack src/FSM_COS/FSM_COS.csproj --configuration Release --no-build --output ./artifacts
 
-      - name: Upload NuGet packages as artifact
+      - name: Upload NuGet package artifact
         uses: actions/upload-artifact@v7
         with:
           name: fsm-cos-nuget-package
           path: ./artifacts/*.nupkg
 
-      - name: Publish to GitHub Packages
-        if: github.event_name == 'workflow_dispatch'
-        run: dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/TrentBest/index.json" --api-key "${{ secrets.GITHUB_TOKEN }}" --skip-duplicate
+      - name: Upload test and coverage artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: fsm-cos-test-results
+          path: ./TestResults/*
+
+  publish_nuget:
+    needs: build-and-test
+    runs-on: ubuntu-24.04
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Download NuGet package
+        uses: actions/download-artifact@v8
+        with:
+          name: fsm-cos-nuget-package
+          path: ./artifacts
 
       - name: Authenticate with NuGet Trusted Publishing
-        if: github.event_name == 'workflow_dispatch'
         uses: NuGet/login@v1
         id: login
         with:
           user: TheSingularityWorkshop
 
       - name: Publish package to NuGet.org
-        if: github.event_name == 'workflow_dispatch'
         run: dotnet nuget push "./artifacts/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
