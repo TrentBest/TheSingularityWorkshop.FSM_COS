@@ -1,8 +1,12 @@
 # FSM_COS Runtime Boundary
 
+> The boundary is easier to understand once the theory is clear: [FSM_COS Theory](THEORY.md) defines why composition stops where it does.
+
 ## Purpose
 
 ![FSM_COS runtime boundary](assets/runtime-boundary.svg)
+
+![FSM_COS composition boundary](assets/composition-boundary.svg)
 
 FSM_COS exists to assemble a requested runtime. It is not the runtime host.
 
@@ -65,6 +69,14 @@ Unity / browser / desktop / other manifestation
 ~~~
 
 This prevents the composition package from acquiring platform lifecycle dependencies.
+
+## Serialization boundary
+
+Serialization is adjacent to composition, but it is not composition.
+
+When a manifest or bundle configuration becomes bytes, the reusable byte-oriented infrastructure belongs to **[TheSingularityWorkshop.FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)**. FSM_COS should consume the resulting semantic/runtime representation rather than absorb the serialization package's responsibility.
+
+See [FSM_COS Theory — Composition is not serialization](THEORY.md#14-composition-is-not-serialization) and [FSM_Serialization Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md).
 
 ## Warehouse boundary
 
