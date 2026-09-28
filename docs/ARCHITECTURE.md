@@ -42,6 +42,8 @@ Exposes runtime identity and the currently loaded bundle set during convergence.
 ### RuntimeAssembly
 The result surface of the composition pass: runtime identity, loaded bundles, and arbitration count.
 
+![Dependency closure and installation order](assets/dependency-resolution.svg)
+
 ## Dependency resolution
 
 FSM_COS performs depth-first dependency resolution.
