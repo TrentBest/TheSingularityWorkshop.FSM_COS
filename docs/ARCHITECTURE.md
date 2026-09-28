@@ -1,5 +1,7 @@
 # FSM_COS Architecture
 
+> **Architecture answers how the composition kernel performs the theory.** For the deeper “why,” start with [FSM_COS Theory](THEORY.md).
+
 FSM_COS is a small composition kernel. This document describes how its pieces cooperate rather than redefining concepts owned by neighboring systems.
 
 ## Runtime flow
@@ -22,10 +24,10 @@ FSM_COS is a small composition kernel. This document describes how its pieces co
 ## Core contracts
 
 ### RuntimeManifest
-Identifies the runtime being assembled and supplies root BundleRequest values. It is composition input, not application behavior.
+Identifies the runtime being assembled and supplies root BundleRequest values. It is composition input, not application behavior. See [Runtime Manifest](RUNTIME_MANIFEST.md) and [Runtime Manifest Theory](MANIFEST_THEORY.md).
 
 ### BundleRequest
-Pairs a ulong BundleId with opaque configuration bytes. A manifest producer can bake richer editor-time structures into this representation.
+Pairs a ulong BundleId with opaque configuration bytes. A manifest producer can bake richer editor-time structures into this representation. If those bytes cross a concrete serialization boundary, that concern belongs to [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization), not the composition algorithm.
 
 ### IMicroBundleCatalog
 Resolves a bundle identity to the IMicroBundle required for installation. The catalog is supplied by the host, so future Warehouse-backed or generated resolvers do not require a different composition algorithm.
@@ -40,9 +42,11 @@ Carries runtime identity and configuration available during installation. Config
 Exposes runtime identity and the currently loaded bundle set during convergence. It is composition state, not host state.
 
 ### RuntimeAssembly
-The result surface of the composition pass: runtime identity, loaded bundles, and arbitration count.
+The result surface of the composition pass: runtime identity, loaded bundles, and arbitration count. See [RuntimeAssembly](RUNTIME_ASSEMBLY.md) and [FSM_COS Theory — RuntimeAssembly is the handoff object](THEORY.md#9-runtimeassembly-is-the-handoff-object).
 
 ![Dependency closure and installation order](assets/dependency-resolution.svg)
+
+The conceptual reason for deriving this order rather than encoding it in the manifest is explained in [FSM_COS Theory — Composition starts with roots, not a giant object graph](THEORY.md#4-composition-starts-with-roots-not-a-giant-object-graph).
 
 ## Dependency resolution
 
