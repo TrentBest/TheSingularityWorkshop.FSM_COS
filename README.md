@@ -11,7 +11,7 @@
 **FSM_COS is the composition system.**
 
 <p align="center">
-  <img src="docs/assets/fsm-cos-crane.svg" alt="Industrial composition crane lifting a runtime assembly">
+  <img src="docs/assets/fsm-cos-crane.gif" alt="Animated industrial composition crane lifting a runtime assembly">
 </p>
 
 <p align="center"><em>Runtime request → composition → stable assembly → host manifestation</em></p>
@@ -122,6 +122,23 @@ It does **not** yet own:
 - general application configuration.
 
 Those concerns can become inputs, providers, or later composition layers without turning FSM_COS into an application framework.
+
+## Living architecture
+
+Git is static. The architecture does not have to *feel* static.
+
+The documentation deliberately uses two visual forms:
+
+- **SVG** is the precise blueprint/source-of-truth illustration.
+- **GIF** supplies lightweight motion when motion communicates a semantic event rather than decoration.
+
+The crane is the first living artifact: its load rises and settles because composition is an active operation — request, lift, stabilize, handoff. GitHub documents that repository SVG views do not support animation, while GIF is a supported image format, so the living asset is intentionally separate from the blueprint SVG.
+
+<p align="center">
+  <img src="docs/assets/fsm-cos-crane.gif" alt="Living FSM_COS composition crane animation">
+</p>
+
+The rule for future visuals is simple: **animate the concept, not the decoration**. Motion should communicate loading, dependency travel, arbitration rounds, convergence, or handoff.
 
 ## Visual map
 
@@ -390,13 +407,6 @@ The boundaries can evolve. The responsibility of FSM_COS should remain clear:
 - **FSM_COS:** [NuGet](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) · [Source](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
 - **FSM_Serialization:** [NuGet](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_Serialization) · [Source](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)
 
-### 📦 Get FSM_API
-
-- **Unity Asset Store:** [FSM_API for Unity](https://assetstore.unity.com/packages/slug/332450)
-- **Core NuGet:** [TheSingularityWorkshop.FSM_API](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_API)
-- **Source Code:** [TheSingularityWorkshop.FSM_COS on GitHub](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
-- **This Package:** [TheSingularityWorkshop.FSM_COS](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS)
-
 ### 💖 Support The Singularity Workshop
 
 - **Patreon:** [Support us on Patreon](https://www.patreon.com/c/TheSingularityWorkshop)
@@ -412,3 +422,18 @@ The boundaries can evolve. The responsibility of FSM_COS should remain clear:
   <em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br>
   <strong>Because state shouldn't be a mess.</strong>
 </p>
+
+
+---
+
+## 🔗 The Singularity Workshop
+
+FSM_COS is one layer in a deliberately troublesome ecosystem:
+
+- **[FSM_API](https://github.com/TrentBest/FSM_API)** — behavior and state.
+- **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
+- **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
+- **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
+- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
+
+<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
