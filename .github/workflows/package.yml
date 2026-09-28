@@ -9,6 +9,7 @@ on:
 permissions:
   contents: read
   packages: write
+  id-token: write
 
 jobs:
   package:
@@ -61,26 +62,13 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         run: dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/TrentBest/index.json" --api-key "${{ secrets.GITHUB_TOKEN }}" --skip-duplicate
 
-  publish_nuget:
-    needs: package
-    runs-on: ubuntu-24.04
-    if: github.event_name == 'workflow_dispatch'
-    permissions:
-      contents: read
-      id-token: write
-
-    steps:
-      - name: Download NuGet packages
-        uses: actions/download-artifact@v8
-        with:
-          name: fsm-cos-nuget-package
-          path: ./artifacts
-
       - name: Authenticate with NuGet Trusted Publishing
+        if: github.event_name == 'workflow_dispatch'
         uses: NuGet/login@v1
         id: login
         with:
           user: TheSingularityWorkshop
 
       - name: Publish package to NuGet.org
+        if: github.event_name == 'workflow_dispatch'
         run: dotnet nuget push "./artifacts/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
