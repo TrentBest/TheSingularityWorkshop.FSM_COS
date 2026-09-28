@@ -1,5 +1,11 @@
 # FSM_COS Theory
 
+## Visual overview
+
+![FSM_COS composition overview](assets/fsm-cos-overview.svg)
+
+FSM_COS sits between a published request and the host that eventually manifests the assembled runtime.
+
 ## 1. The missing layer is assembly
 
 FSM_API provides the behavioral substrate. Higher layers describe richer runtime behavior. MicroBundles provide focused units of capability, content, or behavior. The Warehouse stores and delivers data. Experiences describe what is encountered. Hosts provide environments.
