@@ -44,7 +44,7 @@ TheSingularityWorkshop.FSM_COS
 
 The current alpha line is 0.1.0-alpha.1.
 
-The repository workflow restores, tests, packs, and publishes the package to GitHub Packages on pushes to master and through workflow dispatch.
+The repository workflow restores, tests, and packs on pushes to master. Publishing to GitHub Packages and NuGet.org requires an explicit workflow dispatch with the publish input enabled.
 
 ## Documentation discipline
 
