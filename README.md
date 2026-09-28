@@ -16,6 +16,12 @@
 
 <p align="center"><em>Runtime request → composition → stable assembly → host manifestation</em></p>
 
+<p align="center">
+  <img src="docs/assets/fsm-cos-overview.svg" alt="FSM_COS composition overview: RuntimeManifest through composition to RuntimeAssembly and host manifestation">
+</p>
+
+<p align="center"><em>Runtime request → composition → stable assembly → host manifestation</em></p>
+
 It takes a runtime manifest and assembles the MicroBundles, dependencies, configuration, and runtime components required by that manifest.
 
 ~~~text
