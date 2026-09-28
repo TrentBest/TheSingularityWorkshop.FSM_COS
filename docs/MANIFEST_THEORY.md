@@ -2,6 +2,8 @@
 
 The Runtime Manifest is the handoff between authoring and assembly. It is a compiled request for a runtime, not an application configuration file.
 
+![Runtime Manifest publication pipeline](assets/runtime-manifest-pipeline.svg)
+
 ## Editor time
 
 Authoring systems may know human-readable names, ontology relationships, variants, dependencies, visual structure, provenance, and other rich relationships.
