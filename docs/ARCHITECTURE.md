@@ -4,6 +4,8 @@ FSM_COS is a small composition kernel. This document describes how its pieces co
 
 ## Runtime flow
 
+![FSM_COS runtime flow](assets/fsm-cos-overview.svg)
+
     RuntimeManifest
           │
           ▼
