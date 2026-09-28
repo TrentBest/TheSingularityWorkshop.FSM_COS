@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620">
+<defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#05080d"/><stop offset="1" stop-color="#121c29"/></linearGradient><linearGradient id="plate" x1="0" x2="1"><stop stop-color="#17222d"/><stop offset="1" stop-color="#0a1119"/></linearGradient></defs>
+<rect width="1400" height="620" rx="28" fill="url(#bg)"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<text x="70" y="65" fill="#fff" font-size="32" font-weight="700" letter-spacing="4">RUNTIME ASSEMBLY / HANDOFF</text>
+<text x="72" y="94" fill="#76cfff" font-size="14" letter-spacing="2">THE COMPOSITION KERNEL STOPS HERE</text>
+<rect x="105" y="175" width="330" height="230" rx="22" fill="url(#plate)" stroke="#4d6070" stroke-width="3"/>
+<rect x="535" y="145" width="330" height="290" rx="22" fill="#102833" stroke="#76cfff" stroke-width="4"/>
+<rect x="965" y="175" width="330" height="230" rx="22" fill="url(#plate)" stroke="#ffb84d" stroke-width="3"/>
+<g stroke-width="3"><path d="M435 290h100" stroke="#76cfff"/><path d="M865 290h100" stroke="#ffb84d"/></g>
+<path d="M515 280l20 10-20 10M945 280l20 10-20 10" fill="#fff"/>
+<g fill="#fff" text-anchor="middle">
+<text x="270" y="230" font-size="25" font-weight="700">MANIFEST</text><text x="270" y="265" fill="#9eb1c4" font-size="15">published request</text><text x="270" y="300" fill="#9eb1c4" font-size="15">roots + opaque config</text><text x="270" y="335" fill="#9eb1c4" font-size="15">what is requested</text>
+<text x="700" y="210" font-size="25" font-weight="700">RUNTIME ASSEMBLY</text><text x="700" y="252" fill="#76cfff" font-size="15">stable composition</text><text x="700" y="292" fill="#fff" font-size="15">RuntimeId</text><text x="700" y="320" fill="#fff" font-size="15">loaded MicroBundles</text><text x="700" y="348" fill="#fff" font-size="15">arbitration rounds</text><text x="700" y="390" fill="#76cfff" font-size="14">handoff object</text>
+<text x="1130" y="230" font-size="25" font-weight="700">HOST</text><text x="1130" y="265" fill="#9eb1c4" font-size="15">execution environment</text><text x="1130" y="300" fill="#9eb1c4" font-size="15">GUI • browser • Unity</text><text x="1130" y="335" fill="#9eb1c4" font-size="15">Experience • platform</text>
+</g>
+<path d="M70 485H1330" stroke="#293a49"/>
+<text x="70" y="530" fill="#8fa7bc" font-size="17">The assembly is neither the request nor the experience.</text>
+<text x="70" y="558" fill="#8fa7bc" font-size="17">It is the stable composition handed to whatever host is responsible for manifestation.</text>
+<text x="70" y="590" fill="#6e8499" font-size="13" letter-spacing="2">COMPOSE → HAND OFF → MANIFEST</text>
+</g></svg>
