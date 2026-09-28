@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620">
+<defs>
+<linearGradient id="bg" x1="0" x2="1"><stop stop-color="#05080d"/><stop offset="1" stop-color="#111a27"/></linearGradient>
+<linearGradient id="shell" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#303b46"/><stop offset=".45" stop-color="#080d13"/><stop offset="1" stop-color="#202a35"/></linearGradient>
+<radialGradient id="core"><stop stop-color="#ffd36b" stop-opacity=".95"/><stop offset=".45" stop-color="#d88416" stop-opacity=".65"/><stop offset="1" stop-color="#5a2b05" stop-opacity=".15"/></radialGradient>
+<filter id="glow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="1400" height="620" rx="28" fill="url(#bg)"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<text x="70" y="65" fill="#fff" font-size="32" font-weight="700" letter-spacing="4">MICROBUNDLE / SEALED CAPABILITY</text>
+<text x="72" y="94" fill="#76cfff" font-size="14" letter-spacing="2">FOCUSED RESPONSIBILITY • OPAQUE CONFIGURATION • COMPOSABLE IDENTITY</text>
+<g transform="translate(130 150)">
+<path d="M70 0h480l80 75v250l-80 75H70L0 325V75z" fill="url(#shell)" stroke="#61717f" stroke-width="4"/>
+<path d="M105 45h410l45 42v176l-45 42H105l-40-42V87z" fill="#08121b" stroke="#334b5d" stroke-width="3"/>
+<ellipse cx="310" cy="175" rx="150" ry="115" fill="url(#core)" filter="url(#glow)"/>
+<path d="M190 175h240M310 85v180M215 110l190 130M405 110L215 240" stroke="#ffd36b" stroke-width="3" opacity=".75"/>
+<g fill="#9aa7b2"><rect x="-18" y="105" width="28" height="70" rx="5"/><rect x="-18" y="195" width="28" height="70" rx="5"/><rect x="590" y="105" width="28" height="70" rx="5"/><rect x="590" y="195" width="28" height="70" rx="5"/></g>
+<text x="310" y="335" text-anchor="middle" fill="#fff" font-size="24" font-weight="700" letter-spacing="5">MICROBUNDLE</text>
+</g>
+<g fill="#fff">
+<text x="850" y="205" font-size="23" font-weight="700">ID</text><text x="940" y="205" fill="#76cfff" font-size="16">machine identity</text>
+<text x="850" y="260" font-size="23" font-weight="700">DEPS</text><text x="940" y="260" fill="#76cfff" font-size="16">composition relationships</text>
+<text x="850" y="315" font-size="23" font-weight="700">LOAD</text><text x="940" y="315" fill="#76cfff" font-size="16">installation contract</text>
+<text x="850" y="370" font-size="23" font-weight="700">CONFIG</text><text x="940" y="370" fill="#ffb84d" font-size="16">owned by the bundle</text>
+<text x="850" y="425" font-size="23" font-weight="700">ARBITRATE</text><text x="1010" y="425" fill="#ffb84d" font-size="16">composition negotiation</text>
+</g>
+<text x="850" y="510" fill="#6e8499" font-size="14" letter-spacing="2">MICRO IN FOCUS — NOT NECESSARILY IN BYTES</text>
+</g></svg>
