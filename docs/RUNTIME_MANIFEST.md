@@ -1,5 +1,7 @@
 # Runtime Manifest
 
+> The manifest is the request. [FSM_COS Theory](THEORY.md) explains why the request must remain distinct from the assembled runtime.
+
 The **Runtime Manifest** is the published request that crosses from authoring/tooling into FSM_COS.
 
 It answers one question:
@@ -87,7 +89,13 @@ FSM_COS currently does **not** prescribe a serialization format. The following i
 
 The important part is the semantic shape, not the spelling of the serialization.
 
+**This is where the architecture intentionally hands off to [TheSingularityWorkshop.FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization).** FSM_COS does not need, and should not grow, a second serialization framework. If this conceptual representation becomes a concrete binary representation, the serialization boundary belongs to [FSM_Serialization](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_Serialization).
+
 An authoring system may eventually publish JSON, binary data, generated C#, a compact manifest format, or another representation. FSM_COS only needs the runtime contract represented by `RuntimeManifest`.
+
+> **Representation is not the RuntimeManifest itself. The bytes are a representation of the semantic request. FSM_COS owns what that request means for composition; FSM_Serialization owns the byte boundary.**
+
+For the deeper architectural treatment, see [FSM_COS Theory — Composition is not serialization](THEORY.md#14-composition-is-not-serialization) and [FSM_Serialization Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md).
 
 ## Authoring → publication
 
