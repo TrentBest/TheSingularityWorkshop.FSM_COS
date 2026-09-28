@@ -1,5 +1,7 @@
 # Runtime Manifest Theory
 
+> The manifest is the published request entering the composition kernel. For the larger architectural model, see [FSM_COS Theory](THEORY.md).
+
 The [Runtime Manifest](RUNTIME_MANIFEST.md) is the handoff between authoring and assembly. It is a compiled request for a runtime, not an application configuration file.
 
 ![Runtime Manifest publication pipeline](assets/runtime-manifest-pipeline.svg)
@@ -26,9 +28,13 @@ The manifest is therefore a publication artifact. It contains enough information
 
 ## Runtime representation
 
+A RuntimeManifest is a semantic composition request. Its eventual JSON, binary, generated-code, or other representation is a separate concern.
+
 The current contract is intentionally small: runtime identity plus BundleRequest values, where each request contains a machine ID and opaque configuration bytes.
 
 This keeps FSM_COS independent from the serialization format selected by authoring/tooling.
+
+When that representation becomes a concrete byte-level contract, the reusable serialization boundary belongs to [TheSingularityWorkshop.FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization). See its [serialization theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md).
 
 ## Why not put everything in the manifest?
 
