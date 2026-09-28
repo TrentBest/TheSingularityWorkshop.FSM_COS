@@ -590,8 +590,10 @@ The crane does not become:
 
 That is FSM_COS.
 
+The living version of the crane is deliberately subtle. The load rises, sways, and settles because composition is work: a request causes assembly activity, the assembly stabilizes, and only then does handoff occur. GitHub repository views do not animate SVG assets, so the GIF is the living companion while the SVG remains the blueprint artifact.
+
 <p align="center">
-  <img src="assets/fsm-cos-crane.svg" alt="The FSM_COS composition crane">
+  <img src="assets/fsm-cos-crane.gif" alt="Animated FSM_COS composition crane">
 </p>
 
 > **FSM_COS assembles the machine. It does not become the machine.**
@@ -683,3 +685,40 @@ The invariant is:
 > **FSM_COS assembles what was requested, returns a stable composition, and hands that composition to something else.**
 
 That is the theory.
+
+
+---
+
+## Living architecture
+
+The documentation follows the architecture it describes: **static definitions can participate in dynamic behavior**.
+
+The visual system therefore has a semantic motion vocabulary:
+
+| Motion | Meaning |
+|---|---|
+| **Lift / lower** | work being performed by composition |
+| **Pulse** | an active capability or boundary |
+| **Travel** | a request or dependency moving between layers |
+| **Repetition** | arbitration rounds |
+| **Settling** | convergence |
+| **Docking / handoff** | composition becoming available to a host |
+
+The rule is simple: **animate the concept, not the decoration**.
+
+A static blueprint remains the canonical explanatory artifact. A living companion makes the same model easier to *feel*. They are two manifestations of one semantic model, not competing representations.
+
+
+---
+
+## 🔗 The Singularity Workshop
+
+FSM_COS is one layer in a deliberately troublesome ecosystem:
+
+- **[FSM_API](https://github.com/TrentBest/FSM_API)** — behavior and state.
+- **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
+- **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
+- **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
+- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
+
+<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
