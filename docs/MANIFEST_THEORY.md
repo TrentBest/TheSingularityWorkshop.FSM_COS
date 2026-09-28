@@ -1,6 +1,6 @@
 # Runtime Manifest Theory
 
-The Runtime Manifest is the handoff between authoring and assembly. It is a compiled request for a runtime, not an application configuration file.
+The [Runtime Manifest](RUNTIME_MANIFEST.md) is the handoff between authoring and assembly. It is a compiled request for a runtime, not an application configuration file.
 
 ![Runtime Manifest publication pipeline](assets/runtime-manifest-pipeline.svg)
 
