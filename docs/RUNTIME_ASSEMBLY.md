@@ -102,3 +102,18 @@ That separation is what allows a single composition request to be consumed by di
 - [Runtime Manifest](RUNTIME_MANIFEST.md)
 - [MicroBundles](MICROBUNDLES.md)
 - [Runtime Boundary](RUNTIME_BOUNDARY.md)
+
+
+---
+
+## 🔗 The Singularity Workshop
+
+FSM_COS is one layer in a deliberately troublesome ecosystem:
+
+- **[FSM_API](https://github.com/TrentBest/FSM_API)** — behavior and state.
+- **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
+- **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
+- **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
+- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
+
+<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
