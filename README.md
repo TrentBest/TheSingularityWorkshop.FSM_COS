@@ -93,6 +93,16 @@ It does **not** yet own:
 
 Those concerns can become inputs, providers, or later composition layers without turning FSM_COS into an application framework.
 
+## Visual map
+
+The documentation diagrams are deliberately architecture-first: they show where responsibility lives, what crosses the FSM_COS boundary, and where composition stops.
+
+- [Composition overview](docs/assets/fsm-cos-overview.svg)
+- [Runtime Manifest publication pipeline](docs/assets/runtime-manifest-pipeline.svg)
+- [Dependency resolution](docs/assets/dependency-resolution.svg)
+- [Arbitration and convergence](docs/assets/arbitration-convergence.svg)
+- [Runtime boundary](docs/assets/runtime-boundary.svg)
+
 ## The manifest is the center
 
 A RuntimeManifest is a **published runtime request**, not an application configuration file.
