@@ -6,6 +6,8 @@ Loading answers: what did the manifest request, including everything those reque
 
 Arbitration answers: given everything now installed, does the composition need to change?
 
+![Arbitration convergence](assets/arbitration-convergence.svg)
+
 ## Initial composition
 
 Dependency graphs are loaded first. Only after the reachable set is installed does arbitration begin.
