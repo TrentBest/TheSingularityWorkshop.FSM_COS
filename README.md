@@ -263,7 +263,29 @@ This repository carries its own architecture and theory. The documents here desc
 **Target:** .NET 8  
 **License:** MIT
 
-The package is published to The Singularity Workshop's GitHub Packages feed and NuGet.org by the repository's Actions workflow.
+The repository contains the packaging and trusted-publishing workflow for GitHub Packages and NuGet.org. Publishing is an explicit workflow-dispatch action; the current 0.1.0-alpha.1 package is not yet confirmed published to NuGet.org.
+
+## WebPage integration
+
+WebPage is a host and proving ground for FSM_COS; it is not a special case inside the composition kernel. The intended flow is:
+
+~~~text
+WebPage published manifest
+        ↓
+     FsmCos
+        ↓
+IMicroBundleCatalog supplied by WebPage
+        ↓
+ RuntimeAssembly
+        ↓
+WebPage / GUI manifestation
+        ↓
+     Blazor/browser
+~~~
+
+WebPage should reference the TheSingularityWorkshop.FSM_COS package and implement the catalog/host boundary around it. Platform-specific lifecycle, browser APIs, GUI rendering, and Experience presentation remain outside FSM_COS.
+
+For the concrete integration contract, see [WebPage Integration](docs/WEBPAGE_INTEGRATION.md).
 
 ## Design invariant
 
