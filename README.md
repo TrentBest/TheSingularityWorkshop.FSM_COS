@@ -35,10 +35,6 @@ RuntimeAssembly
 
 > **FSM_COS is the crane that assembles the machine. It does not become the machine.**
 
-<p align="center">
-  <img src="docs/assets/fsm-cos-crane.svg" alt="FSM_COS composition crane showing request, assembly, and handoff">
-</p>
-
 ## Why this repository exists
 
 FSM_COS is the repository for the **composition-of-systems boundary** in The Singularity Workshop architecture.
@@ -100,6 +96,9 @@ The documentation diagrams are deliberately architecture-first: they show where 
 - [Dependency resolution](docs/assets/dependency-resolution.svg)
 - [Arbitration and convergence](docs/assets/arbitration-convergence.svg)
 - [Runtime boundary](docs/assets/runtime-boundary.svg)
+- [Composition crane](docs/assets/fsm-cos-crane.svg)
+- [MicroBundle cartridge](docs/assets/microbundle-cartridge.svg)
+- [RuntimeAssembly handoff](docs/assets/runtime-assembly-handoff.svg)
 
 ## The manifest is the center
 
@@ -250,6 +249,9 @@ TheSingularityWorkshop.FSM_COS/
 ├── docs/
 │   ├── THEORY.md
 │   ├── ARCHITECTURE.md
+│   ├── RUNTIME_MANIFEST.md
+│   ├── MICROBUNDLES.md
+│   ├── RUNTIME_ASSEMBLY.md
 │   ├── MANIFEST_THEORY.md
 │   ├── ARBITRATION.md
 │   ├── RUNTIME_BOUNDARY.md
