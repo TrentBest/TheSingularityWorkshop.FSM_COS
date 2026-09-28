@@ -1,5 +1,7 @@
 # Arbitration and Convergence
 
+> Arbitration is how the assembled composition reaches a stable state. See [FSM_COS Theory](THEORY.md#8-arbitration-is-composition-negotiation) for the conceptual model.
+
 Arbitration is the reconciliation phase of FSM_COS.
 
 Loading answers: what did the manifest request, including everything those requests depend on?
