@@ -2,6 +2,8 @@
 
 ## Purpose
 
+![WebPage and FSM_COS composition boundary](assets/fsm-cos-overview.svg)
+
 WebPage is the first concrete host for FSM_COS. The relationship is intentionally asymmetric:
 
 - **FSM_COS** composes a runtime.
