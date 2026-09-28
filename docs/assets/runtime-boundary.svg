@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760">
+<defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#070b12"/><stop offset="1" stop-color="#111827"/></linearGradient></defs>
+<rect width="1400" height="760" rx="26" fill="url(#bg)"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<text x="70" y="70" fill="#fff" font-size="34" font-weight="700" letter-spacing="3">THE RUNTIME BOUNDARY</text>
+<text x="72" y="101" fill="#76cfff" font-size="15" letter-spacing="2">FSM_COS OWNS COMPOSITION — THE HOST OWNS EXECUTION AND MANIFESTATION</text>
+<rect x="70" y="170" width="500" height="470" rx="24" fill="#0e1622" stroke="#4fb8e8" stroke-width="2"/>
+<rect x="830" y="170" width="500" height="470" rx="24" fill="#0e1622" stroke="#ffb84d" stroke-width="2"/>
+<text x="320" y="215" text-anchor="middle" fill="#76cfff" font-size="25" font-weight="700">FSM_COS</text>
+<text x="1080" y="215" text-anchor="middle" fill="#ffb84d" font-size="25" font-weight="700">HOST / EXPERIENCE</text>
+<g fill="#fff" font-size="17">
+<text x="115" y="270">✓ resolve MicroBundles</text><text x="115" y="308">✓ dependency closure</text><text x="115" y="346">✓ carry configuration</text><text x="115" y="384">✓ ordered Load()</text><text x="115" y="422">✓ arbitration / convergence</text><text x="115" y="460">✓ detect composition errors</text><text x="115" y="498">✓ return RuntimeAssembly</text>
+<text x="875" y="270">✓ execute the assembled runtime</text><text x="875" y="308">✓ render GUI</text><text x="875" y="346">✓ browser / desktop / Unity lifecycle</text><text x="875" y="384">✓ networking and presentation</text><text x="875" y="422">✓ start and encounter Experiences</text><text x="875" y="460">✓ host-specific policy</text><text x="875" y="498">✓ resource / platform integration</text>
+</g>
+<path d="M570 400H830" stroke="#fff" stroke-width="3"/><path d="M810 390l20 10-20 10z" fill="#fff"/>
+<rect x="570" y="345" width="260" height="110" rx="18" fill="#102b36" stroke="#76cfff"/>
+<text x="700" y="385" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">RuntimeAssembly</text>
+<text x="700" y="414" text-anchor="middle" fill="#9eb1c4" font-size="14">handoff object</text>
+<text x="700" y="436" text-anchor="middle" fill="#9eb1c4" font-size="14">stable composition</text>
+<text x="70" y="700" fill="#6e8499" font-size="14" letter-spacing="2">FSM_COS IS THE CRANE • IT DOES NOT BECOME THE MACHINE</text>
+</g></svg>
