@@ -11,18 +11,12 @@
 **FSM_COS is the composition system.**
 
 <p align="center">
-  <img src="docs/assets/fsm-cos-overview.svg" alt="FSM_COS composition overview: RuntimeManifest through composition to RuntimeAssembly and host manifestation">
+  <img src="docs/assets/fsm-cos-crane.svg" alt="Industrial composition crane lifting a runtime assembly">
 </p>
 
 <p align="center"><em>Runtime request → composition → stable assembly → host manifestation</em></p>
 
-<p align="center">
-  <img src="docs/assets/fsm-cos-overview.svg" alt="FSM_COS composition overview: RuntimeManifest through composition to RuntimeAssembly and host manifestation">
-</p>
-
-<p align="center"><em>Runtime request → composition → stable assembly → host manifestation</em></p>
-
-It takes a runtime manifest and assembles the MicroBundles, dependencies, configuration, and runtime components required by that manifest.
+It takes a [Runtime Manifest](RUNTIME_MANIFEST.md) and assembles the [MicroBundles](MICROBUNDLES.md), dependencies, configuration, and runtime components required by that manifest.
 
 ~~~text
 Runtime Manifest
@@ -40,6 +34,10 @@ RuntimeAssembly
 ~~~
 
 > **FSM_COS is the crane that assembles the machine. It does not become the machine.**
+
+<p align="center">
+  <img src="docs/assets/fsm-cos-crane.svg" alt="FSM_COS composition crane showing request, assembly, and handoff">
+</p>
 
 ## Why this repository exists
 
@@ -105,7 +103,11 @@ The documentation diagrams are deliberately architecture-first: they show where 
 
 ## The manifest is the center
 
-A RuntimeManifest is a **published runtime request**, not an application configuration file.
+<p align="center">
+  <img src="docs/assets/runtime-manifest-pipeline.svg" alt="Runtime Manifest publication pipeline">
+</p>
+
+A [RuntimeManifest](RUNTIME_MANIFEST.md) is a **published runtime request**, not an application configuration file.
 
 Editor/tooling systems may know rich information:
 
@@ -125,7 +127,11 @@ See [Runtime Manifest Theory](docs/MANIFEST_THEORY.md).
 
 ## MicroBundles
 
-A MicroBundle is **micro in focus, not necessarily in byte size**.
+A [MicroBundle](MICROBUNDLES.md) is **micro in focus, not necessarily in byte size**.
+
+<p align="center">
+  <img src="docs/assets/microbundle-cartridge.svg" alt="Futuristic MicroBundle capability cartridge">
+</p>
 
 FSM_COS does not care whether a bundle is physically tiny or enormous. It cares that the bundle has a focused composition responsibility and exposes the contract required for assembly.
 
@@ -207,7 +213,11 @@ See [Arbitration and Convergence](docs/ARBITRATION.md).
 
 ## RuntimeAssembly is the handoff
 
-RuntimeAssembly is the result of composition.
+[RuntimeAssembly](RUNTIME_ASSEMBLY.md) is the result of composition.
+
+<p align="center">
+  <img src="docs/assets/runtime-assembly-handoff.svg" alt="RuntimeAssembly as the handoff between FSM_COS and a host">
+</p>
 
 It records the runtime identity, loaded MicroBundles, and arbitration result. It is not the application and it is not a renderer.
 
@@ -273,7 +283,10 @@ This repository carries its own architecture and theory. The documents here desc
 
 - [Theory](docs/THEORY.md) — why the composition boundary exists.
 - [Architecture](docs/ARCHITECTURE.md) — contracts and runtime flow.
-- [Runtime Manifest Theory](docs/MANIFEST_THEORY.md) — the published request model.
+- [Runtime Manifest](docs/RUNTIME_MANIFEST.md) — the published request itself, with examples and the alpha contract.
+- [MicroBundles](docs/MICROBUNDLES.md) — the composable unit contract.
+- [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) — the stable handoff object.
+- [Runtime Manifest Theory](docs/MANIFEST_THEORY.md) — the deeper theory behind publication.
 - [Arbitration and Convergence](docs/ARBITRATION.md) — reconciliation semantics.
 - [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) — what belongs here versus in hosts and neighboring systems.
 - [Development](docs/DEVELOPMENT.md) — how to evolve and verify the repository.
