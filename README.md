@@ -16,7 +16,7 @@
 
 <p align="center"><em>Runtime request → composition → stable assembly → host manifestation</em></p>
 
-It takes a [Runtime Manifest](RUNTIME_MANIFEST.md) and assembles the [MicroBundles](MICROBUNDLES.md), dependencies, configuration, and runtime components required by that manifest.
+It takes a [Runtime Manifest](docs/RUNTIME_MANIFEST.md) and assembles the [MicroBundles](docs/MICROBUNDLES.md), dependencies, configuration, and runtime components required by that manifest.
 
 ~~~text
 Runtime Manifest
@@ -107,7 +107,7 @@ The documentation diagrams are deliberately architecture-first: they show where 
   <img src="docs/assets/runtime-manifest-pipeline.svg" alt="Runtime Manifest publication pipeline">
 </p>
 
-A [RuntimeManifest](RUNTIME_MANIFEST.md) is a **published runtime request**, not an application configuration file.
+A [RuntimeManifest](docs/RUNTIME_MANIFEST.md) is a **published runtime request**, not an application configuration file.
 
 Editor/tooling systems may know rich information:
 
@@ -127,7 +127,7 @@ See [Runtime Manifest Theory](docs/MANIFEST_THEORY.md).
 
 ## MicroBundles
 
-A [MicroBundle](MICROBUNDLES.md) is **micro in focus, not necessarily in byte size**.
+A [MicroBundle](docs/MICROBUNDLES.md) is **micro in focus, not necessarily in byte size**.
 
 <p align="center">
   <img src="docs/assets/microbundle-cartridge.svg" alt="Futuristic MicroBundle capability cartridge">
@@ -213,7 +213,7 @@ See [Arbitration and Convergence](docs/ARBITRATION.md).
 
 ## RuntimeAssembly is the handoff
 
-[RuntimeAssembly](RUNTIME_ASSEMBLY.md) is the result of composition.
+[RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) is the result of composition.
 
 <p align="center">
   <img src="docs/assets/runtime-assembly-handoff.svg" alt="RuntimeAssembly as the handoff between FSM_COS and a host">
