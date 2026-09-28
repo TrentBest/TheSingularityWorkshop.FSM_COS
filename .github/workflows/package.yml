@@ -5,12 +5,6 @@ on:
     branches:
       - master
   workflow_dispatch:
-    inputs:
-      publish:
-        description: "Publish the packed package to GitHub Packages and NuGet.org"
-        required: false
-        default: false
-        type: boolean
 
 permissions:
   contents: read
@@ -64,7 +58,7 @@ jobs:
           path: ./artifacts/*.nupkg
 
       - name: Publish to GitHub Packages
-        if: github.event_name == 'workflow_dispatch' && inputs.publish == true
+        if: github.event_name == 'workflow_dispatch'
         run: dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/TrentBest/index.json" --api-key "${{ secrets.GITHUB_TOKEN }}" --skip-duplicate
 
   publish_nuget:
