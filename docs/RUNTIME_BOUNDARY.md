@@ -2,6 +2,8 @@
 
 ## Purpose
 
+![FSM_COS runtime boundary](assets/runtime-boundary.svg)
+
 FSM_COS exists to assemble a requested runtime. It is not the runtime host.
 
 The boundary is:
