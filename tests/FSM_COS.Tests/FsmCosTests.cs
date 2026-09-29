@@ -221,6 +221,46 @@ public sealed class FsmCosTests
         Assert.Throws<ArgumentNullException>(() => new FsmCos(null!));
     }
 
+    [Fact]
+    public void RuntimeAssembly_can_find_loaded_bundle_by_id()
+    {
+        var bundle = new TestBundle(17);
+
+        var assembly = new FsmCos(new TestCatalog(bundle)).Execute(
+            new RuntimeManifest(42, new[] { BundleRequest.Unconfigured(17) }));
+
+        Assert.True(assembly.TryGetBundle(17, out var resolved));
+        Assert.Same(bundle, resolved);
+        Assert.False(assembly.TryGetBundle(99, out _));
+    }
+
+    [Fact]
+    public void RuntimeAssembly_can_find_host_known_bundle_type()
+    {
+        var bundle = new TestBundle(23);
+
+        var assembly = new FsmCos(new TestCatalog(bundle)).Execute(
+            new RuntimeManifest(42, new[] { BundleRequest.Unconfigured(23) }));
+
+        Assert.True(assembly.TryGetBundle<TestBundle>(23, out var resolved));
+        Assert.Same(bundle, resolved);
+        Assert.True(assembly.TryGetBundle<TestBundle>(out var first));
+        Assert.Same(bundle, first);
+    }
+
+    [Fact]
+    public void RuntimeAssembly_exposes_loaded_bundle_alias_without_changing_composition()
+    {
+        var bundle = new TestBundle(31);
+
+        var assembly = new FsmCos(new TestCatalog(bundle)).Execute(
+            new RuntimeManifest(42, new[] { BundleRequest.Unconfigured(31) }));
+
+        Assert.Same(assembly.Bundles, assembly.LoadedBundles);
+        Assert.Single(assembly.LoadedBundles);
+        Assert.Same(bundle, assembly.LoadedBundles[0]);
+    }
+
     private sealed class TestCatalog : IMicroBundleCatalog
     {
         private readonly Dictionary<ulong, IMicroBundle> _bundles;
