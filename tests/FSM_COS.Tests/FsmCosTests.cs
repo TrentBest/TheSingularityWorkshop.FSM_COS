@@ -179,6 +179,30 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Core_assembly_references_FSM_API_and_MicroBundleDomain()
+    {
+        var references = typeof(FsmCos).Assembly
+            .GetReferencedAssemblies()
+            .Select(x => x.Name)
+            .ToHashSet(StringComparer.Ordinal);
+
+        Assert.Contains("TheSingularityWorkshop.FSM_API", references);
+        Assert.Contains("TheSingularityWorkshop.MicroBundleDomain", references);
+    }
+
+    [Fact]
+    public void RuntimeManifest_empty_preserves_experience_context()
+    {
+        var context = new TestStateContext();
+
+        var manifest = RuntimeManifest.Empty(88, context);
+
+        Assert.Equal(88UL, manifest.RuntimeId);
+        Assert.Empty(manifest.Bundles);
+        Assert.Same(context, manifest.ExperienceContext);
+    }
+
+    [Fact]
     public void Execute_rejects_null_manifest()
     {
         Assert.Throws<ArgumentNullException>(() =>
