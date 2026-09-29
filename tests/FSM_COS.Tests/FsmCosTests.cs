@@ -254,7 +254,7 @@ public sealed class FsmCosTests
 
     private sealed class TestStateContext : IStateContext
     {
-        public string Name => "test";
+        public string Name { get; set; } = "test";
         public bool IsValid { get; set; } = true;
     }
 }
