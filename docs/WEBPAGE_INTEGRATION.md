@@ -19,10 +19,10 @@ The browser should therefore not become a dependency of FSM_COS.
 WebPage consumes the published package:
 
 ~~~xml
-<PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="0.1.0-alpha.1" />
+<PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="0.1.0-alpha.2" />
 ~~~
 
-The package currently targets .NET 8 and depends on FSM_API. A WebPage project may consume it because the composition kernel is written against platform-neutral .NET APIs.
+The package currently targets .NET 8 and depends on FSM_API and MicroBundleDomain. A WebPage project may consume it because the composition kernel is written against platform-neutral .NET APIs.
 
 A browser-specific adapter is **not** required merely to execute FsmCos.Execute(). An adapter becomes necessary at the point where the assembled result must interact with a host-specific lifecycle or rendering system.
 
