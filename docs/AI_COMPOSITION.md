@@ -279,3 +279,193 @@ This is deliberately a **composition hypothesis**, not an alpha API promise.
 
 The first implementation task is to make the semantic contracts stable enough that FSM_COS can consume them without redefining them.
 
+
+
+---
+
+## Semantic layers: from meaning to application coordination
+
+The AI architecture is broader than the exchange transport.
+
+The current semantic model is:
+
+```text
+ProtocolAI
+    WHAT exists
+       ↓
+GrammarAI
+    HOW identities may organize
+       ↓
+CommandAI
+    FUNCTION assembled from grammar
+       ↓
+OperatingSystemAI
+    DISTRIBUTION / ROUTING of commands
+       ↓
+AppAI
+    APPLICATION-LEVEL coordination
+```
+
+This should be understood as a **capability hierarchy**, not a requirement that every interaction traverse every layer.
+
+### ProtocolAI — meaning
+
+ProtocolAI is the foundation.
+
+It provides stable mappings between integer identities and application-owned semantic values. It is deliberately unaware of command execution.
+
+### GrammarAI — legal structure
+
+GrammarAI takes protocol identities and describes which combinations form valid semantic statements.
+
+It is the structural strainer above the vocabulary strainer.
+
+### CommandAI — executable semantic composition
+
+CommandAI is a candidate layer above GrammarAI.
+
+Its concern is not merely that a statement is grammatically valid, but that valid grammar can be assembled into a meaningful unit of functionality.
+
+For example:
+
+```text
+Tool registration
+
+Buttons
+  A
+
+Actions
+  Click
+
+Command
+  Click(A)
+```
+
+The actual GUI object, delegate, framework event, or memory reference remains host-owned. The AI-facing representation contains semantic identities and command structure.
+
+### OperatingSystemAI — distribution and routing
+
+If this layer proves necessary, it belongs **above CommandAI**, not beneath it.
+
+CommandAI answers:
+
+> What functionality does this command represent?
+
+An OperatingSystemAI layer would answer questions such as:
+
+> Which command-capable domain owns this functionality?
+
+> Which available application, process, service, or experience should receive it?
+
+> How should a command move between those domains?
+
+That makes it a coordinator of command-capable resources rather than another command syntax.
+
+The name is intentionally provisional. The architectural role matters before the package name does.
+
+### AppAI — application-level orchestration
+
+An AppAI layer can then describe interaction across application boundaries.
+
+For example:
+
+```text
+Application A
+    ↓
+extract semantic data
+    ↓
+AppAI
+    ↓
+Application B
+    ↓
+invoke exposed CommandAI capability
+```
+
+This is where moving data between applications, selecting capabilities exposed by those applications, and composing cross-application workflows becomes meaningful.
+
+Again, not every host needs this layer.
+
+---
+
+## The important consequence: layers are interaction-dependent
+
+A user interacting with a tool does not inherently invoke the entire AI stack.
+
+The tooling determines the highest semantic layer required by the interaction.
+
+```text
+Simple semantic selection
+    ProtocolAI
+
+Structured statement
+    ProtocolAI + GrammarAI
+
+Tool operation
+    ProtocolAI + GrammarAI + CommandAI
+
+Cross-tool / system routing
+    ... + OperatingSystemAI
+
+Cross-application workflow
+    ... + AppAI
+```
+
+This is important because it prevents the architecture from turning every interaction into a giant prompt.
+
+The host should expose the **smallest semantic surface that can express the requested interaction**.
+
+That is also where the token-efficiency hypothesis becomes concrete: higher layers should add only the additional vocabulary and structure required for the interaction they govern.
+
+---
+
+## Operational-domain extraction
+
+An **Extract to Clipboard** action should therefore extract a semantic snapshot of the current operational domain rather than a prose description of the UI.
+
+A tool can introduce itself when initialized:
+
+```text
+I expose:
+
+Buttons
+  A
+
+Actions
+  Click
+```
+
+The registration can become integer-backed protocol identities, after which GrammarAI can describe legal composition and CommandAI can assemble the executable semantic unit.
+
+The resulting exchange is conceptually closer to:
+
+```text
+[Actions #]
+    [Click]
+        [Button A]
+```
+
+than:
+
+```text
+"Click the button named A."
+```
+
+The first form gives the model a constrained semantic address space. The second asks the model to infer relationships from language.
+
+The architecture therefore aims to move probabilistic inference toward deterministic validation:
+
+```text
+LLM probability
+      ↓
+Protocol identity
+      ↓
+Grammar constraint
+      ↓
+Command composition
+      ↓
+host validation / authorization
+      ↓
+deterministic execution
+```
+
+This is the central reason for keeping the layers separate.
