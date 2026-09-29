@@ -10,6 +10,8 @@
 
 **FSM_COS is the composition system.**
 
+FSM_COS intentionally keeps its dependency floor small: **FSM_API** supplies state/context primitives and **MicroBundleDomain** supplies canonical MicroBundle identity/version/dependency/provider metadata. GUI, serialization, storage, and host frameworks remain outside the kernel.
+
 <p align="center">
   <img src="docs/assets/fsm-cos-crane.gif" alt="Animated industrial composition crane lifting a runtime assembly">
 </p>
@@ -92,7 +94,7 @@ The repository therefore owns the composition contracts, dependency closure, con
 
 ## Current alpha boundary
 
-The current 0.1.0-alpha.1 implementation is intentionally a small vertical slice:
+The current 0.1.0-alpha.2 implementation is intentionally a small vertical slice:
 
 ~~~text
 RuntimeManifest
@@ -354,7 +356,7 @@ This repository carries its own architecture and theory. The documents here desc
 ## Package
 
 **Package:** TheSingularityWorkshop.FSM_COS  
-**Version:** 0.1.0-alpha.1  
+**Version:** 0.1.0-alpha.2  
 **Target:** .NET 8  
 **License:** MIT
 
