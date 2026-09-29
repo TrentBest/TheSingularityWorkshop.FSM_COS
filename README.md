@@ -362,11 +362,11 @@ This repository carries its own architecture and theory. The documents here desc
 ## Package
 
 **Package:** TheSingularityWorkshop.FSM_COS  
-**Version:** 0.1.0-alpha.2  
+**Version:** 0.1.0-alpha.3  
 **Target:** .NET 8  
 **License:** MIT
 
-The repository contains the packaging and trusted-publishing workflow for GitHub Packages and NuGet.org. Publishing is an explicit workflow-dispatch action; the current 0.1.0-alpha.1 package is not yet confirmed published to NuGet.org.
+The repository contains the packaging and trusted-publishing workflow for GitHub Packages and NuGet.org. Publishing is an explicit workflow-dispatch action; the current alpha package is published through the repository's trusted-publishing workflow.
 
 ## WebPage integration
 
