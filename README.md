@@ -267,6 +267,8 @@ Non-convergence is an error. FSM_COS does not return an assembly that it knows i
 
 See [Arbitration and Convergence](docs/ARBITRATION.md) and [FSM_COS Theory — Arbitration is composition negotiation](docs/THEORY.md#8-arbitration-is-composition-negotiation).
 
+For a concrete, executable scenario, see [Weapon + Magic + Elements](docs/WEAPON_MAGIC_ARBITRATION.md): a weapon capability is already part of the requested composition, a new Magic bundle introduces an Elements dependency, and the participants reconcile through arbitration before the RuntimeAssembly is handed off.
+
 ## RuntimeAssembly is the handoff
 
 [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) is the result of composition.
