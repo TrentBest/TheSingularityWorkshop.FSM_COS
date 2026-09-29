@@ -65,7 +65,8 @@ The current alpha contract is:
 ~~~csharp
 public interface IMicroBundle
 {
-    ulong Id { get; }
+    MicroBundleDescriptor Descriptor { get; }
+    ulong Id => Descriptor.Id;
     IReadOnlyList<BundleRequest> Dependencies { get; }
     void Load(MicroBundleLoadContext context);
     bool Arbitrate(ArbitrationContext context, int roundIndex);
