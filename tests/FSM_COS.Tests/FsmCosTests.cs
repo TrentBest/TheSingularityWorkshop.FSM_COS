@@ -186,8 +186,8 @@ public sealed class FsmCosTests
             .Select(x => x.Name)
             .ToHashSet(StringComparer.Ordinal);
 
-        Assert.Contains("TheSingularityWorkshop.FSM_API", references);
-        Assert.Contains("TheSingularityWorkshop.MicroBundleDomain", references);
+        Assert.Contains(typeof(IStateContext).Assembly.GetName().Name!, references);
+        Assert.Contains(typeof(MicroBundleDescriptor).Assembly.GetName().Name!, references);
     }
 
     [Fact]
