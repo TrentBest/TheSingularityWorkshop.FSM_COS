@@ -249,6 +249,65 @@ That keeps the same invariant that governs the rest of the kernel:
 
 ---
 
+## Proven host composition pattern
+
+The first concrete host integration now establishes the intended boundary:
+
+```text
+RuntimeManifest
+    |
+    +-- AI exchange capability
+    |     |
+    |     +-- ProtocolAI
+    |     +-- GrammarAI
+    |
+    +-- GUI-facing capability
+    |
+    v
+FSM_COS
+    |
+    v
+RuntimeAssembly
+    |
+    v
+host
+    |
+    +-- shared GUI builder
+    +-- clipboard
+    +-- provider transport
+```
+
+The important point is that **FSM_COS does not need to reference the AI or GUI packages to compose them**.
+
+A host supplies an `IMicroBundleCatalog`. The catalog resolves concrete capability bundles, while FSM_COS handles dependency ordering, loading, arbitration, and the stable handoff.
+
+The GUI bundle can then build a platform-neutral semantic tree using `TheSingularityWorkshop.GUI.Core`. A host-specific renderer such as Blazor can manifest that tree.
+
+The exchange itself can be assembled from the actual ProtocolAI and GrammarAI definitions:
+
+```text
+PROTOCOL
+  [integer-backed vocabulary]
+
+GRAMMAR
+  [integer-backed structure]
+```
+
+The host may expose that deterministic representation through an **Extract** action, send it to an LLM by clipboard or provider transport, and receive a response through the host's input surface.
+
+FSM_COS remains deliberately unaware of:
+
+- browser clipboard APIs;
+- Blazor or WPF rendering;
+- provider SDKs;
+- API keys or credential stores;
+- LLM inference;
+- arbitrary response parsing.
+
+This is the first meaningful proof of the architecture: **composition is reusable even when manifestation and transport change**.
+
+---
+
 ## Future MicroBundle graph
 
 A plausible future graph is:
