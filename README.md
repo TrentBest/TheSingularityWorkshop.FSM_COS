@@ -338,6 +338,12 @@ There is intentionally **one canonical FSM_COS implementation project**: src/FSM
 
 The old root scaffold that contained only Class1.cs has been removed. The solution now points at the real project.
 
+<p align="center">
+  <img src="docs/assets/ai-composition.svg" alt="FSM_COS AI composition: ProtocolAI and GrammarAI assembled as runtime capabilities" width="1100">
+</p>
+
+<p align="center"><strong>AI capabilities are composed like any other capability; FSM_COS does not become the AI framework.</strong></p>
+
 ## Documentation
 
 This repository carries its own architecture and theory. The documents here describe **FSM_COS itself**, rather than asking another repository to explain its internals.
