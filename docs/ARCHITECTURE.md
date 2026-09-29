@@ -33,13 +33,13 @@ Pairs a ulong BundleId with opaque configuration bytes. A manifest producer can 
 Resolves a bundle identity to the IMicroBundle required for installation. The catalog is supplied by the host, so future Warehouse-backed or generated resolvers do not require a different composition algorithm.
 
 ### IMicroBundle
-Provides exactly what composition needs: identity, dependencies, Load, and Arbitrate. It does not expose a GUI, web server, or host lifecycle contract.
+Consumes the domain-owned `MicroBundleDescriptor` for identity/version/providers, while retaining composition-specific dependency configuration, Load, and Arbitrate behavior. FSM_COS does not redefine MicroBundle domain metadata. It does not expose a GUI, web server, or host lifecycle contract.
 
 ### MicroBundleLoadContext
 Carries runtime identity and configuration available during installation. Configuration remains opaque to FSM_COS.
 
 ### ArbitrationContext
-Exposes runtime identity and the currently loaded bundle set during convergence. It is composition state, not host state.
+Exposes runtime identity, the currently loaded bundle set, and an optional FSM_API `IStateContext` supplied by the host. It is composition context, not host lifecycle state.
 
 ### RuntimeAssembly
 The result surface of the composition pass: runtime identity, loaded bundles, and arbitration count. See [RuntimeAssembly](RUNTIME_ASSEMBLY.md) and [FSM_COS Theory — RuntimeAssembly is the handoff object](THEORY.md#9-runtimeassembly-is-the-handoff-object).
@@ -103,7 +103,7 @@ RuntimeAssembly
 
 ## Current alpha boundary
 
-Alpha 1 stops after manifest → resolve → dependency resolution → configured load → arbitration → RuntimeAssembly.
+Alpha 2 stops after manifest → resolve → dependency resolution → configured load → arbitration → RuntimeAssembly.
 
 Execution scheduling, resource allocation, Warehouse integration, and host lifecycle belong to later layers when their contracts are sufficiently clear.
 
