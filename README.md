@@ -94,7 +94,7 @@ The repository therefore owns the composition contracts, dependency closure, con
 
 ## Current alpha boundary
 
-The current 0.1.0-alpha.2 implementation is intentionally a small vertical slice:
+The current 0.1.0-alpha.3 implementation is intentionally a small vertical slice:
 
 ~~~text
 RuntimeManifest
@@ -387,6 +387,8 @@ WebPage / GUI manifestation
 ~~~
 
 WebPage should reference the TheSingularityWorkshop.FSM_COS package and implement the catalog/host boundary around it. Platform-specific lifecycle, browser APIs, GUI rendering, and Experience presentation remain outside FSM_COS.
+
+The first AI/GUI vertical slice now follows the same boundary: WebPage supplies ProtocolAI, GrammarAI, and GUI-facing MicroBundles through its catalog; FSM_COS composes them and returns them through RuntimeAssembly; the WebPage host uses the shared GUI builder for manifestation and owns clipboard/provider interaction. This keeps the package reusable while proving that the semantic exchange can be assembled as ordinary runtime capability.
 
 For the concrete integration contract, see [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) and [FSM_COS Theory — Same composition, different manifestation](docs/THEORY.md#10-same-composition-different-manifestation).
 
