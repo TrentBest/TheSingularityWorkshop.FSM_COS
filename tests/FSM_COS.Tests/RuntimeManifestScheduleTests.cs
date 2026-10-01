@@ -34,11 +34,11 @@ public sealed class RuntimeManifestScheduleTests
 
         var loaded = new HashSet<ulong>();
 
-        Assert.False(schedule.IsDependencyReady(2, loaded.Contains));
+        Assert.False(schedule.IsDependencyReady(2, id => loaded.Contains(id)));
 
         loaded.Add(1);
 
-        Assert.True(schedule.IsDependencyReady(2, loaded.Contains));
+        Assert.True(schedule.IsDependencyReady(2, id => loaded.Contains(id)));
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public sealed class RuntimeManifestScheduleTests
         var localized = new HashSet<ulong> { 1 };
         var loaded = new HashSet<ulong>();
 
-        Assert.False(schedule.IsDependencyReady(2, loaded.Contains));
+        Assert.False(schedule.IsDependencyReady(2, id => loaded.Contains(id)));
         Assert.Contains(1, localized);
     }
 
