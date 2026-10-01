@@ -1,14 +1,8 @@
 namespace TheSingularityWorkshop.FSM_COS;
 
-/// <summary>
+///
 /// Publish-time execution schedule baked into a RuntimeManifest.
-/// </summary>
-/// <remarks>
-/// The schedule separates fetch opportunity from composition ordering.
-/// Independent entries may be localized as one broad batch while dependency
-/// work proceeds according to the baked graph. Completed localization is
-/// retained; it does not need to be re-requested.
-/// </remarks>
+///
 public sealed class RuntimeManifestSchedule
 {
     public RuntimeManifestSchedule(
@@ -39,16 +33,16 @@ public sealed class RuntimeManifestSchedule
         Entries = entries;
         Dependencies = dependencies;
 
-        var dependencyIds = dependencies
-            .Select(edge => edge.DependencyId)
+        var prerequisiteIds = dependencies
+            .Select(edge => edge.BundleId)
             .ToHashSet();
 
         IndependentEntries = entries
-            .Where(entry => !dependencyIds.Contains(entry.Reference.BundleId))
+            .Where(entry => !prerequisiteIds.Contains(entry.Reference.BundleId))
             .ToArray();
 
         DependencyEntries = entries
-            .Where(entry => dependencyIds.Contains(entry.Reference.BundleId))
+            .Where(entry => prerequisiteIds.Contains(entry.Reference.BundleId))
             .ToArray();
     }
 
@@ -57,13 +51,16 @@ public sealed class RuntimeManifestSchedule
     public IReadOnlyList<RuntimeManifestDependency> Dependencies { get; }
 
     /// <summary>
-    /// Entries not required by another manifest entry. These are candidates
-    /// for broad initial localization.
+    /// Entries with no prerequisites. These are candidates for broad
+    /// initial localization because they do not require another manifest
+    /// entry to become active first.
     /// </summary>
     public IReadOnlyList<RuntimeManifestEntry> IndependentEntries { get; }
 
     /// <summary>
-    /// Entries required by another manifest entry.
+    /// Entries with one or more prerequisites. These remain constrained by
+    /// the baked dependency graph even if they are also dependencies of
+    /// other entries.
     /// </summary>
     public IReadOnlyList<RuntimeManifestEntry> DependencyEntries { get; }
 
