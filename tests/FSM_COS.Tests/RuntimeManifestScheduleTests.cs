@@ -5,7 +5,7 @@ namespace FSM_COS.Tests;
 public sealed class RuntimeManifestScheduleTests
 {
     [Fact]
-    public void Schedule_separates_independent_entries_from_dependency_entries()
+    public void Schedule_separates_entries_without_prerequisites_from_dependency_constrained_entries()
     {
         var a = Entry(1);
         var b = Entry(2);
@@ -19,9 +19,9 @@ public sealed class RuntimeManifestScheduleTests
                 new RuntimeManifestDependency(3, 2)
             });
 
-        Assert.Equal(new ulong[] { 3 }, schedule.IndependentEntries.Select(e => e.Reference.BundleId));
+        Assert.Equal(new ulong[] { 1 }, schedule.IndependentEntries.Select(e => e.Reference.BundleId));
         Assert.Equal(
-            new ulong[] { 1, 2 },
+            new ulong[] { 2, 3 },
             schedule.DependencyEntries.Select(e => e.Reference.BundleId));
     }
 
