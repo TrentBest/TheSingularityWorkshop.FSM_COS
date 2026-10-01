@@ -52,7 +52,7 @@ public sealed class RuntimeManifestScheduleTests
         var loaded = new HashSet<ulong>();
 
         Assert.False(schedule.IsDependencyReady(2, id => loaded.Contains(id)));
-        Assert.Contains(1, localized);
+        Assert.Contains(1UL, localized);
     }
 
     [Fact]
