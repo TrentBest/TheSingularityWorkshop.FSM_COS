@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="360" viewBox="0 0 1100 360">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#172554"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1100" height="360" rx="28" fill="url(#bg)"/>
+  <text x="550" y="52" text-anchor="middle" fill="#fff" font-family="Segoe UI,Arial,sans-serif" font-size="28" font-weight="700">FSM_COS 1.0.0 — Stable Dependency Frontier</text>
+  <text x="550" y="80" text-anchor="middle" fill="#b9c4e4" font-family="Segoe UI,Arial,sans-serif" font-size="15">Stable foundations enter the composition kernel; downstream packages wait for the kernel.</text>
+  <g font-family="Segoe UI,Arial,sans-serif" text-anchor="middle">
+    <rect x="70" y="125" width="250" height="78" rx="16" fill="#111827" stroke="#60a5fa" stroke-width="2"/>
+    <text x="195" y="157" fill="#fff" font-size="19" font-weight="700">FSM_API</text>
+    <text x="195" y="184" fill="#93c5fd" font-size="16">1.0.13 • stable</text>
+    <rect x="70" y="230" width="250" height="78" rx="16" fill="#111827" stroke="#60a5fa" stroke-width="2"/>
+    <text x="195" y="262" fill="#fff" font-size="19" font-weight="700">MicroBundleDomain</text>
+    <text x="195" y="289" fill="#93c5fd" font-size="16">1.0.0 • stable</text>
+    <rect x="425" y="145" width="250" height="110" rx="20" fill="#172554" stroke="#fbbf24" stroke-width="3" filter="url(#glow)"/>
+    <text x="550" y="185" fill="#fff" font-size="23" font-weight="700">FSM_COS</text>
+    <text x="550" y="214" fill="#fde68a" font-size="20">1.0.0 • release prep</text>
+    <text x="550" y="238" fill="#c7d2fe" font-size="14">composition → convergence → handoff</text>
+    <rect x="780" y="125" width="250" height="78" rx="16" fill="#111827" stroke="#64748b" stroke-width="2"/>
+    <text x="905" y="157" fill="#e5e7eb" font-size="19" font-weight="700">FSM_REST</text>
+    <text x="905" y="184" fill="#94a3b8" font-size="16">downstream • next frontier</text>
+    <rect x="780" y="230" width="250" height="78" rx="16" fill="#111827" stroke="#64748b" stroke-width="2"/>
+    <text x="905" y="262" fill="#e5e7eb" font-size="19" font-weight="700">Repository REST</text>
+    <text x="905" y="289" fill="#94a3b8" font-size="16">downstream • next frontier</text>
+  </g>
+  <g stroke="#93c5fd" stroke-width="3" fill="none">
+    <path d="M320 164 C365 164 380 185 425 185"/>
+    <path d="M320 269 C365 269 380 215 425 215"/>
+  </g>
+  <g stroke="#64748b" stroke-width="3" fill="none" stroke-dasharray="9 8">
+    <path d="M675 190 C720 190 735 164 780 164"/>
+    <path d="M675 220 C720 220 735 269 780 269"/>
+  </g>
+  <text x="550" y="334" text-anchor="middle" fill="#dbeafe" font-family="Segoe UI,Arial,sans-serif" font-size="14">Build order is topology • Publication is authority • Runtime composition is a different graph</text>
+</svg>
