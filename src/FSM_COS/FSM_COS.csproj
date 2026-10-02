@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>TheSingularityWorkshop.FSM_COS</PackageId>
-    <Version>0.1.0-alpha.3</Version>
+    <Version>1.0.0</Version>
     <Authors>Trent Best</Authors>
     <Company>The Singularity Workshop</Company>
     <Description>Runtime composition substrate for assembling Experiences from FSM infrastructure and MicroBundles.</Description>
@@ -13,12 +13,12 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <PackageReleaseNotes>1.0.0: stable composition kernel with staged manifest loading, dependency resolution, configuration propagation, arbitration, and RuntimeAssembly handoff.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="TheSingularityWorkshop.FSM_API" Version="1.0.13" />
-    <PackageReference Include="TheSingularityWorkshop.MicroBundleDomain" Version="0.1.0-alpha.1" />
+    <PackageReference Include="TheSingularityWorkshop.MicroBundleDomain" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
