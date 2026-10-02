@@ -1,5 +1,8 @@
+using TheSingularityWorkshop.MicroBundleDomain;
+
 namespace TheSingularityWorkshop.FSM_COS;
 
+/// <summary>Composition engine that assembles domain-owned MicroBundles into a runtime.</summary>
 public sealed class FsmCos : IFsmCos
 {
     public const int DefaultMaximumArbitrationRounds = 10;
@@ -8,7 +11,8 @@ public sealed class FsmCos : IFsmCos
 
     public FsmCos(IMicroBundleCatalog catalog, int maximumArbitrationRounds = DefaultMaximumArbitrationRounds)
     {
-        if (maximumArbitrationRounds < 1) throw new ArgumentOutOfRangeException(nameof(maximumArbitrationRounds));
+        if (maximumArbitrationRounds < 1)
+            throw new ArgumentOutOfRangeException(nameof(maximumArbitrationRounds));
         _catalog = catalog ?? throw new ArgumentNullException(nameof(catalog));
         _maximumArbitrationRounds = maximumArbitrationRounds;
     }
@@ -38,7 +42,8 @@ public sealed class FsmCos : IFsmCos
             foreach (var bundle in loaded)
                 changed |= bundle.Arbitrate(arbitrationContext, rounds);
 
-            if (!changed) break;
+            if (!changed)
+                break;
         }
 
         if (rounds == _maximumArbitrationRounds)
@@ -49,7 +54,7 @@ public sealed class FsmCos : IFsmCos
     }
 
     private void LoadRecursive(
-        BundleRequest request,
+        MicroBundleDependencyRequest request,
         List<IMicroBundle> loaded,
         HashSet<ulong> loadedIds,
         HashSet<ulong> loading,
@@ -58,7 +63,9 @@ public sealed class FsmCos : IFsmCos
         if (request.BundleId == 0)
             throw new ArgumentOutOfRangeException(nameof(request), "A MicroBundle request ID must be non-zero.");
 
-        if (loadedIds.Contains(request.BundleId)) return;
+        if (loadedIds.Contains(request.BundleId))
+            return;
+
         if (!loading.Add(request.BundleId))
             throw new InvalidOperationException(
                 $"MicroBundle dependency cycle detected at {request.BundleId}.");
