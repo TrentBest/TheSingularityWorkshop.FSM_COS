@@ -359,14 +359,40 @@ This repository carries its own architecture and theory. The documents here desc
 - [Development](docs/DEVELOPMENT.md) — how to evolve and verify the repository.
 - [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — how the browser host consumes FSM_COS without pulling platform concerns into the kernel.
 
+## 1.0.0 release posture
+
+This branch is the **release-review precipice** for FSM_COS 1.0.0.
+
+The stable dependency closure is now explicit:
+
+```text
+FSM_API 1.0.13 ───────────────┐
+                              ├──> FSM_COS 1.0.0
+MicroBundleDomain 1.0.0 ─────┘
+```
+
+The staged manifest load-plan work is included in this release-preparation branch. The package remains deliberately independent of GUI, storage, REST transport, serialization implementation, and host lifecycle concerns.
+
+### Release gate
+
+A stable package must not contain a prerelease first-party dependency. CI packs the exact package that would be released and inspects its `.nuspec` before the artifact becomes eligible for publication.
+
+Publication is **not** triggered by a push or pull request. It requires a manual workflow dispatch with `publish: true`.
+
+See [1.0.0 Release Contract](docs/RELEASE_1_0.md) for the FSM_COS-specific review checklist.
+
+<p align="center">
+  <img src="docs/assets/release-frontier.svg" alt="FSM_COS 1.0.0 stable dependency frontier">
+</p>
+
 ## Package
 
 **Package:** TheSingularityWorkshop.FSM_COS  
-**Version:** 0.1.0-alpha.3  
+**Version:** 1.0.0  
 **Target:** .NET 8  
 **License:** MIT
 
-The repository contains the packaging and trusted-publishing workflow for GitHub Packages and NuGet.org. Publishing is an explicit workflow-dispatch action; the current alpha package is published through the repository's trusted-publishing workflow.
+The repository contains the packaging and trusted-publishing workflow for NuGet.org. Ordinary pushes and pull requests build, test, cover, pack, and validate the package; publication requires an explicit workflow dispatch with `publish: true`.
 
 ## WebPage integration
 
