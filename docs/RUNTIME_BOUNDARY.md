@@ -28,7 +28,7 @@ FSM_COS owns the common computation-composition operations required to turn a Ru
 
 1. resolve requested MicroBundles;
 2. resolve dependency closure;
-3. carry request configuration;
+3. accept optional external configuration through the configuration-source boundary;
 4. install/load dependencies before dependents;
 5. arbitrate over the installed composition;
 6. detect cycles, missing bundles, and non-convergence;
@@ -69,6 +69,10 @@ Unity / browser / desktop / other manifestation
 ~~~
 
 This prevents the composition package from acquiring platform lifecycle dependencies.
+
+## Configuration boundary
+
+Configuration is supplied independently of the Runtime Manifest. FSM_COS does not read configuration files or interpret their format; it consumes the optional configuration source contract and passes available configuration into the composition lifecycle. When no configuration exists, the MicroBundle uses its defaults.
 
 ## Serialization boundary
 
