@@ -294,7 +294,7 @@ public sealed class FsmCosTests
         public int ChangesRemaining { get; set; }
         public int ArbitrationCalls { get; private set; }
         public ulong SeenRuntimeId { get; private set; }
-        public IStateContext? SeenExperienceContext { get; private set; }
+        public object? SeenExperienceContext { get; private set; }
 
         public void Load(IMicroBundleLoadContext context)
         {
