@@ -8,7 +8,7 @@
     <Version>0.1.0-alpha.5</Version>
     <Authors>Trent Best</Authors>
     <Company>The Singularity Workshop</Company>
-    <Description>Runtime composition substrate for assembling Experiences from FSM infrastructure and MicroBundles.</Description>
+    <Description>Platform-neutral computation composition kernel for resolving, loading, arbitrating, and assembling MicroBundle-based computation.</Description>
     <PackageTags>FSM;runtime;composition;microbundle;experience</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
