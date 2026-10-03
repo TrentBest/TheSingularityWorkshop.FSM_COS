@@ -237,7 +237,7 @@ FSM_COS must move configuration through the composition process without becoming
 The alpha contract therefore keeps configuration opaque:
 
 ```text
-BundleRequest
+MicroBundleDependencyRequest
 ├── BundleId
 └── Configuration : bytes
 ```
