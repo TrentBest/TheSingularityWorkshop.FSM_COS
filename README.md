@@ -8,7 +8,11 @@
 [![Last commit](https://img.shields.io/github/last-commit/TrentBest/TheSingularityWorkshop.FSM_COS/master)](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commits/master)
 [![Code Coverage](https://codecov.io/gh/TrentBest/TheSingularityWorkshop.FSM_COS/graph/badge.svg)](https://codecov.io/gh/TrentBest/TheSingularityWorkshop.FSM_COS)
 
-**FSM_COS is a platform-neutral computation and composition kernel.**
+**FSM_COS is a platform-neutral computation platform for composing computation.**
+
+> **Engineering identity:** FSM_COS is deliberately a computation platform, not an application platform. It does not know whether the computation will become a WebPage, WebApp, AnyApp, DistributedApp, desktop tool, service, simulation, spreadsheet-like system, or something with no user interface at all.
+
+Its job is the common scheduling and operational overhead required to turn a defined computation into an assembled runtime that another system can execute or manifest.
 
 FSM_COS intentionally keeps its dependency floor small. It consumes **FSM_API** for the state/context primitives required by composition and **MicroBundleDomain** for the canonical MicroBundle contract. It is deliberately **not an application framework**: no browser, desktop UI, Unity runtime, renderer, database, warehouse, or product type is built into the kernel.
 
