@@ -83,14 +83,11 @@ See [Runtime Boundary](docs/RUNTIME_BOUNDARY.md).
 FSM_COS is deliberately above the contracts it consumes.
 
 ```text
-FSM_API
-   │
-   │ state/context primitive
-   ▼
-FSM_COS  ◄──── MicroBundleDomain
-   │
-   │ composition
-   ▼
+FSM_API ───────────────► FSM_COS ◄────────────── FSM_UserIO
+ state/context             composition             semantic intent
+                              │
+                              │ composition
+                              ▼
 RuntimeAssembly
    │
    ▼
@@ -105,6 +102,7 @@ The arrows here mean **dependency direction**: FSM_COS consumes both packages. N
 |---|---|---|
 | **FSM_API 1.0.13** | Supplies the existing state/context abstraction used at the composition boundary. | FSM_COS does not become an FSM host or redefine FSM_API behavior. |
 | **MicroBundleDomain 1.0.1** | Supplies the canonical MicroBundle runtime contract: identity, version/providers, dependency requests, load context, and arbitration context. | FSM_COS does not redefine MicroBundle domain semantics. |
+| **FSM_UserIO 0.1.0-alpha.1** | Supplies the platform-neutral `SemanticIntent` boundary carried by a runtime request and returned with the assembled runtime. | FSM_COS does not own devices, GUI, input policy, datum, or intent execution. |
 
 That distinction is important: **a dependency should be explained by the responsibility FSM_COS actually consumes, not by copying the dependency's documentation.**
 
@@ -473,7 +471,7 @@ This repository documents **FSM_COS itself**. Neighboring packages document thei
 ## Current package
 
 **Package:** `TheSingularityWorkshop.FSM_COS`  
-**Version:** `0.1.0-alpha.5`  
+**Version:** `0.1.0-alpha.6`  
 **Target:** .NET 8  
 **License:** MIT
 
