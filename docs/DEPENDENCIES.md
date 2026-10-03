@@ -322,3 +322,34 @@ If the dependency would require the referenced package to depend back on FSM_COS
 The composition kernel should remain small because its responsibility is small.
 
 > **A package belongs in FSM_COS when the kernel needs its contract to perform composition — not merely because a host currently uses it.**
+
+
+---
+
+## Ontology
+
+**Package:** `TheSingularityWorkshop.Ontology`
+
+### Why it is not a runtime dependency
+
+Ontology is an optional semantic layer. FSM_COS may compose an ontology MicroBundle, but the composition kernel must not require ontology merely to assemble capabilities.
+
+The independent Ontology package provides scalar and N-dimensional semantic indexing, qualified addresses, relationships, and explicit address-space mathematics. It may depend on MicroBundleDomain; MicroBundleDomain must remain independent of Ontology.
+
+```text
+MicroBundleDomain
+      |
+      +----> Ontology (optional semantic structure)
+      |
+      +----> other domain MicroBundles
+                     |
+                     v
+                   FSM_COS
+                     |
+                     v
+               RuntimeAssembly
+```
+
+FSM_COS therefore consumes ontology-enabled capabilities through the same generic MicroBundle boundary. It does not hard-code animal, AEC, physics, rendering, or any other ontology into the kernel.
+
+See the [Ontology repository](https://github.com/TrentBest/TheSingularityWorkshop.Ontology), especially its [address-space mathematics](https://github.com/TrentBest/TheSingularityWorkshop.Ontology/blob/main/docs/MATHEMATICS.md), for the semantic layer itself.
