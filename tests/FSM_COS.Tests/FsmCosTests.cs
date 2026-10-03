@@ -54,6 +54,29 @@ public sealed class FsmCosTests
         Assert.Contains("9.9.9", exception.Message);
     }
 
+
+    [Fact]
+    public void ManifestEntry_rejects_empty_versions()
+    {
+        Assert.Throws<ArgumentException>(() =>
+            new MicroBundleManifestEntry(1, " "));
+    }
+
+    [Fact]
+    public void External_configuration_overrides_dependency_request_configuration()
+    {
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(
+            1,
+            new MicroBundleDependencyRequest(2, new byte[] { 1, 2, 3 }));
+
+        new FsmCos(new TestCatalog(dependency, root)).Execute(
+            new RuntimeManifest(42, new[] { Entry(1) }),
+            new TestConfigurationSource((2, "0.1.0-test", new byte[] { 9, 8, 7 })));
+
+        Assert.Equal(new byte[] { 9, 8, 7 }, dependency.Configuration.ToArray());
+    }
+
     [Fact]
     public void Execute_passes_dependency_configuration_before_loading_dependency()
     {
