@@ -1,7 +1,9 @@
+using TheSingularityWorkshop.MicroBundleDomain;
+
 namespace TheSingularityWorkshop.FSM_COS;
 
-/// <summary>Context supplied to MicroBundles during installation.</summary>
-public sealed class MicroBundleLoadContext
+/// <summary>FSM_COS implementation of the domain-owned load context.</summary>
+public sealed class MicroBundleLoadContext : IMicroBundleLoadContext
 {
     private readonly Dictionary<ulong, ReadOnlyMemory<byte>> _configuration = new();
 

@@ -325,7 +325,7 @@ Those concerns can touch the same configuration data without being the same prob
 ~~~text
 FSM_Serialization
       ↓ representation
-BundleRequest
+MicroBundleDependencyRequest
       ↓
 FSM_COS
       ↓ composition
