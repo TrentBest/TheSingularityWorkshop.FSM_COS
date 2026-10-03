@@ -89,8 +89,8 @@ public sealed class FsmCosTests
         var assembly = new FsmCos(new TestCatalog(shared, first, second)).Execute(
             new RuntimeManifest(42, new[]
             {
-                MicroBundleDependencyRequest.Unconfigured(1),
-                MicroBundleDependencyRequest.Unconfigured(2)
+                Entry(1),
+                Entry(2)
             }));
 
         Assert.Equal(new ulong[] { 3, 1, 2 }, assembly.Bundles.Select(x => x.Id));
@@ -182,7 +182,7 @@ public sealed class FsmCosTests
         var bundle = new TestBundle(1);
 
         new FsmCos(new TestCatalog(bundle)).Execute(
-            new RuntimeManifest(1234, new[] { MicroBundleDependencyRequest.Unconfigured(1) }, context));
+            new RuntimeManifest(1234, new[] { Entry(1) }, context));
 
         Assert.Equal(1234UL, bundle.SeenRuntimeId);
         Assert.Same(context, bundle.SeenExperienceContext);
