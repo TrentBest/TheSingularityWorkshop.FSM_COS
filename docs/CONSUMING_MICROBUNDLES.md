@@ -1,351 +1,426 @@
 # Consuming MicroBundles from FSM_COS
 
-> **FSM_COS does not define the MicroBundle domain. It defines how a composition consumes MicroBundles.**
+> **FSM_COS does not define the MicroBundle domain. It defines how a developer composes MicroBundles into a runtime.**
 
-The canonical MicroBundle contract lives in **TheSingularityWorkshop.MicroBundleDomain**.
+The authoritative MicroBundle contract is supplied by **TheSingularityWorkshop.MicroBundleDomain**.
 
-This document therefore does not attempt to explain what a MicroBundle means, how its ontology is modeled, or how its domain metadata should be designed. Those are responsibilities of the MicroBundle domain package.
+This document is intentionally narrow. It explains what an FSM_COS consumer supplies, what FSM_COS does with it, and how a developer can choose the surrounding infrastructure.
 
-Instead, this document answers the FSM_COS question:
+## The boundary
 
-> **How does a developer provide MicroBundles to FSM_COS and let the composition kernel use them?**
-
-## Ownership map
-
-```text
-MicroBundleDomain
-    │
-    └── defines the MicroBundle contract
-             │
-             ▼
-      MicroBundleRepository
-             │
-             └── locates / delivers artifacts
-                         │
-                         ▼
-                       FSM_COS
-                         │
-                         ├── resolves requested roots
-                         ├── discovers dependencies
-                         ├── supplies optional configuration
-                         ├── calls Load()
-                         ├── runs arbitration
-                         └── returns RuntimeAssembly
-```
-
-FSM_COS consumes the first two layers through explicit boundaries. It does not duplicate their domains.
-
----
-
-
-
-## Why not just use classes?
-
-Because ordinary classes answer a smaller question.
-
-A class usually says:
-
-> Here is some behavior or data.
-
-A MicroBundle says:
-
-> Here is a capability with a machine identity, known composition relationships, an installation boundary, configuration ownership, and a defined opportunity to reconcile with the larger runtime.
-
-That additional contract is what makes a MicroBundle useful to a composition kernel.
-
-The abstraction is not valuable because it wraps a class.
-
-It is valuable because it gives a capability a **place in a larger system without requiring the capability to become the system**.
-
----
-
-## The composition contract
-
-The current domain-owned runtime contract is:
-
-~~~csharp
-public interface IMicroBundle
-{
-    MicroBundleDescriptor Descriptor { get; }
-    ulong Id => Descriptor.Id;
-    IReadOnlyList<MicroBundleDependencyRequest> Dependencies { get; }
-    void Load(IMicroBundleLoadContext context);
-    bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex);
-}
-~~~
-
-The contract describes four responsibilities:
-
-1. **Identity** — who is this capability?
-2. **Dependencies** — what else must exist for this capability to participate?
-3. **Installation** — how does the capability enter the assembled composition?
-4. **Arbitration** — does this participant need the composition to change?
-
-Notice what is absent.
-
-There is no browser lifecycle.
-
-There is no Unity scene lifecycle.
-
-There is no GUI renderer.
-
-There is no application scheduler.
-
-There is no serializer.
-
-That absence is intentional.
-
----
-
-## Identity is composition identity
-
-The Id is the machine-oriented identity used by FSM_COS.
-
-Human-readable names may exist in authoring systems, catalogs, tooling, documentation, or presentation models. The composition kernel does not need to make human naming the primary runtime identity.
-
-That distinction becomes increasingly important as the ecosystem grows.
-
-A human may call something:
-
-~~~text
-Physics
-Navigation
-Forge
-Workshop
-~~~
-
-The composition engine needs an identity that can be resolved deterministically.
-
-This is one reason the Runtime Manifest is published rather than interpreted as a rich editor document.
-
----
-
-## Dependencies are relationships, not ownership
-
-A MicroBundle may request another MicroBundle:
-
-~~~text
-Workshop Experience
-├── GUI
-│   └── FSM_API
-└── Physics
-    └── FSM_API
-~~~
-
-The dependency says:
-
-> **I require this capability to participate in the composition.**
-
-It does not say:
-
-> **I own this capability.**
-
-That distinction is essential.
-
-Ownership language tends to pull composition toward a tree of masters and subordinates. Dependency language instead describes what must coexist.
-
-FSM_COS resolves the reachable dependency closure and prevents duplicate installation of the same identity.
-
-A missing dependency is an explicit composition failure.
-
-A dependency cycle is an explicit composition failure.
-
-The kernel does not guess.
-
----
-
-## Configuration
-
-Configuration is separate from the manifest.
-
-A host can provide an `IMicroBundleConfigurationSource`:
-
-```csharp
-public interface IMicroBundleConfigurationSource
-{
-    bool TryGetConfiguration(
-        ulong runtimeId,
-        ulong bundleId,
-        string version,
-        out ReadOnlyMemory<byte> configuration);
-}
-```
-
-FSM_COS owns the handoff, not the storage format.
-
-If configuration is absent, FSM_COS provides no external configuration and the MicroBundle uses its defaults.
-
-```text
-configuration exists → FSM_COS supplies it → MicroBundle interprets it
-
-configuration absent → no external configuration → MicroBundle defaults
-```
-
-## Arbitration
- makes the MicroBundle interoperable
-
-This is the part that deserves more attention than “bundle” usually receives.
-
-A MicroBundle is not merely a loadable artifact.
-
-It is a participant in **composition negotiation**.
-
-During arbitration, a bundle can inspect the shared composition and determine whether something it owns has become unsatisfied or whether another participant has created a condition that requires a response.
-
-That means a MicroBundle can remain independently authored while still participating in a larger runtime.
-
-The model becomes:
-
-~~~text
-bundle A ──┐
-bundle B ──┼──► shared composition ◄── host later
-bundle C ──┘
-~~~
-
-No single bundle has to understand every other bundle.
-
-The composition kernel provides the shared reconciliation point.
-
-For the deeper interoperability argument, see [Arbitration and Convergence](ARBITRATION.md).
-
----
-
-## A MicroBundle should have a bounded opinion
-
-A useful MicroBundle has an opinion about **its own capability**.
-
-It should not have an opinion about everything.
-
-Good:
-
-> “My navigation capability requires a traversable spatial model.”
-
-Dangerous:
-
-> “I am navigation, therefore I control the GUI, identity, physics, storage, and application lifecycle.”
-
-The first is composition.
-
-The second is application architecture hiding inside a bundle.
-
-The MicroBundle abstraction is strongest when each participant has a sharp boundary and arbitration allows those boundaries to interact without collapsing them.
-
----
-
-## A sealed capability cartridge
-
-The cartridge metaphor is useful:
-
-- the catalog locates the cartridge;
-- the manifest requests it;
-- FSM_COS installs it;
-- dependencies identify other cartridges required by the composition;
-- configuration arrives with the request;
-- arbitration lets the cartridge participate in reconciliation;
-- RuntimeAssembly records the stable result;
-- the host decides how the capability is manifested.
-
-The cartridge does not become the crane.
-
-The crane does not become the warehouse.
-
-The assembled machine does not become the host.
-
-Each metaphor is another way of describing responsibility boundaries.
-
----
-
-## Micro does not mean disposable
-
-A MicroBundle should not be interpreted as a temporary plugin or throwaway module.
-
-The word means that the unit is intentionally bounded.
-
-A mature ecosystem could contain:
-
-~~~text
-Experience
- ├── identity MicroBundle
- ├── navigation MicroBundle
- ├── physics MicroBundle
- ├── GUI MicroBundle
- ├── persistence MicroBundle
- └── domain capability MicroBundle
-~~~
-
-Each can evolve independently.
-
-The composition can evolve by changing which units are requested, which versions are resolved, and which configuration is carried.
-
-That is substantially different from rebuilding a monolithic application every time a capability changes.
-
----
-
-## What a MicroBundle must not become
-
-A MicroBundle should not become:
-
-- a hidden application;
-- a universal service locator;
-- a GUI framework;
-- a host lifecycle manager;
-- a serialization framework;
-- a network orchestrator;
-- a global configuration registry;
-- a replacement for FSM_API;
-- a reason for FSM_COS to know domain-specific semantics.
-
-If a feature needs one of those things, the architecture should ask whether it belongs in another layer rather than quietly expanding the MicroBundle contract.
-
----
-
-## The larger equation
-
-The MicroBundle sits between semantic capability and composition:
-
-~~~text
-semantic capability
+\`\`\`text
+your MicroBundle source
         │
+        │ IMicroBundle
         ▼
-    MicroBundle
-        │
-        ├── identity
-        ├── dependencies
-        ├── configuration
-        ├── installation
-        └── arbitration
+ IMicroBundleCatalog
         │
         ▼
      FSM_COS
         │
+        ├── resolve manifest roots
+        ├── discover dependency closure
+        ├── obtain optional configuration
+        ├── load bundles
+        ├── arbitrate to convergence
         ▼
  RuntimeAssembly
-~~~
+        │
+        ▼
+      your host
+\`\`\`
 
-That is why the MicroBundle is one of the most important concepts in FSM_COS.
+The source can be an in-memory catalog, a repository adapter, local artifacts, generated resources, remote delivery, or another implementation you control.
 
-It is the unit at which a capability becomes **composable without becoming sovereign**.
+FSM_COS does not require a particular storage or delivery mechanism.
 
----
+## What FSM_COS consumes
 
-## Related concepts
+FSM_COS consumes three intentionally small inputs.
 
+### 1. Runtime Manifest
+
+The manifest identifies the runtime and the root MicroBundles it requests.
+
+Each root carries:
+
+\`\`\`csharp
+new MicroBundleManifestEntry(
+    BundleId: 10,
+    Version: "1.2.0");
+\`\`\`
+
+The manifest does **not** contain configuration bytes.
+
+See [Runtime Manifest](RUNTIME_MANIFEST.md).
+
+### 2. MicroBundle catalog
+
+The catalog is your resolution boundary.
+
+For manifest roots, FSM_COS asks:
+
+\`\`\`csharp
+bool TryResolve(
+    ulong bundleId,
+    string version,
+    out IMicroBundle? bundle);
+\`\`\`
+
+For domain-declared dependencies, FSM_COS asks:
+
+\`\`\`csharp
+bool TryResolve(
+    ulong bundleId,
+    out IMicroBundle? bundle);
+\`\`\`
+
+This lets you decide how resolution works.
+
+You can resolve from:
+
+- a dictionary;
+- a package cache;
+- a MicroBundle repository;
+- Azure-backed delivery;
+- generated code;
+- a remote service;
+- a test fixture.
+
+FSM_COS only needs the catalog contract.
+
+### 3. Optional configuration source
+
+Configuration is supplied separately:
+
+\`\`\`csharp
+bool TryGetConfiguration(
+    ulong runtimeId,
+    ulong bundleId,
+    string version,
+    out ReadOnlyMemory<byte> configuration);
+\`\`\`
+
+The implementation decides where those bytes come from.
+
+It might be a file, blob, repository artifact, generated resource, or another application-owned source.
+
+FSM_COS does not read the file or interpret its format.
+
+If no configuration exists, the bundle receives no external configuration and uses its own defaults.
+
+## Minimal composition
+
+A developer can start with an entirely in-memory composition.
+
+\`\`\`csharp
+var catalog = new InMemoryCatalog(
+    guiBundle,
+    inputBundle,
+    physicsBundle);
+
+var manifest = new RuntimeManifest(
+    RuntimeId: 1001,
+    Bundles:
+    [
+        new MicroBundleManifestEntry(guiBundle.Id, "1.0.0"),
+        new MicroBundleManifestEntry(inputBundle.Id, "1.0.0")
+    ]);
+
+var cos = new FsmCos(catalog);
+
+RuntimeAssembly assembly = cos.Execute(manifest);
+\`\`\`
+
+No repository is required.
+
+No configuration source is required.
+
+No GUI framework is required.
+
+No serialization framework is required.
+
+The composition kernel is useful with only the contracts it actually consumes.
+
+## Adding configuration
+
+Configuration can be added without changing the manifest.
+
+\`\`\`csharp
+var configuration = new FileBackedConfigurationSource(
+    configurationDirectory);
+
+RuntimeAssembly assembly = cos.Execute(
+    manifest,
+    configuration);
+\`\`\`
+
+The important architectural property is that the configuration source is replaceable.
+
+The same manifest can therefore be composed using:
+
+\`\`\`text
+local files
+     ↓
+configuration source
+
+Azure Blob
+     ↓
+configuration source
+
+repository artifact
+     ↓
+configuration source
+
+generated defaults
+     ↓
+configuration source
+\`\`\`
+
+FSM_COS sees the same contract.
+
+## Using a repository
+
+A repository adapter can implement \`IMicroBundleCatalog\` and provide the artifacts requested by the manifest.
+
+\`\`\`text
+RuntimeManifest
+      │
+      ▼
+repository-backed catalog
+      │
+      ├── locate root @ requested version
+      ├── locate dependency
+      └── materialize IMicroBundle
+      │
+      ▼
+    FSM_COS
+\`\`\`
+
+This is where **TheSingularityWorkshop.MicroBundleRepository** can participate.
+
+FSM_COS does not need to know whether the catalog came from that repository, another repository, or an application's own implementation.
+
+## Authoring your own MicroBundle
+
+FSM_COS does not prescribe the internal implementation of a MicroBundle.
+
+It consumes the domain-owned contract:
+
+\`\`\`csharp
+public interface IMicroBundle
+{
+    MicroBundleDescriptor Descriptor { get; }
+    ulong Id { get; }
+    IReadOnlyList<MicroBundleDependencyRequest> Dependencies { get; }
+
+    void Load(IMicroBundleLoadContext context);
+
+    bool Arbitrate(
+        IMicroBundleArbitrationContext context,
+        int roundIndex);
+}
+\`\`\`
+
+The implementation remains yours.
+
+FSM_COS gives that implementation a composition lifecycle:
+
+\`\`\`text
+resolve
+   ↓
+dependencies
+   ↓
+load
+   ↓
+arbitration rounds
+   ↓
+stable assembly
+\`\`\`
+
+For the complete domain contract, use the MicroBundleDomain package documentation rather than duplicating it here.
+
+## Dependencies
+
+A root MicroBundle can declare dependencies through the domain contract.
+
+For example:
+
+\`\`\`text
+Experience
+├── GUI
+│   └── Input
+└── Physics
+\`\`\`
+
+The manifest needs only the requested root.
+
+FSM_COS walks the reachable dependency graph and loads dependencies before their dependents.
+
+The resulting order is an implementation detail of composition traversal; the important guarantee is that a dependency is loaded before the bundle that requires it.
+
+Repeated identities are deduplicated.
+
+Missing identities fail composition.
+
+Cycles fail composition.
+
+FSM_COS does not silently invent a substitute.
+
+## Version selection
+
+Version is a manifest concern for root requests.
+
+\`\`\`text
+Manifest
+    │
+    └── GUI @ 1.2.0
+             │
+             ▼
+       catalog / resolver
+             │
+             ▼
+       resolved artifact
+             │
+             ▼
+          FSM_COS
+\`\`\`
+
+FSM_COS verifies that the resolved root reports the requested version.
+
+This prevents a catalog from silently returning a different version than the published composition request named.
+
+Dependency version policy remains a concern of the domain/repository contract that supplies those dependency relationships. FSM_COS does not invent a second versioning system inside the composition kernel.
+
+## Arbitration
+
+After loading, FSM_COS gives every loaded MicroBundle an opportunity to participate in reconciliation.
+
+\`\`\`csharp
+bool changed = bundle.Arbitrate(
+    arbitrationContext,
+    roundIndex);
+\`\`\`
+
+A \`true\` result means the composition may have changed.
+
+FSM_COS runs another round.
+
+A complete round with no changes is stable.
+
+The default maximum is **10 rounds**.
+
+If the composition still reports changes after the maximum, FSM_COS fails rather than returning an assembly it knows is unstable.
+
+See [Arbitration and Convergence](ARBITRATION.md).
+
+## RuntimeAssembly
+
+Successful composition produces:
+
+\`\`\`csharp
+RuntimeAssembly assembly = cos.Execute(manifest);
+\`\`\`
+
+The assembly exposes:
+
+- the runtime identity;
+- the loaded MicroBundles;
+- the number of arbitration rounds.
+
+A host can retrieve a bundle by identity:
+
+\`\`\`csharp
+if (assembly.TryGetBundle(bundleId, out var bundle))
+{
+    // host-specific use
+}
+\`\`\`
+
+Or by a host-known type:
+
+\`\`\`csharp
+if (assembly.TryGetBundle<MyBundle>(bundleId, out var bundle))
+{
+    // host-specific use
+}
+\`\`\`
+
+FSM_COS stops at the assembly boundary.
+
+The host decides what the assembly means operationally.
+
+## Different developers, same kernel
+
+The same FSM_COS package can support very different environments.
+
+\`\`\`text
+Developer A
+    manifest
+      ↓
+in-memory catalog
+      ↓
+FSM_COS
+      ↓
+desktop host
+
+Developer B
+    manifest
+      ↓
+repository catalog
+      ↓
+FSM_COS
+      ↓
+WebPage / Blazor
+
+Developer C
+    manifest
+      ↓
+remote catalog
+      ↓
+FSM_COS
+      ↓
+distributed host
+\`\`\`
+
+The composition algorithm does not need to change because the delivery mechanism changed.
+
+That is the point of the boundary.
+
+## What FSM_COS does not consume
+
+FSM_COS deliberately does not require:
+
+- a GUI framework;
+- a browser;
+- Unity;
+- a specific repository;
+- a specific serialization format;
+- a specific configuration file format;
+- an application scheduler;
+- a particular host;
+- a particular rendering engine.
+
+Those systems may feed the composition boundary through contracts, but they do not become part of the composition kernel.
+
+## Dependency consumption summary
+
+FSM_COS currently consumes two foundational package domains:
+
+| Package | FSM_COS consumes | FSM_COS does not define |
+|---|---|---|
+| **FSM_API** | state/context primitives, including optional runtime experience context | state-machine semantics beyond what composition requires |
+| **MicroBundleDomain** | MicroBundle identity, version metadata, dependencies, load context, arbitration context, and runtime contract | the meaning, ontology, authoring model, or storage of MicroBundles |
+
+This is the intended documentation boundary:
+
+> **A dependency's repository explains the dependency. FSM_COS explains how FSM_COS consumes it.**
+
+## Related documents
+
+- [Architecture](ARCHITECTURE.md)
 - [Runtime Manifest](RUNTIME_MANIFEST.md)
 - [RuntimeAssembly](RUNTIME_ASSEMBLY.md)
 - [Arbitration and Convergence](ARBITRATION.md)
-- [FSM_COS Theory](THEORY.md)
-
-
----
-
-## 🔗 The Singularity Workshop
-
-FSM_COS is one layer in a deliberately troublesome ecosystem:
-
-- **[FSM_API](https://github.com/TrentBest/FSM_API)** — behavior and state.
-- **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
-- **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
-- **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
-
-<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
+- [Runtime Boundary](RUNTIME_BOUNDARY.md)
+- [Development](DEVELOPMENT.md)
