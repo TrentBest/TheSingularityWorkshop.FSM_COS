@@ -437,6 +437,10 @@ For the complete runtime flow, see [Architecture](docs/ARCHITECTURE.md).
 
 ---
 
+## NuGet publication
+
+The Workshop-wide release safety and NuGet Trusted Publishing procedure is documented in **[RELEASING.md](docs/RELEASING.md)**. This includes the AI package publication workflow for ProtocolAI and GrammarAI.
+
 ## Documentation map
 
 This repository documents **FSM_COS itself**. Neighboring packages document their own domains.
