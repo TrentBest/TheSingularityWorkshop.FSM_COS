@@ -6,7 +6,7 @@ The **Runtime Manifest** is the published request that crosses from authoring/to
 
 It answers one question:
 
-> **What runtime composition is being requested?**
+> **Which MicroBundles, at which requested versions, belong in this runtime composition?**
 
 It does not contain the runtime itself, application lifecycle, GUI instructions, or host behavior.
 
@@ -19,15 +19,15 @@ The current implementation is deliberately small:
 ```csharp
 public sealed record RuntimeManifest(
     ulong RuntimeId,
-    IReadOnlyList<BundleRequest> Bundles);
+    IReadOnlyList<MicroBundleManifestEntry> Bundles);
 ```
 
-Each root request is a `BundleRequest`:
+Each root entry identifies a MicroBundle and its requested version:
 
 ```csharp
-public readonly record struct BundleRequest(
+public readonly record struct MicroBundleManifestEntry(
     ulong BundleId,
-    ReadOnlyMemory<byte> Configuration);
+    string Version);
 ```
 
 So, conceptually:
@@ -36,14 +36,30 @@ So, conceptually:
 RuntimeManifest
 ├── RuntimeId
 └── Bundles
-    ├── BundleId + Configuration
-    ├── BundleId + Configuration
-    └── BundleId + Configuration
+    ├── BundleId + Version
+    ├── BundleId + Version
+    └── BundleId + Version
 ```
 
-The manifest names the **roots**. FSM_COS discovers the dependency closure from those roots.
+The manifest names the **roots and requested versions**. FSM_COS discovers the dependency closure from those roots.
 
 ## A real C# manifest
+
+The manifest contains identity and version only:
+
+```csharp
+var manifest = new RuntimeManifest(
+    RuntimeId: 1001,
+    Bundles:
+    [
+        new MicroBundleManifestEntry(10, "1.2.0"),
+        new MicroBundleManifestEntry(20, "3.1.0")
+    ]);
+```
+
+No configuration is embedded in the manifest. A separate configuration source may provide optional configuration for either bundle. If no configuration exists, the bundle is loaded with its defaults.
+
+## 
 
 The alpha API can construct a manifest directly:
 
@@ -118,7 +134,7 @@ rich authoring model
  dependency closure
         │
         ▼
- baked IDs + opaque configuration
+ baked MicroBundle IDs + requested versions
         │
         ▼
  RuntimeManifest
@@ -169,9 +185,9 @@ A Runtime Manifest should not quietly become:
 
 Those concerns belong to other layers.
 
-The manifest requests.
+The manifest requests MicroBundles and versions.
 
-**FSM_COS composes.**
+**Configuration configures. FSM_COS composes.**
 
 The host manifests the result.
 
