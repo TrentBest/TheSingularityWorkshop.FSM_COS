@@ -272,6 +272,82 @@ See [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md).
 
 ---
 
+## Performance, footprint, and efficiency
+
+FSM_COS is deliberately small in responsibility, so performance and physical footprint belong in the architecture story.
+
+FSM_API already gives the Workshop a measured performance foundation:
+
+| Active groups | Mean | Allocated |
+|---:|---:|---:|
+| 1 | 305.1 ns | 360 B |
+| 10 | 3,115.7 ns | 3,600 B |
+| 50 | 15,736.6 ns | 18,000 B |
+
+At 50 groups, the measured FSM update machinery is about 0.094% of a 16.67 ms 60 FPS frame budget. That is **not** an application-wide frame-time claim; it is the measured FSM machinery under that benchmark workload.
+
+See the full [FSM_API benchmark discussion](https://coderlegion.com/26350/benchmarking-the-fsm-pure-strings-already-fast-and-about-to-get-faster).
+
+```mermaid
+xychart-beta
+    title "FSM_API update cost by active process groups"
+    x-axis ["1", "10", "50"]
+    y-axis "Mean (ns)" 0 --> 16000
+    line [305.1, 3115.7, 15736.6]
+```
+
+### The efficiency question
+
+Lower allocation and less runtime work can plausibly reduce energy required for the same useful computation, but **we do not currently have a direct joules-per-operation measurement for FSM_API or FSM_COS**.
+
+The Workshop has explored the energy-efficiency thesis in its Coder Legion writing. Here, that idea is treated as a motivation for measurement rather than as a measured FSM_COS result.
+
+```text
+measured timing/allocation
+          ↓
+less runtime work
+          ↓
+efficiency hypothesis
+          ↓
+energy measurement
+          ↓
+energy-per-useful-computation result
+```
+
+The target is therefore not “claim 30%.” The target is to eventually measure whether the same workload can be completed with materially less energy.
+
+### The physical footprint matters too
+
+AnyApp is the first concrete desktop proving ground. Current local baseline work is approximately:
+
+| Form | Directory | EXE |
+|---|---:|---:|
+| Framework-dependent | 0.33 MB | 0.15 MB |
+| Self-contained | 160.10 MB | 0.15 MB |
+| Single-file self-contained | 154.33 MB | 146.48 MB |
+| Blank WPF Release milestone | — | ~149 KB |
+
+These are **baseline observations, not final product-size guarantees**. AnyApp is still a functional-ish scaffold/proving ground, and publishing mode dramatically changes deployment footprint because self-contained/single-file forms carry the runtime.
+
+MyVR is earlier still and does not yet have an equivalent reproducible footprint measurement. A dedicated production CLI artifact also does not currently exist, so there is no honest CLI size to advertise yet.
+
+The full evidence, caveats, and next experiments are in [Performance, Footprint, and Efficiency](docs/PERFORMANCE_AND_EFFICIENCY.md).
+
+```mermaid
+flowchart LR
+    A[Measured foundation] --> B[FSM_API]
+    B --> C[FSM_COS]
+    C --> D[RuntimeAssembly]
+    D --> E[AnyApp]
+    D --> F[WebPage / WebApp]
+    D --> G[MyVR]
+    D --> H[DistributedApp]
+```
+
+> **The point is not to make every environment small by decree. The point is to keep the composition boundary small enough that each environment can be measured, optimized, and replaced independently.**
+
+---
+
 ## Scale: the composition boundary is compute-environment independent
 
 FSM_COS is not tied to a particular machine, operating system, renderer, process, or network topology. **It is the boundary alignment for functionality.**
@@ -377,6 +453,7 @@ This repository documents **FSM_COS itself**. Neighboring packages document thei
 - [Theory](docs/THEORY.md) — why the composition boundary exists.
 - [Manifest Theory](docs/MANIFEST_THEORY.md) — why publication is separate from authoring.
 - [Development](docs/DEVELOPMENT.md) — repository and verification discipline.
+- [Performance, Footprint, and Efficiency](docs/PERFORMANCE_AND_EFFICIENCY.md) — measured baselines, footprint, energy-efficiency questions, and next experiments.
 - [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — one concrete host integration.
 
 ### Neighboring package documentation
@@ -420,6 +497,7 @@ TheSingularityWorkshop.FSM_COS/
 │   ├── MANIFEST_THEORY.md
 │   ├── DEVELOPMENT.md
 │   ├── COMPUTE_SCALE.md
+│   ├── PERFORMANCE_AND_EFFICIENCY.md
 │   └── WEBPAGE_INTEGRATION.md
 ├── src/
 │   └── FSM_COS/
