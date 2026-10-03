@@ -274,7 +274,7 @@ FSM_Serialization
       bytes
         │
         ▼
-BundleRequest
+MicroBundleDependencyRequest
         │
         ▼
 FSM_COS
