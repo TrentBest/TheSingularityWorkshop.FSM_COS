@@ -16,7 +16,7 @@ and:
 
 That operation is **composition**.
 
-FSM_COS takes a published request, discovers the MicroBundles required to satisfy it, carries the configuration needed to install them, loads the reachable composition, gives that composition an opportunity to reconcile itself, and returns a stable `RuntimeAssembly`.
+FSM_COS takes a published request, discovers the MicroBundles required to satisfy it, accepts optional external configuration through a supplied boundary, loads the reachable composition, gives that composition an opportunity to reconcile itself, and returns a stable `RuntimeAssembly`.
 
 It does not become the application.
 
@@ -138,7 +138,7 @@ rich authoring model
 dependency closure
         │
         ▼
- baked IDs + configuration
+ MicroBundle IDs + requested versions
         │
         ▼
  RuntimeManifest
