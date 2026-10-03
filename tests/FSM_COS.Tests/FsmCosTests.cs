@@ -31,6 +31,30 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_uses_defaults_when_configuration_is_absent()
+    {
+        var bundle = new TestBundle(9);
+
+        new FsmCos(new TestCatalog(bundle)).Execute(
+            new RuntimeManifest(42, new[] { Entry(9) }));
+
+        Assert.Empty(bundle.Configuration.ToArray());
+    }
+
+    [Fact]
+    public void Execute_rejects_a_manifest_version_that_the_catalog_does_not_supply()
+    {
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(new TestBundle(10)))
+                .Execute(new RuntimeManifest(
+                    42,
+                    new[] { new MicroBundleManifestEntry(10, "9.9.9") })));
+
+        Assert.Contains("10", exception.Message);
+        Assert.Contains("9.9.9", exception.Message);
+    }
+
+    [Fact]
     public void Execute_passes_dependency_configuration_before_loading_dependency()
     {
         var dependency = new TestBundle(2);
@@ -48,14 +72,10 @@ public sealed class FsmCosTests
         var bundle = new TestBundle(1);
 
         var assembly = new FsmCos(new TestCatalog(bundle)).Execute(
-            new RuntimeManifest(42, new[]
-            {
-                new MicroBundleDependencyRequest(1, new byte[] { 1 }),
-                new MicroBundleDependencyRequest(1, new byte[] { 2 })
-            }));
+            new RuntimeManifest(42, new[] { Entry(1) }));
 
         Assert.Single(assembly.Bundles);
-        Assert.Equal(new byte[] { 1 }, bundle.Configuration.ToArray());
+        Assert.Empty(bundle.Configuration.ToArray());
         Assert.Equal(1, bundle.LoadCalls);
     }
 
