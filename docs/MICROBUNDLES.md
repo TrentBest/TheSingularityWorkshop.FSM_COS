@@ -60,16 +60,16 @@ It is valuable because it gives a capability a **place in a larger system withou
 
 ## The composition contract
 
-The current alpha contract is:
+The current domain-owned runtime contract is:
 
 ~~~csharp
 public interface IMicroBundle
 {
     MicroBundleDescriptor Descriptor { get; }
     ulong Id => Descriptor.Id;
-    IReadOnlyList<BundleRequest> Dependencies { get; }
-    void Load(MicroBundleLoadContext context);
-    bool Arbitrate(ArbitrationContext context, int roundIndex);
+    IReadOnlyList<MicroBundleDependencyRequest> Dependencies { get; }
+    void Load(IMicroBundleLoadContext context);
+    bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex);
 }
 ~~~
 
