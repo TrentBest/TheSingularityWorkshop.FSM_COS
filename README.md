@@ -94,7 +94,7 @@ The repository therefore owns the composition contracts, dependency closure, con
 
 ## Current alpha boundary
 
-The current 0.1.0-alpha.3 implementation is intentionally a small vertical slice:
+The current 0.1.0-alpha.5 implementation is intentionally a small vertical slice:
 
 ~~~text
 RuntimeManifest
@@ -362,7 +362,7 @@ This repository carries its own architecture and theory. The documents here desc
 ## Package
 
 **Package:** TheSingularityWorkshop.FSM_COS  
-**Version:** 0.1.0-alpha.3  
+**Version:** 0.1.0-alpha.5  
 **Target:** .NET 8  
 **License:** MIT
 
