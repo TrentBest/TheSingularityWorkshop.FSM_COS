@@ -1,4 +1,6 @@
-# Consuming MicroBundles from FSM_COS
+# Consuming MicroBundles
+
+> This document is about **using MicroBundles with FSM_COS**, not defining the MicroBundle domain. The authoritative MicroBundle contract and domain model live in MicroBundleDomain. from FSM_COS
 
 > **FSM_COS does not define the MicroBundle domain. It defines how a developer composes MicroBundles into a runtime.**
 
@@ -201,9 +203,9 @@ This is where **TheSingularityWorkshop.MicroBundleRepository** can participate.
 
 FSM_COS does not need to know whether the catalog came from that repository, another repository, or an application's own implementation.
 
-## Authoring your own MicroBundle
+## Supplying your own MicroBundle
 
-FSM_COS does not prescribe the internal implementation of a MicroBundle.
+FSM_COS does not prescribe the internal implementation of a MicroBundle. For the complete domain definition, use MicroBundleDomain documentation. Here we only show the portion an FSM_COS developer must provide to the composition boundary.
 
 It consumes the domain-owned contract:
 
@@ -239,6 +241,10 @@ stable assembly
 \`\`\`
 
 For the complete domain contract, use the MicroBundleDomain package documentation rather than duplicating it here.
+
+## Dependency consumption
+
+FSM_COS consumes dependencies as relationships exposed by the domain-owned contract. It resolves those relationships, loads the reachable closure, deduplicates repeated identities, and rejects missing or cyclic composition. The semantics of what a dependency means inside a MicroBundle remain the MicroBundle domain's responsibility.
 
 ## Dependencies
 
