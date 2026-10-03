@@ -590,11 +590,7 @@ The crane does not become:
 
 That is FSM_COS.
 
-The living version of the crane is deliberately subtle. The load rises, sways, and settles because composition is work: a request causes assembly activity, the assembly stabilizes, and only then does handoff occur. GitHub repository views do not animate SVG assets, so the GIF is the living companion while the SVG remains the blueprint artifact.
-
-<p align="center">
-  <img src="assets/fsm-cos-crane.gif" alt="Animated FSM_COS composition crane">
-</p>
+The crane is intentionally static in the architecture documentation. It is a symbol for the composition boundary: receive the request, gather the parts, stabilize the assembly, and hand it off. The SVG remains the canonical explanatory artifact.
 
 > **FSM_COS assembles the machine. It does not become the machine.**
 
@@ -605,11 +601,11 @@ The living version of the crane is deliberately subtle. The load rises, sways, a
 The entire kernel can be reduced to:
 
 ```text
-published request
+published manifest
        +
 reachable MicroBundles
        +
-configuration
+optional external configuration
        +
 dependency ordering
        +
