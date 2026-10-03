@@ -1,5 +1,6 @@
 using TheSingularityWorkshop.FSM_API;
 using TheSingularityWorkshop.FSM_COS;
+using TheSingularityWorkshop.FSM_UserIO;
 using TheSingularityWorkshop.MicroBundleDomain;
 using Xunit;
 
@@ -169,6 +170,22 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_carries_semantic_intent_from_manifest_to_runtime_assembly()
+    {
+        var intent = new SemanticIntent("open.workshop", 0x4201UL);
+
+        var assembly = new FsmCos(new TestCatalog()).Execute(
+            new RuntimeManifest(
+                1234,
+                Array.Empty<MicroBundleDependencyRequest>(),
+                Intent: intent));
+
+        Assert.Same(intent, assembly.Intent);
+        Assert.Equal("open.workshop", assembly.Intent!.Name);
+        Assert.Equal(0x4201UL, assembly.Intent.ProtocolId);
+    }
+
+    [Fact]
     public void Execute_supports_an_empty_manifest()
     {
         var assembly = new FsmCos(new TestCatalog()).Execute(RuntimeManifest.Empty(77));
@@ -176,10 +193,11 @@ public sealed class FsmCosTests
         Assert.Equal(77UL, assembly.RuntimeId);
         Assert.Empty(assembly.Bundles);
         Assert.Equal(0, assembly.ArbitrationRounds);
+        Assert.Null(assembly.Intent);
     }
 
     [Fact]
-    public void Core_assembly_references_FSM_API_and_MicroBundleDomain()
+    public void Core_assembly_references_FSM_API_MicroBundleDomain_and_UserIO()
     {
         var references = typeof(FsmCos).Assembly
             .GetReferencedAssemblies()
@@ -188,6 +206,7 @@ public sealed class FsmCosTests
 
         Assert.Contains(typeof(IStateContext).Assembly.GetName().Name!, references);
         Assert.Contains(typeof(MicroBundleDescriptor).Assembly.GetName().Name!, references);
+        Assert.Contains(typeof(SemanticIntent).Assembly.GetName().Name!, references);
     }
 
     [Fact]
@@ -200,6 +219,17 @@ public sealed class FsmCosTests
         Assert.Equal(88UL, manifest.RuntimeId);
         Assert.Empty(manifest.Bundles);
         Assert.Same(context, manifest.ExperienceContext);
+        Assert.Null(manifest.Intent);
+    }
+
+    [Fact]
+    public void RuntimeManifest_empty_can_carry_semantic_intent()
+    {
+        var intent = new SemanticIntent("resume.last.experience");
+
+        var manifest = RuntimeManifest.Empty(88, intent: intent);
+
+        Assert.Same(intent, manifest.Intent);
     }
 
     [Fact]
