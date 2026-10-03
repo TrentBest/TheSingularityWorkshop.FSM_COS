@@ -89,6 +89,10 @@ public sealed class AiGuiCapabilityHandoffTests
         public TestCatalog(params IMicroBundle[] bundles) =>
             _bundles = bundles.ToDictionary(x => x.Id);
 
+        public bool TryResolve(ulong bundleId, string version, out IMicroBundle? bundle) =>
+            _bundles.TryGetValue(bundleId, out bundle) &&
+            string.Equals(bundle.Descriptor.Version, version, StringComparison.Ordinal);
+
         public bool TryResolve(ulong bundleId, out IMicroBundle? bundle) =>
             _bundles.TryGetValue(bundleId, out bundle);
     }
