@@ -69,3 +69,8 @@ The release mechanism is deliberately explicit: **ordinary development proves th
 ## Alpha.5 release authorization
 
 This document is part of the alpha.5 release commit whose exact message authorizes the publish job.
+
+
+### Alpha.5 publication execution
+
+The release authorization commit uses the exact message `release: publish FSM_COS 0.1.0-alpha.5`. The package workflow recognizes that commit on `master` as the publication trigger after the verification job succeeds.
