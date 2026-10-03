@@ -99,13 +99,15 @@ The current `development` line is the active architecture workstream. The packag
 ~~~text
 RuntimeManifest
     ↓
-BundleRequest
+MicroBundle identity + version
     ↓
-MicroBundleCatalog
+MicroBundle catalog / resolver
+    ↓
+optional configuration source
     ↓
 dependency closure
     ↓
-configured Load()
+Load()
     ↓
 Arbitrate() rounds
     ↓
