@@ -192,104 +192,85 @@ See [Architecture — Dependency Resolution](ARCHITECTURE.md#dependency-resoluti
 
 ---
 
-## 5. MicroBundles are composition units
+## 5. MicroBundles participate in composition
 
-A [MicroBundle](MICROBUNDLES.md) is **micro in responsibility, not necessarily in byte size**.
+**MicroBundleDomain owns the MicroBundle domain. FSM_COS owns the composition of those participants.**
 
-The point of the abstraction is not that every bundle must be tiny.
+FSM_COS therefore does not define:
 
-The point is that a capability can expose a focused composition contract.
+- what a MicroBundle means;
+- how its ontology is modeled;
+- how its domain metadata should be designed;
+- how its implementation is authored.
 
-A bundle contributes:
-
-- identity;
-- dependencies;
-- configuration;
-- installation/loading behavior;
-- arbitration behavior.
-
-It does not need to know which host will eventually manifest the result.
-
-That allows one semantic composition to be assembled for different environments:
+FSM_COS consumes the domain-owned contract to perform composition work:
 
 ```text
-                         RuntimeAssembly
-                               │
-              ┌────────────────┼────────────────┐
-              ▼                ▼                ▼
-           WebForge          Unity            Desktop
-              │                │                │
-           browser          scene            native host
+domain-owned MicroBundle
+          │
+          ▼
+     catalog / resolver
+          │
+          ▼
+       FSM_COS
+          │
+     ┌────┼────┐
+     ▼    ▼    ▼
+   Load Arbitrate dependency closure
+          │
+          ▼
+   RuntimeAssembly
 ```
 
-The bundle participates in composition.
+The same MicroBundle domain can therefore be consumed by different composition hosts.
 
-The host owns manifestation.
+> **MicroBundleDomain explains the participant. FSM_COS explains the relationship between participants.**
 
-See [MicroBundles](MICROBUNDLES.md).
+For concrete developer usage, see [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md).
 
 ---
 
-## 6. Configuration is carried, not interpreted by the kernel
+## 6. Configuration is external to the manifest
 
-FSM_COS must move configuration through the composition process without becoming the owner of every domain's configuration schema.
+The manifest says which MicroBundles and requested versions belong in the composition.
 
-The alpha contract therefore keeps configuration opaque:
+A separate configuration source says how a particular MicroBundle is configured for this runtime.
 
-```text
-BundleRequest
-├── BundleId
-└── Configuration : bytes
-```
+FSM_COS may consume configuration through `IMicroBundleConfigurationSource`, but it does not read configuration files or define their representation.
 
-A parent can request a dependency with configuration:
+If configuration is absent, the MicroBundle receives no external configuration and uses its defaults.
 
 ```text
-A requests B + configuration X
-B requests C + configuration Y
+Manifest
+   │
+   ├── identity + version
+   │
+   ▼
+FSM_COS
+   ▲
+   │
+optional configuration source
 ```
-
-FSM_COS transports those values to the bundle that owns them.
-
-The kernel does not decide whether the bytes represent JSON, binary fields, generated code, or something else.
-
-That is an important boundary.
 
 ### The serialization boundary
 
-When the conceptual discussion reaches **serialized representation**, the owner of that problem is **[TheSingularityWorkshop.FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)**.
+When configuration crosses a concrete byte representation boundary, that representation belongs to **FSM_Serialization** rather than FSM_COS.
 
-Its corresponding package is **[TheSingularityWorkshop.FSM_Serialization on NuGet](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_Serialization/)**.
-
-FSM_COS can consume configuration that has crossed a representation boundary, but it should not grow a second serialization architecture.
-
-The intended direction is:
+FSM_COS can consume the resulting bytes without becoming another serialization framework.
 
 ```text
-semantic configuration
-        │
-        ▼
 FSM_Serialization
-        │
-      bytes
-        │
-        ▼
-BundleRequest
-        │
-        ▼
+    ↓ representation
+
+configuration source
+    ↓ availability
+
 FSM_COS
-        │
-        ▼
+    ↓ composition
+
 MicroBundle
+    ↓ domain interpretation
 ```
-
-The serializer owns the representation boundary.
-
-FSM_COS owns the composition boundary.
-
-Those are related boundaries, but they are not the same boundary.
-
-See [FSM_Serialization Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md) for the representation-versus-reality model.
 
 ---
 
