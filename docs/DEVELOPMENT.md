@@ -2,76 +2,123 @@
 
 ## Repository rule
 
-This repository is the canonical home for the FSM_COS composition kernel, its tests, package definition, and FSM_COS-specific documentation.
+This repository is the canonical home for the FSM_COS composition kernel, its tests, package definition, workflow, and FSM_COS-specific documentation.
 
 The implementation project is:
 
-~~~text
+```text
 src/FSM_COS/FSM_COS.csproj
-~~~
+```
 
 The test project is:
 
-~~~text
+```text
 tests/FSM_COS.Tests/FSM_COS.Tests.csproj
-~~~
+```
 
-The solution files must reference those projects. There should not be a second root scaffold containing a placeholder Class1.cs project.
+The solution files must reference those projects. There should not be a second placeholder implementation project.
 
-## Build
+## Current package line
+
+The current package is:
+
+```text
+TheSingularityWorkshop.FSM_COS
+0.1.0-alpha.5
+```
+
+The package currently consumes:
+
+```text
+TheSingularityWorkshop.FSM_API       1.0.13
+TheSingularityWorkshop.MicroBundleDomain 1.0.1
+```
+
+Those are runtime dependencies because the composition kernel actually consumes their contracts.
+
+Other ecosystem packages should remain outside the runtime dependency graph unless a future FSM_COS contract genuinely requires them.
+
+See [Dependency & Boundary Guide](DEPENDENCIES.md).
+
+## Build and test
 
 From the repository root:
 
-~~~text
+```text
 dotnet restore TheSingularityWorkshop.FSM_COS.sln
 dotnet build TheSingularityWorkshop.FSM_COS.sln --configuration Release
 dotnet test TheSingularityWorkshop.FSM_COS.sln --configuration Release
-~~~
+```
 
-## Package
-
-The package project is:
-
-~~~text
-src/FSM_COS/FSM_COS.csproj
-~~~
-
-The package identity is:
-
-~~~text
-TheSingularityWorkshop.FSM_COS
-~~~
-
-The current alpha line is 0.1.0-alpha.1.
-
-The repository workflow restores, tests, and packs on pushes to master. Publishing to GitHub Packages and NuGet.org requires an explicit workflow dispatch with the publish input enabled.
+The packaging workflow also produces coverage and a NuGet artifact before the explicit publication step.
 
 ## Documentation discipline
 
-Documentation belongs with the repository whose contracts it explains.
+Documentation is part of the contract.
 
-FSM_COS-specific theory should be added under:
-
-~~~text
-docs/
-~~~
-
-Neighboring repositories may describe their relationship to FSM_COS, but they are not substitutes for FSM_COS documentation.
-
-When a contract changes, update:
+When a public composition boundary changes, update:
 
 1. implementation;
 2. tests;
-3. the relevant FSM_COS documentation;
-4. README architecture/usage material when the public boundary changes.
+3. architecture documentation;
+4. README usage and dependency material;
+5. any document whose examples or terminology became stale.
+
+A documentation statement that describes a previous API is not harmless. It is another copy of the contract and can teach consumers to use the wrong architecture.
+
+## Dependency discipline
+
+Before adding a package reference, answer:
+
+1. What contract from the package does FSM_COS actually require?
+2. Is that contract part of composition rather than host implementation?
+3. Can the concern be supplied through an adapter or input boundary?
+4. Would the new reference pull storage, transport, GUI, serialization, or host lifecycle into the kernel?
+5. Would the referenced package remain independent of FSM_COS?
+
+If a lower-level package would need to reference FSM_COS to support the dependency, the direction is wrong.
+
+## Tests are architectural evidence
+
+Tests should establish the observable composition contract:
+
+- root resolution;
+- dependency ordering;
+- duplicate dependency handling;
+- cycle detection;
+- missing bundle handling;
+- configuration propagation;
+- arbitration convergence;
+- arbitration round counting;
+- non-convergence failure;
+- RuntimeAssembly contents.
+
+A test that exposes an ambiguous contract is a reason to clarify the contract, not to weaken the assertion.
+
+## Documentation standard for FSM_COS
+
+A reader should be able to answer these questions without opening another repository:
+
+- What does FSM_COS do?
+- What does it deliberately not do?
+- What enters the kernel?
+- What leaves the kernel?
+- How are dependencies resolved?
+- How is configuration transported?
+- What does arbitration mean?
+- What constitutes convergence?
+- What is RuntimeAssembly?
+- Why does FSM_COS depend on FSM_API?
+- Why does it depend on MicroBundleDomain?
+- Why does it not depend on repository, REST, serialization, GUI, or host packages?
+
+The neighboring package should explain its own domain in full. FSM_COS should explain **its use of that domain**.
 
 ## Alpha development pattern
 
-FSM_COS should evolve slice-by-slice.
-
 A useful change should normally have this shape:
 
-~~~text
+```text
 contract
    ↓
 small implementation
@@ -81,25 +128,11 @@ focused tests
 documentation
    ↓
 package
-~~~
+```
 
 Do not add host-specific infrastructure merely because a consuming application currently needs it.
 
-## Tests are architectural evidence
-
-The tests should establish the semantics of:
-
-- dependency ordering;
-- duplicate dependency handling;
-- cycle detection;
-- missing bundle handling;
-- configuration propagation;
-- arbitration convergence;
-- arbitration round counting;
-- non-convergence;
-- RuntimeAssembly contents.
-
-A test that exposes an ambiguous contract is a reason to clarify the contract, not to weaken the assertion.
+Do not publish a package until the verified package artifact and its dependency graph match the documented architecture.
 
 ## Future work
 
@@ -111,22 +144,6 @@ Potential future slices include:
 - deterministic manifest validation;
 - compact/binary manifest publication;
 - explicit configuration conflict policy;
-- integration with higher-level FSM composition;
 - host handoff/execution contracts.
 
-Those are future contracts, not assumptions that should be silently embedded in Alpha 1.
-
-
----
-
-## 🔗 The Singularity Workshop
-
-FSM_COS is one layer in a deliberately troublesome ecosystem:
-
-- **[FSM_API](https://github.com/TrentBest/FSM_API)** — behavior and state.
-- **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
-- **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
-- **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
-
-<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
+Those are future contracts, not assumptions that should silently become part of the alpha kernel.
