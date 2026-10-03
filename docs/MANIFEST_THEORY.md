@@ -30,7 +30,7 @@ The manifest is therefore a publication artifact. It contains enough information
 
 A RuntimeManifest is a semantic composition request. Its eventual JSON, binary, generated-code, or other representation is a separate concern.
 
-The current contract is intentionally small: runtime identity plus BundleRequest values, where each request contains a machine ID and opaque configuration bytes.
+The current contract is intentionally small: runtime identity plus MicroBundleDependencyRequest values, where each request contains a machine ID and opaque configuration bytes.
 
 This keeps FSM_COS independent from the serialization format selected by authoring/tooling.
 
