@@ -56,6 +56,47 @@ Those responsibilities remain with FSM_API and its consumers.
 
 **Read FSM_API for state-machine behavior. Read FSM_COS for how state context can participate at the composition boundary.**
 
+## FSM_UserIO
+
+**Package:** `TheSingularityWorkshop.FSM_UserIO`  
+**Current FSM_COS reference:** `0.1.0-alpha.1`
+
+### Why FSM_COS uses it
+
+FSM_COS consumes the platform-neutral `SemanticIntent` boundary as part of the runtime request and assembly handoff. A host or authoring system can associate an application-owned semantic intent with a RuntimeManifest without forcing FSM_COS to own devices, GUI, datum, execution policy, or interaction mechanics.
+
+FSM_COS deliberately carries the intent rather than interpreting it:
+
+```text
+semantic request
+      │
+      ▼
+  FSM_UserIO
+      │
+      ▼
+ RuntimeManifest
+      │
+      ▼
+   FSM_COS
+      │
+      ▼
+RuntimeAssembly
+```
+
+The resulting `SemanticIntent` is available from `RuntimeAssembly.Intent`. The host or manifestation layer decides what the intent means operationally.
+
+### What FSM_COS does not own
+
+FSM_COS does not:
+
+- define device input;
+- render GUI controls;
+- decide how an intent is executed;
+- assign interaction policy;
+- redefine the semantic-intent contract.
+
+**FSM_UserIO defines the semantic interaction boundary. FSM_COS carries that boundary through composition.**
+
 ---
 
 ## MicroBundleDomain
