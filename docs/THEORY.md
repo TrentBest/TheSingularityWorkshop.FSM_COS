@@ -4,7 +4,7 @@
   <img src="assets/fsm-cos-system.svg" alt="FSM_COS composition kernel between authoring and host manifestation">
 </p>
 
-FSM_COS is the **composition kernel** of The Singularity Workshop ecosystem.
+FSM_COS is the **platform-neutral computation and composition kernel** of The Singularity Workshop ecosystem.
 
 It exists because there is a meaningful architectural operation between:
 
@@ -12,7 +12,7 @@ It exists because there is a meaningful architectural operation between:
 
 and:
 
-> **“Here is the runtime environment that will execute and manifest it.”**
+> **“Here is the system that will execute or manifest that computation.”**
 
 That operation is **composition**.
 
@@ -34,6 +34,10 @@ For the architectural rationale behind this boundary, see this document together
 
 ## 1. What does “composition of systems” mean?
 
+FSM_COS is intentionally **not an application type**. It does not assume that the computation being assembled is a WebPage, WebApp, desktop application, distributed service, game, spreadsheet, simulation, or any other particular product form.
+
+The engineering abstraction is the computation and the common operational work required to assemble it. A host may later turn that computation into any of those things, or into something with no presentation layer at all.
+
 The name **FSM_COS** is intentionally broader than “bundle loader.”
 
 A loader answers:
@@ -42,7 +46,7 @@ A loader answers:
 
 A composition system answers:
 
-> “Given a requested collection of capabilities and their relationships, what complete set of components must exist together, in what dependency-respecting arrangement, with what configuration, before the result can be handed to something else?”
+> “Given a requested computation and its relationships, what complete set of components must exist together, in what dependency-respecting arrangement, with what optional configuration, before the result can be handed to something else?”
 
 That distinction matters.
 
@@ -76,6 +80,8 @@ See [Runtime Manifest Theory](MANIFEST_THEORY.md) for the deeper distinction bet
 
 ## 2. The missing layer is assembly
 
+The word **system** here means the computation being assembled, not an application category. FSM_COS is useful precisely because the same assembly mechanics can support many kinds of software.
+
 The broader ecosystem has several important responsibilities:
 
 | Layer | Primary responsibility |
@@ -88,7 +94,7 @@ The broader ecosystem has several important responsibilities:
 | **Host** | execution and manifestation |
 | **Experience** | what is encountered |
 
-FSM_COS is not a replacement for any of those layers.
+FSM_COS is not a replacement for any of those domains. This document only summarizes how FSM_COS consumes the contracts it needs; the authoritative explanation of each dependency remains in that dependency's repository.
 
 It is the boundary that connects a **request for a composition** to a **stable assembled composition**.
 
@@ -226,7 +232,7 @@ The same MicroBundle domain can therefore be consumed by different composition h
 
 > **MicroBundleDomain explains the participant. FSM_COS explains the relationship between participants.**
 
-For concrete developer usage, see [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md).
+For concrete developer usage, see [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md). The document focuses on what an FSM_COS developer can do with the contract; it does not attempt to redefine the MicroBundle domain.
 
 ---
 
@@ -375,9 +381,9 @@ This is the point at which FSM_COS stops being the owner of the journey.
 
 ---
 
-## 10. Same composition, different manifestation
+## 10. Same computation, different manifestation
 
-A composition should not become web-specific merely because the first proving ground is WebPage.
+A computation should not become web-specific merely because the first proving ground is WebPage.
 
 The same semantic request can be assembled for multiple hosts:
 
@@ -598,7 +604,7 @@ stable RuntimeAssembly
 Or, more simply:
 
 ```text
-FSM_COS = request → composition → stable assembly
+FSM_COS = computation request → composition → stable assembly
 ```
 
 Not:
