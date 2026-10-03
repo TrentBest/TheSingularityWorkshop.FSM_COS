@@ -65,3 +65,7 @@ If you are asked to publish FSM_COS and workflow dispatch is unavailable:
 9. Record the resulting commit and workflow run in the release notes or PR.
 
 The release mechanism is deliberately explicit: **ordinary development proves the package; an exact release action authorizes publication.**
+
+## Alpha.5 release authorization
+
+This document is part of the alpha.5 release commit whose exact message authorizes the publish job.
