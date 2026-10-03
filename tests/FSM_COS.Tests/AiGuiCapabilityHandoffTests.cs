@@ -104,7 +104,7 @@ public sealed class AiGuiCapabilityHandoffTests
 
         public MicroBundleDescriptor Descriptor { get; }
         public ulong Id => BundleId;
-        public IReadOnlyList<MicroBundleDependencyRequest> Dependencies => Array.Empty<BundleRequest>();
+        public IReadOnlyList<MicroBundleDependencyRequest> Dependencies => Array.Empty<MicroBundleDependencyRequest>();
 
         public ProtocolDefinition Protocol { get; } =
             new ProtocolBuilder(0x2001UL, "WorkshopAI")
