@@ -18,7 +18,7 @@ FSM_COS intentionally keeps its dependency floor small: **FSM_API** supplies sta
 
 <p align="center"><em>Runtime request → composition → stable assembly → host manifestation</em></p>
 
-It takes a [Runtime Manifest](docs/RUNTIME_MANIFEST.md) and assembles the [MicroBundles](docs/MICROBUNDLES.md), dependencies, configuration, and runtime components required by that manifest.
+It takes a [Runtime Manifest](docs/RUNTIME_MANIFEST.md) and assembles the [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md), dependencies, configuration, and runtime components required by that manifest.
 
 ~~~text
 Runtime Manifest
@@ -168,32 +168,36 @@ Editor/tooling systems may know rich information:
 - visual/editor structure;
 - authoring metadata.
 
-That information can be validated and baked into compact machine-oriented IDs and opaque configuration before runtime.
+That information is authored and validated by the systems that own those domains. FSM_COS consumes the resulting machine-oriented manifest and optional configuration source; it does not define the authoring model.
 
 FSM_COS consumes the published representation.
 
 See [Runtime Manifest Theory](docs/MANIFEST_THEORY.md) and the deeper [FSM_COS Theory](docs/THEORY.md#3-why-the-manifest-exists).
 
-## MicroBundles
+## Consuming MicroBundles
 
-A [MicroBundle](docs/MICROBUNDLES.md) is **micro in focus, not necessarily in byte size**.
+FSM_COS does not define what a MicroBundle means. **MicroBundleDomain owns that domain.**
 
-<p align="center">
-  <img src="docs/assets/microbundle-cartridge.svg" alt="Futuristic MicroBundle capability cartridge">
-</p>
+FSM_COS consumes the domain-owned contract through an application- or repository-supplied catalog.
 
-FSM_COS does not care whether a bundle is physically tiny or enormous. It cares that the bundle has a focused composition responsibility and exposes the contract required for assembly.
+```text
+MicroBundleDomain
+      │ defines
+      ▼
+IMicroBundle
+      │ consumed by
+      ▼
+FSM_COS
+      │
+      ├── resolve
+      ├── load
+      ├── arbitrate
+      └── hand off
+```
 
-The current runtime contract is owned by `TheSingularityWorkshop.MicroBundleDomain`. FSM_COS consumes `IMicroBundle`; it does not define the MicroBundle.
+A developer is free to supply MicroBundles from memory, a repository, local storage, remote delivery, generated resources, or another source. FSM_COS only requires the composition boundary represented by `IMicroBundleCatalog`.
 
-~~~text
-MicroBundleDomain → what a MicroBundle is
-MicroBundleRepository → where a MicroBundle artifact comes from
-FSM_COS → how the requested composition is assembled
-Host → what the assembled runtime becomes
-~~~
-
-A bundle can therefore participate in composition without knowing whether it will ultimately manifest in WebForge, AnyApp, Unity, Desktop Forge, or another host.
+See [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) for concrete usage patterns.
 
 ## Dependency resolution
 
@@ -308,7 +312,7 @@ TheSingularityWorkshop.FSM_COS/
 │   ├── THEORY.md
 │   ├── ARCHITECTURE.md
 │   ├── RUNTIME_MANIFEST.md
-│   ├── MICROBUNDLES.md
+│   ├── CONSUMING_MICROBUNDLES.md
 │   ├── RUNTIME_ASSEMBLY.md
 │   ├── MANIFEST_THEORY.md
 │   ├── ARBITRATION.md
@@ -348,7 +352,7 @@ This repository carries its own architecture and theory. The documents here desc
 - [Theory](docs/THEORY.md) — why the composition boundary exists.
 - [Architecture](docs/ARCHITECTURE.md) — contracts and runtime flow.
 - [Runtime Manifest](docs/RUNTIME_MANIFEST.md) — the published request itself, with examples and the alpha contract.
-- [MicroBundles](docs/MICROBUNDLES.md) — the composable unit contract.
+- [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) — the composable unit contract.
 - [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) — the stable handoff object.
 - [Runtime Manifest Theory](docs/MANIFEST_THEORY.md) — the deeper theory behind publication.
 - [Arbitration and Convergence](docs/ARBITRATION.md) — reconciliation semantics.
