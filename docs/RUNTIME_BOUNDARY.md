@@ -8,7 +8,7 @@
 
 ![FSM_COS composition boundary](assets/composition-boundary.svg)
 
-FSM_COS exists to assemble a requested runtime. It is not the runtime host.
+FSM_COS exists to assemble a requested computation. It is not the application or runtime host.
 
 The boundary is:
 
@@ -24,7 +24,7 @@ host / Experience execution
 
 ## FSM_COS owns
 
-FSM_COS owns the composition operations required to turn a RuntimeManifest into a stable RuntimeAssembly:
+FSM_COS owns the common computation-composition operations required to turn a RuntimeManifest into a stable RuntimeAssembly:
 
 1. resolve requested MicroBundles;
 2. resolve dependency closure;
