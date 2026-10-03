@@ -36,7 +36,7 @@ public sealed class AiGuiCapabilityHandoffTests
                 new TestCatalog(protocol, grammar, gui))
             .Execute(new RuntimeManifest(
                 0xCAFEUL,
-                new[] { BundleRequest.Unconfigured(gui.Id) }));
+                new[] { new MicroBundleManifestEntry(gui.Id, "0.1.0-test") }));
 
         Assert.Equal(
             new[] { protocol.Id, grammar.Id, gui.Id },
@@ -71,7 +71,7 @@ public sealed class AiGuiCapabilityHandoffTests
                 new TestCatalog(protocol, grammar))
             .Execute(new RuntimeManifest(
                 0xBEEFUL,
-                new[] { BundleRequest.Unconfigured(grammar.Id) }));
+                new[] { new MicroBundleManifestEntry(grammar.Id, "0.1.0-test") }));
 
         Assert.Equal(protocol.Protocol.Id, grammar.Grammar.Rules
             .SelectMany(rule => rule.RightHandSide)
@@ -89,6 +89,10 @@ public sealed class AiGuiCapabilityHandoffTests
         public TestCatalog(params IMicroBundle[] bundles) =>
             _bundles = bundles.ToDictionary(x => x.Id);
 
+        public bool TryResolve(ulong bundleId, string version, out IMicroBundle? bundle) =>
+            _bundles.TryGetValue(bundleId, out bundle) &&
+            string.Equals(bundle.Descriptor.Version, version, StringComparison.Ordinal);
+
         public bool TryResolve(ulong bundleId, out IMicroBundle? bundle) =>
             _bundles.TryGetValue(bundleId, out bundle);
     }
@@ -104,7 +108,7 @@ public sealed class AiGuiCapabilityHandoffTests
 
         public MicroBundleDescriptor Descriptor { get; }
         public ulong Id => BundleId;
-        public IReadOnlyList<BundleRequest> Dependencies => Array.Empty<BundleRequest>();
+        public IReadOnlyList<MicroBundleDependencyRequest> Dependencies => Array.Empty<MicroBundleDependencyRequest>();
 
         public ProtocolDefinition Protocol { get; } =
             new ProtocolBuilder(0x2001UL, "WorkshopAI")
@@ -114,10 +118,10 @@ public sealed class AiGuiCapabilityHandoffTests
                 .Define(0x2104UL, "Grammar", "grammar")
                 .Build();
 
-        public void Load(MicroBundleLoadContext context) =>
+        public void Load(IMicroBundleLoadContext context) =>
             ArgumentNullException.ThrowIfNull(context);
 
-        public bool Arbitrate(ArbitrationContext context, int roundIndex) => false;
+        public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex) => false;
     }
 
     private sealed class GrammarCapabilityBundle : IMicroBundle
@@ -135,9 +139,9 @@ public sealed class AiGuiCapabilityHandoffTests
         public MicroBundleDescriptor Descriptor { get; }
         public ulong Id => BundleId;
 
-        public IReadOnlyList<BundleRequest> Dependencies => new[]
+        public IReadOnlyList<MicroBundleDependencyRequest> Dependencies => new[]
         {
-            BundleRequest.Unconfigured(ProtocolCapabilityBundle.BundleId)
+            MicroBundleDependencyRequest.Unconfigured(ProtocolCapabilityBundle.BundleId)
         };
 
         public GrammarDefinition Grammar { get; } =
@@ -153,10 +157,10 @@ public sealed class AiGuiCapabilityHandoffTests
                         new GrammarProtocolReference(0x2001UL, 0x2101UL)))
                 .Build();
 
-        public void Load(MicroBundleLoadContext context) =>
+        public void Load(IMicroBundleLoadContext context) =>
             ArgumentNullException.ThrowIfNull(context);
 
-        public bool Arbitrate(ArbitrationContext context, int roundIndex) => false;
+        public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex) => false;
     }
 
     private sealed class AiExchangeGuiCapabilityBundle : IMicroBundle
@@ -178,16 +182,16 @@ public sealed class AiGuiCapabilityHandoffTests
         public MicroBundleDescriptor Descriptor { get; }
         public ulong Id => BundleId;
 
-        public IReadOnlyList<BundleRequest> Dependencies => new[]
+        public IReadOnlyList<MicroBundleDependencyRequest> Dependencies => new[]
         {
-            BundleRequest.Unconfigured(ProtocolCapabilityBundle.BundleId),
-            BundleRequest.Unconfigured(GrammarCapabilityBundle.BundleId)
+            MicroBundleDependencyRequest.Unconfigured(ProtocolCapabilityBundle.BundleId),
+            MicroBundleDependencyRequest.Unconfigured(GrammarCapabilityBundle.BundleId)
         };
 
         public GuiNode? Composition { get; private set; }
         public string? ExchangeText { get; private set; }
 
-        public void Load(MicroBundleLoadContext context)
+        public void Load(IMicroBundleLoadContext context)
         {
             ArgumentNullException.ThrowIfNull(context);
 
@@ -203,15 +207,15 @@ public sealed class AiGuiCapabilityHandoffTests
                 .Build();
         }
 
-        public bool Arbitrate(ArbitrationContext context, int roundIndex)
+        public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex)
         {
             ArgumentNullException.ThrowIfNull(context);
 
-            var protocol = context.LoadedBundles
+            var protocol = context.Bundles
                 .OfType<ProtocolCapabilityBundle>()
                 .Single();
 
-            var grammar = context.LoadedBundles
+            var grammar = context.Bundles
                 .OfType<GrammarCapabilityBundle>()
                 .Single();
 

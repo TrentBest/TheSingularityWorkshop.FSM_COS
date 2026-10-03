@@ -8,7 +8,7 @@
 
 ![FSM_COS composition boundary](assets/composition-boundary.svg)
 
-FSM_COS exists to assemble a requested runtime. It is not the runtime host.
+FSM_COS exists to assemble a requested computation. It is not the application or runtime host.
 
 The boundary is:
 
@@ -24,11 +24,11 @@ host / Experience execution
 
 ## FSM_COS owns
 
-FSM_COS owns the composition operations required to turn a RuntimeManifest into a stable RuntimeAssembly:
+FSM_COS owns the common computation-composition operations required to turn a RuntimeManifest into a stable RuntimeAssembly:
 
 1. resolve requested MicroBundles;
 2. resolve dependency closure;
-3. carry request configuration;
+3. accept optional external configuration through the configuration-source boundary;
 4. install/load dependencies before dependents;
 5. arbitrate over the installed composition;
 6. detect cycles, missing bundles, and non-convergence;
@@ -69,6 +69,10 @@ Unity / browser / desktop / other manifestation
 ~~~
 
 This prevents the composition package from acquiring platform lifecycle dependencies.
+
+## Configuration boundary
+
+Configuration is supplied independently of the Runtime Manifest. FSM_COS does not read configuration files or interpret their format; it consumes the optional configuration source contract and passes available configuration into the composition lifecycle. When no configuration exists, the MicroBundle uses its defaults.
 
 ## Serialization boundary
 

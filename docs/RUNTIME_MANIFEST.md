@@ -1,136 +1,184 @@
 # Runtime Manifest
 
-> The manifest is the request. [FSM_COS Theory](THEORY.md) explains why the request must remain distinct from the assembled runtime.
+> **The manifest says which MicroBundles and versions are requested. Configuration is a separate concern. FSM_COS composes the request.**
 
-The **Runtime Manifest** is the published request that crosses from authoring/tooling into FSM_COS.
+The **Runtime Manifest** is the machine-oriented composition request that crosses from authoring/tooling into FSM_COS.
 
-It answers one question:
+It answers:
 
-> **What runtime composition is being requested?**
+> **Which MicroBundles, at which requested versions, belong in this runtime composition?**
 
-It does not contain the runtime itself, application lifecycle, GUI instructions, or host behavior.
+It deliberately does **not** answer:
+
+- how a MicroBundle is configured;
+- where a MicroBundle artifact is stored;
+- how configuration is serialized;
+- how the host presents the resulting Experience;
+- how the assembled runtime is scheduled after composition.
 
 ![Runtime Manifest publication pipeline](assets/runtime-manifest-pipeline.svg)
 
-## The actual alpha contract
+## The contract
 
-The current implementation is deliberately small:
+The current development contract is intentionally small:
 
 ```csharp
 public sealed record RuntimeManifest(
     ulong RuntimeId,
-    IReadOnlyList<BundleRequest> Bundles);
+    IReadOnlyList<MicroBundleManifestEntry> Bundles,
+    IStateContext? ExperienceContext = null);
 ```
 
-Each root request is a `BundleRequest`:
+Each entry identifies one root MicroBundle and the version requested by the manifest:
 
 ```csharp
-public readonly record struct BundleRequest(
+public readonly record struct MicroBundleManifestEntry(
     ulong BundleId,
-    ReadOnlyMemory<byte> Configuration);
+    string Version);
 ```
 
-So, conceptually:
+The concrete implementation validates that the ID is non-zero and the version is present.
+
+Conceptually:
 
 ```text
 RuntimeManifest
 ├── RuntimeId
-└── Bundles
-    ├── BundleId + Configuration
-    ├── BundleId + Configuration
-    └── BundleId + Configuration
+├── Bundles
+│   ├── MicroBundle ID + requested version
+│   ├── MicroBundle ID + requested version
+│   └── MicroBundle ID + requested version
+└── optional ExperienceContext
 ```
 
-The manifest names the **roots**. FSM_COS discovers the dependency closure from those roots.
+The manifest names **roots**. FSM_COS discovers the dependency closure from those roots.
 
-## A real C# manifest
-
-The alpha API can construct a manifest directly:
+## Example
 
 ```csharp
 var manifest = new RuntimeManifest(
     RuntimeId: 1001,
     Bundles:
     [
-        BundleRequest.Unconfigured(10),
-        new BundleRequest(
-            BundleId: 20,
-            Configuration: new byte[] { 0x01, 0x02, 0x03 })
+        new MicroBundleManifestEntry(10, "1.2.0"),
+        new MicroBundleManifestEntry(20, "3.1.0")
     ]);
 ```
 
-Here:
+This means:
 
-- `1001` identifies the runtime being assembled.
-- Bundle `10` is requested without configuration.
-- Bundle `20` is requested with opaque configuration bytes.
-- FSM_COS does **not** interpret the bytes as JSON, XML, YAML, or any domain-specific format.
-- The MicroBundle that owns the configuration interprets it during `Load()`.
+- runtime `1001` is being assembled;
+- MicroBundle `10` is requested at `1.2.0`;
+- MicroBundle `20` is requested at `3.1.0`;
+- configuration is **not** embedded in the manifest.
 
-## A conceptual serialized form
+The catalog/resolver is responsible for locating a compatible artifact. FSM_COS verifies the resolved root reports the requested version before loading it.
 
-FSM_COS currently does **not** prescribe a serialization format. The following is therefore an illustrative representation, not a wire-format contract:
+## Version is part of the request
 
-```json
+Version belongs in the manifest because the manifest is a publication-level statement of **what composition was requested**.
+
+```text
+Manifest
+    │
+    ├── Bundle 10 → version 1.2.0
+    └── Bundle 20 → version 3.1.0
+
+Catalog / Repository
+    │
+    └── locate those requested artifacts
+
+FSM_COS
+    │
+    └── compose the resolved artifacts
+```
+
+The manifest does not need to know whether an artifact came from an in-memory catalog, a repository, Azure Blob, a package cache, or another delivery mechanism.
+
+## Configuration is deliberately outside the manifest
+
+Configuration answers a different question:
+
+> **How should this particular MicroBundle participate in this particular runtime?**
+
+That information belongs in a separate configuration source.
+
+```text
+runtime 1001
+
+MicroBundle 10
+    └── configuration file exists
+            ↓
+        configuration bytes
+
+MicroBundle 20
+    └── no configuration file
+            ↓
+        use MicroBundle defaults
+```
+
+FSM_COS exposes the composition boundary through:
+
+```csharp
+public interface IMicroBundleConfigurationSource
 {
-  "runtimeId": 1001,
-  "bundles": [
-    {
-      "bundleId": 10,
-      "configuration": null
-    },
-    {
-      "bundleId": 20,
-      "configuration": "AQID"
-    }
-  ]
+    bool TryGetConfiguration(
+        ulong runtimeId,
+        ulong bundleId,
+        string version,
+        out ReadOnlyMemory<byte> configuration);
 }
 ```
 
-The important part is the semantic shape, not the spelling of the serialization.
+The interface is intentionally about **availability**, not storage.
 
-**This is where the architecture intentionally hands off to [TheSingularityWorkshop.FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization).** FSM_COS does not need, and should not grow, a second serialization framework. If this conceptual representation becomes a concrete binary representation, the serialization boundary belongs to [FSM_Serialization](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_Serialization).
+The implementation might read a local configuration file, an Azure Blob, a repository artifact, generated resources, or another application-owned source.
 
-An authoring system may eventually publish JSON, binary data, generated C#, a compact manifest format, or another representation. FSM_COS only needs the runtime contract represented by `RuntimeManifest`.
+FSM_COS does not choose among those.
 
-> **Representation is not the RuntimeManifest itself. The bytes are a representation of the semantic request. FSM_COS owns what that request means for composition; FSM_Serialization owns the byte boundary.**
+### No configuration means defaults
 
-For the deeper architectural treatment, see [FSM_COS Theory — Composition is not serialization](THEORY.md#14-composition-is-not-serialization) and [FSM_Serialization Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md).
-
-## Authoring → publication
-
-The editor may know vastly more than the runtime manifest needs:
+This is an important semantic rule:
 
 ```text
-rich authoring model
-        │
-        ├── names
-        ├── ontology
-        ├── variants
-        ├── dependency graph
-        ├── provenance
-        └── visual/editor metadata
+configuration exists
         │
         ▼
-     validation
+provide bytes to the MicroBundle
         │
         ▼
- dependency closure
+MicroBundle interprets its own configuration
+
+configuration absent
         │
         ▼
- baked IDs + opaque configuration
+provide no external configuration
         │
         ▼
- RuntimeManifest
+MicroBundle loads its defaults
 ```
 
-This is an intentional compression boundary.
+There is no empty “default configuration file” requirement. Absence itself has meaning.
 
-The manifest should be **small enough to publish and stable enough to consume**, without becoming a second copy of the editor.
+## Configuration format is not an FSM_COS concern
+
+FSM_COS does not parse JSON, YAML, XML, binary records, generated C#, or any other configuration representation.
+
+If configuration becomes a serialized byte-level contract, the serialization responsibility remains with the appropriate serialization layer.
+
+```text
+representation
+     ↓
+configuration source
+     ↓
+FSM_COS
+     ↓
+MicroBundle
+```
 
 ## Roots versus dependencies
 
-Suppose the manifest requests:
+Suppose the requested root is:
 
 ```text
 A
@@ -139,25 +187,27 @@ A
 └── D
 ```
 
-The manifest only needs to name the requested root:
+The manifest only needs:
 
 ```text
-[A]
+[A @ requested-version]
 ```
 
-FSM_COS discovers the rest:
+FSM_COS discovers:
 
 ```text
 C → B → D → A
 ```
 
-The resulting order is an implementation consequence of the dependency graph, not something the manifest author has to manually encode.
+and loads dependencies before the root.
 
-See [Dependency Resolution](ARCHITECTURE.md#dependency-resolution) for the runtime behavior.
+A dependency's domain-owned `MicroBundleDependencyRequest` may still carry dependency-specific configuration for compatibility with the MicroBundleDomain runtime contract. When an external configuration source supplies configuration for that dependency, the external value is used.
 
-## What does not belong in a manifest?
+That compatibility detail does **not** move configuration into the manifest.
 
-A Runtime Manifest should not quietly become:
+## What does not belong in a Runtime Manifest?
+
+A manifest should not quietly become:
 
 - an application configuration file;
 - a GUI layout;
@@ -165,42 +215,77 @@ A Runtime Manifest should not quietly become:
 - a Unity scene;
 - a Warehouse database;
 - an Experience execution script;
-- a serialized RuntimeAssembly.
+- a serialized RuntimeAssembly;
+- a repository API response.
 
-Those concerns belong to other layers.
+The boundary is:
 
-The manifest requests.
+```text
+Manifest
+    = what MicroBundles + which versions
 
-**FSM_COS composes.**
+Configuration
+    = how a MicroBundle is configured
 
-The host manifests the result.
+Repository / Resolver
+    = where the artifact comes from
+
+FSM_COS
+    = how the requested composition is assembled
+
+RuntimeAssembly
+    = what FSM_COS successfully assembled
+```
+
+## Authoring → publication → composition
+
+A rich authoring environment may know far more than the runtime needs:
+
+```text
+rich authoring model
+        │
+        ├── names
+        ├── ontology
+        ├── variants
+        ├── dependencies
+        ├── provenance
+        └── editor metadata
+        │
+        ▼
+     validation
+        │
+        ▼
+MicroBundle IDs + requested versions
+        │
+        ▼
+ Runtime Manifest
+        │
+        ├─────────────── optional configuration source
+        │                                  │
+        ▼                                  ▼
+ Catalog / Resolver ───────────────► FSM_COS
+                                        │
+                                        ▼
+                                 RuntimeAssembly
+```
+
+This is a compression boundary: authoring can be rich without forcing the composition kernel to become an editor.
 
 ## Stability
 
 A useful long-term property is:
 
-> The same semantic manifest should produce the same composition when resolved against the same compatible catalog and bundle versions.
+> **The same semantic manifest, resolved against the same compatible catalog and versions, should produce the same composition.**
 
-That does not mean every host must render the result identically. It means the composition request remains meaningful when moved between hosts.
+That does not require every host to render or execute the result identically.
 
-## Related concepts
+It means the composition request remains meaningful when moved between hosts.
+
+## Related documents
 
 - [FSM_COS Architecture](ARCHITECTURE.md)
+- [FSM_COS Theory](THEORY.md)
 - [MicroBundles](MICROBUNDLES.md)
 - [RuntimeAssembly](RUNTIME_ASSEMBLY.md)
 - [Arbitration and Convergence](ARBITRATION.md)
-
-
----
-
-## 🔗 The Singularity Workshop
-
-FSM_COS is one layer in a deliberately troublesome ecosystem:
-
-- **[FSM_API](https://github.com/TrentBest/FSM_API)** — behavior and state.
-- **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
-- **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
-- **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
-
-<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
+- [Development](DEVELOPMENT.md)

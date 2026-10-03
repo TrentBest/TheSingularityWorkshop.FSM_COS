@@ -1,132 +1,147 @@
 # FSM_COS Development
 
-## Repository rule
+> There are two active branches by design: master and development.
 
-This repository is the canonical home for the FSM_COS composition kernel, its tests, package definition, and FSM_COS-specific documentation.
+This repository deliberately avoids a forest of simultaneously-current feature branches.
 
-The implementation project is:
+## Branch policy
 
-~~~text
-src/FSM_COS/FSM_COS.csproj
-~~~
+### master
 
-The test project is:
+`master` is the stable baseline.
 
-~~~text
-tests/FSM_COS.Tests/FSM_COS.Tests.csproj
-~~~
+It should represent code that has been deliberately consolidated and is suitable to treat as the public stable line. Release preparation is performed from a known-good development state; it is not an alternative permanent development branch.
 
-The solution files must reference those projects. There should not be a second root scaffold containing a placeholder Class1.cs project.
+### development
 
-## Build
+`development` is the current integration and architecture branch.
 
-From the repository root:
+All normal FSM_COS evolution should happen here unless a short-lived branch is genuinely useful for isolating a risky experiment.
 
-~~~text
-dotnet restore TheSingularityWorkshop.FSM_COS.sln
-dotnet build TheSingularityWorkshop.FSM_COS.sln --configuration Release
-dotnet test TheSingularityWorkshop.FSM_COS.sln --configuration Release
-~~~
+> **If you need to ask which branch is current, the answer should be `development`.**
 
-## Package
+### Short-lived branches
 
-The package project is:
+A temporary branch is acceptable for a substantial architecture experiment, focused documentation overhaul, risky implementation change, or benchmark/investigation that should remain isolated.
 
-~~~text
-src/FSM_COS/FSM_COS.csproj
-~~~
+When accepted, merge it into `development` and close the temporary PR. Do not allow old branches to become competing definitions of “current.”
 
-The package identity is:
+## Consolidation record
 
-~~~text
-TheSingularityWorkshop.FSM_COS
-~~~
+The repository previously accumulated overlapping branches for the domain-contract correction, staged manifest loading, and release preparation.
 
-The current alpha line is 0.1.0-alpha.1.
+The domain-contract correction was merged into `development`.
 
-The repository workflow restores, tests, and packs on pushes to master. Publishing to GitHub Packages and NuGet.org requires an explicit workflow dispatch with the publish input enabled.
+The staged-manifest and release-preparation PRs were closed as superseded designs. Their branches remain historical references; they are not active development lanes.
 
-## Documentation discipline
+This is intentional housekeeping, not deletion of architectural history.
 
-Documentation belongs with the repository whose contracts it explains.
+## Development sequence
 
-FSM_COS-specific theory should be added under:
+```text
+idea / issue
+    ↓
+development
+    ↓
+implementation + tests + documentation
+    ↓
+CI
+    ↓
+review
+    ↓
+development remains current
+    ↓
+stable checkpoint
+    ↓
+master
+    ↓
+explicit release
+```
 
-~~~text
-docs/
-~~~
+Do not publish a package merely because a development branch builds.
 
-Neighboring repositories may describe their relationship to FSM_COS, but they are not substitutes for FSM_COS documentation.
+## Documentation standard
 
-When a contract changes, update:
+FSM_COS documentation should explain four things together:
 
-1. implementation;
-2. tests;
-3. the relevant FSM_COS documentation;
-4. README architecture/usage material when the public boundary changes.
+1. Why the boundary exists.
+2. What contract crosses the boundary.
+3. How the implementation realizes the contract.
+4. What does not belong here.
 
-## Alpha development pattern
+A document is not finished merely because the code example compiles. It should leave a reader able to answer who owns a concept, who supplies it, who interprets it, where it stops, what happens when an optional piece is absent, and what the stable handoff is.
 
-FSM_COS should evolve slice-by-slice.
+Architecture diagrams are part of that explanation, not decoration.
 
-A useful change should normally have this shape:
+## Current architecture direction
 
-~~~text
-contract
-   ↓
-small implementation
-   ↓
-focused tests
-   ↓
-documentation
-   ↓
-package
-~~~
+```text
+MicroBundleDomain
+    │
+    │ defines what a MicroBundle is
+    ▼
+MicroBundleRepository
+    │
+    │ locates and delivers MicroBundle artifacts
+    ▼
+FSM_COS
+    │
+    │ composes the requested runtime
+    ▼
+RuntimeAssembly
+    │
+    ▼
+Host / Experience
+```
 
-Do not add host-specific infrastructure merely because a consuming application currently needs it.
+The Runtime Manifest belongs to the composition request:
 
-## Tests are architectural evidence
+```text
+Manifest
+  ├── MicroBundle identity
+  └── requested version
+```
 
-The tests should establish the semantics of:
+Per-MicroBundle configuration is deliberately separate:
 
-- dependency ordering;
-- duplicate dependency handling;
-- cycle detection;
-- missing bundle handling;
-- configuration propagation;
-- arbitration convergence;
-- arbitration round counting;
-- non-convergence;
-- RuntimeAssembly contents.
+```text
+Configuration source
+  ├── MicroBundle A → configuration
+  ├── MicroBundle B → configuration
+  └── MicroBundle C → absent → defaults
+```
 
-A test that exposes an ambiguous contract is a reason to clarify the contract, not to weaken the assertion.
+FSM_COS may consume configuration through an abstraction, but it does not become a file reader, serializer, repository, or application configuration framework.
 
-## Future work
+## Verification
 
-Potential future slices include:
+Before a development change is considered complete:
 
-- richer catalog/resolver contracts;
-- Warehouse-backed resolution;
-- version compatibility;
-- deterministic manifest validation;
-- compact/binary manifest publication;
-- explicit configuration conflict policy;
-- integration with higher-level FSM composition;
-- host handoff/execution contracts.
+- production code builds with zero warnings;
+- tests pass;
+- XML documentation remains coherent;
+- README and architecture docs describe the actual code;
+- package dependencies point at published/staged versions intentionally;
+- examples do not reference removed contracts;
+- branch purpose is obvious from GitHub;
+- no accidental publication occurs.
 
-Those are future contracts, not assumptions that should be silently embedded in Alpha 1.
+## Release discipline
 
+A release is a separate decision from development:
 
----
+```text
+development
+    ↓
+stable documentation
+    ↓
+green CI
+    ↓
+explicit approval
+    ↓
+merge to master
+    ↓
+explicit publication
+```
 
-## 🔗 The Singularity Workshop
-
-FSM_COS is one layer in a deliberately troublesome ecosystem:
-
-- **[FSM_API](https://github.com/TrentBest/FSM_API)** — behavior and state.
-- **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
-- **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
-- **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
-
-<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
+No automatic branch state should be interpreted as permission to publish a NuGet package.

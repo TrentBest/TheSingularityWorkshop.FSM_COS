@@ -4,7 +4,7 @@
   <img src="assets/fsm-cos-system.svg" alt="FSM_COS composition kernel between authoring and host manifestation">
 </p>
 
-FSM_COS is the **composition kernel** of The Singularity Workshop ecosystem.
+FSM_COS is the **platform-neutral computation and composition kernel** of The Singularity Workshop ecosystem.
 
 It exists because there is a meaningful architectural operation between:
 
@@ -12,11 +12,11 @@ It exists because there is a meaningful architectural operation between:
 
 and:
 
-> **“Here is the runtime environment that will execute and manifest it.”**
+> **“Here is the system that will execute or manifest that computation.”**
 
 That operation is **composition**.
 
-FSM_COS takes a published request, discovers the MicroBundles required to satisfy it, carries the configuration needed to install them, loads the reachable composition, gives that composition an opportunity to reconcile itself, and returns a stable `RuntimeAssembly`.
+FSM_COS takes a published request, discovers the MicroBundles required to satisfy it, accepts optional external configuration through a supplied boundary, loads the reachable composition, gives that composition an opportunity to reconcile itself, and returns a stable `RuntimeAssembly`.
 
 It does not become the application.
 
@@ -34,6 +34,10 @@ For the architectural rationale behind this boundary, see this document together
 
 ## 1. What does “composition of systems” mean?
 
+FSM_COS is intentionally **not an application type**. It does not assume that the computation being assembled is a WebPage, WebApp, desktop application, distributed service, game, spreadsheet, simulation, or any other particular product form.
+
+The engineering abstraction is the computation and the common operational work required to assemble it. A host may later turn that computation into any of those things, or into something with no presentation layer at all.
+
 The name **FSM_COS** is intentionally broader than “bundle loader.”
 
 A loader answers:
@@ -42,7 +46,7 @@ A loader answers:
 
 A composition system answers:
 
-> “Given a requested collection of capabilities and their relationships, what complete set of components must exist together, in what dependency-respecting arrangement, with what configuration, before the result can be handed to something else?”
+> “Given a requested computation and its relationships, what complete set of components must exist together, in what dependency-respecting arrangement, with what optional configuration, before the result can be handed to something else?”
 
 That distinction matters.
 
@@ -76,6 +80,8 @@ See [Runtime Manifest Theory](MANIFEST_THEORY.md) for the deeper distinction bet
 
 ## 2. The missing layer is assembly
 
+The word **system** here means the computation being assembled, not an application category. FSM_COS is useful precisely because the same assembly mechanics can support many kinds of software.
+
 The broader ecosystem has several important responsibilities:
 
 | Layer | Primary responsibility |
@@ -88,7 +94,7 @@ The broader ecosystem has several important responsibilities:
 | **Host** | execution and manifestation |
 | **Experience** | what is encountered |
 
-FSM_COS is not a replacement for any of those layers.
+FSM_COS is not a replacement for any of those domains. This document only summarizes how FSM_COS consumes the contracts it needs; the authoritative explanation of each dependency remains in that dependency's repository.
 
 It is the boundary that connects a **request for a composition** to a **stable assembled composition**.
 
@@ -132,7 +138,7 @@ rich authoring model
 dependency closure
         │
         ▼
- baked IDs + configuration
+ MicroBundle IDs + requested versions
         │
         ▼
  RuntimeManifest
@@ -192,104 +198,85 @@ See [Architecture — Dependency Resolution](ARCHITECTURE.md#dependency-resoluti
 
 ---
 
-## 5. MicroBundles are composition units
+## 5. MicroBundles participate in composition
 
-A [MicroBundle](MICROBUNDLES.md) is **micro in responsibility, not necessarily in byte size**.
+**MicroBundleDomain owns the MicroBundle domain. FSM_COS owns the composition of those participants.**
 
-The point of the abstraction is not that every bundle must be tiny.
+FSM_COS therefore does not define:
 
-The point is that a capability can expose a focused composition contract.
+- what a MicroBundle means;
+- how its ontology is modeled;
+- how its domain metadata should be designed;
+- how its implementation is authored.
 
-A bundle contributes:
-
-- identity;
-- dependencies;
-- configuration;
-- installation/loading behavior;
-- arbitration behavior.
-
-It does not need to know which host will eventually manifest the result.
-
-That allows one semantic composition to be assembled for different environments:
+FSM_COS consumes the domain-owned contract to perform composition work:
 
 ```text
-                         RuntimeAssembly
-                               │
-              ┌────────────────┼────────────────┐
-              ▼                ▼                ▼
-           WebForge          Unity            Desktop
-              │                │                │
-           browser          scene            native host
+domain-owned MicroBundle
+          │
+          ▼
+     catalog / resolver
+          │
+          ▼
+       FSM_COS
+          │
+     ┌────┼────┐
+     ▼    ▼    ▼
+   Load Arbitrate dependency closure
+          │
+          ▼
+   RuntimeAssembly
 ```
 
-The bundle participates in composition.
+The same MicroBundle domain can therefore be consumed by different composition hosts.
 
-The host owns manifestation.
+> **MicroBundleDomain explains the participant. FSM_COS explains the relationship between participants.**
 
-See [MicroBundles](MICROBUNDLES.md).
+For concrete developer usage, see [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md). The document focuses on what an FSM_COS developer can do with the contract; it does not attempt to redefine the MicroBundle domain.
 
 ---
 
-## 6. Configuration is carried, not interpreted by the kernel
+## 6. Configuration is external to the manifest
 
-FSM_COS must move configuration through the composition process without becoming the owner of every domain's configuration schema.
+The manifest says which MicroBundles and requested versions belong in the composition.
 
-The alpha contract therefore keeps configuration opaque:
+A separate configuration source says how a particular MicroBundle is configured for this runtime.
 
-```text
-BundleRequest
-├── BundleId
-└── Configuration : bytes
-```
+FSM_COS may consume configuration through `IMicroBundleConfigurationSource`, but it does not read configuration files or define their representation.
 
-A parent can request a dependency with configuration:
+If configuration is absent, the MicroBundle receives no external configuration and uses its defaults.
 
 ```text
-A requests B + configuration X
-B requests C + configuration Y
+Manifest
+   │
+   ├── identity + version
+   │
+   ▼
+FSM_COS
+   ▲
+   │
+optional configuration source
 ```
-
-FSM_COS transports those values to the bundle that owns them.
-
-The kernel does not decide whether the bytes represent JSON, binary fields, generated code, or something else.
-
-That is an important boundary.
 
 ### The serialization boundary
 
-When the conceptual discussion reaches **serialized representation**, the owner of that problem is **[TheSingularityWorkshop.FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)**.
+When configuration crosses a concrete byte representation boundary, that representation belongs to **FSM_Serialization** rather than FSM_COS.
 
-Its corresponding package is **[TheSingularityWorkshop.FSM_Serialization on NuGet](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_Serialization/)**.
-
-FSM_COS can consume configuration that has crossed a representation boundary, but it should not grow a second serialization architecture.
-
-The intended direction is:
+FSM_COS can consume the resulting bytes without becoming another serialization framework.
 
 ```text
-semantic configuration
-        │
-        ▼
 FSM_Serialization
-        │
-      bytes
-        │
-        ▼
-BundleRequest
-        │
-        ▼
+    ↓ representation
+
+configuration source
+    ↓ availability
+
 FSM_COS
-        │
-        ▼
+    ↓ composition
+
 MicroBundle
+    ↓ domain interpretation
 ```
-
-The serializer owns the representation boundary.
-
-FSM_COS owns the composition boundary.
-
-Those are related boundaries, but they are not the same boundary.
-
-See [FSM_Serialization Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md) for the representation-versus-reality model.
 
 ---
 
@@ -394,9 +381,9 @@ This is the point at which FSM_COS stops being the owner of the journey.
 
 ---
 
-## 10. Same composition, different manifestation
+## 10. Same computation, different manifestation
 
-A composition should not become web-specific merely because the first proving ground is WebPage.
+A computation should not become web-specific merely because the first proving ground is WebPage.
 
 The same semantic request can be assembled for multiple hosts:
 
@@ -590,11 +577,7 @@ The crane does not become:
 
 That is FSM_COS.
 
-The living version of the crane is deliberately subtle. The load rises, sways, and settles because composition is work: a request causes assembly activity, the assembly stabilizes, and only then does handoff occur. GitHub repository views do not animate SVG assets, so the GIF is the living companion while the SVG remains the blueprint artifact.
-
-<p align="center">
-  <img src="assets/fsm-cos-crane.gif" alt="Animated FSM_COS composition crane">
-</p>
+The crane is intentionally static in the architecture documentation. It is a symbol for the composition boundary: receive the request, gather the parts, stabilize the assembly, and hand it off. The SVG remains the canonical explanatory artifact.
 
 > **FSM_COS assembles the machine. It does not become the machine.**
 
@@ -605,11 +588,11 @@ The living version of the crane is deliberately subtle. The load rises, sways, a
 The entire kernel can be reduced to:
 
 ```text
-published request
+published manifest
        +
 reachable MicroBundles
        +
-configuration
+optional external configuration
        +
 dependency ordering
        +
@@ -621,7 +604,7 @@ stable RuntimeAssembly
 Or, more simply:
 
 ```text
-FSM_COS = request → composition → stable assembly
+FSM_COS = computation request → composition → stable assembly
 ```
 
 Not:

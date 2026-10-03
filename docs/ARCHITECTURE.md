@@ -24,10 +24,10 @@ FSM_COS is a small composition kernel. This document describes how its pieces co
 ## Core contracts
 
 ### RuntimeManifest
-Identifies the runtime being assembled and supplies root BundleRequest values. It is composition input, not application behavior. See [Runtime Manifest](RUNTIME_MANIFEST.md) and [Runtime Manifest Theory](MANIFEST_THEORY.md).
+Identifies the runtime being assembled and supplies root MicroBundle manifest entries. It is composition input, not application behavior. See [Runtime Manifest](RUNTIME_MANIFEST.md) and [Runtime Manifest Theory](MANIFEST_THEORY.md).
 
-### BundleRequest
-Pairs a ulong BundleId with opaque configuration bytes. A manifest producer can bake richer editor-time structures into this representation. If those bytes cross a concrete serialization boundary, that concern belongs to [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization), not the composition algorithm.
+### MicroBundle manifest entries
+A manifest entry identifies a requested MicroBundle and its requested version. Configuration is intentionally not part of the manifest. A separate configuration source may provide per-MicroBundle configuration at runtime.
 
 ### IMicroBundleCatalog
 Resolves a bundle identity to the IMicroBundle required for installation. The catalog is supplied by the host, so future Warehouse-backed or generated resolvers do not require a different composition algorithm.
@@ -66,9 +66,7 @@ Missing bundles and dependency cycles are composition failures.
 
 ## Configuration propagation
 
-Configuration belongs to the BundleRequest that caused installation. The load context is populated before a requested bundle and its dependency chain are loaded.
-
-This is the foundation for entangled dependency composition.
+Configuration is an external runtime input. FSM_COS accepts configuration through an abstraction supplied by the host/repository layer; it does not read configuration files or interpret their format. If no configuration is available for a bundle, the bundle is loaded without external configuration and uses its defaults.
 
 ## Arbitration
 
@@ -101,9 +99,27 @@ RuntimeAssembly
        ├── Desktop Forge → native manifestation
        └── MyVR / Domain → encountered Experience
 
-## Current alpha boundary
+## Current development boundary
 
-Alpha 2 stops after manifest → resolve → dependency resolution → configured load → arbitration → RuntimeAssembly.
+The active development line is refining the manifest/configuration boundary while preserving the small composition kernel:
+
+```text
+Manifest (bundle + version)
+        ↓
+resolver / catalog
+        ↓
+configuration source (optional)
+        ↓
+dependency closure
+        ↓
+Load()
+        ↓
+Arbitrate() until stable
+        ↓
+RuntimeAssembly
+```
+
+File I/O, repository transport, serialization, host lifecycle, and presentation remain outside the kernel.
 
 Execution scheduling, resource allocation, Warehouse integration, and host lifecycle belong to later layers when their contracts are sufficiently clear.
 
