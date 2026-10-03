@@ -19,7 +19,9 @@ The current implementation is deliberately small:
 ```csharp
 public sealed record RuntimeManifest(
     ulong RuntimeId,
-    IReadOnlyList<MicroBundleDependencyRequest> Bundles);
+    IReadOnlyList<MicroBundleDependencyRequest> Bundles,
+    IStateContext? ExperienceContext = null,
+    SemanticIntent? Intent = null);
 ```
 
 The request type is owned by [MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain).
@@ -29,13 +31,17 @@ Each root request identifies a MicroBundle and may carry opaque configuration:
 ```text
 RuntimeManifest
 ├── RuntimeId
-└── Bundles
+├── Bundles
+├── ExperienceContext
+└── SemanticIntent
     ├── BundleId + Configuration
     ├── BundleId + Configuration
     └── BundleId + Configuration
 ```
 
 The manifest names the **roots**. FSM_COS discovers the dependency closure from those roots.
+
+The optional `SemanticIntent` comes from [FSM_UserIO](https://github.com/TrentBest/FSM_UserIO). FSM_COS carries it through the composition boundary without interpreting or executing it. The resulting intent is available on `RuntimeAssembly.Intent` for the host or manifestation layer.
 
 ## Why the request type is domain-owned
 
