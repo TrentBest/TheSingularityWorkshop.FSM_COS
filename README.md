@@ -13,7 +13,7 @@
 FSM_COS intentionally keeps its dependency floor small: **FSM_API** supplies state/context primitives and **MicroBundleDomain** supplies canonical MicroBundle identity/version/dependency/provider metadata. GUI, serialization, storage, and host frameworks remain outside the kernel.
 
 <p align="center">
-  <img src="docs/assets/fsm-cos-crane.gif" alt="Animated industrial composition crane lifting a runtime assembly">
+  <img src="docs/assets/fsm-cos-crane.svg" alt="FSM_COS composition crane">
 </p>
 
 <p align="center"><em>Runtime request → composition → stable assembly → host manifestation</em></p>
@@ -92,9 +92,9 @@ FSM_COS answers one narrower question:
 
 The repository therefore owns the composition contracts, dependency closure, configured loading, arbitration, convergence, and the resulting RuntimeAssembly.
 
-## Current alpha boundary
+## Current development boundary
 
-The current 0.1.0-alpha.3 implementation is intentionally a small vertical slice:
+The current `development` line is the active architecture workstream. The package remains `0.1.0-alpha.5` while the runtime contract and documentation are being refined:
 
 ~~~text
 RuntimeManifest
@@ -125,22 +125,13 @@ It does **not** yet own:
 
 Those concerns can become inputs, providers, or later composition layers without turning FSM_COS into an application framework.
 
-## Living architecture
+## Architecture visuals
 
 Git is static. The architecture does not have to *feel* static.
 
-The documentation deliberately uses two visual forms:
+FSM_COS uses static SVG architecture art as the canonical visual language. The crane is a deliberately simple symbol: it represents the composition boundary doing work, not a UI animation.
 
-- **SVG** is the precise blueprint/source-of-truth illustration.
-- **GIF** supplies lightweight motion when motion communicates a semantic event rather than decoration.
-
-The crane is the first living artifact: its load rises and settles because composition is an active operation — request, lift, stabilize, handoff. GitHub documents that repository SVG views do not support animation, while GIF is a supported image format, so the living asset is intentionally separate from the blueprint SVG.
-
-<p align="center">
-  <img src="docs/assets/fsm-cos-crane.gif" alt="Living FSM_COS composition crane animation">
-</p>
-
-The rule for future visuals is simple: **animate the concept, not the decoration**. Motion should communicate loading, dependency travel, arbitration rounds, convergence, or handoff.
+The rule for repository visuals is simple: **illustrate the concept, not the decoration**. Architecture diagrams should remain readable, versionable, and useful in GitHub, package documentation, and generated documentation.
 
 ## Visual map
 
@@ -163,7 +154,7 @@ The documentation diagrams are deliberately architecture-first: they show where 
   <img src="docs/assets/runtime-manifest-pipeline.svg" alt="Runtime Manifest publication pipeline">
 </p>
 
-A [RuntimeManifest](docs/RUNTIME_MANIFEST.md) is a **published runtime request**, not an application configuration file.
+A [RuntimeManifest](docs/RUNTIME_MANIFEST.md) is a **published composition request**, not an application configuration file. The manifest identifies the MicroBundles and their requested versions. Per-MicroBundle configuration is a separate concern and may be absent; absence means the MicroBundle uses its defaults.
 
 Editor/tooling systems may know rich information:
 
@@ -191,16 +182,13 @@ A [MicroBundle](docs/MICROBUNDLES.md) is **micro in focus, not necessarily in by
 
 FSM_COS does not care whether a bundle is physically tiny or enormous. It cares that the bundle has a focused composition responsibility and exposes the contract required for assembly.
 
-The current contract is:
+The current runtime contract is owned by `TheSingularityWorkshop.MicroBundleDomain`. FSM_COS consumes `IMicroBundle`; it does not define the MicroBundle.
 
-~~~csharp
-public interface IMicroBundle
-{
-    ulong Id { get; }
-    IReadOnlyList<BundleRequest> Dependencies { get; }
-    void Load(MicroBundleLoadContext context);
-    bool Arbitrate(ArbitrationContext context, int roundIndex);
-}
+~~~text
+MicroBundleDomain → what a MicroBundle is
+MicroBundleRepository → where a MicroBundle artifact comes from
+FSM_COS → how the requested composition is assembled
+Host → what the assembled runtime becomes
 ~~~
 
 A bundle can therefore participate in composition without knowing whether it will ultimately manifest in WebForge, AnyApp, Unity, Desktop Forge, or another host.
@@ -230,18 +218,27 @@ Cycles are composition errors. Missing bundles are composition errors. FSM_COS d
 
 ## Configuration
 
-BundleRequest carries a bundle ID plus opaque configuration bytes.
-
-That matters because a dependency can be **entangled** with the request that caused it to load:
+Configuration is deliberately **outside the Runtime Manifest**.
 
 ~~~text
-A requests B + configuration X
-B requests C + configuration Y
+Manifest
+  └── MicroBundle identity + requested version
+
+Configuration source
+  ├── MicroBundle A configuration
+  ├── MicroBundle B configuration
+  └── optional entries
 ~~~
 
-FSM_COS transports the configuration. The bundle that owns it interprets it.
+FSM_COS may receive configuration through an abstraction supplied by the host or repository layer. It does not read files, choose a file format, or interpret domain configuration.
 
-This keeps the composition engine independent from the serialization format and domain meaning of configuration.
+If a MicroBundle has no configuration entry, it is loaded with no external configuration and therefore uses its own defaults.
+
+This keeps three responsibilities distinct:
+
+- **Manifest** — which MicroBundles and versions are requested.
+- **Configuration source** — how a particular MicroBundle is configured for this runtime.
+- **FSM_COS** — how the resulting composition is resolved, loaded, and arbitrated.
 
 When configuration becomes a **serialized representation**, FSM_COS deliberately points downward to **[TheSingularityWorkshop.FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** rather than defining another serializer here. See [FSM_COS Theory — Composition is not serialization](docs/THEORY.md#14-composition-is-not-serialization) and the [FSM_Serialization Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md).
 
@@ -322,8 +319,6 @@ TheSingularityWorkshop.FSM_COS/
 │       ├── IFsmCos.cs
 │       ├── FsmCos.cs
 │       ├── RuntimeManifest.cs
-│       ├── BundleRequest.cs
-│       ├── IMicroBundle.cs
 │       ├── IMicroBundleCatalog.cs
 │       ├── MicroBundleLoadContext.cs
 │       ├── ArbitrationContext.cs
@@ -362,7 +357,8 @@ This repository carries its own architecture and theory. The documents here desc
 ## Package
 
 **Package:** TheSingularityWorkshop.FSM_COS  
-**Version:** 0.1.0-alpha.3  
+**Version:** 0.1.0-alpha.5  
+**Development dependency:** TheSingularityWorkshop.MicroBundleDomain 1.0.1  
 **Target:** .NET 8  
 **License:** MIT
 
