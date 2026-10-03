@@ -8,9 +8,9 @@
 [![Last commit](https://img.shields.io/github/last-commit/TrentBest/TheSingularityWorkshop.FSM_COS/master)](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commits/master)
 [![Code Coverage](https://codecov.io/gh/TrentBest/TheSingularityWorkshop.FSM_COS/graph/badge.svg)](https://codecov.io/gh/TrentBest/TheSingularityWorkshop.FSM_COS)
 
-**FSM_COS is the composition system.**
+**FSM_COS is a platform-neutral computation and composition kernel.**
 
-FSM_COS intentionally keeps its dependency floor small: **FSM_API** supplies the state/context primitives used by composition, while **MicroBundleDomain** supplies the canonical MicroBundle contract consumed by resolution, loading, and arbitration. GUI, serialization, storage, and host frameworks remain outside the kernel.
+FSM_COS intentionally keeps its dependency floor small. It consumes **FSM_API** for the state/context primitives required by composition and **MicroBundleDomain** for the canonical MicroBundle contract. It is deliberately **not an application framework**: no browser, desktop UI, Unity runtime, renderer, database, warehouse, or product type is built into the kernel.
 
 <p align="center">
   <img src="docs/assets/fsm-cos-crane.svg" alt="FSM_COS composition crane">
@@ -18,7 +18,7 @@ FSM_COS intentionally keeps its dependency floor small: **FSM_API** supplies the
 
 <p align="center"><em>Runtime request → composition → stable assembly → host manifestation</em></p>
 
-It takes a [Runtime Manifest](docs/RUNTIME_MANIFEST.md) and assembles the [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md), dependencies, configuration, and runtime components required by that manifest.
+It takes a [Runtime Manifest](docs/RUNTIME_MANIFEST.md), resolves the requested computation, and produces a stable [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) for another system to execute or manifest.
 
 ~~~text
 Runtime Manifest
@@ -35,7 +35,7 @@ Runtime Manifest
 RuntimeAssembly
 ~~~
 
-> **FSM_COS is the crane that assembles the machine. It does not become the machine.**
+> **FSM_COS assembles the computation. It does not become the application.**
 
 ## What FSM_COS actually is
 
@@ -51,22 +51,22 @@ The central distinction is:
 
 The deeper explanation lives in [FSM_COS Theory](docs/THEORY.md). The README uses that theory as a map and links into it repeatedly so the implementation and the architectural model stay connected.
 
-### The composition boundary
+### The computation boundary
 
 ```text
-authoring intent
+computation request
       ↓
 Runtime Manifest
       ↓
     FSM_COS
       ├── dependency closure
-      ├── configuration propagation
-      ├── configured loading
+      ├── optional configuration
+      ├── loading
       └── arbitration / convergence
       ↓
 RuntimeAssembly
       ↓
-host / manifestation
+execution / manifestation / next system
 ```
 
 **FSM_COS assembles the system. It does not become the system.**
@@ -75,7 +75,7 @@ See [Theory — what “composition of systems” means](docs/THEORY.md#1-what-d
 
 ## Why this repository exists
 
-FSM_COS is the repository for the **composition-of-systems boundary** in The Singularity Workshop architecture.
+FSM_COS is the repository for the **common computation-composition boundary** in The Singularity Workshop architecture.
 
 It is deliberately separate from:
 
@@ -86,9 +86,9 @@ It is deliberately separate from:
 - **Warehouse infrastructure** — storage and delivery of data.
 - **Experiences** — things a user encounters and executes.
 
-FSM_COS answers one narrower question:
+FSM_COS answers one deliberately general question:
 
-> **Given a published runtime manifest, what must be assembled before that runtime can be handed to a host?**
+> **Given a published computation request, what must be assembled before the resulting computation can be handed to another system?**
 
 The repository therefore owns the composition contracts, dependency closure, configured loading, arbitration, convergence, and the resulting RuntimeAssembly.
 
@@ -114,9 +114,9 @@ Arbitrate() rounds
 RuntimeAssembly
 ~~~
 
-It does **not** yet own:
+It does **not** own:
 
-- host execution scheduling;
+- application-specific execution scheduling;
 - GUI rendering;
 - browser, desktop, or Unity lifecycle;
 - Warehouse allocation;
@@ -125,7 +125,24 @@ It does **not** yet own:
 - Experience presentation;
 - general application configuration.
 
-Those concerns can become inputs, providers, or later composition layers without turning FSM_COS into an application framework.
+Those concerns can become inputs, MicroBundles, or host-side layers without turning FSM_COS into an application framework.
+
+### The design target is deliberately broader than any current host
+
+The same kernel can be used to assemble computation for a WebPage, WebApp, AnyApp, DistributedApp, service, tool, simulation, data processor, spreadsheet-like application, or a system that has no user interface at all.
+
+The application is **not** the abstraction. The computation is.
+
+FSM_COS therefore has no architectural preference for:
+
+- web over desktop;
+- desktop over distributed;
+- interactive over headless;
+- GUI over command line;
+- game over business software;
+- one runtime platform over another.
+
+Those are manifestations or application choices made outside the kernel.
 
 ## Architecture visuals
 
@@ -370,9 +387,9 @@ This repository carries its own architecture and theory. The documents here desc
 
 The repository contains the packaging and trusted-publishing workflow for GitHub Packages and NuGet.org. Publishing is an explicit workflow-dispatch action; the current alpha package is published through the repository's trusted-publishing workflow.
 
-## WebPage integration
+## Host integration
 
-WebPage is a host and proving ground for FSM_COS; it is not a special case inside the composition kernel. The intended flow is:
+WebPage is one host and proving ground for FSM_COS; it is not a special case inside the composition kernel. The intended flow is:
 
 ~~~text
 WebPage published manifest
@@ -397,17 +414,18 @@ For the concrete integration contract, see [WebPage Integration](docs/WEBPAGE_IN
 ## Design invariant
 
 ~~~text
-FSM_API      → behavior
-FSM_COS      → composition
-MicroBundle  → focused capability/content/behavior
-Warehouse    → storage and delivery
+FSM_API      → behavior/state primitives
+FSM_COS      → computation composition + stable assembly
+MicroBundle  → focused domain capability/content/behavior
+Repository   → artifact discovery and delivery
+Serialization→ representation
 Host         → execution / manifestation
-Experience   → what is encountered
+Application  → whatever the assembled computation is used to build
 ~~~
 
 The boundaries can evolve. The responsibility of FSM_COS should remain clear:
 
-> **Assemble what was requested. Return a stable composition. Hand it to the host.**
+> **Assemble the requested computation. Return a stable composition. Hand it to whatever executes or manifests it.**
 
 ---
 
