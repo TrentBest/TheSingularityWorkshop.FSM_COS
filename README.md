@@ -272,6 +272,72 @@ See [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md).
 
 ---
 
+## Scale: the composition boundary is compute-environment independent
+
+FSM_COS is not tied to a particular machine, operating system, renderer, process, or network topology. **It is the boundary alignment for functionality.**
+
+The same composition model can feed radically different execution environments:
+
+```text
+                         Runtime Manifest
+                                │
+                                ▼
+                           +---------+
+                           | FSM_COS |
+                           +---------+
+                                │
+                         RuntimeAssembly
+                                │
+          +---------------------+---------------------+
+          │           │           │          │        │
+          ▼           ▼           ▼          ▼        ▼
+       AnyApp      WebPage      WebApp      MyVR   DistributedApp
+       desktop      browser      service    VR      shared compute
+```
+
+These are **siblings, not layers**. FSM_COS composes the functionality; the execution environment determines where and how that composition is encountered or computed.
+
+That scale is intentional. A capability composed for AnyApp should not become a different capability merely because it is later encountered through WebPage, MyVR, or a distributed execution topology.
+
+### DistributedApp: computational sharing, not another kernel
+
+[DistributedApp](docs/COMPUTE_SCALE.md) is a proposed sibling execution model for sharing computation across participating environments. It does **not** sit above FSM_COS and it does not replace the MicroBundle contract.
+
+This distinction matters for relationships such as MyVR using computation hosted by an AnyApp process. We do **not** want:
+
+```text
+MyVR → AnyApp
+```
+
+as a hard architectural dependency.
+
+We want the participating environments to meet through a distributed computation boundary:
+
+```text
+              MyVR
+                │
+                │ participates
+                ▼
+         DistributedApp
+                │
+       computational sharing
+                │
+                ▼
+             AnyApp
+```
+
+In other words: **MyVR does not need to use AnyApp as an application dependency. MyVR can participate in a distributed computation in which an AnyApp host is one available compute participant.**
+
+This preserves replaceability. The other participant could eventually be another desktop, a server, a WebApp, a cloud process, a specialized machine, or an execution environment we have not invented yet.
+
+The composition question and the placement question remain separate:
+
+> **FSM_COS answers what must exist together. DistributedApp can answer where computation happens.**
+
+See [Compute Scale and Distributed Execution](docs/COMPUTE_SCALE.md).
+
+---
+
 ## Quick start
 
 A composition host supplies an `IMicroBundleCatalog` that can resolve the domain-owned `IMicroBundle` instances.
@@ -353,6 +419,7 @@ TheSingularityWorkshop.FSM_COS/
 │   ├── THEORY.md
 │   ├── MANIFEST_THEORY.md
 │   ├── DEVELOPMENT.md
+│   ├── COMPUTE_SCALE.md
 │   └── WEBPAGE_INTEGRATION.md
 ├── src/
 │   └── FSM_COS/
