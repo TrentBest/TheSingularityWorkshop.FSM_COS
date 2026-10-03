@@ -10,7 +10,7 @@
 
 **FSM_COS is the composition system.**
 
-FSM_COS intentionally keeps its dependency floor small: **FSM_API** supplies state/context primitives and **MicroBundleDomain** supplies canonical MicroBundle identity/version/dependency/provider metadata. GUI, serialization, storage, and host frameworks remain outside the kernel.
+FSM_COS intentionally keeps its dependency floor small: **FSM_API** supplies the state/context primitives used by composition, while **MicroBundleDomain** supplies the canonical MicroBundle contract consumed by resolution, loading, and arbitration. GUI, serialization, storage, and host frameworks remain outside the kernel.
 
 <p align="center">
   <img src="docs/assets/fsm-cos-crane.svg" alt="FSM_COS composition crane">
