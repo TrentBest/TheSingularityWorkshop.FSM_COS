@@ -19,7 +19,7 @@ The browser should therefore not become a dependency of FSM_COS.
 WebPage consumes the published package:
 
 ~~~xml
-<PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="0.1.0-alpha.2" />
+<PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="0.1.0-alpha.5" />
 ~~~
 
 The package currently targets .NET 8 and depends on FSM_API and MicroBundleDomain. A WebPage project may consume it because the composition kernel is written against platform-neutral .NET APIs.
@@ -172,7 +172,7 @@ The Warehouse does not become part of the FSM_COS package. It supplies or backs 
 
 ## Current limitation
 
-0.1.0-alpha.1 is a composition kernel, not yet a complete runtime-host framework.
+0.1.0-alpha.5 is a composition kernel, not yet a complete runtime-host framework.
 
 The next meaningful evolution is therefore not adding platform APIs to FSM_COS. It is proving the complete handoff:
 
