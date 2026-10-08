@@ -212,7 +212,7 @@ A manifest should not quietly become:
 - an application configuration file;
 - a GUI layout;
 - a browser lifecycle description;
-- a Unity scene;
+- a native scene;
 - a Warehouse database;
 - an Experience execution script;
 - a serialized RuntimeAssembly;
