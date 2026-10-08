@@ -24,6 +24,15 @@ FSM_COS intentionally keeps its dependency floor small. It consumes **FSM_API** 
 
 It takes a [Runtime Manifest](docs/RUNTIME_MANIFEST.md), resolves the requested computation, and produces a stable [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) for another system to execute or manifest.
 
+## Documentation
+
+Choose the depth that fits your goal:
+
+- **Start with the map:** [Documentation Index](docs/DOCUMENTATION_INDEX.md) routes readers to the right explanation without requiring a linear read.
+- **Understand the design:** [FSM_COS Theory](docs/THEORY.md) explains the composition boundary and its invariants.
+- **Use the runtime:** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md), [Runtime Manifest](docs/RUNTIME_MANIFEST.md), and [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) cover the main handoff.
+- **Review the proposed shared README convention:** [Ecosystem Documentation Standard](docs/ECOSYSTEM_DOCUMENTATION_STANDARD.md). This is a proposal under review, not yet a rule adopted across all Workshop repositories.
+
 ~~~text
 Runtime Manifest
       │
