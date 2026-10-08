@@ -148,3 +148,14 @@ This is a target boundary to validate, not a claim that all projects currently s
 #### FSM_COS source-difference finding: intent contract
 
 A direct fetch of every `.cs` and `.csproj` file in the inspected FSM_COS master and development trees found a concrete difference: **master's `RuntimeAssembly` and `RuntimeManifest` use `SemanticIntent` from FSM_UserIO; development has no matching source reference even though its project file still declares the package.** Therefore the FSM_UserIO dependency cannot be called dead weight from package metadata alone. The next decision is whether to preserve the intent-bearing runtime contract and bring it into development with tests, or intentionally redesign the contract first. Do not remove the dependency as a cleanup-only change.
+
+
+#### FSM_COS branch disposition: development is the stronger composition base, with a master-only intent feature to preserve
+
+The source-level comparison shows more than the FSM_UserIO difference:
+
+- **Development has the stronger manifest/configuration path:** version-specific root entries, version-aware catalog resolution, and an optional `IMicroBundleConfigurationSource` that supplies per-runtime/per-bundle configuration. This directly supports the target of manifest-driven, versioned MicroBundle composition.
+- **Master has the simpler dependency-request API** and carries `SemanticIntent` from `RuntimeManifest` into `RuntimeAssembly`, but its inspected catalog contract does not require a version for the root request and its manifest does not expose the development configuration-source path.
+- **Both retain the core composition behavior** of recursive loading, cycle detection, and bounded arbitration, but their loading contracts are not source-compatible as-is.
+
+**Preliminary recommendation:** use development as the integration base for versioned, configured composition; port the master intent field into the development manifest/runtime assembly as a small, tested additive capability if its contract is still desired. Do not replace the development manifest/configuration work with master wholesale. Before committing to this choice, inspect MicroBundleDomain's dependency/version contract and run tests against the intended package/API version. This is an architectural recommendation from source inspection, not a claim that development currently passes CI or that the master-only intent feature has been migrated.
