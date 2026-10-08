@@ -217,7 +217,7 @@ That allows one semantic composition to be assembled for different environments:
                                │
               ┌────────────────┼────────────────┐
               ▼                ▼                ▼
-           WebForge          Unity            Desktop
+           WebForge          native host            Desktop
               │                │                │
            browser          scene            native host
 ```
@@ -302,7 +302,7 @@ It does **not** mean:
 - an Experience has started;
 - a GUI has rendered;
 - a browser has opened;
-- a Unity scene has loaded;
+- a native scene has loaded;
 - a desktop application has entered its lifecycle;
 - a process has begun scheduling;
 - a user has encountered anything.
@@ -316,7 +316,7 @@ This distinction is what lets the same composition travel to different hosts.
                   │
        ┌──────────┼──────────┐
        ▼          ▼          ▼
-     browser    Unity     desktop
+     browser    native host     desktop
 ```
 
 FSM_COS stops at the handoff.
@@ -410,7 +410,7 @@ The same semantic request can be assembled for multiple hosts:
                  RuntimeAssembly
                  /        |        \
                 /         |         \
-           WebForge      Unity     Desktop
+           WebForge      native host     Desktop
               │            │          │
            browser       scene      native host
 ```
@@ -432,7 +432,7 @@ FSM_COS does not own:
 - application lifecycle;
 - GUI rendering;
 - browser lifecycle;
-- Unity scene/object lifecycle;
+- native scene/object lifecycle;
 - desktop lifecycle;
 - Warehouse persistence;
 - storage policy;
@@ -719,6 +719,5 @@ FSM_COS is one layer in a deliberately troublesome ecosystem:
 - **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
 - **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
 - **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
