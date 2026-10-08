@@ -137,7 +137,7 @@ Its significance is not that VR requires a different composition model.
 
 Its significance is that **the same composition model survives a radically different manifestation environment**.
 
-A MicroBundle should not become a Unity-only concept merely because MyVR happens to use Unity or another immersive runtime.
+A MicroBundle should not become a native host-only concept merely because MyVR happens to use native host or another immersive runtime.
 
 ## DistributedApp
 
