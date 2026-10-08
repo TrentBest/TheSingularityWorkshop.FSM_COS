@@ -262,7 +262,7 @@ This is the same dependency-direction rule applied to another domain.
 
 ---
 
-## WebPage, AnyApp, Unity, and other hosts
+## WebPage, AnyApp, native host, and other hosts
 
 These are consumers of the composition boundary.
 
@@ -274,7 +274,7 @@ These are consumers of the composition boundary.
                 │
        ┌────────┼────────┐
        ▼        ▼        ▼
-    WebPage   AnyApp   Unity/other
+    WebPage   AnyApp   native host/other
 ```
 
 A host owns its lifecycle, execution model, rendering, interaction, and manifestation.
