@@ -65,6 +65,23 @@ The inspected Profiles development branch contains a .NET 8 domain package, test
 
 No NuGet publication was performed. These workflow-only edits have not been represented as passing CI unless a corresponding run confirms it.
 
+## Branch reconciliation snapshot (2026-10-08)
+
+These counts compare master (base) with development (head). They are repository-history facts, not a merge recommendation. A divergence must be understood before using one branch's project files as the authority for another.
+
+| Repository | Comparison status | Development ahead / behind | Action |
+|---|---|---:|---|
+| FSM_API | Identical | 0 / 0 | The 2.0 feature branches remain separate; do not merge them into master until parity and tests are approved. |
+| FSM_Serialization | Diverged | 1 / 1 | Review the workflow-only safety differences and preserve disabled publication on both branches. |
+| Ontology | Diverged | 1 / 1 | Review the workflow-only safety differences and preserve disabled publication on both branches. |
+| MicroBundleDomain | Diverged | 1 / 2 | Reconcile current package/contract changes and keep publishing disabled. |
+| FSM_UserIO | Diverged | 12 / 19 | Inspect source/API changes before choosing the canonical integration line. |
+| ProtocolAi | Development ahead | 6 / 0 | Review development changes and the open alpha.3 PR before pinning consumers. |
+| GrammarAi | Identical | 0 / 0 | Branch histories align; keep the current publish gate disabled. |
+| Renderer | Development ahead | 5 / 0 | Review renderer API/dependency changes before consumer version updates. |
+| FSM_REST | Diverged | 24 / 4 | Reconcile the transport/API branch split before updating repository REST pins. |
+| MicroBundleRepository | Diverged | 29 / 22 | Resolve the major source and adapter divergence before dependency alignment. |
+
 ## Completion criteria
 
 A row is complete only when its intended version is identified, the package/source compatibility is demonstrated by restore/build/tests, the consumer’s actual usage is understood, and any release action has explicit approval. Documentation alone does not make a dependency aligned or a capability integrated.
