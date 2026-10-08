@@ -16,7 +16,7 @@
 
 | Consumer / project | Current source finding | Next verification |
 |---|---|---|
-| AnyApp | Master project metadata references FSM_COS alpha.4 while inspected FSM_COS source declares alpha.6. AnyApp also references GUI.WPF alpha.6, FSM_UserIO alpha.1, ProtocolAi alpha.2, and GrammarAi alpha.2. | Inspect the active AnyApp branch, package availability, restore/build/test results, and whether the host uses APIs introduced after alpha.4. Do not bump the pin based only on version arithmetic. |
+| AnyApp (development) | The active development project declares AnyApp alpha.1 and references FSM_COS alpha.5, GUI.WPF alpha.6, FSM_UserIO alpha.1, ProtocolAi alpha.2, GrammarAi alpha.2, and MicroBundleRepository.Rest alpha.5. The inspected FSM_COS development source declares alpha.6. | Verify alpha.5 package availability and API compatibility before changing the pin. Run the Windows restore/build/test path. The development README describes a repository-backed artifact path alongside a compiled compatibility catalog; confirm which path is exercised by tests. |
 | MicroBundleRepository.FSM_COS | Adapter references FSM_COS alpha.5 while inspected FSM_COS source declares alpha.6. | Confirm whether alpha.5 is available and intentional; build the adapter against the selected compatible package/source. |
 | MicroBundleRepository.Core | References FSM_Serialization alpha.2 and Ontology alpha.2; inspected source declarations were Serialization 1.0.0 and Ontology alpha.3. | Check NuGet availability and API/format compatibility; update pins only after validation. |
 | MicroBundleRepository.Rest | References Ontology alpha.2 while inspected Ontology source declares alpha.3. Its FSM_REST alpha.4 reference matches inspected source metadata. | Verify whether alpha.2 is intentionally pinned for compatibility or simply stale. |
@@ -27,6 +27,7 @@
 ### 2. Verify optionality and actual runtime discovery
 
 - [ ] Prove that an Elements experience can be discovered, loaded, and arbitrated by a real FSM_COS catalog.
+- [ ] Verify AnyApp’s actual repository-backed composition path, including artifact identity/hash verification and materialization, rather than treating a repository reference as proof of runtime use.
 - [ ] Prove the Moniker experience can be consumed consistently by WebPage and AnyApp, or document the current host-specific limitation.
 - [ ] Confirm MicroBundleIngestor remains an authoring/ingestion tool, not a runtime dependency. Its repository REST dependency is conditional on UseMicroBundleRepositoryRest=true and disabled by default in the inspected development source.
 - [ ] Keep REST, storage, Azure, WPF, and other host/platform adapters optional unless a consumer demonstrably requires them.
