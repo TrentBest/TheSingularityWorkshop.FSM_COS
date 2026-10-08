@@ -81,6 +81,34 @@ Recommended boundary: keep the provider-neutral Profiles domain contract indepen
 4. Audit every package project file and consumer before deciding which packages are foundations, adapters, optional bundles, or standalone tools.
 5. Keep version alignment changes separate from documentation changes, with builds/tests and explicit release approval.
 
+## Minimal runtime dependency strategy
+
+The objective is **not** to force every repository into one package. It is to make the required host/runtime footprint small and let optional capabilities arrive through the MicroBundle ecosystem.
+
+### Proposed dependency tiers
+
+| Tier | What belongs here | Runtime rule |
+|---|---|---|
+| **A — Composition floor** | FSM_API, MicroBundleDomain, FSM_COS, plus any contract proven unavoidable by source use | Keep this set small, stable, host-neutral, and explicitly justified. Today FSM_COS also directly references FSM_UserIO, so the actual dependency floor must be reviewed rather than assumed. |
+| **B — Domain contracts** | Profiles, Ontology, ProtocolAi/GrammarAi contracts, and other stable reusable vocabulary where consumers need compile-time types | A domain contract may remain a NuGet package without being loaded by every host. Only promote a contract into Tier A if the composition kernel itself truly requires it. |
+| **C — Optional capabilities / MicroBundles** | Experiences, optional profile workflows, rendering behaviors, specialized arbitration participants, and other independently selectable domain capabilities | Resolve through a catalog and manifest when the capability is requested. Do not make every host reference every capability assembly. “Micro” describes the conceptual capability boundary, not a maximum file size. |
+| **D — Providers and host adapters** | Repository storage providers, REST delivery, Azure adapters, WPF/Blazor GUI adapters, renderer backends, and platform-specific I/O | Install only where the host uses that provider or platform. Keep provider-specific dependencies out of the core contract and composition kernel. |
+| **E — Development-only assets** | Benchmarks, test projects, examples, authoring tools, docs tooling | Do not leak these into runtime package dependencies. |
+
+### Concrete decisions to test, not assume
+
+1. **FSM_API 2.0.0:** keep the FSM core independently useful; its planned string/integer backing choices do not justify an upward dependency on FSM_COS.
+2. **FSM_UserIO:** it is currently a direct FSM_COS dependency. Trace the exact SemanticIntent uses and determine whether it is a genuinely mandatory request/result contract or should be optional. The README must state the actual dependency until a code change proves otherwise.
+3. **FSM_Serialization:** do not make serialization mandatory for composition unless FSM_COS source needs it. Manifests/configuration can remain separate from the assembly algorithm; persistence/serialization providers can be optional.
+4. **MicroBundleRepository:** preserve the useful separation between core repository contracts, REST transport, Azure provider, and the FSM_COS adapter. Consumers should not need every adapter merely to compose an in-memory or custom catalog.
+5. **Ontology:** keep it independently useful and flexible; bundles that require ontology features can declare that requirement rather than making a single ontology schema mandatory for every bundle.
+6. **Profiles:** keep the provider-neutral domain independent of authentication, persistence, GUI, Economy, and FSM_COS. If runtime profile operations should be selectable, add a separate Profiles MicroBundle/adapter with explicit contracts and authorization behavior.
+7. **ProtocolAi / GrammarAi:** remain optional where possible. Renderer currently references ProtocolAi directly; validate whether this is part of its essential contract or an optional semantic adapter.
+8. **GUI and Experiences:** keep platform GUI packages at the host/presentation edge. Investigate separating Moniker's experience/domain capability from its current GUI.Core compile-time dependency if the same Experience must manifest in WebPage, AnyApp, and future VR clients.
+9. **Package count:** reduce the number of packages a host must install, not necessarily the number of source projects or published artifacts. Multiple independently versioned artifacts may be healthy when their contracts and release cycles genuinely differ.
+
+The end state should let a minimal host install the composition floor, choose a catalog/provider, and request only the MicroBundles its manifest needs. This remains a target until dependency-closure and host integration tests prove it.
+
 ## Package versus MicroBundle
 
 Use this decision table as the default, then record exceptions with evidence.
