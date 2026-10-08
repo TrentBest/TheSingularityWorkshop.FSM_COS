@@ -43,8 +43,9 @@ The inspected Profiles development branch contains a .NET 8 domain package, test
 - [ ] Test manifest-driven discovery, arbitration, and host behavior before describing Profiles as integrated.
 - [ ] Preserve the current open [Profiles PR #1](https://github.com/TrentBest/Profiles/pull/1) branch distinction; do not claim the development implementation is already on master.
 
-### 4. Documentation rollout
+### 4. Branch and documentation reconciliation
 
+- [ ] MicroBundleRepository master and development are materially diverged: the comparison reports 29 commits ahead on master and 22 commits behind relative to development, with changes to artifact payloads, the FSM_COS adapter, REST behavior, tests, and package references. Do not treat the older development project files as the current architecture or blindly merge one branch into the other. Reconcile the intended integration line and open PR bases before making dependency-version edits.
 - [ ] Reconcile FSM_COS README changes with open PR #22 (base development), PR #23 (base master), and draft PR #14 before standardizing README headings.
 - [ ] Apply the shared numbered topic taxonomy repository-by-repository, retaining project-specific content and the stable semantic/color mapping.
 - [ ] Ensure docs distinguish implemented behavior, intended architecture, and future work.
