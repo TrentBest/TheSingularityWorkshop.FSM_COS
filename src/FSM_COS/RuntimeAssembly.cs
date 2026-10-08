@@ -9,7 +9,7 @@ namespace TheSingularityWorkshop.FSM_COS;
 /// <remarks>
 /// FSM_COS exposes the domain-owned MicroBundle contract without redefining it.
 /// Hosts retrieve composed capabilities without requiring GUI, AI, browser,
-/// desktop, Unity, or provider assemblies in the composition kernel.
+/// desktop, platform-specific, or provider assemblies in the composition kernel.
 /// </remarks>
 public sealed class RuntimeAssembly
 {
