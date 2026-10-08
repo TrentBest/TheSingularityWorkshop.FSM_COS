@@ -4,26 +4,34 @@ This document defines the shared documentation standard for The Singularity Work
 
 The goal is to **edify, not mystify**: explain the human problem and conceptual model, state the technical boundary precisely, show how to use the software, and provide evidence for claims about implementation and behavior.
 
-## 1. README sequence
+## 1. README sequence and shared section identifiers
 
-Unless the repository's purpose makes a section irrelevant, use this sequence:
+Unless the repository's purpose makes a section irrelevant, use the shared semantic identifiers below. The identifier belongs to the topic, not merely to its current position: preserve it across repositories so readers learn the visual language once. Omit irrelevant sections rather than renumbering later sections.
 
-1. **Identity and badges** — repository/package name; valid license, build, coverage, release, and package badges.
-2. **One-sentence definition** — what this project is, in concrete language.
-3. **Visual identity** — one meaningful project image or architecture diagram with useful alternative text.
-4. **Plain-language explanation** — the problem, why it exists, and the central idea before implementation detail.
-5. **Who this is for / choose your path** — give non-coders, users, developers, architects, and evaluators an appropriate starting point when those audiences apply.
-6. **At a glance** — package ID, status/version, supported frameworks, license, installation/repository links, and CI/coverage links where applicable. Never present an unpublished version as available.
-7. **Responsibility boundary** — what the project owns, what it deliberately does not own, and where neighboring responsibilities belong.
-8. **Architecture and ecosystem position** — diagrams and dependency direction; explain why each direct dependency exists without duplicating its own documentation.
-9. **Quick start** — the shortest verified path to a meaningful result, with exact prerequisites and commands.
-10. **Core concepts / how it works** — explain the model and flow, linking to focused theory and contract documents.
-11. **Usage and examples** — realistic code that matches the current source or published package version explicitly.
-12. **Verification and development** — build, test, coverage, contribution/development guidance as appropriate.
-13. **Documentation map / further reading** — guide readers to the right depth instead of dumping an unstructured link list.
-14. **Related projects and Workshop footer** — only relevant neighbors, accurate links, consistent closing identity.
+| ID | Canonical section | Marker color | Typical content |
+|---|---|---|---|
+| **00** | Identity and badges | Graphite `#475569` | Repository/package name, valid license/build/coverage/release badges |
+| **01** | Definition | Cobalt `#2563EB` | One-sentence concrete definition |
+| **02** | Visual identity | Teal `#0F766E` | Project image or architecture visual with useful alt text |
+| **03** | Plain-language explanation | Blue `#1D4ED8` | Problem, motivation, central idea before implementation detail |
+| **04** | Audience / choose your path | Orange `#EA580C` | Reader paths for newcomers, users, developers, architects, evaluators |
+| **05** | At a glance | Violet `#7C3AED` | Package ID, status/version, frameworks, license, install and CI links |
+| **06** | Responsibility boundary | Emerald `#047857` | What the project owns, excludes, and hands off |
+| **07** | Architecture and ecosystem | Amber `#B45309` | Ownership, dependency direction, architecture diagrams |
+| **08** | Quick start | Green `#15803D` | Shortest verified path to a meaningful result |
+| **09** | Core concepts / how it works | Indigo `#4338CA` | Model, lifecycle, invariants, theory and contracts |
+| **10** | Usage and examples | Cyan `#0E7490` | Realistic source/package-version-specific examples |
+| **11** | Verification and development | Slate blue `#475569` | Build, tests, coverage, contribution guidance |
+| **12** | Documentation map / further reading | Purple `#6D28D9` | Reader-oriented routes to authoritative deep dives |
+| **13** | Related projects and Workshop footer | Warm gold `#A16207` | Relevant neighbors and consistent Workshop identity |
 
-This order is a default sequence, not a checklist to pad every README. Keep the README navigable. Deep theory, API detail, tutorials, and decision records belong in focused documents linked from it.
+### How to apply the color system on GitHub
+
+GitHub Markdown does not provide a dependable repository-wide stylesheet for arbitrary heading colors. Use the **number plus a small colored marker** as the portable visual anchor (for example, a small SVG marker checked into a shared documentation-assets location, or a consistent colored square emoji where assets are not practical). Keep the heading text, numeric ID, marker color, and meaning aligned. Do not rely on custom HTML/CSS rendering that may be sanitized or display differently across clients. The color supplements the number; it must never be the only way to distinguish a section.
+
+Use headings such as `## 03 🔵 Plain-language explanation` and `## 04 🟠 Audience / choose your path` when shared SVG markers are not available. For deep-dive documents, use the same ID/color only when the section belongs to that canonical topic; otherwise use unnumbered local headings rather than assigning a misleading global ID.
+
+This order is a default, not a checklist to pad every README. Deep theory, API detail, tutorials, and decision records belong in focused documents linked from the README.
 
 ## 2. Required quality questions
 
