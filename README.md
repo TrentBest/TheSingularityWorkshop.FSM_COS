@@ -139,7 +139,7 @@ It is deliberately separate from:
 - **FSM_API** — behavioral/state-machine primitives.
 - **TheSingularityWorkshop.GUI** — semantic GUI construction and platform manifestation.
 - **WebPage / WebForge** — a browser host and proving ground.
-- **Unity-facing adapters or packages** — platform integration, not the composition kernel.
+- **host-facing adapters or packages** — platform integration, not the composition kernel.
 - **Warehouse infrastructure** — storage and delivery of data.
 - **Experiences** — things a user encounters and executes.
 
@@ -175,7 +175,7 @@ It does **not** own:
 
 - application-specific execution scheduling;
 - GUI rendering;
-- browser, desktop, or Unity lifecycle;
+- browser, desktop, or native-host lifecycle;
 - Warehouse allocation;
 - telemetry or metaDev adaptation;
 - networking;
@@ -521,6 +521,5 @@ FSM_COS is one layer in a deliberately troublesome ecosystem:
 - **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
 - **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
 - **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
