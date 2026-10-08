@@ -133,7 +133,7 @@ The test should establish that:
 
 ## Platform adapters
 
-Do not create FSM_COS.Blazor, FSM_COS.Unity, FSM_COS.Windows, or similar packages just because the hosts exist.
+Do not create FSM_COS.Blazor, host-specific integration, FSM_COS.Windows, or similar packages just because the hosts exist.
 
 Those packages would only be justified when a reusable **host contract** has emerged that belongs to more than one consuming application.
 
@@ -146,7 +146,7 @@ FSM_COS
 RuntimeAssembly
   │
   ├── WebPage host bridge → Blazor
-  ├── Unity host bridge   → Unity
+  ├── native host host bridge   → native host
   └── Desktop host bridge → desktop runtime
 ~~~
 
@@ -200,6 +200,5 @@ FSM_COS is one layer in a deliberately troublesome ecosystem:
 - **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
 - **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
 - **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
