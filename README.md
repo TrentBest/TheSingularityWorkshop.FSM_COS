@@ -432,6 +432,7 @@ This repository carries its own architecture and theory. The documents here desc
 - [Arbitration and Convergence](docs/ARBITRATION.md) — reconciliation semantics.
 - [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) — what belongs here versus in hosts and neighboring systems.
 - [Development](docs/DEVELOPMENT.md) — how to evolve and verify the repository.
+- [FSM_API Integration](docs/FSM_API_INTEGRATION.md) — the behavior-layer boundary, current package usage, and the planned FSM_API 2.0.0 direction.
 - [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — how the browser host consumes FSM_COS without pulling platform concerns into the kernel.
 
 ## Package
