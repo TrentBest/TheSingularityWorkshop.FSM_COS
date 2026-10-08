@@ -180,3 +180,11 @@ One compatibility warning remains concrete in source: the master REST project re
 - [ ] Preserve the publisher's materialization verification in an automated test path, including exact artifact hash and requested bundle ID.
 - [ ] Verify Core/Azure immutability and hash checks with contract tests; inspect behavior when a content-addressed Azure object already exists but retrieval bytes fail validation.
 - [ ] Confirm the final package workflow's pack set matches the projects intentionally published, and keep every publish job gated with `&& false`.
+
+
+#### Publisher verification gap found and corrected in its feature branch (2026-10-08)
+
+The open draft [MicroBundleRepository PR #17](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/pull/17) contains a useful no-Azure end-to-end smoke tool: repository put/get, byte-for-byte comparison, then FSM_COS materialization and requested-ID verification. Source inspection found its project was **not listed in the feature branch's solution**, so the normal solution build/test workflow would not compile that executable. Added the project to `TheSingularityWorkshop.MicroBundleRepository.slnx` on `feature/microbundle-publisher` in commit `7bb3ac5482585aaad5480cb92e7ec31342e4b833`. This is an unmerged feature-branch change; no build/CI pass is claimed. PR #17 remains draft/open and must not be merged as a side effect of this audit.
+
+- [ ] Verify PR #17 CI builds the newly included publisher project and add an automated test or explicit workflow step that runs its local round-trip against a deterministic test artifact.
+- [ ] Resolve the Core serialization boundary before treating the publisher as a clean architectural example; its end-to-end behavior is valuable, but current project references inherit the master branch's serialization/materializer coupling.
