@@ -57,7 +57,9 @@ The inspected Profiles development branch contains a .NET 8 domain package, test
 - [x] Ontology master, development, chore/standardize-ci-ontology, and docs/readme-standard workflows all now have an explicit && false publish safeguard.
 - [x] FSM_API: added && false to stale feature/legacy branch publish jobs in feature/fsm-api-2.0, feature/fsm-api-2.0-work, feature/fsm-api-2.0-next, feature/fsm-api-2.0-registry, RefactoringToHashBacking, HireMeFSMDemo, and docs/benchmarking. Disabled the two legacy automatic downstream repository-push jobs in HireMeFSMDemo/WindowsFormsEditor. Other inspected FSM_API branches either already had the safeguard or had the publish job commented out.
 - [x] MicroBundleRepository: added && false to the development and docs/readme-standard package workflows; master and the active feature/microbundle-publisher branch were already gated.
-- [x] Verified explicit publish safeguards in the inspected master workflows for FSM_UserIO, MicroBundleDomain, FSM_REST, ProtocolAi, GrammarAi, Renderer, and GUI (including its core, Blazor, and WPF package jobs).
+- [x] MicroBundleDomain: added && false to the development workflow; master was already gated.
+- [x] GUI: disabled automatic publication from the development package workflow to GitHub Packages. Master’s NuGet.org package jobs were already gated.
+- [x] Verified explicit publish safeguards in the inspected master workflows for FSM_UserIO, FSM_REST, ProtocolAi, GrammarAi, and Renderer.
 - [ ] Finish checking any additional package-producing workflow paths and branch variants; repository-wide search is only a discovery aid, not proof every workflow is safe.
 
 No NuGet publication was performed. These workflow-only edits have not been represented as passing CI unless a corresponding run confirms it.
