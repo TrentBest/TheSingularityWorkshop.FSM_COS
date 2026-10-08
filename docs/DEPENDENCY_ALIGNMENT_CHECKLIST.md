@@ -50,6 +50,11 @@ The inspected Profiles development branch contains a .NET 8 domain package, test
 - [ ] Ensure docs distinguish implemented behavior, intended architecture, and future work.
 - [ ] Audit links after each batch and record the exact branch/commit reviewed.
 
+## Release-safety checkpoint
+
+- [x] The FSM_COS development workflow at .github/workflows/package.yml now includes an explicit && false in its publish job condition. The inspected master workflow already had an && false safeguard. No NuGet publication was performed.
+- [ ] Audit the remaining ecosystem package workflows individually; a repository-wide search is only a discovery aid and is not proof that every workflow is safe.
+
 ## Completion criteria
 
 A row is complete only when its intended version is identified, the package/source compatibility is demonstrated by restore/build/tests, the consumer’s actual usage is understood, and any release action has explicit approval. Documentation alone does not make a dependency aligned or a capability integrated.
