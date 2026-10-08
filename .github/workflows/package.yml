@@ -1,17 +1,12 @@
-name: Pack and publish
+name: Build, test, and package fsm-cos
 
 on:
   push:
     branches:
       - master
+      - development
   pull_request:
   workflow_dispatch:
-    inputs:
-      publish:
-        description: 'Publish the verified package to NuGet.org'
-        required: true
-        default: false
-        type: boolean
 
 permissions:
   contents: read
@@ -22,45 +17,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
-      - name: Checkout MicroBundleDomain dependency
-        uses: actions/checkout@v7
-        with:
-          repository: TrentBest/TheSingularityWorkshop.MicroBundleDomain
-          ref: architecture/runtime-contract-ownership
-          path: _dependencies/MicroBundleDomain
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 8.0.x
-
-      - name: Pack MicroBundleDomain dependency
-        run: |
-          dotnet restore _dependencies/MicroBundleDomain/TheSingularityWorkshop.MicroBundleDomain.slnx
-          dotnet build _dependencies/MicroBundleDomain/TheSingularityWorkshop.MicroBundleDomain.slnx --configuration Release --no-restore
-          mkdir -p _dependencies/nuget
-          dotnet pack _dependencies/MicroBundleDomain/TheSingularityWorkshop.MicroBundleDomain.csproj --configuration Release --no-build --output _dependencies/nuget
-
-      - name: Add local dependency feed
-        run: dotnet nuget add source "$GITHUB_WORKSPACE/_dependencies/nuget" --name MicroBundleDomainLocal
-
       - name: Restore
         run: dotnet restore TheSingularityWorkshop.FSM_COS.sln
-
       - name: Build
         run: dotnet build TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore
-
       - name: Test with coverage
         run: >
-          dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj
+          dotnet test TheSingularityWorkshop.FSM_COS.sln
           --configuration Release
           --no-build
           --verbosity normal
           --collect:"XPlat Code Coverage;Format=cobertura"
           --results-directory ./TestResults
           --logger "trx;LogFileName=testresults.trx"
-
       - name: Prepare coverage report
         shell: bash
         run: |
@@ -72,8 +45,6 @@ jobs:
             exit 1
           fi
           cp "$coverage_file" ./TestResults/coverage.cobertura.xml
-          echo "Prepared coverage report: $coverage_file"
-
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v6
         with:
@@ -81,42 +52,35 @@ jobs:
           slug: TrentBest/TheSingularityWorkshop.FSM_COS
           files: ./TestResults/coverage.cobertura.xml
           fail_ci_if_error: true
-
       - name: Pack
         run: dotnet pack src/FSM_COS/FSM_COS.csproj --configuration Release --no-build --output ./artifacts
-
       - name: Upload NuGet package artifact
         uses: actions/upload-artifact@v7
         with:
           name: fsm-cos-nuget-package
           path: ./artifacts/*.nupkg
-
       - name: Upload test and coverage artifacts
         uses: actions/upload-artifact@v7
         with:
           name: fsm-cos-test-results
           path: ./TestResults/*
-
   publish_nuget:
     needs: build-and-test
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true }}
+    if: ${{ github.event_name == 'workflow_dispatch' && false }}
     permissions:
       contents: read
       id-token: write
-
     steps:
       - name: Download NuGet package
         uses: actions/download-artifact@v8
         with:
           name: fsm-cos-nuget-package
           path: ./artifacts
-
       - name: Authenticate with NuGet Trusted Publishing
         uses: NuGet/login@v1
         id: login
         with:
           user: TheSingularityWorkshop
-
       - name: Publish package to NuGet.org
         run: dotnet nuget push "./artifacts/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
