@@ -159,3 +159,24 @@ The source-level comparison shows more than the FSM_UserIO difference:
 - **Both retain the core composition behavior** of recursive loading, cycle detection, and bounded arbitration, but their loading contracts are not source-compatible as-is.
 
 **Preliminary recommendation:** use development as the integration base for versioned, configured composition; port the master intent field into the development manifest/runtime assembly as a small, tested additive capability if its contract is still desired. Do not replace the development manifest/configuration work with master wholesale. Before committing to this choice, inspect MicroBundleDomain's dependency/version contract and run tests against the intended package/API version. This is an architectural recommendation from source inspection, not a claim that development currently passes CI or that the master-only intent feature has been migrated.
+
+
+#### MicroBundleRepository source comparison: Core boundary and publisher branch (2026-10-08)
+
+A direct comparison of the current Core and Azure project/source files confirms that the two lines share the same artifact address validation, SHA-256 verification, and immutable content-copy behavior. The main design difference is dependency placement:
+
+- Development Core alpha.1 has no package references and treats artifacts as opaque bytes.
+- Master Core alpha.3 adds a hard Ontology dependency solely to expose optional `OntologyAddress` metadata on `MicroBundleArtifact`, and declares FSM_Serialization as a Core package dependency for the assembly-payload/envelope path.
+- The publisher branch adds `MicroBundleAssemblyPayload` to Core, coupling the repository's artifact contract to `IBinarySerializable`. It also adds a publisher executable that performs a repository round-trip and then verifies FSM_COS materialization.
+
+**Disposition:** keep the dependency-light Core contract from development as the target. Optional semantic metadata should be carried by a separate catalog/manifest or optional metadata contract, not force every repository consumer to reference Ontology. Assembly-envelope serialization and materialization should live in an explicit payload/serialization or FSM_COS adapter boundary, not in the generic repository Core. Preserve the publisher's end-to-end round-trip/materialization check as a standalone tool or integration test; do not discard it just because its current implementation is coupled.
+
+The publisher branch is therefore not simply redundant with development's CLI. The development CLI provides human-operated REST operations (health/list/put/get); the publisher branch demonstrates a stronger end-to-end publish → retrieve → materialize verification path. Preserve that unique test/tool behavior while deciding whether it belongs in a standalone publisher tool, automated integration test, or both.
+
+One compatibility warning remains concrete in source: the master REST project references Ontology alpha.2, and the master FSM_COS adapter references FSM_COS alpha.5, while inspected current source declarations are Ontology alpha.3 and FSM_COS alpha.6. Development REST references FSM_COS alpha.3. These are source declarations, not proof of the versions available on NuGet. Do not change the pins until restore/build/tests validate the chosen target.
+
+- [ ] Extract or redesign assembly payload/envelope handling outside repository Core, preserving format/version tests.
+- [ ] Keep optional semantic metadata out of the required Core dependency closure unless a concrete consumer proves it is foundational.
+- [ ] Preserve the publisher's materialization verification in an automated test path, including exact artifact hash and requested bundle ID.
+- [ ] Verify Core/Azure immutability and hash checks with contract tests; inspect behavior when a content-addressed Azure object already exists but retrieval bytes fail validation.
+- [ ] Confirm the final package workflow's pack set matches the projects intentionally published, and keep every publish job gated with `&& false`.
