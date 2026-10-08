@@ -67,7 +67,11 @@ These are facts read directly from project files during this audit. They describ
 
 ### Confirmed documentation/integration gap: Profiles
 
-The inspected `Profiles` repository's `master` tree contains only a minimal `README.md` and no visible `.csproj`, source, or test files. Its broader profile/sharing model is known as a design direction, but the implementation, package identity, contracts, and integration path cannot yet be verified from that branch. Treat it as **unclassified / not demonstrated as integrated**, not as a functioning MicroBundle. Before designing an adapter, check all branches and open issues for work not present on master.
+The inspected `Profiles` repository has an important branch distinction: `master` currently contains only a minimal README, while `development` contains a .NET 8 `TheSingularityWorkshop.Profiles` project at source version `0.1.0-alpha.1`, profile-domain source files, tests, and privacy/architecture/API guides. Its implementation is under open PR #1 to master, and the package project explicitly disables package-on-build; no NuGet publication is implied. Therefore, describe Profiles as **implemented on development but not yet integrated into FSM_COS**, and preserve the branch/PR distinction.
+
+The current Profiles source models entity kinds, stable `ProfileId`, micro-data claims, per-attribute disclosure, groups, relationships, observer-specific representations, exclusion, assumptions, public-data exposure reporting, access records, private persona/publisher identity links, and explicit data-licensing policy. Its stated non-goals include persistence, transport, rendering, authentication-provider duties, and jurisdiction-specific enforcement. The current project does not reference MicroBundleDomain, so Profiles is presently a domain package rather than a MicroBundle.
+
+Recommended boundary: keep the provider-neutral Profiles domain contract independently reusable wherever consumers need its types; introduce a separate optional MicroBundle/adapter only if the runtime needs to expose profile capabilities through FSM_COS. Keep authentication credentials/provider protocols outside Profiles, and keep audience-specific presentation in WebPage/Experience policy. The open identity-boundary issue #2 should be resolved before freezing the identity/provider-link contract. Do not label the Profiles capability integrated until a manifest-driven composition path and tests prove it.
 
 ### Highest-value follow-up checks
 
