@@ -206,3 +206,43 @@ A package/capability is considered integrated only when all applicable checks ar
 ---
 
 *The Singularity Workshop — architecture should make capabilities composable without making every capability mandatory.*
+
+
+## Initial package-versus-MicroBundle classification (2026-10-08)
+
+This is a working classification for architecture decisions, not a declaration that the listed capabilities are already loadable bundles. A runtime MicroBundle should be selected by manifest/configuration and composed through FSM_COS; a package can still be used to build, validate, author, or adapt that bundle.
+
+| Ecosystem component / capability | Initial disposition | Why |
+|---|---|---|
+| FSM_API | **Foundational NuGet package** | Core state-machine contracts/runtime are compile-time infrastructure; the planned 2.0.0 release is the next major, with string and/or integer backing. Do not fork its core behavior into per-capability bundles. |
+| FSM_Layer | **Foundational NuGet package** | Reusable abstraction layer below FSM_COS; must not depend upward on composition. |
+| MicroBundleDomain | **Foundational contract package** | Defines the MicroBundle domain boundary without owning hosting, transport, storage, or execution. |
+| FSM_COS | **Composition/runtime package** | Owns discovery, dependency closure, arbitration, and runtime assembly; it is the composition boundary, not a MicroBundle or application execution loop. |
+| FSM_Serialization | **Reusable package/tooling boundary** | Useful to artifact producers/consumers and tests; do not make every runtime bundle pay for serialization tooling unless its payload format requires it. Repository Core should store opaque verified bytes. |
+| Ontology | **Reusable domain package; possible optional capability adapter** | Keep ontology/addressing reusable. Only expose specific ontology behaviors as MicroBundles where manifest-driven runtime selection adds value; do not force every bundle into one fixed ontology scheme. |
+| MicroBundleRepository.Core | **Infrastructure NuGet package** | Stable artifact identity and repository contracts must be reusable by local, cloud, and transport implementations. |
+| MicroBundleRepository.Local / Azure / REST | **Optional provider/transport packages** | Storage and delivery choices are host/deployment infrastructure, not domain MicroBundles. A minimal local host should not inherit Azure SDK or REST-host dependencies. |
+| MicroBundleRepository.FSM_COS | **Optional composition adapter package** | Bridges artifact retrieval to FSM_COS materialization; install only where repository-backed bundle loading is required. Keep it provider-neutral rather than requiring REST specifically. |
+| MicroBundleRepository CLI / Ingestor | **Standalone authoring/operations tools** | Build, inspect, validate, and publish artifacts; do not add these executables to runtime dependency closure. |
+| Experiences: Moniker, Elements, and future domain experiences | **Primary MicroBundle candidates** | Optional capabilities should be manifest-selectable and independently versioned as artifacts. Keep presentation-specific host integration separate where possible. |
+| GUI.Core | **Reusable presentation package** | A shared GUI abstraction is useful to hosts and rendering adapters; it should not become mandatory for non-visual bundles. |
+| GUI.WPF | **Optional host adapter package** | WPF is a desktop presentation choice, not a core FSM_COS dependency and not a domain MicroBundle. |
+| Renderer | **Reusable engine package plus optional render-capability bundles** | Keep renderer contracts/runtime reusable; put selectable assets, scene behaviors, or specialized rendering capabilities into bundles when they can be independently discovered/configured. Avoid hard ProtocolAi coupling unless its types are part of the renderer's required contract. |
+| FSM_REST | **Optional transport package** | REST is a way to expose/consume a capability, not the capability itself. Keep it outside hosts that do not need network delivery. |
+| FSM_UserIO | **Reusable interaction contract package; optional runtime capability** | Keep neutral input/intent contracts reusable. If the runtime can enable a particular interaction provider through a bundle, do not make every composition depend on that provider; trace current FSM_COS usage first. |
+| ProtocolAi / GrammarAi | **Reusable semantic/language packages; optional capability adapters** | Foundational APIs may remain packages, while selectable interpreters, grammars, or protocol-specific behaviors can be MicroBundles. Do not introduce hard dependencies where concepts can be integrated through optional contracts/adapters. |
+| Profiles | **Reusable domain package; optional Profiles MicroBundle/adapter** | Identity/profile data and disclosure rules can be useful outside FSM_COS. Preserve independent reuse and add an adapter only when manifest-driven runtime profile operations are proven necessary. |
+| AnyApp / WebPage / WebApp | **Hosts, not MicroBundles** | Hosts provide lifecycle, UI, platform and user-facing surfaces; they load selected capabilities rather than being loaded as domain bundles. |
+
+### Bundle-candidate acceptance test
+
+Before moving a capability from a NuGet dependency to a MicroBundle, verify all of the following:
+
+1. It has a clear domain/capability contract that does not require a host GUI or application lifecycle.
+2. A manifest can identify it, select a version, and provide configuration/defaults.
+3. FSM_COS can discover and load the artifact, close its dependencies, and arbitrate conflicts without a compile-time reference to every concrete capability.
+4. The artifact is versioned and content-identified, and retrieval/materialization verifies identity before execution/use.
+5. A host that does not select the capability does not pay its runtime package/dependency cost.
+6. Tests demonstrate the real artifact path end-to-end, not merely a project reference or a hard-coded catalog entry.
+
+**Do not optimize by package count alone.** Keep a NuGet boundary when it protects a stable reusable contract or separates an infrastructure/provider implementation. Convert optional domain behaviors to MicroBundles when runtime selection materially reduces the default dependency closure. Track actual dependency size, startup work, and update independence before claiming a performance win.
