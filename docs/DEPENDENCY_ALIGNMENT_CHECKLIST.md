@@ -52,8 +52,13 @@ The inspected Profiles development branch contains a .NET 8 domain package, test
 
 ## Release-safety checkpoint
 
-- [x] The FSM_COS development workflow at .github/workflows/package.yml now includes an explicit && false in its publish job condition. The inspected master workflow already had an && false safeguard. No NuGet publication was performed.
-- [ ] Audit the remaining ecosystem package workflows individually; a repository-wide search is only a discovery aid and is not proof that every workflow is safe.
+- [x] FSM_COS development workflow: .github/workflows/package.yml now includes an explicit && false in its publish job condition; the inspected master workflow already had this safeguard.
+- [x] FSM_Serialization master workflow: added && false because the previous condition allowed publishing on push and workflow_dispatch.
+- [x] Ontology master workflow: added && false to the manual publish condition.
+- [x] Verified explicit publish safeguards in the inspected master workflows for FSM_API, FSM_UserIO, MicroBundleDomain, MicroBundleRepository, FSM_REST, ProtocolAi, GrammarAi, Renderer, and GUI (including its core, Blazor, and WPF package jobs).
+- [ ] Finish checking any additional package-producing workflow paths and branch variants; repository-wide search is only a discovery aid, not proof every workflow is safe.
+
+No NuGet publication was performed. These workflow-only edits have not been represented as passing CI unless a corresponding run confirms it.
 
 ## Completion criteria
 
