@@ -246,3 +246,12 @@ Before moving a capability from a NuGet dependency to a MicroBundle, verify all 
 6. Tests demonstrate the real artifact path end-to-end, not merely a project reference or a hard-coded catalog entry.
 
 **Do not optimize by package count alone.** Keep a NuGet boundary when it protects a stable reusable contract or separates an infrastructure/provider implementation. Convert optional domain behaviors to MicroBundles when runtime selection materially reduces the default dependency closure. Track actual dependency size, startup work, and update independence before claiming a performance win.
+
+
+### MicroBundleRepository boundary refinement (2026-10-08)
+
+The source comparison strengthens the dependency-light Core recommendation. Development Core has no package dependencies and stores verified opaque bytes; master adds a hard Ontology dependency for optional `SemanticAddress` metadata and an FSM_Serialization dependency for the assembly payload/envelope. Those are useful capabilities, but neither should automatically become mandatory for every consumer of artifact identity and storage.
+
+**Target split:** Core owns artifact address, content identity, hash validation, and repository contracts. An optional metadata/catalog contract owns semantic addresses and publication pointers. A serialization/materialization adapter owns the assembly envelope and turns verified bytes into an `IMicroBundle`. A standalone publisher or integration test should preserve the feature branch's end-to-end upload/retrieve/materialize check. The development CLI's REST operations are complementary, not a replacement for that validation path.
+
+The source-level compatibility gaps remain unverified: master pins FSM_COS alpha.5 and Ontology alpha.2; development REST pins FSM_COS alpha.3; inspected current source declarations are FSM_COS alpha.6 and Ontology alpha.3. Do not alter package pins until restore/build/test results establish compatibility. No build or CI pass is claimed by this source inspection.
