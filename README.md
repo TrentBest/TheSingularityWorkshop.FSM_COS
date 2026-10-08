@@ -114,7 +114,7 @@ Already have an application? You do not need to replace its host loop, UI, or do
 Until alpha.6 is published and independently verified, add a project reference to the current source project rather than copying a package-install command that may not resolve:
 
 ```powershell
-dotnet add reference ..\\TheSingularityWorkshop.FSM_COS\\src\\FSM_COS\\FSM_COS.csproj
+dotnet add reference ..\TheSingularityWorkshop.FSM_COS\src\FSM_COS\FSM_COS.csproj
 ```
 
 Adjust the relative path to your clone. The consuming project must target a compatible .NET framework and restore the exact dependencies declared by that source version.
@@ -547,7 +547,8 @@ This repository documents **FSM_COS itself**. Neighboring packages document thei
 ## Current package
 
 **Package:** `TheSingularityWorkshop.FSM_COS`  
-**Version:** `0.1.0-alpha.6`  
+**Source version:** `0.1.0-alpha.6`  
+**Latest verified published version:** `0.1.0-alpha.5`  
 **Target:** .NET 8  
 **License:** MIT
 
