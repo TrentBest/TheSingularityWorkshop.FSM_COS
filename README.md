@@ -368,6 +368,8 @@ The old root scaffold that contained only Class1.cs has been removed. The soluti
 
 ## Documentation
 
+This repository follows the shared [Documentation Standard](DOCUMENTATION_STANDARD.md). Use the [Documentation Index](DOCUMENTATION_INDEX.md) to choose a reading path by goal; the README is the entry point, while focused documents remain authoritative for theory, architecture, and individual contracts.
+
 This repository carries its own architecture and theory. The documents here describe **FSM_COS itself**, rather than asking another repository to explain its internals.
 
 - [Theory](docs/THEORY.md) — why the composition boundary exists.
