@@ -194,7 +194,7 @@ For the full convergence model, see [Arbitration and Convergence](ARBITRATION.md
 
 A MicroBundle does not need to know:
 
-- whether the host is WebPage, AnyApp, Unity, or another application;
+- whether the host is WebPage, AnyApp, native host, or another application;
 - where its artifact was stored;
 - which REST transport retrieved it;
 - which GUI framework will manifest it;
