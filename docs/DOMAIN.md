@@ -38,7 +38,7 @@ FSM_COS is common operational machinery that can sit beneath many kinds of digit
               any digital system
 ```
 
-Those are examples, not special cases. FSM_COS does not contain a browser model, desktop model, Unity model, renderer model, spreadsheet model, game model, business-application model, or distributed-systems product model.
+Those are examples, not special cases. FSM_COS does not contain a browser model, desktop model, native host model, renderer model, spreadsheet model, game model, business-application model, or distributed-systems product model.
 
 ## The domain seam
 
@@ -117,7 +117,7 @@ FSM_COS does not prescribe whether configuration comes from a file, blob, reposi
 - GUI semantics or rendering;
 - browser lifecycle;
 - desktop lifecycle;
-- Unity lifecycle;
+- native-host lifecycle;
 - Experience semantics;
 - application-specific scheduling;
 - application configuration frameworks;
