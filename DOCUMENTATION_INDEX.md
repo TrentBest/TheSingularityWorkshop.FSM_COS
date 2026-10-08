@@ -6,31 +6,31 @@ Use this page to find the right level of explanation. The README is the orientat
 
 | If you want to... | Start here |
 |---|---|
-| Understand the purpose and boundary of FSM_COS | [README](../README.md) |
+| Understand the purpose and boundary of FSM_COS | [README](README.md) |
 | Understand how Workshop packages fit together, including package-versus-MicroBundle decisions and Profiles | [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md) |
-| Understand the architecture and component ownership | [Architecture](ARCHITECTURE.md) |
-| Learn the conceptual model and rationale | [FSM_COS Theory](THEORY.md) |
-| Understand the request that enters the kernel | [Runtime Manifest](RUNTIME_MANIFEST.md), then [Manifest Theory](MANIFEST_THEORY.md) |
-| Understand the object handed to a host | [RuntimeAssembly](RUNTIME_ASSEMBLY.md) |
-| Understand what stays outside the kernel | [Runtime Boundary](RUNTIME_BOUNDARY.md) |
-| Learn how MicroBundles are resolved and consumed | [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) |
-| Understand MicroBundle arbitration and convergence | [Arbitration](ARBITRATION.md) |
-| Explore AI-oriented composition | [AI Composition](AI_COMPOSITION.md) |
-| Understand the domain FSM_COS owns | [Domain](DOMAIN.md) |
-| Integrate with WebPage | [WebPage Integration](WEBPAGE_INTEGRATION.md) |
-| Contribute, build, and verify changes | [Development](DEVELOPMENT.md) |
+| Understand the architecture and component ownership | [Architecture](docs/ARCHITECTURE.md) |
+| Learn the conceptual model and rationale | [FSM_COS Theory](docs/THEORY.md) |
+| Understand the request that enters the kernel | [Runtime Manifest](docs/RUNTIME_MANIFEST.md), then [Manifest Theory](docs/MANIFEST_THEORY.md) |
+| Understand the object handed to a host | [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) |
+| Understand what stays outside the kernel | [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) |
+| Learn how MicroBundles are resolved and consumed | [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) |
+| Understand MicroBundle arbitration and convergence | [Arbitration](docs/ARBITRATION.md) |
+| Explore AI-oriented composition | [AI Composition](docs/AI_COMPOSITION.md) |
+| Understand the domain FSM_COS owns | [Domain](docs/DOMAIN.md) |
+| Integrate with WebPage | [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) |
+| Contribute, build, and verify changes | [Development](docs/DEVELOPMENT.md) |
 
 ## Recommended reading order
 
 For a first encounter:
 
-1. [README](../README.md) — identity, responsibility boundary, and quick orientation.
-2. [Architecture](ARCHITECTURE.md) — how the pieces fit together and which layer owns each concern.
+1. [README](README.md) — identity, responsibility boundary, and quick orientation.
+2. [Architecture](docs/ARCHITECTURE.md) — how the pieces fit together and which layer owns each concern.
 3. [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md) — package responsibilities, integration gaps, and MicroBundle candidates.
-4. [FSM_COS Theory](THEORY.md) — why composition is a distinct operation.
-5. [Runtime Manifest](RUNTIME_MANIFEST.md) — what the caller requests.
-6. [RuntimeAssembly](RUNTIME_ASSEMBLY.md) — what the host receives.
-7. [Runtime Boundary](RUNTIME_BOUNDARY.md) — where FSM_COS hands off responsibility.
+4. [FSM_COS Theory](docs/THEORY.md) — why composition is a distinct operation.
+5. [Runtime Manifest](docs/RUNTIME_MANIFEST.md) — what the caller requests.
+6. [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) — what the host receives.
+7. [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) — where FSM_COS hands off responsibility.
 8. The relevant integration or development guide for the task at hand.
 
 Experienced readers can jump directly to the contract or integration guide they need.
