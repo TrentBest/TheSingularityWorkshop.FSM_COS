@@ -14,7 +14,7 @@
 
 Its job is the common scheduling and operational overhead required to turn a defined computation into an assembled runtime that another system can execute or manifest.
 
-FSM_COS intentionally keeps its dependency floor small. It consumes **FSM_API** for the state/context primitives required by composition and **MicroBundleDomain** for the canonical MicroBundle contract. It is deliberately **not an application framework**: no browser, desktop UI, Unity runtime, renderer, database, warehouse, or product type is built into the kernel.
+FSM_COS intentionally keeps its dependency floor small. It consumes **FSM_API** for the state/context primitives required by composition and **MicroBundleDomain** for the canonical MicroBundle contract. It is deliberately **not an application framework**: no browser, desktop UI, renderer, database, warehouse, or product type is built into the kernel.
 
 <p align="center">
   <img src="docs/assets/fsm-cos-crane.svg" alt="FSM_COS composition crane">
@@ -23,6 +23,59 @@ FSM_COS intentionally keeps its dependency floor small. It consumes **FSM_API** 
 <p align="center"><em>Runtime request → composition → stable assembly → host manifestation</em></p>
 
 It takes a [Runtime Manifest](docs/RUNTIME_MANIFEST.md), resolves the requested computation, and produces a stable [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) for another system to execute or manifest.
+
+
+## 60-Second Quick Start: Run the Current Source
+
+FSM_COS is a composition infrastructure package. Its useful first step is to open the implementation and verify its tests—not to create a pretend application around an empty runtime.
+
+### 1. Open the solution in Visual Studio
+
+Clone this repository, then open `TheSingularityWorkshop.FSM_COS.sln` in Visual Studio. The solution contains the library and its test project.
+
+### 2. Build and run the tests
+
+In Visual Studio, choose **View → Terminal** and ensure the terminal is at the repository root:
+
+```powershell
+dotnet build TheSingularityWorkshop.FSM_COS.sln -c Release
+dotnet test TheSingularityWorkshop.FSM_COS.sln -c Release
+```
+
+You can also run the tests from **Test → Test Explorer**. The tests exercise composition behavior, including manifest resolution and arbitration.
+
+### 3. Understand the smallest contract
+
+The current composition entry point is `IFsmCos.Execute(RuntimeManifest, configurationSource)`. The manifest requests root MicroBundles and their versions; the catalog resolves those roots and their dependencies; the result is a `RuntimeAssembly`. The host decides what to do with that assembly.
+
+```text
+RuntimeManifest → IFsmCos.Execute(...) → RuntimeAssembly → host-owned next step
+```
+
+**Release note:** the source project currently declares `0.1.0-alpha.5`, but a source version is not proof that the same version is published to NuGet. Check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) and the release status before attempting a package install. No package publication is implied by this README.
+
+## Add FSM_COS to an Existing Project
+
+Already have an application? Keep your existing host, domain model, and presentation. FSM_COS is only the composition boundary when you need to assemble MicroBundles.
+
+The current implementation is source-first. Until a suitable package version is confirmed as published, you can add a project reference from an existing .NET project to a local clone. From your consuming project's directory, adjust the relative path to the location of your clone:
+
+```powershell
+dotnet add reference ..\\TheSingularityWorkshop.FSM_COS\\src\\FSM_COS\\FSM_COS.csproj
+```
+
+The library itself targets .NET 8 and references the published `TheSingularityWorkshop.FSM_API` 1.0.13 and `TheSingularityWorkshop.MicroBundleDomain` 1.0.1 packages. Review the consuming project's framework and package graph before adding the reference.
+
+Use the package when you need the composition responsibility; do not add it just to use a lower-level contract. Your application still owns its UI, host loop, scheduling, storage, rendering, and platform integration.
+
+## What This Does Not Do
+
+- FSM_COS does not define the domain meaning of a MicroBundle; that contract belongs to MicroBundleDomain.
+- It does not store or publish MicroBundle artifacts; repositories and delivery systems own that responsibility.
+- It does not parse configuration formats; it accepts configuration bytes through an explicit source.
+- It does not start the assembled application or become its execution loop.
+- It does not require a GUI, browser, renderer, database, or platform-specific runtime.
+
 
 ~~~text
 Runtime Manifest
