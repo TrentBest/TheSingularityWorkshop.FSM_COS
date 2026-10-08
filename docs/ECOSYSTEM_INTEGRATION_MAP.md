@@ -2,7 +2,7 @@
 
 > **Status:** architecture working document. This map separates verified repository/package facts from proposed composition decisions. It is not a release plan and does not authorize publishing, merging, or breaking package changes.
 
-## 00 — Purpose and decision rule
+## Purpose and decision rule
 
 The goal is to make **FSM_COS the composition boundary for the Workshop ecosystem**, while reducing unnecessary always-installed NuGet dependencies. A repository existing as a NuGet package today does not mean it must remain a separately installed runtime dependency forever; equally, a package must not be collapsed into a MicroBundle merely because it is small.
 
@@ -10,7 +10,7 @@ Every candidate must be classified by responsibility, runtime needs, reuse, and 
 
 **Core rule:** retain independently useful, stable contracts as packages; consider runtime-composed capabilities as MicroBundles when they can be discovered, configured, arbitrated, and hosted without creating upward dependencies or duplicating foundational infrastructure.
 
-## 01 — The target shape
+## The target shape
 
 ```text
 Host applications (WebPage, AnyApp, WebApp, other hosts)
@@ -45,7 +45,39 @@ This is a **conceptual target**, not a claim that every repository is integrated
 - MicroBundles express optional capabilities. Their domain contracts should not require a specific GUI, host, or execution loop.
 - A NuGet package may remain valuable as a **development-time contract** even when its concrete runtime capability is delivered as a MicroBundle.
 
-## 02 — Package versus MicroBundle
+## Verified source snapshot (master branches inspected 2026-10-08)
+
+These are facts read directly from project files during this audit. They describe repository source metadata, **not confirmation that every listed package version is published or currently consumed successfully**.
+
+| Project file | Declared package version | Direct package/project dependencies visible in source | Immediate implication |
+|---|---|---|---|
+| FSM_COS `src/FSM_COS/FSM_COS.csproj` | `0.1.0-alpha.6` | `FSM_API 1.0.13`; `FSM_UserIO 0.1.0-alpha.1`; `MicroBundleDomain 1.0.1` | UserIO is currently a hard package dependency of FSM_COS. Review whether the semantic interaction contract belongs in the mandatory composition kernel or should be an optional capability; do not remove it without tracing code/API use. |
+| MicroBundleDomain `TheSingularityWorkshop.MicroBundleDomain.csproj` | `1.0.1` | No PackageReference shown in the project file inspected | A comparatively neutral domain contract is a plausible stable dependency foundation. |
+| FSM_Serialization `TheSingularityWorkshop.FSM_Serialization.csproj` | `1.0.0` | No PackageReference shown in the project file inspected | Treat as a stable serialization package candidate; inspect API/format compatibility before making it a core dependency. |
+| Ontology `TheSingularityWorkshop.Ontology.csproj` | `0.1.0-alpha.3` | `MicroBundleDomain 1.0.1` | Ontology is currently built above the bundle domain contract, not the reverse. |
+| MicroBundleRepository Core | `0.1.0-alpha.3` | `FSM_Serialization 0.1.0-alpha.2`; `Ontology 0.1.0-alpha.2` | References do not match the current version declarations found in the inspected Serialization and Ontology project files; determine whether older packages are intentionally pinned or stale. |
+| MicroBundleRepository REST | `0.1.0-alpha.5` | `FSM_REST 0.1.0-alpha.4`; `Ontology 0.1.0-alpha.2`; project reference to Core | REST and Core should be evaluated as separate adapter layers, not automatically bundled into every FSM_COS consumer. |
+| MicroBundleRepository FSM_COS adapter | `0.1.0-alpha.1` | `FSM_COS 0.1.0-alpha.5`; `MicroBundleDomain 1.0.1`; project reference to REST | This adapter currently targets FSM_COS alpha.5 while its inspected source project declares alpha.6. That is a concrete alignment item to resolve with build/compatibility evidence. |
+| Experiences Moniker | `0.1.0-alpha.1` | `GUI.Core 0.1.0-alpha.4`; `MicroBundleDomain 1.0.1` | The Moniker capability currently depends on GUI.Core at compile/package time. Decide whether the bundle contract should expose a host-neutral experience capability and load presentation separately. |
+| Experiences Elements | `0.1.0-alpha.1` | `MicroBundleDomain 1.0.1` | This is closer to the optional domain-capability pattern; validate whether it can be loaded and arbitrated by FSM_COS today. |
+| Renderer | `0.1.0-alpha.2` | `FSM_API 1.0.13`; `ProtocolAi 0.1.0-alpha.2`; `MicroBundleDomain 1.0.1` | ProtocolAi is currently a hard dependency of Renderer. Confirm it is essential to the renderer's stable contract or isolate it behind an optional semantic adapter. |
+| GUI.Core | `0.1.0-alpha.4` | No PackageReference shown in its project file inspected | Platform-neutral GUI core may be reusable independently; host/platform adapters should remain separate. |
+| GUI.WPF | `0.1.0-alpha.6` | Project reference to GUI.Core | WPF belongs at the host-adapter edge, not in FSM_COS or MicroBundleDomain. |
+| FSM_UserIO | `0.1.0-alpha.1` | No PackageReference shown in its project file inspected | The declared package is platform-neutral and small by intent; its mandatory placement in FSM_COS should be justified by actual use. |
+
+### Confirmed documentation/integration gap: Profiles
+
+The inspected `Profiles` repository's `master` tree contains only a minimal `README.md` and no visible `.csproj`, source, or test files. Its broader profile/sharing model is known as a design direction, but the implementation, package identity, contracts, and integration path cannot yet be verified from that branch. Treat it as **unclassified / not demonstrated as integrated**, not as a functioning MicroBundle. Before designing an adapter, check all branches and open issues for work not present on master.
+
+### Highest-value follow-up checks
+
+1. Verify actual NuGet availability and API compatibility for the version pairs called out above.
+2. Trace FSM_COS's direct use of FSM_UserIO and Renderer’s direct use of ProtocolAi before changing either dependency.
+3. Verify that Experiences artifacts implement the current MicroBundleDomain contracts and are discoverable by a real FSM_COS catalog.
+4. Audit every package project file and consumer before deciding which packages are foundations, adapters, optional bundles, or standalone tools.
+5. Keep version alignment changes separate from documentation changes, with builds/tests and explicit release approval.
+
+## Package versus MicroBundle
 
 Use this decision table as the default, then record exceptions with evidence.
 
@@ -60,7 +92,7 @@ Use this decision table as the default, then record exceptions with evidence.
 
 **Do not optimize for the smallest package count at the expense of clear contracts.** The target is the smallest *required runtime dependency surface*, with optional capabilities loaded only when needed.
 
-## 03 — Initial ecosystem inventory
+## Initial ecosystem inventory
 
 The entries below are starting points for an audit, not a final integration verdict. Confirm each row against its current repository, project references, NuGet metadata, tests, and actual consumers before changing package boundaries.
 
@@ -92,7 +124,7 @@ Assign exactly one status per repository/package as evidence is gathered:
 
 Do not label a repository “integrated” because it references a NuGet package. Integration means a capability can be discovered/selected through the intended composition path, has a defined contract and configuration, is tested in that path, and has documented ownership.
 
-## 04 — Profiles: required investigation path
+## Profiles: required investigation path
 
 Profiles should be treated as a first-class integration study, not a footnote.
 
@@ -106,7 +138,7 @@ Profiles should be treated as a first-class integration study, not a footnote.
 
 No implementation or security guarantee should be inferred from this plan alone.
 
-## 05 — Integration definition of done
+## Integration definition of done
 
 A package/capability is considered integrated only when all applicable checks are satisfied:
 
@@ -121,7 +153,7 @@ A package/capability is considered integrated only when all applicable checks ar
 - [ ] The published package state is distinguished from source state.
 - [ ] Any package merge, split, deprecation, or migration has an explicit decision record and compatibility plan.
 
-## 06 — Work sequence
+## Work sequence
 
 1. **Establish the map:** enumerate every Workshop repository/package and all project/package references in consumers.
 2. **Verify the foundations:** `FSM_API`, `FSM_Layer`, `MicroBundleDomain`, `FSM_COS`, and serialization/repository contracts.
@@ -131,7 +163,7 @@ A package/capability is considered integrated only when all applicable checks ar
 6. **Integrate incrementally:** one capability and test path at a time. Do not combine this work with unapproved package releases.
 7. **Publish the architecture map:** keep this document current and link each repository to its own authoritative docs.
 
-## 07 — Documentation and release safeguards
+## Documentation and release safeguards
 
 - Use the shared section sequence and color taxonomy defined in [the Documentation Standard](../DOCUMENTATION_STANDARD.md).
 - Keep the source branch, published package, and intended target architecture distinct.
