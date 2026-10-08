@@ -85,3 +85,61 @@ These counts compare master (base) with development (head). They are repository-
 ## Completion criteria
 
 A row is complete only when its intended version is identified, the package/source compatibility is demonstrated by restore/build/tests, the consumer’s actual usage is understood, and any release action has explicit approval. Documentation alone does not make a dependency aligned or a capability integrated.
+
+
+### 5. Architecture disposition: MicroBundleRepository divergence (2026-10-08)
+
+**Preliminary recommendation: preserve the useful work from both lines; do not wholesale-select or merge either branch yet.** The source tree comparison shows that these are not simply old/new copies. The development line adds a local filesystem implementation, REST host/client, CLI, and repository observer/observation DTOs. The master line has an FSM_COS materialization/catalog adapter, an Azure experience catalog/repository, and an assembly-payload/envelope path. Several pieces are complementary and should be reconciled as separate responsibilities.
+
+| Area | Master line observed | Development line observed | Disposition |
+|---|---|---|---|
+| Core artifact contract | Core alpha.3 references FSM_Serialization alpha.2 and Ontology alpha.2; includes assembly payload/envelope-related artifacts. | Core alpha.1 has no package references and includes observer/observation contracts. | **Prefer a dependency-light Core as the target.** Repository Core should identify, store, retrieve, and verify opaque artifacts; serialization/materialization belongs in an explicit producer/consumer adapter. Assess whether experience catalog contracts truly belong in Core or are a separate optional catalog capability. |
+| Azure storage | Azure implementation alpha.1 with Core project reference and Azure SDK dependencies. | Same alpha.1 and same project/package references in the inspected project file. | Keep; implementation is shared and should be tested against the chosen Core contract. |
+| Local storage | No Local implementation in the inspected master tree. | File-system repository implementation exists. | Preserve as an optional implementation and test provider. It enables local development and low-cost testing without Azure; it must not become a dependency of Core. |
+| REST transport | REST alpha.5 uses FSM_REST alpha.4 and Ontology alpha.2; has a separate FSM_COS adapter project. | REST alpha.2 uses FSM_REST alpha.4 and FSM_COS alpha.3; REST host and observer support are present, but no separate FSM_COS adapter project in the inspected development tree. | Keep REST optional. Align its DTO/transport contract with Core, remove any unnecessary ontology dependency, and keep FSM_COS materialization in the dedicated adapter—not in the REST transport package. Validate against current FSM_COS source alpha.6 before changing pins. |
+| FSM_COS materialization | Dedicated `MicroBundleRepository.FSM_COS` alpha.1 adapter references FSM_COS alpha.5, MicroBundleDomain 1.0.1, and REST via project reference. | No matching adapter project in the inspected development tree. | Preserve the adapter concept, update only after compatibility tests. Its dependency on REST may be too strong: prefer an adapter over `IMicroBundleRepository`/artifact contracts so local, REST, or Azure-backed implementations can be selected without coupling composition to one transport. |
+| Operational tooling | No CLI project in the inspected master tree. | CLI executable exists and uses the REST boundary. | Preserve as an operational tool, not a runtime NuGet dependency or MicroBundle. Keep it independently deployable and ensure publishing stays disabled. |
+| Tests / verification | Master has Core, Azure, REST-related tests in its tree. | Development adds/retains Core, Azure, REST and related tests alongside its extra implementations. | Reconcile test coverage by contract and behavior, not by copying a branch wholesale. Add shared contract tests for every repository implementation and integration tests for artifact retrieval/materialization. |
+
+#### Target project boundaries
+
+```text
+MicroBundleRepository.Core
+  - artifact address, immutable artifact, repository contract
+  - hash/content identity and provider-neutral metadata
+  - no Azure, REST, FSM_COS, Ontology, GUI, or storage SDK dependency
+             ^
+             | implemented by
+    +--------+---------+
+    |        |         |
+   Local    Azure     REST client/server adapter
+                       |
+                       v
+             REST host / operational CLI
+
+FSM_COS MicroBundleRepository adapter
+  - depends on Core contracts
+  - turns retrieved artifact bytes into a validated IMicroBundle
+  - plugs into catalog/composition APIs
+  - should not require REST when another repository provider is selected
+```
+
+This is a target boundary to validate, not a claim that all projects currently satisfy it.
+
+#### NuGet versus MicroBundle disposition
+
+- **Keep as NuGet/infrastructure packages:** repository Core contracts and independently reusable Local/Azure/REST provider adapters; the CLI remains an executable tool. These are delivery mechanisms and developer operations, not user-selectable domain behaviors.
+- **Keep as an optional integration package:** the FSM_COS materializer/catalog adapter while its APIs are compiled against the runtime contracts. It should be installed only by hosts that compose repository-backed MicroBundles.
+- **Generate MicroBundles for domain capabilities, not storage infrastructure:** experiences such as Moniker or Elements are better candidates for independently loadable MicroBundles. Their build/publish pipeline may use NuGet and serialization tooling, but the consumer should load the resulting bundle artifact through the repository and FSM_COS rather than carry a separate NuGet dependency for every experience.
+- **Do not turn every NuGet package into a MicroBundle:** FSM_API, serialization primitives, repository contracts, and host-specific adapters provide compile-time/runtime infrastructure and should remain packages unless a concrete measured use case proves otherwise.
+- **Avoid accidental dependency closure:** a minimal host should not pull in Azure SDKs, REST hosting, CLI, WPF, or unrelated domain capabilities merely to use FSM_COS or a local artifact repository.
+
+#### Required verification before choosing a canonical branch
+
+- [ ] Compare source/API differences in Core artifact types, hash verification, immutability, observer contracts, and experience catalog contracts.
+- [ ] Build and run tests for both branch snapshots; no CI result is implied by this source inspection.
+- [ ] Add/verify shared repository contract tests for Local and Azure, plus REST integration tests.
+- [ ] Prove exact artifact bytes/hash survive put/get and that the FSM_COS adapter materializes the requested bundle ID.
+- [ ] Verify the adapter can consume the Core abstraction without requiring REST specifically.
+- [ ] Decide which branch becomes the integration base only after these checks; migrate complementary features in small commits and retain the other branch until parity is demonstrated.
+- [ ] Keep all package publishing disabled. No dependency pins or package versions should be changed solely to make the branches look aligned.
