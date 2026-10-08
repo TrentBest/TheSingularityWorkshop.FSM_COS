@@ -24,6 +24,105 @@ That boundary is the reason this package exists.
 
 ---
 
+## 60-Second Quick Start
+
+The current `master` source declares `0.1.0-alpha.6`, but the release record identifies `0.1.0-alpha.5` as the latest verified published package. This tutorial therefore runs the current source; it does **not** pretend alpha.6 is available from NuGet before its publication is verified.
+
+### 1. Open the solution in Visual Studio
+
+Clone this repository and open `TheSingularityWorkshop.FSM_COS.sln` in Visual Studio. The solution includes the library and its test project.
+
+### 2. Open the Developer Terminal
+
+Choose **View → Terminal** in Visual Studio, from the repository root.
+
+### 3. Build and test the source
+
+```powershell
+dotnet build TheSingularityWorkshop.FSM_COS.sln -c Release
+dotnet test TheSingularityWorkshop.FSM_COS.sln -c Release
+```
+
+### 4. See a real composition in a Console App
+
+Create a **Console App** targeting .NET 8 and add a project reference to the local `src/FSM_COS/FSM_COS.csproj` project. The exact relative path depends on where you cloned this repository.
+
+Replace `Program.cs` with this example:
+
+```csharp
+using TheSingularityWorkshop.FSM_COS;
+using TheSingularityWorkshop.MicroBundleDomain;
+
+var manifest = new RuntimeManifest(
+    RuntimeId: 1001,
+    Bundles: new[]
+    {
+        MicroBundleDependencyRequest.Unconfigured(1001)
+    });
+
+var assembly = new FsmCos(new SingleBundleCatalog()).Execute(manifest);
+
+Console.WriteLine($"Assembled {assembly.Bundles.Count} MicroBundle(s) in runtime {assembly.RuntimeId}.");
+
+public sealed class HelloBundle : IMicroBundle
+{
+    public MicroBundleDescriptor Descriptor { get; } =
+        new(1001, "1.0.0", providers: [new MicroBundleProvider("hello")]);
+
+    public ulong Id => Descriptor.Id;
+
+    public IReadOnlyList<MicroBundleDependencyRequest> Dependencies { get; } =
+        Array.Empty<MicroBundleDependencyRequest>();
+
+    public void Load(IMicroBundleLoadContext context) =>
+        Console.WriteLine($"Loaded MicroBundle {Id} into runtime {context.RuntimeId}");
+
+    public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex) => false;
+}
+
+public sealed class SingleBundleCatalog : IMicroBundleCatalog
+{
+    private readonly IMicroBundle _bundle = new HelloBundle();
+
+    public bool TryResolve(ulong bundleId, out IMicroBundle? bundle)
+    {
+        if (bundleId == _bundle.Id)
+        {
+            bundle = _bundle;
+            return true;
+        }
+
+        bundle = null;
+        return false;
+    }
+}
+```
+
+Expected output:
+
+```text
+Loaded MicroBundle 1001 into runtime 1001
+Assembled 1 MicroBundle(s) in runtime 1001.
+```
+
+This demonstrates the current source API: a manifest requests a root capability, a catalog resolves it, FSM_COS loads it, arbitration reaches a stable result, and the host receives a `RuntimeAssembly`.
+
+## Add It to an Existing Project
+
+Already have an application? You do not need to replace its host loop, UI, or domain model.
+
+Until alpha.6 is published and independently verified, add a project reference to the current source project rather than copying a package-install command that may not resolve:
+
+```powershell
+dotnet add reference ..\\TheSingularityWorkshop.FSM_COS\\src\\FSM_COS\\FSM_COS.csproj
+```
+
+Adjust the relative path to your clone. The consuming project must target a compatible .NET framework and restore the exact dependencies declared by that source version.
+
+Your application remains responsible for the next step after composition: scheduling, rendering, user interaction, networking, storage, and platform-specific execution. FSM_COS returns the assembled composition; it does not become the application.
+
+---
+
 ## What FSM_COS owns
 
 Given a `RuntimeManifest`, FSM_COS owns the composition operation:
@@ -64,7 +163,7 @@ FSM_COS does **not** own:
 - artifact storage or delivery;
 - serialization formats;
 - GUI rendering;
-- browser, desktop, or Unity lifecycle;
+- browser, desktop, or native-host lifecycle;
 - Experience execution;
 - application scheduling;
 - Warehouse allocation;
@@ -115,7 +214,7 @@ FSM_COS does not require:
 - FSM_REST — transport is outside composition;
 - GUI packages — manifestation is outside composition;
 - ProtocolAi / GrammarAi — capabilities may be composed, but AI protocol/grammar are not kernel dependencies;
-- WebPage, AnyApp, Unity, Blazor, WPF, or another host — hosts consume FSM_COS rather than the reverse.
+- WebPage, AnyApp, native host, Blazor, WPF, or another host — hosts consume FSM_COS rather than the reverse.
 
 See [Dependency & Boundary Guide](docs/DEPENDENCIES.md).
 
@@ -412,29 +511,6 @@ See [Compute Scale and Distributed Execution](docs/COMPUTE_SCALE.md).
 
 ---
 
-## Quick start
-
-A composition host supplies an `IMicroBundleCatalog` that can resolve the domain-owned `IMicroBundle` instances.
-
-Conceptually:
-
-```csharp
-var manifest = new RuntimeManifest(
-    RuntimeId: 1001,
-    Bundles:
-    [
-        /* root MicroBundle dependency requests */
-    ]);
-
-var assembly = fsmCos.Execute(manifest, catalog);
-```
-
-The catalog is intentionally an input boundary. It can be backed by an in-memory registry, generated registry, cache, Warehouse adapter, or another discovery system without changing the composition algorithm.
-
-For the complete runtime flow, see [Architecture](docs/ARCHITECTURE.md).
-
----
-
 ## NuGet publication
 
 The Workshop-wide release safety and NuGet Trusted Publishing procedure is documented in **[RELEASING.md](docs/RELEASING.md)**. This includes the AI package publication workflow for ProtocolAI and GrammarAI.
@@ -477,7 +553,7 @@ This repository documents **FSM_COS itself**. Neighboring packages document thei
 
 This alpha deliberately remains a composition kernel rather than an application framework.
 
-The package is published through the repository's explicit trusted-publishing workflow. Publication is intentionally separate from verification.
+The source tree declares alpha.6, while the latest verified published version remains alpha.5 until the alpha.6 package is independently confirmed on NuGet. The publishing workflow is available but remains disabled by default; source metadata is not evidence of publication. See [the alpha readiness issue](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/issues/20) before adopting a newer version.
 
 ---
 
