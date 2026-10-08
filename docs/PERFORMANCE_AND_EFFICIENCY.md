@@ -224,7 +224,7 @@ It should not acquire:
 - a serialization framework;
 - an application lifecycle;
 - a browser;
-- Unity;
+- native host;
 - or a distributed scheduler merely to make composition possible.
 
 Those concerns belong at neighboring boundaries.
