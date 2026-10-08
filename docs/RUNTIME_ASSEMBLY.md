@@ -44,7 +44,7 @@ RuntimeAssembly
       │
       ├── WebForge → GUI → browser
       ├── Desktop Forge → native host
-      ├── Unity bridge → Unity
+      ├── native-host bridge → native host
       └── another host → its own manifestation
 ```
 
@@ -71,7 +71,7 @@ A RuntimeAssembly does not promise:
 - that an Experience has started;
 - that a GUI exists;
 - that a browser is open;
-- that a Unity scene exists;
+- that a native scene exists;
 - that Warehouse resources have been allocated;
 - that networking has begun.
 
@@ -114,6 +114,5 @@ FSM_COS is one layer in a deliberately troublesome ecosystem:
 - **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
 - **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
 - **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
