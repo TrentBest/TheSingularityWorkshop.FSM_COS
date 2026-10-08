@@ -14,7 +14,7 @@
 
 Its job is the common scheduling and operational overhead required to turn a defined computation into an assembled runtime that another system can execute or manifest.
 
-FSM_COS intentionally keeps its dependency floor small. It consumes **FSM_API** for the state/context primitives required by composition and **MicroBundleDomain** for the canonical MicroBundle contract. It is deliberately **not an application framework**: no browser, desktop UI, Unity runtime, renderer, database, warehouse, or product type is built into the kernel.
+FSM_COS intentionally keeps its dependency floor small. It consumes **FSM_API** for the state/context primitives required by composition and **MicroBundleDomain** for the canonical MicroBundle contract. The current project also has a direct dependency on **FSM_UserIO** (`0.1.0-alpha.1`); whether semantic-intent exchange belongs in the mandatory composition floor remains an explicit audit item, so it should not be described as optional until source usage and the public contract are verified. FSM_COS is deliberately **not an application framework**: no browser, desktop UI, Unity runtime, renderer, database, warehouse, or product type is built into the kernel.
 
 <p align="center">
   <img src="docs/assets/fsm-cos-crane.svg" alt="FSM_COS composition crane">
@@ -98,7 +98,7 @@ The repository therefore owns the composition contracts, dependency closure, con
 
 ## Current development boundary
 
-The current `development` line is the active architecture workstream. The package remains `0.1.0-alpha.5` while the runtime contract and documentation are being refined:
+The current `development` line is the active architecture workstream. The project file currently declares `0.1.0-alpha.6`; this source declaration is not a claim that alpha.6 has been published to NuGet. The runtime contract and documentation are still being refined:
 
 ~~~text
 RuntimeManifest
