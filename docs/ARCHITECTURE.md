@@ -222,7 +222,7 @@ It deliberately stops before:
 
 - host execution scheduling;
 - GUI rendering;
-- browser/desktop/Unity lifecycle;
+- browser/desktop/native-host lifecycle;
 - Warehouse implementation;
 - networking;
 - telemetry/metaDev adaptation;
