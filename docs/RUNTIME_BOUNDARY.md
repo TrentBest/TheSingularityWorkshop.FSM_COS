@@ -42,7 +42,7 @@ The following remain outside the kernel:
 - stepping FSM_API process groups;
 - rendering GUI nodes;
 - browser or desktop lifecycle;
-- Unity scene/object lifecycle;
+- native scene/object lifecycle;
 - Warehouse storage and allocation;
 - networking;
 - domain rules;
@@ -52,9 +52,9 @@ The following remain outside the kernel:
 
 A host may use the RuntimeAssembly to perform those operations, but those operations are not silently pulled into FSM_COS.
 
-## Unity boundary
+## platform-specific boundary
 
-A Unity-facing implementation may consume FSM_COS, but Unity-specific code belongs outside this repository's composition kernel.
+A host-facing implementation may consume FSM_COS, but platform-specific code belongs outside this repository's composition kernel.
 
 The same rule applies to WebForge/Blazor:
 
@@ -65,7 +65,7 @@ RuntimeAssembly
    ↓
 platform adapter / host
    ↓
-Unity / browser / desktop / other manifestation
+native host / browser / desktop / other manifestation
 ~~~
 
 This prevents the composition package from acquiring platform lifecycle dependencies.
@@ -123,6 +123,5 @@ FSM_COS is one layer in a deliberately troublesome ecosystem:
 - **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
 - **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
 - **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
