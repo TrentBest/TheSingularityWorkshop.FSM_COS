@@ -7,6 +7,7 @@ Use this page to find the right level of explanation. The README is the orientat
 | If you want to... | Start here |
 |---|---|
 | Understand the purpose and boundary of FSM_COS | [README](../README.md) |
+| Understand how Workshop packages fit together, including package-versus-MicroBundle decisions and Profiles | [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md) |
 | Understand the architecture and component ownership | [Architecture](ARCHITECTURE.md) |
 | Learn the conceptual model and rationale | [FSM_COS Theory](THEORY.md) |
 | Understand the request that enters the kernel | [Runtime Manifest](RUNTIME_MANIFEST.md), then [Manifest Theory](MANIFEST_THEORY.md) |
@@ -25,11 +26,12 @@ For a first encounter:
 
 1. [README](../README.md) — identity, responsibility boundary, and quick orientation.
 2. [Architecture](ARCHITECTURE.md) — how the pieces fit together and which layer owns each concern.
-3. [FSM_COS Theory](THEORY.md) — why composition is a distinct operation.
-4. [Runtime Manifest](RUNTIME_MANIFEST.md) — what the caller requests.
-5. [RuntimeAssembly](RUNTIME_ASSEMBLY.md) — what the host receives.
-6. [Runtime Boundary](RUNTIME_BOUNDARY.md) — where FSM_COS hands off responsibility.
-7. The relevant integration or development guide for the task at hand.
+3. [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md) — package responsibilities, integration gaps, and MicroBundle candidates.
+4. [FSM_COS Theory](THEORY.md) — why composition is a distinct operation.
+5. [Runtime Manifest](RUNTIME_MANIFEST.md) — what the caller requests.
+6. [RuntimeAssembly](RUNTIME_ASSEMBLY.md) — what the host receives.
+7. [Runtime Boundary](RUNTIME_BOUNDARY.md) — where FSM_COS hands off responsibility.
+8. The relevant integration or development guide for the task at hand.
 
 Experienced readers can jump directly to the contract or integration guide they need.
 
