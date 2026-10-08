@@ -399,7 +399,7 @@ FSM_COS deliberately does not require:
 
 - a GUI framework;
 - a browser;
-- Unity;
+- native host;
 - a specific repository;
 - a specific serialization format;
 - a specific configuration file format;
