@@ -157,3 +157,17 @@ Key commits on `development` include planning-contract additions `b4a0ddc`, `84a
 **Not yet implemented:** asynchronous repository/cache localization, content-hash verification against actual bytes, bootstrap entry while localization continues, and live deferred promotion into an existing RuntimeAssembly. The current `FsmCos.Execute` behavior remains the composition path. These require a host/localization integration contract and end-to-end tests; the presence of planning types alone is not proof of staged execution.
 
 **Branch disposition remains:** active integration; more work remains; **`forge/staged-manifest-load-plan` is not safe to delete**.
+
+
+### Related release-prep branch comparison
+
+The `release-prep/fsm-cos-1.0.0` branch is not a replacement for the staged-load branch. Comparing it directly with `forge/staged-manifest-load-plan` shows the staged-load implementation is shared, while release-prep adds a release contract, README material, a release-frontier SVG, project/package metadata, and a different workflow.
+
+Disposition of its unique work:
+
+- **Preserve for later adaptation:** `docs/RELEASE_1_0.md` and `docs/assets/release-frontier.svg`. The release checklist and contract-stabilization rationale are useful, but the dependency diagram and text currently name MicroBundleDomain 1.0.0 while `development` uses 1.0.1; revise against the actual release candidate before using it.
+- **Do not copy its project metadata yet:** it changes the package from the current alpha version to `1.0.0` and pins MicroBundleDomain 1.0.0. That is release-sensitive and not authorized by this task.
+- **Do not copy its workflow:** the release-prep workflow permits NuGet publishing on a manually dispatched run when the input is true, without the repository's mandatory `&& false` safety latch. The owner must explicitly authorize any future temporary publish-gate change, and the gate must return to disabled afterward.
+- **Do not merge the branch wholesale:** it contains the staged-load implementation already being adapted plus unrelated release-only changes.
+
+The release-prep branch remains **not safe to delete** until the release guide/visual are adapted or consciously dispositioned, the workflow/project changes are resolved, and its open/closed PR history is accounted for.
