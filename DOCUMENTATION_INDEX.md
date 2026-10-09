@@ -13,6 +13,7 @@ Use this page to find the right level of explanation. The README is the orientat
 | Understand the architecture and component ownership | [Architecture](docs/ARCHITECTURE.md) |
 | Learn the conceptual model and rationale | [FSM_COS Theory](docs/THEORY.md) |
 | Understand the request that enters the kernel | [Runtime Manifest](docs/RUNTIME_MANIFEST.md), then [Manifest Theory](docs/MANIFEST_THEORY.md) |
+| Understand staged loading, dependency planning, and the current implementation boundary | [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md) |
 | Understand the object handed to a host | [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) |
 | Understand what stays outside the kernel | [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) |
 | Learn how MicroBundles are resolved and consumed | [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) |
