@@ -244,6 +244,7 @@ The current development source does **not** appear to need a new host-specific f
 - [x] Add tests for matching schedule/dependency graph, graph mismatch rejection before loading, and semantic-intent pass-through.
 - [ ] Confirm the current workflow run passes build, tests, coverage, and pack on the exact candidate commit.
 - [ ] Run a clean restore/build/test/pack using public MicroBundleDomain 1.0.1 instead of the CI-only local branch package; reconcile any API drift before release.
-- [ ] Verify the packed `.nupkg` contents/metadata, README/license inclusion, package dependency list, release notes, and disabled publish condition.
+- [x] Add candidate release notes at `docs/releases/0.1.0-alpha.6.md`, explicitly separating implemented behavior from staged-loading limitations.
+- [ ] Verify the packed `.nupkg` contents/metadata, README/license inclusion, package dependency list, and disabled publish condition.
 - [ ] Verify consumer compatibility (at minimum Forge and AnyApp API migration plan); no consumer should be pinned to alpha.6 before the package is actually published.
 - [ ] Final release review by owner; only explicit approval may ever authorize the publish mechanism.
