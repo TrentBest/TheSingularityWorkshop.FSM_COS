@@ -137,3 +137,23 @@ Proceed in small verified slices on `development`:
 5. Run the development build/test workflow and inspect its publish gate. NuGet publishing remains disabled unless the owner explicitly authorizes it.
 
 **Disposition:** active review; useful work identified; integration and verification pending; **not safe to delete**.
+
+
+### First compatible staged-planning slice — integrated, end-to-end loading still pending
+
+The following has now been added to `development` without replacing the current `MicroBundleManifestEntry` contract:
+
+- `MicroBundleReference`, `ManifestLoadStage`, and `RuntimeManifestEntry` record versioned immutable identity and Resident/Deferred intent.
+- `RuntimeManifestDependency` and `RuntimeManifestSchedule` represent dependency prerequisites separately from FSM_API process scheduling; the schedule validates entry identity, duplicate edges, unknown dependencies, and cycles.
+- `RuntimeManifestLoadPlan` tracks Published → Localized → Loaded. When a schedule is supplied, it rejects loading a dependent entry before its prerequisites are Loaded; promotion evaluation respects both Experience choice and dependency readiness.
+- `RuntimeManifest` now accepts optional staged-plan/schedule metadata while retaining the existing versioned root entries. `FsmCos.Execute` validates consistency before resolving or loading any bundles.
+- `tests/FSM_COS.Tests/RuntimeManifestPlanningTests.cs` covers current-manifest compatibility, version drift, independent/dependent classification, cycle rejection, and dependency-gated promotion.
+- `docs/STAGED_MANIFEST_LOADING.md` documents the responsibilities and explicitly distinguishes implemented planning/state contracts from the not-yet-integrated host localization/deferred execution path; the document is linked from `DOCUMENTATION_INDEX.md`.
+
+Key commits on `development` include planning-contract additions `b4a0ddc`, `84ab6d8`, `527b3fb`; manifest integration `e92c28a`, `c4eafa2`; tests `559124f`, `de78324`; and design/index documentation `0608fdc`, `102a421`.
+
+**Verification evidence:** [GitHub Actions run 37984065276](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/37984065276) completed successfully for commit `de78324a68c8ed5e0c0b0de5987616f2ee598eca`: build, tests, and pack succeeded; the `publish_nuget` job was skipped. A documentation-only follow-up run was still in progress when this ledger entry was written.
+
+**Not yet implemented:** asynchronous repository/cache localization, content-hash verification against actual bytes, bootstrap entry while localization continues, and live deferred promotion into an existing RuntimeAssembly. The current `FsmCos.Execute` behavior remains the composition path. These require a host/localization integration contract and end-to-end tests; the presence of planning types alone is not proof of staged execution.
+
+**Branch disposition remains:** active integration; more work remains; **`forge/staged-manifest-load-plan` is not safe to delete**.
