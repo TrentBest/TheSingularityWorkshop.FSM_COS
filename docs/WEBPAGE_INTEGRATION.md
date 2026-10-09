@@ -16,7 +16,7 @@ The browser should therefore not become a dependency of FSM_COS.
 
 ## Package boundary
 
-WebPage consumes the published package:
+WebPage consumes the published package. The example below preserves the older integration baseline; it must be replaced with a version that is actually available from NuGet before use. The current source declaration is `0.1.0-alpha.5`, which does not by itself establish that version has been published:
 
 ~~~xml
 <PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="0.1.0-alpha.2" />
