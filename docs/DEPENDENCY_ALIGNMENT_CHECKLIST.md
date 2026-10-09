@@ -248,3 +248,14 @@ The current development source does **not** appear to need a new host-specific f
 - [x] Inspected the public-feed `.nupkg`: version `0.1.0-alpha.6`, README/license included, dependencies are FSM_API 1.0.13, FSM_UserIO 0.1.0-alpha.1, and MicroBundleDomain 1.0.1; release notes are included and internal branch/continuation planning files are excluded. The workflow's publish condition remains `github.event_name == 'workflow_dispatch' && inputs.publish == true && false`.
 - [ ] Verify consumer compatibility (at minimum Forge and AnyApp API migration plan); no consumer should be pinned to alpha.6 before the package is actually published.
 - [ ] Final release review by owner; only explicit approval may ever authorize the publish mechanism.
+
+
+### 6. Alpha.6 release-candidate verification and remaining blocker (2026-10-09)
+
+- [x] Development code/package candidate `77c05d68d70159e6f4ffb53bd2209a5ed6ed0abc` passed [Actions run 37988552679](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/37988552679): build/test/coverage/pack and a separate public-NuGet restore/build/test/pack path succeeded; publication was skipped.
+- [x] Development project version and release notes declare `0.1.0-alpha.6`; the publish condition remains explicitly gated by `&& false`.
+- [ ] **Release blocker:** master and development both declare alpha.6 but expose different manifest APIs. Master still uses `MicroBundleDependencyRequest` with inline configuration; development uses versioned `MicroBundleManifestEntry` roots, external `IMicroBundleConfigurationSource`, and schedule-vs-resolved-graph preflight validation. The branch comparison reports development 172 ahead / 40 behind master. Do not publish until these source lines are reconciled, since a NuGet version cannot safely identify two different public contracts.
+- [ ] Selectively reconcile the tested development contract into the master release line while preserving master-only documentation and branch history. Add the public-package compatibility job to master’s workflow, then run the full release checks on the exact master candidate.
+- [ ] Inspect the master candidate package artifact, dependency metadata, README/license/release notes, and packaged-file exclusions; verify all package-producing workflows remain disabled by default. Then provide the owner a final release review. This checklist is not publication authorization.
+
+The next repository-level milestone is **master alpha.6 source reconciliation**, not further staged-loading expansion and not WebPage work. Once the exact master candidate is verified and the release review is complete, WebPage can resume; actual publication still requires explicit owner approval.
