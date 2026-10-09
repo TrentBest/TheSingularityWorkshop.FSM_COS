@@ -183,6 +183,17 @@ The documentation diagrams are deliberately architecture-first: they show where 
 - [MicroBundle cartridge](docs/assets/microbundle-cartridge.svg)
 - [RuntimeAssembly handoff](docs/assets/runtime-assembly-handoff.svg)
 
+## 08 🟢 Quick start
+
+This repository's documented artifact is the .NET 8 FSM_COS library. The README is an architectural orientation, not a claim that every integration scenario below is already exercised end-to-end.
+
+1. Install or reference the package version appropriate to your project from [NuGet](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS), or build the current source from the repository.
+2. Read [Runtime Manifest](docs/RUNTIME_MANIFEST.md) to understand the composition request and [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) to understand the handoff.
+3. Supply the MicroBundle catalog and any configuration source through the contracts described in [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md).
+4. Follow [Development and verification](docs/DEVELOPMENT.md) before relying on a source build or adapting examples.
+
+**Status note:** source version, NuGet publication, and a successful local build are separate facts. Check the package page and current CI rather than assuming they are interchangeable.
+
 ## 09 🟪 Core concepts: the Runtime Manifest
 
 <p align="center">
@@ -331,7 +342,11 @@ A host receives the assembled result and decides how to execute, present, or enc
 
 **Composition is not manifestation.**
 
-## Repository structure
+## 11 🩵 Verification and development
+
+Use the [Development guide](docs/DEVELOPMENT.md) for repository-specific build, test, and contribution instructions. Use the [current GitHub Actions runs](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions) and [coverage report](https://codecov.io/gh/TrentBest/TheSingularityWorkshop.FSM_COS) as live evidence; badges alone do not establish that a particular commit passed.
+
+## 11 🩵 Repository structure and verification
 
 ~~~text
 TheSingularityWorkshop.FSM_COS/
@@ -405,7 +420,7 @@ This repository carries its own architecture and theory. The documents here desc
 
 The package workflow builds, tests, packs, and uploads artifacts. Its NuGet publication job is currently hard-disabled by an explicit `&& false` guard. A source version or successful build is not evidence that a package version was published, and this documentation change does not authorize publication.
 
-## Host integration
+## 10 🟦 Host integration and usage
 
 WebPage is one host and proving ground for FSM_COS; it is not a special case inside the composition kernel. The intended flow is:
 
@@ -429,7 +444,7 @@ The first AI/GUI vertical slice now follows the same boundary: WebPage supplies 
 
 For the concrete integration contract, see [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) and [FSM_COS Theory — Same composition, different manifestation](docs/THEORY.md#10-same-composition-different-manifestation).
 
-## 06 Responsibility invariant
+## Responsibility invariant
 
 ~~~text
 FSM_API      → behavior/state primitives
@@ -447,7 +462,7 @@ The boundaries can evolve. The responsibility of FSM_COS should remain clear:
 
 ---
 
-## 🔗 Resources & Support
+## 13 🟨 Related projects, resources & Workshop support
 
 ### 📦 Get the core packages
 
@@ -474,7 +489,7 @@ The boundaries can evolve. The responsibility of FSM_COS should remain clear:
 
 ---
 
-## 🔗 The Singularity Workshop
+## Workshop identity
 
 FSM_COS is one layer in a deliberately troublesome ecosystem:
 
