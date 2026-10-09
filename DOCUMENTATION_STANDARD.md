@@ -10,7 +10,7 @@ Unless the repository's purpose makes a section irrelevant, use the shared seman
 
 | ID | Opening section | Marker shape and color | Reader purpose |
 |---|---|---|---|
-| **00** | Title and identity | **Bold asterisk ✳️ in bright magenta** | Make the project identity immediately recognizable; keep valid badges close by |
+| **00** | Title and identity | **Bright, high-contrast asterisk emoji ✳️** | Make the project identity immediately recognizable; keep valid badges close by |
 | **01** | Problem and short response | Blue square 🟦 | Name the problem first, then explain in a few sentences how this package responds |
 | **02** | Workshop documentation map | Violet marker 🟣 | Explain the repository ecosystem, document roles, and any local variation from the shared standard |
 | **03** | The problem and solution in depth | Teal marker 🩵 | Build the mental model, show responsibility boundaries, and explain why the design works |
@@ -23,7 +23,7 @@ After section 05, continue with concise, useful technical reference sections as 
 
 ### Shape, color, and ordering
 
-Put the marker **before** its number and heading text (for example, 🟦 01 The problem—and our response). For section 00, use the high-contrast asterisk ✳️ before 00; do not use the low-contrast gray circle. A marker must remain recognizable in GitHub light and dark themes and must not be the only carrier of meaning—the number and words remain visible.
+Put the marker **before** its number and heading text (for example, 🟦 01 The problem—and our response). For section 00, use the high-contrast asterisk emoji ✳️ before 00; do not use the low-contrast gray circle. A marker must remain recognizable in GitHub light and dark themes and must not be the only carrier of meaning—the number and words remain visible.
 
 The marker palette is intentionally vivid. Color creates quick recognition, while the repeated shape/position creates a stable visual rhythm. Use a small consistent palette rather than choosing a new decorative color for every heading. Do not rely on custom HTML/CSS for heading colors; GitHub Markdown does not provide dependable arbitrary heading-color styling. Check mobile and dark-mode readability, and never rely on color alone.
 
