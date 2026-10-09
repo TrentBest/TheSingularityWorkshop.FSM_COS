@@ -1,4 +1,5 @@
 using TheSingularityWorkshop.FSM_API;
+using TheSingularityWorkshop.FSM_UserIO;
 
 namespace TheSingularityWorkshop.FSM_COS;
 
@@ -12,7 +13,8 @@ public sealed record RuntimeManifest(
     IReadOnlyList<MicroBundleManifestEntry> Bundles,
     IStateContext? ExperienceContext = null,
     IReadOnlyList<RuntimeManifestEntry>? LoadPlan = null,
-    RuntimeManifestSchedule? Schedule = null)
+    RuntimeManifestSchedule? Schedule = null,
+    SemanticIntent? Intent = null)
 {
     public static RuntimeManifest Empty(ulong runtimeId, IStateContext? experienceContext = null) =>
         new(runtimeId, Array.Empty<MicroBundleManifestEntry>(), experienceContext);
