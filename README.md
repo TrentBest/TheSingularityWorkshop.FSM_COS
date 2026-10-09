@@ -12,7 +12,7 @@
 
 **FSM_COS is a platform-neutral computation-composition kernel that resolves MicroBundles and assembles a runtime for handoff to a host.**
 
-## 02 🟦 Visual identity
+## 02 🟩 Visual identity
 
 Git is static. The architecture does not have to *feel* static.
 
@@ -203,7 +203,7 @@ This repository's documented artifact is the .NET 8 FSM_COS library. The README 
 
 **Status note:** source version, NuGet publication, and a successful local build are separate facts. Check the package page and current CI rather than assuming they are interchangeable.
 
-## 09 🔵 Core concepts: the Runtime Manifest
+## 09 🟪 Core concepts: the Runtime Manifest
 
 <p align="center">
   <img src="docs/assets/runtime-manifest-pipeline.svg" alt="Runtime Manifest publication pipeline">
