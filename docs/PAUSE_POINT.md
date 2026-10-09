@@ -74,3 +74,17 @@ The public launch is not blocked on integrating every Workshop package. It is bl
 - **Future:** not part of the present contract.
 
 Do not describe a package or MicroBundle as integrated merely because it exists, is listed in a dependency table, or compiles in a separate repository.
+
+
+## Updated continuation priority — FSM_COS alpha.6 and Forge boundary (2026-10-09)
+
+This addendum supersedes the older sequencing above until the alpha.6 source reconciliation is complete. Do not resume broad WebPage work yet.
+
+1. Treat `0.1.0-alpha.6` as the intended next FSM_COS package candidate; the development project metadata now declares it. This is not publication authorization.
+2. Reconcile `master` and `development` deliberately. Preserve development's requested-version manifest roots and external configuration-source contract; evaluate master-only `FSM_UserIO.SemanticIntent` as an additive capability with tests rather than replacing the newer manifest contract wholesale.
+3. Continue reconciling the Forge staged-manifest work. Forge owns authoring and publish-time compilation; FSM_COS consumes the compact published result. The Forge must not become a runtime dependency of FSM_COS, and FSM_COS must not absorb Forge UI, serialization, storage, or repository transport.
+4. The current staged metadata can describe immutable identity, dependency edges, and Bootstrap/Resident/Deferred intent, but does not yet implement artifact localization/hash verification, Bootstrap-only initial composition, or live deferred promotion. Do not claim those behaviors until a repository/host adapter and end-to-end tests prove them.
+5. Verify dependency-graph agreement between the published manifest and the resolved MicroBundleDomain contract; then prove clean restore/build/test against public package versions without the CI-only local MicroBundleDomain feed.
+6. Keep NuGet publication disabled with `&& false`. No publish, branch deletion, or merge of the draft integration PR is authorized by this checklist.
+
+Return to WebPage once the source contract is reconciled, the alpha.6 package candidate passes its release-readiness checks, and the RuntimeAssembly host handoff can be evaluated against that stable candidate. A package publish still requires separate explicit owner approval.
