@@ -74,6 +74,33 @@ RuntimeAssembly
 
 > **FSM_COS assembles the computation. It does not become the application.**
 
+## 🟢 First proof: watch composition resolve a dependency
+
+You do not need to understand the whole architecture to see the central behavior.
+
+A test MicroBundle with ID `1` declares a dependency on MicroBundle `2`. The manifest requests only bundle `1`. FSM_COS resolves and loads the dependency first, so the resulting assembly is ordered `2 → 1`.
+
+```csharp
+var catalog = new TestCatalog(
+    new TestBundle(2),
+    new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2)));
+
+var assembly = new FsmCos(catalog).Execute(
+    new RuntimeManifest(42, new[] { Entry(1) }));
+
+Assert.Equal(new ulong[] { 2, 1 }, assembly.Bundles.Select(x => x.Id));
+```
+
+This is a **test-fixture excerpt**, not a copy-paste application: `TestCatalog`, `TestBundle`, and `Entry` are helpers defined in the test project. The assertion is taken from the repository's `Execute_loads_dependencies_before_requesting_bundle` test.
+
+To run that proof from a clone:
+
+```bash
+dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --filter "FullyQualifiedName~Execute_loads_dependencies_before_requesting_bundle"
+```
+
+The expected result is a passing test confirming that the requested root brings its dependency into the assembly first. For the consumer-owned catalog and bundle contracts needed to build your own composition, continue to [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md). For the complete conceptual model, continue to [FSM_COS Theory](docs/THEORY.md).
+
 ## 🟠 04 Choose your path
 
 <img src="docs/assets/section-dividers/04-choose-your-path.svg" alt="" width="100%">
