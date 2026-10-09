@@ -109,7 +109,7 @@ Source branch: [`forge/staged-manifest-load-plan`](https://github.com/TrentBest/
 ### Valuable work to preserve
 
 - Immutable `MicroBundleReference` with ID, version, and content hash.
-- Explicit `Resident` / `Deferred` stages.
+- Explicit `Bootstrap` / `Resident` / `Deferred` stages.
 - Distinct `Published` → `Localized` → `Loaded` lifecycle.
 - An Experience-owned `IManifestLoadEvaluator`, so the kernel does not hard-code domain-specific reasons to promote deferred capabilities.
 - A dependency graph/schedule, plus tests and a readable design document.
@@ -145,14 +145,14 @@ The following has now been added to `development` without replacing the current 
 
 - `MicroBundleReference`, `ManifestLoadStage`, and `RuntimeManifestEntry` record versioned immutable identity and Resident/Deferred intent.
 - `RuntimeManifestDependency` and `RuntimeManifestSchedule` represent dependency prerequisites separately from FSM_API process scheduling; the schedule validates entry identity, duplicate edges, unknown dependencies, and cycles.
-- `RuntimeManifestLoadPlan` tracks Published → Localized → Loaded. When a schedule is supplied, it rejects loading a dependent entry before its prerequisites are Loaded; promotion evaluation respects both Experience choice and dependency readiness.
+- `RuntimeManifestLoadPlan` tracks Published → Localized → Loaded. When a schedule is supplied, it rejects loading a dependent entry before its prerequisites are Loaded; promotion evaluation respects both Experience choice and dependency readiness. Bootstrap entries are considered before Resident, then Deferred entries, preserving manifest order within each stage.
 - `RuntimeManifest` now accepts optional staged-plan/schedule metadata while retaining the existing versioned root entries. `FsmCos.Execute` validates consistency before resolving or loading any bundles.
-- `tests/FSM_COS.Tests/RuntimeManifestPlanningTests.cs` covers current-manifest compatibility, version drift, independent/dependent classification, cycle rejection, and dependency-gated promotion.
+- `tests/FSM_COS.Tests/RuntimeManifestPlanningTests.cs` covers current-manifest compatibility, version drift, independent/dependent classification, cycle rejection, dependency-gated promotion, and Bootstrap-first ordering.
 - `docs/STAGED_MANIFEST_LOADING.md` documents the responsibilities and explicitly distinguishes implemented planning/state contracts from the not-yet-integrated host localization/deferred execution path; the document is linked from `DOCUMENTATION_INDEX.md`.
 
 Key commits on `development` include planning-contract additions `b4a0ddc`, `84ab6d8`, `527b3fb`; manifest integration `e92c28a`, `c4eafa2`; tests `559124f`, `de78324`; and design/index documentation `0608fdc`, `102a421`.
 
-**Verification evidence:** [GitHub Actions run 37984065276](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/37984065276) completed successfully for commit `de78324a68c8ed5e0c0b0de5987616f2ee598eca`: build, tests, and pack succeeded; the `publish_nuget` job was skipped. A documentation-only follow-up run was still in progress when this ledger entry was written.
+**Verification evidence:** [GitHub Actions run 37984065276](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/37984065276) completed successfully for commit `de78324a68c8ed5e0c0b0de5987616f2ee598eca`: build, tests, and pack succeeded; the `publish_nuget` job was skipped. Bootstrap-first ordering was then added in commits `1d8fdba`, `52966ea`, and tested in `a5188b2`; the corresponding CI run was still in progress when this ledger update was prepared.
 
 **Not yet implemented:** asynchronous repository/cache localization, content-hash verification against actual bytes, bootstrap entry while localization continues, and live deferred promotion into an existing RuntimeAssembly. The current `FsmCos.Execute` behavior remains the composition path. These require a host/localization integration contract and end-to-end tests; the presence of planning types alone is not proof of staged execution.
 
