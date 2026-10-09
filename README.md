@@ -113,7 +113,7 @@ This is the starting map. Open the document that answers your next question; the
 
 FSM_COS is designed to be useful as a **reusable composition boundary**, not as a toll gate that forces every creator to adopt the entire Workshop. You can use the package, build your own compatible pieces, or combine the two. The more of the Workshop's contracts and conventions you choose to use, the more naturally your work can fit alongside its other parts—but that alignment is an invitation, not a lock-in requirement.
 
-That is the confidence behind the architecture: **we want other creators to stand on these shoulders.** Reusable capabilities should be useful beyond the repository that introduced them. They should be maintainable as focused parts, discoverable through clear contracts, and composable into experiences their original authors did not anticipate.
+That is the confidence behind the architecture: **we want other creators to stand on these shoulders.** Reusable capabilities should be useful beyond the repository that introduced them. They should be maintainable as focused parts, discoverable through clear contracts, and composable into experiences their original authors did not anticipate. Over time, we want that compatibility to make it more attractive to create for the Workshop ecosystem—including the possibility of broader discovery, distribution, and monetization as those mechanisms are built.
 
 ### The intended relationship
 
