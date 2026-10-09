@@ -1,5 +1,6 @@
 using TheSingularityWorkshop.FSM_API;
 using TheSingularityWorkshop.FSM_COS;
+using TheSingularityWorkshop.FSM_UserIO;
 using TheSingularityWorkshop.MicroBundleDomain;
 using Xunit;
 
@@ -248,6 +249,19 @@ public sealed class FsmCosTests
 
         Assert.Contains(typeof(IStateContext).Assembly.GetName().Name!, references);
         Assert.Contains(typeof(MicroBundleDescriptor).Assembly.GetName().Name!, references);
+    }
+
+    [Fact]
+    public void Execute_preserves_optional_semantic_intent_on_the_runtime_assembly()
+    {
+        var intent = new SemanticIntent("open-moniker", 123UL);
+
+        var assembly = new FsmCos(new TestCatalog()).Execute(
+            RuntimeManifest.Empty(88, intent: intent));
+
+        Assert.Same(intent, assembly.Intent);
+        Assert.Equal("open-moniker", assembly.Intent!.Name);
+        Assert.Equal(123UL, assembly.Intent.ProtocolId);
     }
 
     [Fact]
