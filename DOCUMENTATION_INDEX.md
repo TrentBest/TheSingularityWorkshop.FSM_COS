@@ -43,7 +43,7 @@ Experienced readers can jump directly to the contract or integration guide they 
 - Architecture and theory documents explain ownership and rationale.
 - Focused contract guides describe the manifest, assembly, dependency, loading, and arbitration boundaries.
 - Source code and tests determine the behavior of the current implementation. If prose and implementation disagree, record and resolve the discrepancy rather than silently assuming the prose is correct.
-- The repository-wide documentation rules live in [Documentation Standard](../DOCUMENTATION_STANDARD.md).
+- The repository-wide documentation rules live in [Documentation Standard](DOCUMENTATION_STANDARD.md).
 
 ## Status discipline
 
