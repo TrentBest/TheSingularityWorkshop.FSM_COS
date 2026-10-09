@@ -391,7 +391,7 @@ See [Arbitration and Convergence](docs/ARBITRATION.md) and [FSM_COS Theory — A
   <img src="docs/assets/runtime-assembly-handoff.svg" alt="RuntimeAssembly as the handoff between FSM_COS and a host">
 </p>
 
-It records the runtime identity, loaded MicroBundles, and arbitration result. It is not the application and it is not a renderer.
+It records the runtime identity, loaded MicroBundles, arbitration result, and optional semantic intent supplied by the manifest. It is not the application and it is not a renderer.
 
 A host receives the assembled result and decides how to execute, present, or encounter it.
 
