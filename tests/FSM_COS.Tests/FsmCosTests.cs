@@ -95,11 +95,28 @@ public sealed class FsmCosTests
         var bundle = new TestBundle(1);
 
         var assembly = new FsmCos(new TestCatalog(bundle)).Execute(
-            new RuntimeManifest(42, new[] { Entry(1) }));
+            new RuntimeManifest(42, new[] { Entry(1), Entry(1) }));
 
         Assert.Single(assembly.Bundles);
         Assert.Empty(bundle.Configuration.ToArray());
         Assert.Equal(1, bundle.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_conflicting_versions_for_the_same_root_bundle()
+    {
+        var bundle = new TestBundle(1);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[]
+                {
+                    new MicroBundleManifestEntry(1, "0.1.0-test"),
+                    new MicroBundleManifestEntry(1, "0.2.0-test")
+                })));
+
+        Assert.Contains("conflicting versions", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(0, bundle.LoadCalls);
     }
 
     [Fact]
