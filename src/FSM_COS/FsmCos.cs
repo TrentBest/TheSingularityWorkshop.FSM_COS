@@ -27,6 +27,7 @@ public sealed class FsmCos : IFsmCos
     {
         ArgumentNullException.ThrowIfNull(manifest);
         ArgumentNullException.ThrowIfNull(manifest.Bundles);
+        manifest.ValidateStagedPlan();
 
         // A manifest cannot request two versions of the same root identity.
         // Without this preflight, the first request would silently win because
