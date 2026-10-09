@@ -33,6 +33,80 @@ Use headings such as `## 03 🔵 Plain-language explanation` and `## 04 🟠 Aud
 
 This order is a default, not a checklist to pad every README. Deep theory, API detail, tutorials, and decision records belong in focused documents linked from the README.
 
+## 1A. The reader journey: promise, proof, understanding, depth
+
+The README is the public front door, not a manual that happens to be placed first in the repository. Its order must respect how a new reader learns: first identify the thing, then understand why it matters, then see evidence, then decide how deeply to explore.
+
+Use this **reading order** when the topics apply:
+
+1. **What is it?** Definition and clear identity.
+2. **Why should I care?** The human or engineering problem, the cost/friction, and the outcome this package is designed to improve.
+3. **Show me in about a minute.** The shortest meaningful, verified example or a direct route to a real demonstration. State prerequisites and show the expected result.
+4. **What do I get?** A concise view of capabilities and the audience/use cases that benefit.
+5. **How does it fit?** Responsibility boundary, neighboring packages, and a compact architecture visual.
+6. **How does it work?** The mental model, normal lifecycle, important contracts, and core invariants.
+7. **What else must I know?** Configuration, limitations, compatibility, measured performance, troubleshooting, development, and further reading.
+
+The shared section IDs in the table below identify **topics**, not a mandatory numeric reading order. Keep an ID/color attached to its canonical topic across repositories, but place the quick-start topic near the top even though its canonical identifier is **08**. The reader should not have to pass through every architecture section before reaching the first proof.
+
+This is progressive disclosure, not a demand to make documentation shallow. The first screen earns attention; the first example earns confidence; the deeper guides earn understanding. A skimming reader should leave with the right idea, a practical reader should find the first success quickly, and a motivated reader should have a clear route into the complete theory and contract.
+
+### The first-minute proof
+
+The quick start belongs immediately after the definition and reason to care, not after a long tour of architecture. A meaningful first proof must:
+
+- demonstrate the package's real purpose rather than a generic language feature;
+- match the current source API or clearly name the published package version it targets;
+- include the minimum necessary setup and prerequisites;
+- show code or a real demo path plus its expected output/behavior;
+- explain the example in plain language;
+- link to the complete usage guide for setup details and realistic scenarios.
+
+A snippet is not a first proof merely because it is short. Verify the code against source, build/run it when feasible, and label examples as verified, source-checked, or conceptual. Never imply a class or helper is supplied by the package if it is only illustrative scaffolding.
+
+Some composition kernels and infrastructure packages cannot show a meaningful result without a host or domain contract. In that case, give the shortest honest proof available: a tested composition fixture, a minimal in-memory example with all required contracts identified, or a link to a working consumer demonstration that names exactly what it proves. Do not fake a standalone capability to satisfy the template.
+
+### The README is a map; the deep dives teach
+
+Keep the README focused on orientation, value, first proof, boundaries, and navigation. Link to focused documentation for:
+
+- **Usage:** installation, setup, common tasks, complete runnable examples, and troubleshooting.
+- **Theory:** the problem behind the abstraction, mental models, assumptions, trade-offs, and adjacent concepts.
+- **Architecture:** ownership, dependencies, lifecycle, handoffs, and invariants.
+- **API/contracts:** exact signatures, inputs, outputs, validation, and guarantees.
+- **Performance and verification:** reproducible measurements, test evidence, environment, and known limits.
+- **Non-coder learning path:** concepts explained from observable problems, with examples and exercises that teach the reader how to reason about software.
+- **Integration:** how this package is consumed by a host or neighbor without duplicating that neighbor's authoritative domain documentation.
+
+Give each link a purpose statement: not just “Theory,” but what the reader will understand after opening it. Maintain one authoritative explanation per topic instead of copying the same manual into multiple repositories.
+
+### Teaching software concepts to non-coders
+
+A non-coder path should teach a useful mental model, not merely replace technical words with friendlier synonyms. Build from concrete experience toward abstraction:
+
+1. Show a recognizable problem or behavior.
+2. Use a familiar analogy and clearly state where it stops matching reality.
+3. Name and define the software concept in plain language.
+4. Explain what design decision the concept enables or protects.
+5. Show the relationship in a diagram or small example.
+6. Offer a deeper explanation, a practical exercise, or both.
+
+Explain why a boundary exists, what it costs, what it makes easier, what it cannot guarantee, and when it may not be appropriate. The goal is to help readers think alongside the software—not to require them to arrive already knowing its vocabulary.
+
+### Visual and literary craft
+
+Visual hierarchy and prose are part of the teaching system. Use contrast to establish priority, repetition to create recognition, proximity to show relationships, and concrete metaphors to make abstract systems memorable. Apply these techniques in service of understanding, never as camouflage for missing evidence.
+
+- Put the most important distinction first and use concise paragraphs with informative headings.
+- Use architecture diagrams for responsibility and relationships; sequence diagrams for flow; screenshots or animation for actual product behavior; tables for compact comparisons.
+- Use a small semantic color palette consistently. Color should signal meaning (such as definition, procedure, caution, or deeper theory), not decorate unrelated sections.
+- Never rely on color alone. Pair color with text labels, shapes, line styles, or icons; check contrast, mobile readability, and dark/light rendering.
+- Keep badge use restrained and factual. Avoid badge walls, emoji walls, and ornate separators that compete with the package's promise.
+- Give meaningful visuals descriptive alt text and captions explaining what the visual proves.
+- Keep SVGs legible at ordinary GitHub width and avoid imagery that implies behavior the software does not implement.
+
+The Workshop should be compelling because its value is understandable and its claims are provable. Do not substitute hype, pressure, or unsupported superlatives for evidence. State poor-fit scenarios, prerequisites, limitations, maturity, and performance context honestly.
+
 ## 2. Required quality questions
 
 Every README should answer, in language appropriate to its audience:
