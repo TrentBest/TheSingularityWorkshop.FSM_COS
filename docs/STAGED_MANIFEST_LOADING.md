@@ -41,8 +41,11 @@ Localization does not imply in-memory loading.
 
 A manifest entry may be:
 
-- **Resident** — intended for initial composition.
+- **Bootstrap** — required to establish the initial visible/runnable Experience.
+- **Resident** — participates in initial preparation but is not itself a bootstrap prerequisite.
 - **Deferred** — eligible for later Experience-owned promotion.
+
+Promotion candidates are considered in Bootstrap → Resident → Deferred order while preserving manifest order within each stage. Dependency readiness still wins: a bootstrap entry cannot be loaded until its prerequisites are loaded. This is planning/state-model behavior today; `FsmCos.Execute` does not yet run a bootstrap-only composition or continue localization in the background.
 
 An `IManifestLoadEvaluator` lets the Experience decide *whether* a deferred capability is wanted. It does not decide whether prerequisites are ready: the dependency schedule/load plan must enforce that separately. A dependent entry cannot be marked Loaded until its prerequisites are Loaded.
 
