@@ -37,13 +37,13 @@ Existing tests cover these contracts, including dependency ordering, configurati
 
 ## Final FSM_COS gate before pausing
 
-- [ ] CI passes for the current development head, including the new manifest-version conflict regression test.
-- [ ] Repeated requests for the same root ID and same version load once.
-- [ ] A manifest requesting the same root ID at conflicting versions fails before any bundle is loaded. Silently letting the first version win would make the manifest ambiguous.
-- [ ] The package workflow still has NuGet publishing disabled by default and explicitly gated by `&& false`.
-- [ ] The published package version is not changed and no NuGet release is made without explicit approval.
+- [x] CI passed for development head `e721e0b52fecbbd0aaafc84a8c8e5e1e2bd4f440` in [run 37979475866](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/37979475866); the `build-and-test` job succeeded.
+- [x] Repeated requests for the same root ID and same version load once (covered by the passing regression suite).
+- [x] A manifest requesting the same root ID at conflicting versions fails before any bundle is loaded (covered by the passing regression suite).
+- [x] The package workflow still has NuGet publishing disabled by default and explicitly gated by `&& false`; the publish job was skipped in run 37979475866.
+- [x] No package version was changed and no NuGet release was made.
 
-If the gate passes, pause broad FSM_COS feature work. Fix any blocker that fails this gate, but do not hold WebPage hostage to unrelated future capabilities.
+**Pause gate passed for the verified commit above.** Pause broad FSM_COS feature work here. Reopen it only for a correctness blocker or a narrowly scoped change required to unblock WebPage; do not hold WebPage hostage to unrelated future capabilities.
 
 ## What remains outside this pause
 
