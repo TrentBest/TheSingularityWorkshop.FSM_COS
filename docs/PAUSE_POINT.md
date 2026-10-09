@@ -98,7 +98,7 @@ Latest candidate work on `development`:
 - Added `docs/releases/0.1.0-alpha.6.md`; it explicitly says localization, content-hash verification, Bootstrap-only initial composition, and live Deferred promotion are not implemented.
 - Added a separate public-NuGet restore/build/test/pack workflow job that deliberately does not use the CI-only local MicroBundleDomain package. The publish job now requires both verification jobs and still includes `&& false`.
 
-Current verification run to watch: [GitHub Actions](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions). A run from an earlier commit succeeded, but the latest code and workflow changes are still being verified; do not claim the candidate is green until the exact latest code commit has a successful build/test/pack result and the public-feed job passes.
+Verified: [Actions run 37986518315](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/37986518315) passed on candidate HEAD `c0de28513c9007d64501a400b994a2d5bbba4829`: restore, build, tests/coverage, pack, and the separate public-NuGet restore/build/test/pack job all succeeded; publish was skipped. I inspected the public-feed package artifact: it is `TheSingularityWorkshop.FSM_COS.0.1.0-alpha.6.nupkg`, includes README/license/release notes, excludes internal continuation/branch-planning docs, and declares the intended three dependencies. This establishes a publish-ready candidate, not authorization to publish.
 
 Next:
 1. Verify latest code commit and workflow runs, then fix any build/test/public-feed failures.
