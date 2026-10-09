@@ -88,7 +88,7 @@ public sealed class FsmCos : IFsmCos
             throw new InvalidOperationException(
                 $"FSM_COS arbitration did not converge within {_maximumArbitrationRounds} rounds.");
 
-        return new RuntimeAssembly(manifest.RuntimeId, loaded, rounds);
+        return new RuntimeAssembly(manifest.RuntimeId, loaded, rounds, manifest.Intent);
     }
 
     private void ValidateScheduleAgainstResolvedGraph(RuntimeManifest manifest)
