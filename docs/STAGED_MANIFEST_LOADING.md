@@ -55,7 +55,7 @@ Independent entries are entries with no prerequisite edges. Dependency-constrain
 
 The current manifest continues to use `MicroBundleManifestEntry` (bundle ID + requested version). Do not replace it with the old branch's `BundleRequest` model: that model lacks the current root-version contract and would conflict with the configuration-source boundary.
 
-The current `FsmCos.Execute` path still resolves domain-owned `IMicroBundle` instances through `IMicroBundleCatalog`, traverses their dependency declarations, loads dependencies before dependents, detects cycles, and arbitrates to convergence. The optional staged metadata currently validates identity/version consistency and provides a testable dependency/state model; it does **not** yet change that execution path or perform asynchronous localization.
+The current `FsmCos.Execute` path still resolves domain-owned `IMicroBundle` instances through `IMicroBundleCatalog`, traverses their dependency declarations, loads dependencies before dependents, detects cycles, and arbitrates to convergence. The optional staged metadata validates root identity/version consistency. When a `Schedule` is supplied, FSM_COS also preflights the catalog-resolved dependency closure and rejects scheduled bundle-ID, resolved-version, or dependency-edge drift before any `Load` side effects. It still does **not** execute bootstrap-only composition, perform asynchronous localization, verify content hashes, or promote Deferred entries into an already running RuntimeAssembly.
 
 ## Intended end-to-end direction
 
@@ -72,7 +72,7 @@ Forge / publisher
 
 The three clocks should be able to progress independently. A host should be able to enter a minimum runnable Experience while other eligible artifacts continue localizing, without faking a delay or making the presentation layer act as the scheduler.
 
-The published manifest should eventually describe the dependency graph established by the Forge. The current runtime dependency traversal remains the compatibility behavior until the published graph has an authoritative producer, consistency checks against resolved MicroBundles, and end-to-end tests. Do not silently treat the published graph as authoritative before those checks exist.
+The published manifest should describe the dependency graph established by the Forge. The current runtime dependency traversal remains the compatibility behavior; the optional published schedule is now checked against the resolved graph before loading, but it does not yet dictate staged loading order or lifecycle. Do not treat stage metadata as an end-to-end staged runtime until localization and promotion have dedicated implementation and tests.
 
 ## Verification still required
 
