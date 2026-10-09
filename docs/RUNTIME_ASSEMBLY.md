@@ -100,7 +100,7 @@ That separation is what allows a single composition request to be consumed by di
 ## Related concepts
 
 - [Runtime Manifest](RUNTIME_MANIFEST.md)
-- [MicroBundles](MICROBUNDLES.md)
+- [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md)
 - [Runtime Boundary](RUNTIME_BOUNDARY.md)
 
 
