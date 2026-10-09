@@ -188,7 +188,7 @@ The Warehouse does not become part of the FSM_COS package. It supplies or backs 
 
 ## Current limitation
 
-0.1.0-alpha.5 is a composition kernel, not yet a complete runtime-host framework. This is the current source declaration; it does not establish that the package has been published.
+The 0.1.0-alpha.6 candidate is a composition kernel, not a complete runtime-host framework. This source declaration does not establish that the package has been published; alpha.5 remains the latest published version until alpha.6 is released.
 
 The next meaningful evolution is therefore not adding platform APIs to FSM_COS. It is proving the complete handoff:
 
