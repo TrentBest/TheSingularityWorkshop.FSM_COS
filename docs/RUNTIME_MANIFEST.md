@@ -285,7 +285,7 @@ It means the composition request remains meaningful when moved between hosts.
 
 - [FSM_COS Architecture](ARCHITECTURE.md)
 - [FSM_COS Theory](THEORY.md)
-- [MicroBundles](MICROBUNDLES.md)
+- [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md)
 - [RuntimeAssembly](RUNTIME_ASSEMBLY.md)
 - [Arbitration and Convergence](ARBITRATION.md)
 - [Development](DEVELOPMENT.md)
