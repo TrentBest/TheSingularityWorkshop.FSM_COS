@@ -472,7 +472,7 @@ The old root scaffold that contained only Class1.cs has been removed. The soluti
 </p>
 
 <p align="center"><strong>AI capabilities are composed like any other capability; FSM_COS does not become the AI framework.</strong></p>
-## <img src="docs/assets/section-markers/13-related-projects.svg" alt="" width="20" height="20"> 13 Related projects, resources & Workshop support
+## 🟨 Related projects, resources & Workshop support
 
 <img src="docs/assets/section-dividers/13-related-projects.svg" alt="" width="100%">
 
