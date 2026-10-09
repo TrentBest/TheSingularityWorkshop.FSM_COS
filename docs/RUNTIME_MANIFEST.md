@@ -26,7 +26,10 @@ The current development contract is intentionally small:
 public sealed record RuntimeManifest(
     ulong RuntimeId,
     IReadOnlyList<MicroBundleManifestEntry> Bundles,
-    IStateContext? ExperienceContext = null);
+    IStateContext? ExperienceContext = null,
+    IReadOnlyList<RuntimeManifestEntry>? LoadPlan = null,
+    RuntimeManifestSchedule? Schedule = null,
+    SemanticIntent? Intent = null);
 ```
 
 Each entry identifies one root MicroBundle and the version requested by the manifest:
@@ -48,10 +51,18 @@ RuntimeManifest
 │   ├── MicroBundle ID + requested version
 │   ├── MicroBundle ID + requested version
 │   └── MicroBundle ID + requested version
-└── optional ExperienceContext
+├── optional ExperienceContext
+├── optional staged LoadPlan + Schedule
+└── optional FSM_UserIO SemanticIntent
 ```
 
 The manifest names **roots**. FSM_COS discovers the dependency closure from those roots.
+
+## Optional intent and published dependency plan
+
+`Intent` carries an optional `FSM_UserIO.SemanticIntent` to the returned `RuntimeAssembly`. It describes application-owned semantic intent; it does not grant device authority or cause an Experience to start.
+
+`LoadPlan` and `Schedule` are optional published metadata. When a schedule is present, FSM_COS resolves the dependency closure before loading and verifies that the scheduled bundle IDs, resolved versions, and dependency edges match the domain-owned MicroBundle declarations. A mismatch fails before any bundle `Load` call. This is a consistency check, not artifact localization or hash verification.
 
 ## Example
 
