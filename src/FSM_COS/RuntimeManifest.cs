@@ -16,8 +16,11 @@ public sealed record RuntimeManifest(
     RuntimeManifestSchedule? Schedule = null,
     SemanticIntent? Intent = null)
 {
-    public static RuntimeManifest Empty(ulong runtimeId, IStateContext? experienceContext = null) =>
-        new(runtimeId, Array.Empty<MicroBundleManifestEntry>(), experienceContext);
+    public static RuntimeManifest Empty(
+        ulong runtimeId,
+        IStateContext? experienceContext = null,
+        SemanticIntent? intent = null) =>
+        new(runtimeId, Array.Empty<MicroBundleManifestEntry>(), experienceContext, Intent: intent);
 
     /// <summary>
     /// Validates consistency between the current versioned root contract and optional staged-plan metadata.
