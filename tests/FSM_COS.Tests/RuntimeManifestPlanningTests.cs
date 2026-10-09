@@ -67,6 +67,25 @@ public sealed class RuntimeManifestPlanningTests
     }
 
     [Fact]
+    public void Bootstrap_entries_are_offered_before_resident_and_deferred_entries()
+    {
+        var resident = new RuntimeManifestEntry(Reference(1, "1.0.0"), ManifestLoadStage.Resident);
+        var deferred = new RuntimeManifestEntry(Reference(2, "1.0.0"), ManifestLoadStage.Deferred);
+        var bootstrap = new RuntimeManifestEntry(Reference(3, "1.0.0"), ManifestLoadStage.Bootstrap);
+        var plan = new RuntimeManifestLoadPlan(new[] { resident, deferred, bootstrap });
+
+        plan.MarkLocalized(1);
+        plan.MarkLocalized(2);
+        plan.MarkLocalized(3);
+
+        var promotions = plan.EvaluatePromotions(new AcceptAllEvaluator(), null)
+            .Select(entry => entry.Reference.BundleId)
+            .ToArray();
+
+        Assert.Equal(new ulong[] { 3, 1, 2 }, promotions);
+    }
+
+    [Fact]
     public void Deferred_promotion_waits_for_localization_and_prerequisite_load()
     {
         var root = new RuntimeManifestEntry(Reference(1, "1.0.0"));
