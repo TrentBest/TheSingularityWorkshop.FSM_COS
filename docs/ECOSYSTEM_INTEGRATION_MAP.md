@@ -85,6 +85,12 @@ Recommended boundary: keep the provider-neutral Profiles domain contract indepen
 
 The objective is **not** to force every repository into one package. It is to make the required host/runtime footprint small and let optional capabilities arrive through the MicroBundle ecosystem.
 
+### Why creators might choose to participate
+
+The long-term ambition is not only technical reuse. Compatible contracts can help independent creators make capabilities that are easier for other people to discover, combine, distribute, and potentially monetize within a growing Workshop ecosystem. A creator might contribute a renderer that outperforms the Workshop's own implementation, or build a game that another creator can incorporate into a larger experience. That should strengthen the ecosystem rather than threaten it: creators keep room to innovate, and hosts gain more choices.
+
+This is an **ecosystem direction, not a current platform promise**. This repository does not establish a marketplace, payment system, revenue-sharing arrangement, or guaranteed audience. Those opportunities depend on future distribution, licensing, trust, and commercial mechanisms. For now, the engineering responsibility is to make contracts clear, components reusable, compatibility honest, and integrations demonstrable.
+
 ### Proposed dependency tiers
 
 | Tier | What belongs here | Runtime rule |
