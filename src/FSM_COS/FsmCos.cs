@@ -29,6 +29,11 @@ public sealed class FsmCos : IFsmCos
         ArgumentNullException.ThrowIfNull(manifest.Bundles);
         manifest.ValidateStagedPlan();
 
+        // If a published schedule is supplied, verify it against the catalog's actual
+        // dependency graph before any MicroBundle Load method can have side effects.
+        if (manifest.Schedule is not null)
+            ValidateScheduleAgainstResolvedGraph(manifest);
+
         // A manifest cannot request two versions of the same root identity.
         // Without this preflight, the first request would silently win because
         // subsequent requests are skipped once that bundle ID is loaded.
@@ -84,6 +89,100 @@ public sealed class FsmCos : IFsmCos
                 $"FSM_COS arbitration did not converge within {_maximumArbitrationRounds} rounds.");
 
         return new RuntimeAssembly(manifest.RuntimeId, loaded, rounds);
+    }
+
+    private void ValidateScheduleAgainstResolvedGraph(RuntimeManifest manifest)
+    {
+        var schedule = manifest.Schedule!;
+        var plannedById = schedule.Entries.ToDictionary(entry => entry.Reference.BundleId);
+        var resolvedById = new Dictionary<ulong, IMicroBundle>();
+        var actualEdges = new HashSet<(ulong BundleId, ulong DependencyId)>();
+        var visiting = new HashSet<ulong>();
+        var visited = new HashSet<ulong>();
+
+        IMicroBundle Resolve(ulong id, string? requestedVersion = null)
+        {
+            var resolved = requestedVersion is null
+                ? _catalog.TryResolve(id, out var byId) ? byId : null
+                : _catalog.TryResolve(id, requestedVersion, out var byVersion) ? byVersion : null;
+
+            if (resolved is null)
+                throw new InvalidOperationException(
+                    $"Scheduled MicroBundle {id}" +
+                    (requestedVersion is null ? string.Empty : $" version '{requestedVersion}'") +
+                    " could not be resolved.");
+
+            if (resolved.Descriptor is null || resolved.Id != id)
+                throw new InvalidOperationException(
+                    $"MicroBundle catalog resolved request {id} to an invalid or mismatched bundle.");
+
+            if (requestedVersion is not null &&
+                !string.Equals(resolved.Descriptor.Version, requestedVersion, StringComparison.Ordinal))
+                throw new InvalidOperationException(
+                    $"MicroBundle {id} resolved to version '{resolved.Descriptor.Version}', " +
+                    $"but manifest requested '{requestedVersion}'.");
+
+            return resolved;
+        }
+
+        void Visit(IMicroBundle bundle)
+        {
+            if (visited.Contains(bundle.Id))
+                return;
+            if (!visiting.Add(bundle.Id))
+                throw new InvalidOperationException(
+                    $"MicroBundle dependency cycle detected at {bundle.Id}.");
+
+            resolvedById[bundle.Id] = bundle;
+            foreach (var dependency in bundle.Dependencies)
+            {
+                actualEdges.Add((bundle.Id, dependency.BundleId));
+                if (visited.Contains(dependency.BundleId))
+                    continue;
+
+                var dependencyBundle = Resolve(dependency.BundleId);
+                Visit(dependencyBundle);
+            }
+
+            visiting.Remove(bundle.Id);
+            visited.Add(bundle.Id);
+        }
+
+        foreach (var root in manifest.Bundles)
+            Visit(Resolve(root.BundleId, root.Version));
+
+        var resolvedIds = resolvedById.Keys.ToHashSet();
+        if (!resolvedIds.SetEquals(plannedById.Keys))
+        {
+            var missing = resolvedIds.Except(plannedById.Keys).OrderBy(id => id).ToArray();
+            var extra = plannedById.Keys.Except(resolvedIds).OrderBy(id => id).ToArray();
+            throw new InvalidOperationException(
+                $"Runtime manifest schedule does not match the resolved dependency closure. " +
+                $"Missing scheduled IDs: [{string.Join(", ", missing)}]; " +
+                $"unexpected scheduled IDs: [{string.Join(", ", extra)}].");
+        }
+
+        foreach (var (id, bundle) in resolvedById)
+        {
+            var planned = plannedById[id];
+            if (!string.Equals(planned.Reference.Version, bundle.Descriptor.Version, StringComparison.Ordinal))
+                throw new InvalidOperationException(
+                    $"Runtime manifest schedule expects MicroBundle {id} version " +
+                    $"'{planned.Reference.Version}', but the catalog resolved '{bundle.Descriptor.Version}'.");
+        }
+
+        var plannedEdges = schedule.Dependencies
+            .Select(edge => (edge.BundleId, edge.DependencyId))
+            .ToHashSet();
+        if (!actualEdges.SetEquals(plannedEdges))
+        {
+            var missing = actualEdges.Except(plannedEdges).OrderBy(edge => edge.BundleId).ThenBy(edge => edge.DependencyId);
+            var extra = plannedEdges.Except(actualEdges).OrderBy(edge => edge.BundleId).ThenBy(edge => edge.DependencyId);
+            throw new InvalidOperationException(
+                "Runtime manifest schedule dependency edges do not match the resolved MicroBundle dependency graph. " +
+                $"Missing edges: [{string.Join(", ", missing.Select(edge => $"{edge.BundleId}->{edge.DependencyId}"))}]; " +
+                $"unexpected edges: [{string.Join(", ", extra.Select(edge => $"{edge.BundleId}->{edge.DependencyId}"))}].");
+        }
     }
 
     private void LoadRoot(
