@@ -88,23 +88,19 @@ public sealed class RuntimeManifestLoadPlan
         ArgumentNullException.ThrowIfNull(evaluator);
         schedule ??= _schedule;
 
-        foreach (var entry in Entries)
+        foreach (var entry in Entries.OrderBy(entry => entry.Stage))
         {
             if (GetState(entry.Reference.BundleId) != MicroBundleRuntimeState.Localized)
                 continue;
 
-            if (entry.Stage == ManifestLoadStage.Resident)
-            {
-                if (schedule is null || schedule.IsDependencyReady(entry.Reference.BundleId,
-                        dependencyId => GetState(dependencyId) == MicroBundleRuntimeState.Loaded))
-                    yield return entry;
-
+            var prerequisitesReady = schedule is null ||
+                schedule.IsDependencyReady(entry.Reference.BundleId,
+                    dependencyId => GetState(dependencyId) == MicroBundleRuntimeState.Loaded);
+            if (!prerequisitesReady)
                 continue;
-            }
 
-            if (evaluator.ShouldLoad(entry, experienceContext) &&
-                (schedule is null || schedule.IsDependencyReady(entry.Reference.BundleId,
-                    dependencyId => GetState(dependencyId) == MicroBundleRuntimeState.Loaded)))
+            if (entry.Stage != ManifestLoadStage.Deferred ||
+                evaluator.ShouldLoad(entry, experienceContext))
                 yield return entry;
         }
     }
