@@ -49,6 +49,9 @@ public sealed record RuntimeManifest(
             return;
 
         var scheduleById = Schedule.Entries.ToDictionary(entry => entry.Reference.BundleId);
+        if (scheduleById.Count != byId.Count)
+            throw new InvalidOperationException("Runtime manifest schedule and load plan contain different MicroBundle sets.");
+
         foreach (var entry in LoadPlan)
         {
             if (!scheduleById.TryGetValue(entry.Reference.BundleId, out var scheduled) ||
