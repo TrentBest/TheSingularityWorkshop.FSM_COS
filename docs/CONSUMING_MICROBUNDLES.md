@@ -1,6 +1,6 @@
 # Consuming MicroBundles
 
-> This document is about **using MicroBundles with FSM_COS**, not defining the MicroBundle domain. The authoritative MicroBundle contract and domain model live in MicroBundleDomain. from FSM_COS
+> This document is about **using MicroBundles with FSM_COS**, not defining the MicroBundle domain. The authoritative MicroBundle contract and domain model live in MicroBundleDomain.
 
 > **FSM_COS does not define the MicroBundle domain. It defines how a developer composes MicroBundles into a runtime.**
 
@@ -10,7 +10,7 @@ This document is intentionally narrow. It explains what an FSM_COS consumer supp
 
 ## The boundary
 
-\`\`\`text
+```text
 your MicroBundle source
         │
         │ IMicroBundle
@@ -30,7 +30,7 @@ your MicroBundle source
         │
         ▼
       your host
-\`\`\`
+```
 
 The source can be an in-memory catalog, a repository adapter, local artifacts, generated resources, remote delivery, or another implementation you control.
 
@@ -46,11 +46,11 @@ The manifest identifies the runtime and the root MicroBundles it requests.
 
 Each root carries:
 
-\`\`\`csharp
+```csharp
 new MicroBundleManifestEntry(
     BundleId: 10,
     Version: "1.2.0");
-\`\`\`
+```
 
 The manifest does **not** contain configuration bytes.
 
@@ -62,20 +62,20 @@ The catalog is your resolution boundary.
 
 For manifest roots, FSM_COS asks:
 
-\`\`\`csharp
+```csharp
 bool TryResolve(
     ulong bundleId,
     string version,
     out IMicroBundle? bundle);
-\`\`\`
+```
 
 For domain-declared dependencies, FSM_COS asks:
 
-\`\`\`csharp
+```csharp
 bool TryResolve(
     ulong bundleId,
     out IMicroBundle? bundle);
-\`\`\`
+```
 
 This lets you decide how resolution works.
 
@@ -95,13 +95,13 @@ FSM_COS only needs the catalog contract.
 
 Configuration is supplied separately:
 
-\`\`\`csharp
+```csharp
 bool TryGetConfiguration(
     ulong runtimeId,
     ulong bundleId,
     string version,
     out ReadOnlyMemory<byte> configuration);
-\`\`\`
+```
 
 The implementation decides where those bytes come from.
 
@@ -115,7 +115,7 @@ If no configuration exists, the bundle receives no external configuration and us
 
 A developer can start with an entirely in-memory composition.
 
-\`\`\`csharp
+```csharp
 var catalog = new InMemoryCatalog(
     guiBundle,
     inputBundle,
@@ -132,7 +132,7 @@ var manifest = new RuntimeManifest(
 var cos = new FsmCos(catalog);
 
 RuntimeAssembly assembly = cos.Execute(manifest);
-\`\`\`
+```
 
 No repository is required.
 
@@ -148,20 +148,20 @@ The composition kernel is useful with only the contracts it actually consumes.
 
 Configuration can be added without changing the manifest.
 
-\`\`\`csharp
+```csharp
 var configuration = new FileBackedConfigurationSource(
     configurationDirectory);
 
 RuntimeAssembly assembly = cos.Execute(
     manifest,
     configuration);
-\`\`\`
+```
 
 The important architectural property is that the configuration source is replaceable.
 
 The same manifest can therefore be composed using:
 
-\`\`\`text
+```text
 local files
      ↓
 configuration source
@@ -177,15 +177,15 @@ configuration source
 generated defaults
      ↓
 configuration source
-\`\`\`
+```
 
 FSM_COS sees the same contract.
 
 ## Using a repository
 
-A repository adapter can implement \`IMicroBundleCatalog\` and provide the artifacts requested by the manifest.
+A repository adapter can implement `IMicroBundleCatalog` and provide the artifacts requested by the manifest.
 
-\`\`\`text
+```text
 RuntimeManifest
       │
       ▼
@@ -197,7 +197,7 @@ repository-backed catalog
       │
       ▼
     FSM_COS
-\`\`\`
+```
 
 This is where **TheSingularityWorkshop.MicroBundleRepository** can participate.
 
@@ -209,7 +209,7 @@ FSM_COS does not prescribe the internal implementation of a MicroBundle. For the
 
 It consumes the domain-owned contract:
 
-\`\`\`csharp
+```csharp
 public interface IMicroBundle
 {
     MicroBundleDescriptor Descriptor { get; }
@@ -222,13 +222,13 @@ public interface IMicroBundle
         IMicroBundleArbitrationContext context,
         int roundIndex);
 }
-\`\`\`
+```
 
 The implementation remains yours.
 
 FSM_COS gives that implementation a composition lifecycle:
 
-\`\`\`text
+```text
 resolve
    ↓
 dependencies
@@ -238,7 +238,7 @@ load
 arbitration rounds
    ↓
 stable assembly
-\`\`\`
+```
 
 For the complete domain contract, use the MicroBundleDomain package documentation rather than duplicating it here.
 
@@ -252,12 +252,12 @@ A root MicroBundle can declare dependencies through the domain contract.
 
 For example:
 
-\`\`\`text
+```text
 Experience
 ├── GUI
 │   └── Input
 └── Physics
-\`\`\`
+```
 
 The manifest needs only the requested root.
 
@@ -277,7 +277,7 @@ FSM_COS does not silently invent a substitute.
 
 Version is a manifest concern for root requests.
 
-\`\`\`text
+```text
 Manifest
     │
     └── GUI @ 1.2.0
@@ -290,7 +290,7 @@ Manifest
              │
              ▼
           FSM_COS
-\`\`\`
+```
 
 FSM_COS verifies that the resolved root reports the requested version.
 
@@ -302,13 +302,13 @@ Dependency version policy remains a concern of the domain/repository contract th
 
 After loading, FSM_COS gives every loaded MicroBundle an opportunity to participate in reconciliation.
 
-\`\`\`csharp
+```csharp
 bool changed = bundle.Arbitrate(
     arbitrationContext,
     roundIndex);
-\`\`\`
+```
 
-A \`true\` result means the composition may have changed.
+A `true` result means the composition may have changed.
 
 FSM_COS runs another round.
 
@@ -324,9 +324,9 @@ See [Arbitration and Convergence](ARBITRATION.md).
 
 Successful composition produces:
 
-\`\`\`csharp
+```csharp
 RuntimeAssembly assembly = cos.Execute(manifest);
-\`\`\`
+```
 
 The assembly exposes:
 
@@ -336,21 +336,21 @@ The assembly exposes:
 
 A host can retrieve a bundle by identity:
 
-\`\`\`csharp
+```csharp
 if (assembly.TryGetBundle(bundleId, out var bundle))
 {
     // host-specific use
 }
-\`\`\`
+```
 
 Or by a host-known type:
 
-\`\`\`csharp
+```csharp
 if (assembly.TryGetBundle<MyBundle>(bundleId, out var bundle))
 {
     // host-specific use
 }
-\`\`\`
+```
 
 FSM_COS stops at the assembly boundary.
 
@@ -360,7 +360,7 @@ The host decides what the assembly means operationally.
 
 The same FSM_COS package can support very different environments.
 
-\`\`\`text
+```text
 Developer A
     manifest
       ↓
@@ -387,7 +387,7 @@ remote catalog
 FSM_COS
       ↓
 distributed host
-\`\`\`
+```
 
 The composition algorithm does not need to change because the delivery mechanism changed.
 
