@@ -16,10 +16,10 @@ The browser should therefore not become a dependency of FSM_COS.
 
 ## Package boundary
 
-WebPage consumes the published package. The example below preserves the older integration baseline; it must be replaced with a version that is actually available from NuGet before use. The current source declaration is `0.1.0-alpha.5`, which does not by itself establish that version has been published:
+WebPage consumes the published package. Use a version that is actually available from NuGet; the current source declaration is `0.1.0-alpha.5`, which does not by itself establish that version has been published:
 
 ~~~xml
-<PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="0.1.0-alpha.2" />
+<PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="x.y.z" />
 ~~~
 
 The package currently targets .NET 8 and depends on FSM_API and MicroBundleDomain. A WebPage project may consume it because the composition kernel is written against platform-neutral .NET APIs.
