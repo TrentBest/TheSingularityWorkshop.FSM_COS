@@ -107,6 +107,22 @@ Visual hierarchy and prose are part of the teaching system. Use contrast to esta
 
 The Workshop should be compelling because its value is understandable and its claims are provable. Do not substitute hype, pressure, or unsupported superlatives for evidence. State poor-fit scenarios, prerequisites, limitations, maturity, and performance context honestly.
 
+## 1B. Explain the package's place in the ecosystem
+
+A package README should explain not only how to use the package, but how it relates to the author's wider ecosystem—especially when the package is intended to be independently reusable.
+
+Describe the following where relevant:
+
+- **Standalone value:** what a reader can use without adopting other ecosystem projects.
+- **Optional alignment:** which contracts or conventions make integration with neighboring projects easier, without implying that outside creators must adopt them.
+- **Responsibility and dependency direction:** what this package owns, what it consumes, what consumes it, and which upward dependencies are prohibited.
+- **Package versus runtime capability:** distinguish a NuGet library/contract from a MicroBundle or other artifact that can be discovered and composed at runtime. Do not assume every package should become a bundle.
+- **Host relationship:** explain how an application or host uses the package and which presentation, execution, or platform responsibilities remain with that host.
+- **Current versus intended integration:** name working integrations separately from proposed paths. If cross-host use (for example, through AnyApp) still needs adaptation or proof, say so explicitly.
+- **Creator freedom:** welcome compatible alternatives and independent implementations. The goal is to make useful parts easier to combine, not to create lock-in or require adoption of the whole ecosystem.
+
+A useful message is: *build with the parts that help you; compatible Workshop contracts can make the pieces fit together more naturally, while you remain free to build the rest yourself.* State this as design intent, then substantiate each concrete compatibility claim with contracts, tests, or a working host integration.
+
 ## 2. Required quality questions
 
 Every README should answer, in language appropriate to its audience:
