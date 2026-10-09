@@ -321,6 +321,57 @@ public sealed class FsmCosTests
         Assert.Same(bundle, assembly.LoadedBundles[0]);
     }
 
+    [Fact]
+    public void Execute_accepts_a_schedule_that_matches_the_resolved_dependency_graph()
+    {
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var entries = new[]
+        {
+            new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", "sha256:root")),
+            new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", "sha256:dependency"))
+        };
+        var schedule = new RuntimeManifestSchedule(
+            entries,
+            new[] { new RuntimeManifestDependency(1, 2) });
+
+        var assembly = new FsmCos(new TestCatalog(dependency, root)).Execute(
+            new RuntimeManifest(
+                42,
+                new[] { Entry(1) },
+                LoadPlan: entries,
+                Schedule: schedule));
+
+        Assert.Equal(new ulong[] { 2, 1 }, assembly.Bundles.Select(bundle => bundle.Id));
+        Assert.Equal(1, dependency.LoadCalls);
+        Assert.Equal(1, root.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_a_schedule_that_disagrees_with_the_resolved_graph_before_loading()
+    {
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var entries = new[]
+        {
+            new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", "sha256:root")),
+            new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", "sha256:dependency"))
+        };
+        var schedule = new RuntimeManifestSchedule(entries, Array.Empty<RuntimeManifestDependency>());
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(dependency, root)).Execute(
+                new RuntimeManifest(
+                    42,
+                    new[] { Entry(1) },
+                    LoadPlan: entries,
+                    Schedule: schedule)));
+
+        Assert.Contains("dependency edges do not match", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(0, dependency.LoadCalls);
+        Assert.Equal(0, root.LoadCalls);
+    }
+
     private static MicroBundleManifestEntry Entry(ulong bundleId) =>
         new(bundleId, "0.1.0-test");
 
