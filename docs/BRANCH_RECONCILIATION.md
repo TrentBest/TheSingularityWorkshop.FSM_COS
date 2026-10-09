@@ -55,3 +55,46 @@ A branch may only be marked **verified—owner may delete** when all useful work
 ## Release safety
 
 This cleanup and integration work does not authorize a NuGet release. Do not publish any package until the owner explicitly says to do so.
+
+
+## Second-pass findings — pull requests and architectural questions (2026-10-09)
+
+### Pull-request relationships
+
+The following extra branches still back open PRs and cannot be considered cleanup candidates yet:
+
+- `docs/ecosystem-documentation-standard` → [PR #24](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/24), targets `development`.
+- `docs/master-readme-standard` → [PR #23](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/23), targets `master`.
+- `docs/readme-standard` → [PR #22](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/22), targets `development`.
+- `chore/standardize-ci-fsm-cos` → [PR #21](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/21), targets `development`.
+- `development` → [draft integration PR #14](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/14), targets `master`; it is not mergeable at the time of review and is explicitly not release approval.
+
+Several other branches have PRs that were merged into `master` or `development` in the past: AI composition (#2), RuntimeAssembly capability handoff (#4), alpha.3 capability handoff (#5), AI/GUI capability handoff (#6), and domain-owned MicroBundle contract (#13 and #15). Their branch tips still need reconciliation against the *current* `development` source because a historical PR merge into one branch does not prove that the same behavior exists on the other branch.
+
+The staged-load-plan PR #9 and release-prep PR #12 are closed without merging, but the staged-load design issue #8 remains open. Therefore the staged-loading work is not safe to classify as simply abandoned.
+
+### Staged manifest loading — significant design choice
+
+The `forge/staged-manifest-load-plan` branch contains:
+- `MicroBundleReference` with ID/version/content hash;
+- `RuntimeManifestEntry` pairing immutable identity with the existing bundle request and a Resident/Deferred stage;
+- `RuntimeManifestLoadPlan` tracking Published → Localized → Loaded;
+- `IManifestLoadEvaluator` for Experience-owned deferred promotion;
+- `RuntimeManifestSchedule` and dependency-edge types to distinguish broad localization opportunities from dependency-constrained composition;
+- tests and `docs/STAGED_MANIFEST_LOADING.md`.
+
+None of those staged-load files currently exists on `development`. The design is host-neutral in intent, but it expands the current simple manifest contract and brings localization/cache lifecycle concepts close to the kernel boundary. The open issue #8 describes an even broader eventual flow with bootstrap/resident/deferred entries, background localization, and launch before full localization. Issue #20 separately calls for repository-backed resolution and deterministic local cache/preservation/update behavior.
+
+The current pause-point document had previously prioritized proving the existing `RuntimeAssembly` handoff in WebPage before broadening FSM_COS. Reconcile these two directions explicitly before integrating the staged-load types into the near-term release. Do not silently merge them, and do not delete their source branch while the owner decides.
+
+### Master/development divergence is substantive
+
+The current `master` `RuntimeAssembly` includes a `SemanticIntent` property and a direct `FSM_UserIO` reference; current `development` does not. The AI/GUI handoff test exists on both branches but uses the different manifest request types matching each branch's MicroBundleDomain contract. This is evidence that some branch content has already landed in one canonical line while the two canonical lines still have materially different public APIs. Review the current `development`→`master` integration PR and dependency contract before declaring the older feature branches reconciled.
+
+### CI workflow branch
+
+The CI-standardization branch changes the workflow substantially. Current `development` builds a separate `MicroBundleDomain` architecture branch into a local package feed before building FSM_COS; the CI branch removes that special checkout and builds against the solution/package graph directly. It also disables publication with `&& false`. Do not take the workflow wholesale until confirming which dependency source is authoritative and that the test/pack path works from a clean checkout.
+
+### Current safe-to-delete status
+
+**No extra branch is cleared for deletion.** Open PR references, master/development API drift, and the unreviewed staged-load design are active reconciliation work. Continue preserving evidence and integrating selectively; the owner alone deletes branches.
