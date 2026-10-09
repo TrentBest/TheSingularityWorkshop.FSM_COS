@@ -100,8 +100,9 @@ public sealed class RuntimeManifestPlanningTests
         plan.MarkLocalized(1);
         plan.MarkLocalized(2);
 
-        Assert.Empty(plan.EvaluatePromotions(evaluator, null)
-            .Where(entry => entry.Reference.BundleId == 2));
+        Assert.DoesNotContain(
+            plan.EvaluatePromotions(evaluator, null),
+            entry => entry.Reference.BundleId == 2);
         Assert.Throws<InvalidOperationException>(() => plan.MarkLoaded(2));
 
         plan.MarkLoaded(1);
