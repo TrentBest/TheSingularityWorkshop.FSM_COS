@@ -107,6 +107,35 @@ This is the starting map. Open the document that answers your next question; the
 - [Development](docs/DEVELOPMENT.md) — how to build, test, and change the repository.
 - [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — how the browser host consumes FSM_COS without moving browser concerns into the kernel.
 - [Documentation Index](DOCUMENTATION_INDEX.md) — a reader-oriented map of the wider document set.
+- [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md) — how packages, MicroBundles, FSM_COS, and hosts relate, including what is verified versus still a target.
+
+## How this NuGet package fits into the Workshop ecosystem
+
+FSM_COS is designed to be useful as a **reusable composition boundary**, not as a toll gate that forces every creator to adopt the entire Workshop. You can use the package, build your own compatible pieces, or combine the two. The more of the Workshop's contracts and conventions you choose to use, the more naturally your work can fit alongside its other parts—but that alignment is an invitation, not a lock-in requirement.
+
+That is the confidence behind the architecture: **we want other creators to stand on these shoulders.** Reusable capabilities should be useful beyond the repository that introduced them. They should be maintainable as focused parts, discoverable through clear contracts, and composable into experiences their original authors did not anticipate.
+
+### The intended relationship
+
+- **NuGet packages** provide reusable code and stable contracts for developers and build-time integration.
+- **MicroBundles** are candidates for independently composed runtime capabilities when their contracts and lifecycle support that role.
+- **FSM_COS** resolves a runtime request and composes the selected capabilities into a `RuntimeAssembly`.
+- **Hosts** such as WebPage, AnyApp, or a creator's own application decide how to present, execute, or otherwise use the result.
+- **Creators** remain free to use only the parts that help them, write their own alternatives, and adapt at the boundaries where their design differs.
+
+This is not a claim that every Workshop package is already a MicroBundle, that every bundle works in every host, or that AnyApp can currently host every compatible experience without adaptation. **AnyApp and broader cross-host composition are architectural directions to validate with real integrations.** Compatibility still depends on the contracts, dependencies, platform assumptions, and host capabilities of the particular component.
+
+### How to choose what to use
+
+| If you are... | A useful starting point |
+|---|---|
+| Using FSM_COS in an existing application | Reference the NuGet package, create or select a catalog, submit a Runtime Manifest, and consume the returned RuntimeAssembly. |
+| Building reusable Workshop-compatible capabilities | Start with the MicroBundleDomain contract and the [Consuming MicroBundles guide](docs/CONSUMING_MICROBUNDLES.md); keep domain behavior independent of a specific host where practical. |
+| Building a host or experience | Own presentation and application lifecycle in the host; use FSM_COS for composition rather than making the host a dependency of lower-level packages. |
+| Using only one useful Workshop library | Use that library on its own when its dependencies and license permit; adopting the whole ecosystem is not a prerequisite. |
+| Creating your own equivalent technology | Keep your own contracts if that serves you better. Where you choose compatible Workshop contracts, integration may become easier without requiring you to surrender control of your design. |
+
+For the verified dependency picture, current gaps, and package-versus-MicroBundle decisions, see the [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md). It deliberately distinguishes current repository facts from proposed architecture so that confidence does not turn into an unsupported compatibility promise.
 
 ## Additional technical reference
 
