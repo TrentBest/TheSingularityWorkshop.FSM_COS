@@ -28,6 +28,23 @@ public sealed class FsmCos : IFsmCos
         ArgumentNullException.ThrowIfNull(manifest);
         ArgumentNullException.ThrowIfNull(manifest.Bundles);
 
+        // A manifest cannot request two versions of the same root identity.
+        // Without this preflight, the first request would silently win because
+        // subsequent requests are skipped once that bundle ID is loaded.
+        var requestedVersions = new Dictionary<ulong, string>();
+        foreach (var entry in manifest.Bundles)
+        {
+            if (requestedVersions.TryGetValue(entry.BundleId, out var requestedVersion) &&
+                !string.Equals(requestedVersion, entry.Version, StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException(
+                    $"Runtime manifest requests MicroBundle {entry.BundleId} at conflicting versions " +
+                    $"'{requestedVersion}' and '{entry.Version}'.");
+            }
+
+            requestedVersions[entry.BundleId] = entry.Version;
+        }
+
         var loaded = new List<IMicroBundle>();
         var loadedIds = new HashSet<ulong>();
         var loading = new HashSet<ulong>();
