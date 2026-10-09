@@ -259,3 +259,12 @@ The current development source does **not** appear to need a new host-specific f
 - [ ] Inspect the master candidate package artifact, dependency metadata, README/license/release notes, and packaged-file exclusions; verify all package-producing workflows remain disabled by default. Then provide the owner a final release review. This checklist is not publication authorization.
 
 The next repository-level milestone is **master alpha.6 source reconciliation**, not further staged-loading expansion and not WebPage work. Once the exact master candidate is verified and the release review is complete, WebPage can resume; actual publication still requires explicit owner approval.
+
+
+### Master alpha.6 candidate — CI pending (2026-10-09)
+
+Draft [PR #25](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/25) now carries the selective release contract onto a branch based on master. It preserves master history while bringing over the versioned manifest/configuration API, semantic intent, staged dependency-graph validation, tests, release notes, and public-package compatibility workflow.
+
+- [ ] Verify PR #25 CI on its exact head `9640b99e88df881c1afc974a3d2e16470a6c517f`; development run 37988552679 is useful evidence for the source contract but is not a substitute for candidate-branch verification.
+- [ ] Confirm PR #25's mergeability, review any docs that still describe the old inline-configuration API, and inspect the candidate package artifact/dependencies.
+- [ ] Only after those checks pass, prepare the final release review. Keep PR #25 draft, leave publication disabled with `&& false`, and do not publish without explicit approval.
