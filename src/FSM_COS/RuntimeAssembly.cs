@@ -13,11 +13,7 @@ namespace TheSingularityWorkshop.FSM_COS;
 /// </remarks>
 public sealed class RuntimeAssembly
 {
-    internal RuntimeAssembly(
-        ulong runtimeId,
-        IReadOnlyList<IMicroBundle> bundles,
-        int arbitrationRounds,
-        SemanticIntent? intent)
+    internal RuntimeAssembly(ulong runtimeId, IReadOnlyList<IMicroBundle> bundles, int arbitrationRounds, SemanticIntent? intent)
     {
         RuntimeId = runtimeId;
         Bundles = bundles;
