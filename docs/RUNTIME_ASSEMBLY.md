@@ -18,6 +18,7 @@ public sealed class RuntimeAssembly
     public ulong RuntimeId { get; }
     public IReadOnlyList<IMicroBundle> Bundles { get; }
     public int ArbitrationRounds { get; }
+    public SemanticIntent? Intent { get; }
 }
 ```
 
@@ -25,7 +26,8 @@ The assembly records:
 
 - the runtime identity;
 - the loaded MicroBundles;
-- how many arbitration rounds were required to converge.
+- how many arbitration rounds were required to converge;
+- the optional application-owned semantic intent carried by the manifest, when supplied.
 
 It does not become a host, renderer, scheduler, or Experience.
 
