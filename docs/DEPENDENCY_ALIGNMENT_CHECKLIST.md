@@ -197,6 +197,8 @@ The open draft [MicroBundleRepository PR #17](https://github.com/TrentBest/TheSi
 
 This section supersedes older dependency observations above where they conflict with the current inspected development heads. It is a source-level readiness assessment, not a package publication or a claim that consumer builds have passed against the next NuGet version.
 
+**New release blocker found during follow-up verification:** `src/FSM_COS/FSM_COS.csproj` on `development` still declares `<Version>0.1.0-alpha.5</Version>`, while the source exposes the newer versioned-root manifest and separate configuration-source contract. Do not pack/release that changed source as alpha.5 if that version has already been published. Confirm the immutable NuGet version status, then set the next unused version (expected `0.1.0-alpha.6` if alpha.5 is already issued) before final build, test, pack, and consumer verification. The candidate version must be consistent across the project metadata, release notes, package artifact, and consumer smoke tests.
+
 #### Consumer findings
 
 | Consumer | Inspected source | Required action for the next FSM_COS package |
