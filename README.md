@@ -423,10 +423,10 @@ var manifest = new RuntimeManifest(
     RuntimeId: 1001,
     Bundles:
     [
-        /* root MicroBundle dependency requests */
+        new MicroBundleManifestEntry(10, "1.2.0")
     ]);
 
-var assembly = fsmCos.Execute(manifest, catalog);
+var assembly = new FsmCos(catalog).Execute(manifest);
 ```
 
 The catalog is intentionally an input boundary. It can be backed by an in-memory registry, generated registry, cache, Warehouse adapter, or another discovery system without changing the composition algorithm.
