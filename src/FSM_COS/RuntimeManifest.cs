@@ -6,8 +6,12 @@ namespace TheSingularityWorkshop.FSM_COS;
 /// <summary>
 /// Machine-oriented description of the MicroBundles and versions FSM_COS must assemble.
 /// </summary>
+/// <param name="RuntimeId">Stable identity assigned to this runtime composition.</param>
+/// <param name="Bundles">Versioned root MicroBundles requested by the host.</param>
+/// <param name="ExperienceContext">Optional state context shared with the composition arbitration process.</param>
 /// <param name="LoadPlan">Optional published identity/stage metadata; does not itself localize or load bundles.</param>
 /// <param name="Schedule">Optional publish-time dependency plan, distinct from FSM_API process scheduling.</param>
+/// <param name="Intent">Optional semantic intent supplied by the host for the assembled runtime.</param>
 public sealed record RuntimeManifest(
     ulong RuntimeId,
     IReadOnlyList<MicroBundleManifestEntry> Bundles,
