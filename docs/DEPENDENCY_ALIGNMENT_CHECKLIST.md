@@ -261,10 +261,11 @@ The current development source does **not** appear to need a new host-specific f
 The next repository-level milestone is **master alpha.6 source reconciliation**, not further staged-loading expansion and not WebPage work. Once the exact master candidate is verified and the release review is complete, WebPage can resume; actual publication still requires explicit owner approval.
 
 
-### Master alpha.6 candidate — CI pending (2026-10-09)
+### Master alpha.6 candidate — CI and package inspection passed (2026-10-09)
 
-Draft [PR #25](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/25) now carries the selective release contract onto a branch based on master. It preserves master history while bringing over the versioned manifest/configuration API, semantic intent, staged dependency-graph validation, tests, release notes, and public-package compatibility workflow.
+[PR #25](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/25) carries the selective release contract onto a branch based on master. It preserves master history while bringing over the versioned manifest/configuration API, semantic intent, staged dependency-graph validation, tests, release notes, and public-package compatibility workflow. The PR is open, ready for review, mergeable, and not merged.
 
-- [ ] Verify PR #25 CI on its exact head `9640b99e88df881c1afc974a3d2e16470a6c517f`; development run 37988552679 is useful evidence for the source contract but is not a substitute for candidate-branch verification.
-- [ ] Confirm PR #25's mergeability, review any docs that still describe the old inline-configuration API, and inspect the candidate package artifact/dependencies.
-- [ ] Only after those checks pass, prepare the final release review. Keep PR #25 draft, leave publication disabled with `&& false`, and do not publish without explicit approval.
+- [x] Verified exact PR head `385bec07588185d7cc98471db1f1015e9da69e5c` in [Actions run 37992111115](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/37992111115): build/test/coverage/pack and clean public-NuGet restore/build/test/pack succeeded; `publish_nuget` was skipped.
+- [x] Inspected the generated package: `TheSingularityWorkshop.FSM_COS 0.1.0-alpha.6`, dependencies FSM_API 1.0.13, FSM_UserIO 0.1.0-alpha.1, MicroBundleDomain 1.0.1; README/license/release notes included; internal planning docs excluded. TRX reports 39/39 tests passed, with zero .NET compiler warnings/errors.
+- [ ] Owner review and approval to merge PR #25 into master. After merge, verify the exact master-head workflow and package artifact again.
+- [ ] Only after master verification, prepare the final release review. Keep publication disabled with `&& false` and do not publish without separate explicit approval.
