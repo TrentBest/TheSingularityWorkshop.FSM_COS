@@ -59,10 +59,10 @@ The likely release gap is **verification and consumer migration**, not a new For
 
 Recent work on `development`: optional semantic-intent pass-through and pre-load schedule-vs-resolved-graph validation have been implemented and tested in source; the exact-commit workflow and public-feed dependency verification remain mandatory.
 
-- [ ] Re-read current `development` HEAD and project version; reconcile any parallel LLM changes without overwriting them.
-- [ ] Confirm `src/FSM_COS/FSM_COS.csproj` declares `0.1.0-alpha.6`, and that release notes, package metadata, and the intended package contents agree.
-- [ ] Confirm `.github/workflows/package.yml` publish job still has the explicit `&& false` safeguard.
-- [ ] Obtain a passing build/test/pack workflow on the exact candidate commit. If no workflow triggered, investigate/trigger the verification workflow using supported repository tooling; do not infer success from older runs.
+- [x] Re-read current `development` HEAD and project version; the branch is exactly three documentation-only commits beyond verified code/package candidate `77c05d68d70159e6f4ffb53bd2209a5ed6ed0abc`.
+- [x] Confirmed `src/FSM_COS/FSM_COS.csproj` declares `0.1.0-alpha.6`; release notes and project dependency metadata agree with the candidate contract.
+- [x] Confirmed `.github/workflows/package.yml` publish job still has the explicit `&& false` safeguard.
+- [x] Verified workflow [37988552679](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/37988552679) on exact code/package candidate `77c05d68d70159e6f4ffb53bd2209a5ed6ed0abc`: `build-and-test` and `public-package-compatibility` succeeded; `publish_nuget` was skipped. Current `development` is three docs-only commits ahead; those edits do not change package code or packed release notes.
 - [ ] Add or confirm tests for: versioned root manifest execution; expected bundle present in `RuntimeAssembly`; configuration source receives the correct runtime ID, bundle ID, version and bytes; absent config uses defaults; duplicate same-version roots load once; conflicting-version roots fail before loading.
 - [x] When `RuntimeManifest.Schedule` is supplied, preflight the resolved dependency closure against scheduled bundle IDs, resolved versions, and exact dependency edges before any bundle `Load`; tests cover a matching graph and mismatch rejection without load side effects.
 - [ ] Inspect the packed artifact/version and package contents if CI exposes an artifact. Distinguish pack success from NuGet publication.
@@ -154,3 +154,11 @@ Use [DEPENDENCY_ALIGNMENT_CHECKLIST.md](https://github.com/TrentBest/TheSingular
 ## Resume instruction
 
 On reset, start by checking this document and the live FSM_COS development HEAD, then the current CI status for that exact SHA. Do **not** begin by re-auditing every repository. Finish P0 first; once the release candidate is verified, proceed to the separate consumer migrations in the order above.
+
+### Release-candidate checkpoint — source line still must be reconciled (2026-10-09)
+
+The alpha.6 code/package candidate is verified on `development` at `77c05d68d70159e6f4ffb53bd2209a5ed6ed0abc`. Actions run 37988552679 passed both the repository CI path (including build, tests, coverage, pack) and clean public-NuGet restore/build/test/pack; the publish job was skipped. The three later development commits only update internal continuation/checklist/pause-point documentation. The workflow's `&& false` safeguard remains present.
+
+**Do not yet call alpha.6 publish-ready.** `master` still exposes the older `MicroBundleDependencyRequest`/inline-configuration manifest contract, while `development` exposes versioned `MicroBundleManifestEntry` roots, an external configuration source, and staged dependency-graph validation. Both project files declare alpha.6, so releasing from one branch before reconciling the other risks making the same immutable NuGet version represent two different public APIs. The current comparison is materially diverged (development is 172 commits ahead and 40 behind master; candidate commit 77 itself was 169 ahead / 40 behind). The existing PR #14 remains a draft integration surface, not merge authorization.
+
+**Next P0:** selectively reconcile the tested development contract into the master release line while preserving master-only documentation and useful history; do not wholesale-merge the diverged branches. Ensure master gets the versioned manifest/configuration API, regression tests, alpha.6 release notes, and the public-package compatibility workflow. Then run the full release workflow on the exact master candidate, inspect its package artifact and dependency metadata, verify every package workflow's `&& false` gate, and present the final review. Only after that should the work pivot to WebPage. No package was published.
