@@ -13,8 +13,11 @@ namespace TheSingularityWorkshop.FSM_COS;
 public sealed class RuntimeManifestLoadPlan
 {
     private readonly Dictionary<ulong, MicroBundleRuntimeState> _states;
+    private readonly RuntimeManifestSchedule? _schedule;
 
-    public RuntimeManifestLoadPlan(IReadOnlyList<RuntimeManifestEntry> entries)
+    public RuntimeManifestLoadPlan(
+        IReadOnlyList<RuntimeManifestEntry> entries,
+        RuntimeManifestSchedule? schedule = null)
     {
         ArgumentNullException.ThrowIfNull(entries);
 
@@ -25,6 +28,22 @@ public sealed class RuntimeManifestLoadPlan
             throw new ArgumentException("Load-plan entries must have unique MicroBundle IDs.", nameof(entries));
 
         Entries = entries.ToArray();
+        _schedule = schedule;
+        if (_schedule is not null)
+        {
+            var scheduled = _schedule.Entries.ToDictionary(entry => entry.Reference.BundleId);
+            if (scheduled.Count != Entries.Count ||
+                Entries.Any(entry =>
+                    !scheduled.TryGetValue(entry.Reference.BundleId, out var scheduledEntry) ||
+                    scheduledEntry.Reference != entry.Reference ||
+                    scheduledEntry.Stage != entry.Stage))
+            {
+                throw new ArgumentException(
+                    "The load plan and dependency schedule must contain the same identities and stages.",
+                    nameof(schedule));
+            }
+        }
+
         _states = Entries.ToDictionary(
             entry => entry.Reference.BundleId,
             _ => MicroBundleRuntimeState.Published);
@@ -50,6 +69,14 @@ public sealed class RuntimeManifestLoadPlan
         if (GetState(bundleId) != MicroBundleRuntimeState.Localized)
             throw new InvalidOperationException($"MicroBundle {bundleId} must be localized before it can be loaded.");
 
+        if (_schedule is not null &&
+            !_schedule.IsDependencyReady(bundleId,
+                dependencyId => GetState(dependencyId) == MicroBundleRuntimeState.Loaded))
+        {
+            throw new InvalidOperationException(
+                $"MicroBundle {bundleId} cannot be loaded until its dependencies are loaded.");
+        }
+
         _states[bundleId] = MicroBundleRuntimeState.Loaded;
     }
 
@@ -59,6 +86,7 @@ public sealed class RuntimeManifestLoadPlan
         RuntimeManifestSchedule? schedule = null)
     {
         ArgumentNullException.ThrowIfNull(evaluator);
+        schedule ??= _schedule;
 
         foreach (var entry in Entries)
         {
