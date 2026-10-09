@@ -1,6 +1,8 @@
 # Dependency Alignment Checklist
 
 > **Status:** audit worklist based on source metadata inspected on 2026-10-08. This is not a release plan, merge approval, or claim that a package version is published. Confirm each item against the intended branch, package feed, and CI before changing references.
+>
+> **Reset / continuation brief:** use [CONTINUATION_BRIEF_ALPHA6_FORGE_ANYAPP_WEBPAGE.md](CONTINUATION_BRIEF_ALPHA6_FORGE_ANYAPP_WEBPAGE.md) for the current ordered TODOs, alpha.6 release gate, Forge/AnyApp/WebPage migration sequence, architecture boundaries, guardrails, and resume instructions. Re-check current branch heads and CI before relying on snapshot details.
 
 ## Guardrails
 
