@@ -53,11 +53,14 @@ The likely release gap is **verification and consumer migration**, not a new For
 
 ### P0 — Finish the alpha.6 candidate (do first)
 
+Recent work on `development`: optional semantic-intent pass-through and pre-load schedule-vs-resolved-graph validation have been implemented and tested in source; the exact-commit workflow and public-feed dependency verification remain mandatory.
+
 - [ ] Re-read current `development` HEAD and project version; reconcile any parallel LLM changes without overwriting them.
 - [ ] Confirm `src/FSM_COS/FSM_COS.csproj` declares `0.1.0-alpha.6`, and that release notes, package metadata, and the intended package contents agree.
 - [ ] Confirm `.github/workflows/package.yml` publish job still has the explicit `&& false` safeguard.
 - [ ] Obtain a passing build/test/pack workflow on the exact candidate commit. If no workflow triggered, investigate/trigger the verification workflow using supported repository tooling; do not infer success from older runs.
 - [ ] Add or confirm tests for: versioned root manifest execution; expected bundle present in `RuntimeAssembly`; configuration source receives the correct runtime ID, bundle ID, version and bytes; absent config uses defaults; duplicate same-version roots load once; conflicting-version roots fail before loading.
+- [x] When `RuntimeManifest.Schedule` is supplied, preflight the resolved dependency closure against scheduled bundle IDs, resolved versions, and exact dependency edges before any bundle `Load`; tests cover a matching graph and mismatch rejection without load side effects.
 - [ ] Inspect the packed artifact/version and package contents if CI exposes an artifact. Distinguish pack success from NuGet publication.
 - [ ] Check README/release notes and candidate diff for unrelated changes and API claims that are not tested.
 - [ ] Present the exact candidate commit, verified CI evidence, known caveats, and package version for final human review.
@@ -108,7 +111,7 @@ Use [DEPENDENCY_ALIGNMENT_CHECKLIST.md](https://github.com/TrentBest/TheSingular
 - [ ] Check the optional `MicroBundleRepository.FSM_COS` adapter, which was observed pinning alpha.5, against the actual released contract. Prefer repository-provider-neutral Core contracts so the adapter does not require REST if Local/Azure/other providers are used.
 - [ ] Reconcile `MicroBundleRepository` master/development divergence carefully; preserve complementary Local, Azure, REST, CLI, materialization-adapter, and publisher smoke-test work rather than choosing a branch wholesale.
 - [ ] Investigate Core boundary: artifact address/identity, immutable bytes and hash verification should stay provider-neutral; serialization/envelope and FSM_COS materialization should live in explicit adapter/payload boundaries.
-- [ ] Resolve FSM_COS master-only `SemanticIntent` versus development versioned configuration contract deliberately.
+- [x] Resolve FSM_COS master-only `SemanticIntent` versus development versioned configuration contract additively: `RuntimeManifest.Intent` passes through to `RuntimeAssembly.Intent`; versioned roots and external configuration remain intact.
 - [ ] Check MicroBundleRepository.Core / REST / adapter package pins against actual published versions before changing them.
 - [ ] Keep Profiles provider-neutral and separate from FSM_COS unless a tested optional MicroBundle/adapter is designed; do not call it integrated merely because its domain package exists.
 - [ ] Confirm MicroBundleIngestor stays an authoring/ingestion tool, not a runtime dependency; optional REST should remain opt-in.
