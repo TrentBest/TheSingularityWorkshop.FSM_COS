@@ -98,3 +98,42 @@ The CI-standardization branch changes the workflow substantially. Current `devel
 ### Current safe-to-delete status
 
 **No extra branch is cleared for deletion.** Open PR references, master/development API drift, and the unreviewed staged-load design are active reconciliation work. Continue preserving evidence and integrating selectively; the owner alone deletes branches.
+
+
+## Scheduler / staged-loading branch — active integration review (2026-10-09)
+
+**Owner's priority:** treat the substantial scheduler/load-plan branch as the first capability to reconcile. Preserve useful work and refactor it to fit the current ecosystem; do not delete the branch or merge it mechanically.
+
+Source branch: [`forge/staged-manifest-load-plan`](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/forge/staged-manifest-load-plan). Its closed PR #9 and open design issue #8 remain useful history. The source branch is 19 commits ahead of and 139 behind the current `development` ref in the current comparison; this is a diverged history, not a safe merge candidate.
+
+### Valuable work to preserve
+
+- Immutable `MicroBundleReference` with ID, version, and content hash.
+- Explicit `Resident` / `Deferred` stages.
+- Distinct `Published` → `Localized` → `Loaded` lifecycle.
+- An Experience-owned `IManifestLoadEvaluator`, so the kernel does not hard-code domain-specific reasons to promote deferred capabilities.
+- A dependency graph/schedule, plus tests and a readable design document.
+- The intended separation between localization/storage and in-memory composition.
+
+### Compatibility findings
+
+The implementation on that branch predates the current `development` contract and must be adapted:
+
+1. Current `RuntimeManifest.Bundles` is `IReadOnlyList<MicroBundleManifestEntry>` (bundle ID + requested version). The old branch instead changes it to `IReadOnlyList<BundleRequest>` (ID + configuration), losing the current explicit root-version contract and bypassing the current configuration-source behavior. Do **not** replace the current contract with the old one.
+2. Current `FsmCos.Execute` resolves domain-owned `IMicroBundle` instances through `IMicroBundleCatalog`, traverses `IMicroBundle.Dependencies`, loads dependencies before dependents, and arbitrates to convergence. The staged plan must complement that contract rather than introduce a second competing dependency resolver.
+3. FSM_API already owns sequential process-group scheduling. FSM_COS should describe composition dependencies and hand runnable work to the appropriate lower-level scheduler; it must not duplicate FSM_API's process scheduler.
+4. The old `RuntimeManifestSchedule` is a dependency-order analysis, not a process scheduler. Its `IsDependencyReady` helper is useful as a predicate, but the current loader does not enforce it; `EvaluatePromotions` alone can return a localized deferred dependent without checking prerequisite readiness. Any integrated promotion path must enforce dependency readiness or explicitly delegate it to the current dependency resolver.
+5. The old identity/version/hash model and current ID/version manifest entry need one authoritative representation. Avoid carrying conflicting version/configuration copies that can drift. Content-hash verification belongs at the artifact localization/resolution boundary; FSM_COS should not pretend that carrying a hash verifies bytes.
+6. Localization/cache/repository access is not currently implemented by the FSM_COS kernel. Keep that responsibility behind a host/repository-facing abstraction rather than adding storage, network, or cache implementation to the composition package.
+
+### Integration direction
+
+Proceed in small verified slices on `development`:
+
+1. Preserve the old branch as source evidence while reviewing all implementation, tests, docs, workflow edits, and PR/issue context.
+2. Adapt the manifest representation without regressing requested versions, opaque configuration, dependency closure, arbitration, or the existing public API.
+3. Separate the concepts explicitly: **dependency plan** (what must precede what), **FSM_API scheduling** (when runnable process groups execute), **localization** (where immutable bytes become available), and **FSM_COS composition** (when resolved bundles are loaded/arbitrated into a RuntimeAssembly).
+4. Add tests for identity/version consistency, dependency ordering/readiness, resident/deferred promotion, and backward compatibility with current composition behavior. Add integration only when the relevant host/localization boundary exists; do not claim background localization or live deferred loading works before it does.
+5. Run the development build/test workflow and inspect its publish gate. NuGet publishing remains disabled unless the owner explicitly authorizes it.
+
+**Disposition:** active review; useful work identified; integration and verification pending; **not safe to delete**.
