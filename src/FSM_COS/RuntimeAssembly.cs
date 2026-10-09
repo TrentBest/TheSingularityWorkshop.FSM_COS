@@ -1,3 +1,4 @@
+using TheSingularityWorkshop.FSM_UserIO;
 using TheSingularityWorkshop.MicroBundleDomain;
 
 namespace TheSingularityWorkshop.FSM_COS;
@@ -12,17 +13,21 @@ namespace TheSingularityWorkshop.FSM_COS;
 /// </remarks>
 public sealed class RuntimeAssembly
 {
-    internal RuntimeAssembly(ulong runtimeId, IReadOnlyList<IMicroBundle> bundles, int arbitrationRounds)
+    internal RuntimeAssembly(ulong runtimeId, IReadOnlyList<IMicroBundle> bundles, int arbitrationRounds, SemanticIntent? intent)
     {
         RuntimeId = runtimeId;
         Bundles = bundles;
         ArbitrationRounds = arbitrationRounds;
+        Intent = intent;
     }
 
     public ulong RuntimeId { get; }
     public IReadOnlyList<IMicroBundle> Bundles { get; }
     public IReadOnlyList<IMicroBundle> LoadedBundles => Bundles;
     public int ArbitrationRounds { get; }
+
+    /// <summary>Gets the semantic interaction intent carried by the runtime request, when one was supplied.</summary>
+    public SemanticIntent? Intent { get; }
 
     public bool TryGetBundle(ulong bundleId, out IMicroBundle? bundle)
     {
