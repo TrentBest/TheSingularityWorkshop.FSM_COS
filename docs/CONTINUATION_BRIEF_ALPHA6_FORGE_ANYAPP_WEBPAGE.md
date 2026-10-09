@@ -53,6 +53,10 @@ The likely release gap is **verification and consumer migration**, not a new For
 
 ### P0 — Finish the alpha.6 candidate (do first)
 
+**Verification checkpoint (2026-10-09):** candidate code/package commit `0319307831c431fed250063a5f53744309b09220` passed the full `build-and-test` job (restore, build, tests/coverage, pack) and the separate `public-package-compatibility` job (public NuGet restore/build/test/pack). The publish job was skipped. The public-feed package artifact was inspected: `0.1.0-alpha.6`, README and license included, dependencies FSM_API 1.0.13 + FSM_UserIO 0.1.0-alpha.1 + MicroBundleDomain 1.0.1; release notes included; internal branch/continuation planning docs excluded. The publish gate still contains `&& false`. Documentation-only commits followed this code/package verification; confirm their latest workflow finishes before finalizing the candidate.
+
+
+
 Recent work on `development`: optional semantic-intent pass-through and pre-load schedule-vs-resolved-graph validation have been implemented and tested in source; the exact-commit workflow and public-feed dependency verification remain mandatory.
 
 - [ ] Re-read current `development` HEAD and project version; reconcile any parallel LLM changes without overwriting them.
