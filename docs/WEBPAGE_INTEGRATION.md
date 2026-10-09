@@ -73,6 +73,22 @@ public sealed class WebPageMicroBundleCatalog : IMicroBundleCatalog
         _bundles = bundles.ToDictionary(bundle => bundle.Id);
     }
 
+    public bool TryResolve(
+        ulong bundleId,
+        string version,
+        out IMicroBundle? bundle)
+    {
+        if (_bundles.TryGetValue(bundleId, out var candidate) &&
+            string.Equals(candidate.Descriptor.Version, version, StringComparison.Ordinal))
+        {
+            bundle = candidate;
+            return true;
+        }
+
+        bundle = null;
+        return false;
+    }
+
     public bool TryResolve(ulong bundleId, out IMicroBundle? bundle) =>
         _bundles.TryGetValue(bundleId, out bundle);
 }
@@ -172,7 +188,7 @@ The Warehouse does not become part of the FSM_COS package. It supplies or backs 
 
 ## Current limitation
 
-0.1.0-alpha.1 is a composition kernel, not yet a complete runtime-host framework.
+0.1.0-alpha.5 is a composition kernel, not yet a complete runtime-host framework. This is the current source declaration; it does not establish that the package has been published.
 
 The next meaningful evolution is therefore not adding platform APIs to FSM_COS. It is proving the complete handoff:
 
