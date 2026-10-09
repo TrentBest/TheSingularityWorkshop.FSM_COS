@@ -120,6 +120,7 @@ Describe the following where relevant:
 - **Host relationship:** explain how an application or host uses the package and which presentation, execution, or platform responsibilities remain with that host.
 - **Current versus intended integration:** name working integrations separately from proposed paths. If cross-host use (for example, through AnyApp) still needs adaptation or proof, say so explicitly.
 - **Creator freedom:** welcome compatible alternatives and independent implementations. The goal is to make useful parts easier to combine, not to create lock-in or require adoption of the whole ecosystem.
+- **Creator opportunity, when relevant:** it is appropriate to briefly signal the long-term possibility that compatible capabilities may become easier to discover, distribute, and monetize through the ecosystem. Keep this secondary to the technical value, frame it as intent rather than an existing feature, and never promise a marketplace, income, revenue share, or audience unless those mechanisms are real and documented.
 
 A useful message is: *build with the parts that help you; compatible Workshop contracts can make the pieces fit together more naturally, while you remain free to build the rest yourself.* State this as design intent, then substantiate each concrete compatibility claim with contracts, tests, or a working host integration.
 
