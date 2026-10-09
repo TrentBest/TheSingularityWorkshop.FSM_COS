@@ -133,7 +133,7 @@ execution / manifestation / next system
 
 See [Theory — what “composition of systems” means](docs/THEORY.md#1-what-does-composition-of-systems-mean) and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md).
 
-## 🟡 07 Architecture and ecosystem
+## <img src="docs/assets/section-markers/07-architecture-ecosystem.svg" alt="" width="20" height="20"> 07 Architecture and ecosystem
 
 <img src="docs/assets/section-dividers/07-architecture-ecosystem.svg" alt="" width="100%">
 
@@ -369,7 +369,7 @@ A host receives the assembled result and decides how to execute, present, or enc
 
 **Composition is not manifestation.**
 
-## 🩵 10 Host integration and usage
+## <img src="docs/assets/section-markers/10-host-integration.svg" alt="" width="20" height="20"> 10 Host integration and usage
 
 <img src="docs/assets/section-dividers/10-host-integration.svg" alt="" width="100%">
 
@@ -413,7 +413,7 @@ The boundaries can evolve. The responsibility of FSM_COS should remain clear:
 
 ---
 
-## 🩶 11 Verification and development
+## <img src="docs/assets/section-markers/11-verification-development.svg" alt="" width="20" height="20"> 11 Verification and development
 
 <img src="docs/assets/section-dividers/11-verification-development.svg" alt="" width="100%">
 
@@ -485,7 +485,7 @@ This repository carries its own architecture and theory. The documents here desc
 - [Development](docs/DEVELOPMENT.md) — how to evolve and verify the repository.
 - [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — how the browser host consumes FSM_COS without pulling platform concerns into the kernel.
 
-## 🟨 13 Related projects, resources & Workshop support
+## <img src="docs/assets/section-markers/13-related-projects.svg" alt="" width="20" height="20"> 13 Related projects, resources & Workshop support
 
 <img src="docs/assets/section-dividers/13-related-projects.svg" alt="" width="100%">
 
