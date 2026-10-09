@@ -2,6 +2,8 @@
 
 > **Status:** proposed engineering pause gate, 2026-10-09. This is not a release approval and does not authorize publishing to NuGet.
 
+**Continuation checklist:** [WebPage Working Task List](https://github.com/TrentBest/WebPage/blob/development/docs/WORKING_TASKS.md) is the durable cross-session handoff. On resumption, read it, verify current branch heads and workflow runs, then continue the highest-priority unfinished task.
+
 ## Decision
 
 FSM_COS should stop broadening its scope once the current correctness patch passes CI. The next major block of work belongs in WebPage: prove that the host consumes the composed `RuntimeAssembly` for actual Experience behavior, then prepare the public site for launch.
