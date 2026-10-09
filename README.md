@@ -12,6 +12,29 @@
 
 **FSM_COS is a platform-neutral computation-composition kernel that resolves MicroBundles and assembles a runtime for handoff to a host.**
 
+## 02 🟩 Visual identity
+
+Git is static. The architecture does not have to *feel* static.
+
+FSM_COS uses static SVG architecture art as the canonical visual language. The crane is a deliberately simple symbol: it represents the composition boundary doing work, not a UI animation.
+
+The rule for repository visuals is simple: **illustrate the concept, not the decoration**. Architecture diagrams should remain readable, versionable, and useful in GitHub, package documentation, and generated documentation.
+
+### Architecture visual map
+
+The documentation diagrams are deliberately architecture-first: they show where responsibility lives, what crosses the FSM_COS boundary, and where composition stops.
+
+- [FSM_COS system overview](docs/assets/fsm-cos-system.svg)
+- [Composition boundary](docs/assets/composition-boundary.svg)
+- [Composition overview](docs/assets/fsm-cos-overview.svg)
+- [Runtime Manifest publication pipeline](docs/assets/runtime-manifest-pipeline.svg)
+- [Dependency resolution](docs/assets/dependency-resolution.svg)
+- [Arbitration and convergence](docs/assets/arbitration-convergence.svg)
+- [Runtime boundary](docs/assets/runtime-boundary.svg)
+- [Composition crane](docs/assets/fsm-cos-crane.svg)
+- [MicroBundle cartridge](docs/assets/microbundle-cartridge.svg)
+- [RuntimeAssembly handoff](docs/assets/runtime-assembly-handoff.svg)
+
 ## 03 🔷 Plain-language explanation
 
 > **Engineering identity:** FSM_COS is deliberately a computation platform, not an application platform. It does not know whether the computation will become a WebPage, WebApp, AnyApp, DistributedApp, desktop tool, service, simulation, spreadsheet-like system, or something with no user interface at all.
@@ -45,13 +68,22 @@ RuntimeAssembly
 
 > **FSM_COS assembles the computation. It does not become the application.**
 
-
 ## 04 🟠 Choose your path
 
 - **New to FSM_COS:** start with the definition and responsibility boundary above, then read [FSM_COS Theory](docs/THEORY.md).
 - **Integrating a host:** read [Runtime Manifest](docs/RUNTIME_MANIFEST.md), [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md), and [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) as applicable.
 - **Building or changing FSM_COS:** use [Development](docs/DEVELOPMENT.md) and the [Documentation Index](DOCUMENTATION_INDEX.md).
 - **Checking ecosystem ownership or package alignment:** use the [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md) and [Dependency Alignment Checklist](docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md).
+
+## 05 🟣 At a glance
+
+**Package:** TheSingularityWorkshop.FSM_COS  
+**Source package version:** `0.1.0-alpha.5`  
+**Direct package dependencies:** `TheSingularityWorkshop.FSM_API 1.0.13`; `TheSingularityWorkshop.MicroBundleDomain 1.0.1`  
+**Target framework:** .NET 8 (`net8.0`)  
+**License:** MIT
+
+The package workflow builds, tests, packs, and uploads artifacts. Its NuGet publication job is currently hard-disabled by an explicit `&& false` guard. A source version or successful build is not evidence that a package version was published, and this documentation change does not authorize publication.
 
 ## 06 🟢 Responsibility boundary
 
@@ -89,7 +121,7 @@ execution / manifestation / next system
 
 See [Theory — what “composition of systems” means](docs/THEORY.md#1-what-does-composition-of-systems-mean) and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md).
 
-## 07 🟠 Architecture and ecosystem
+## 07 🟡 Architecture and ecosystem
 
 FSM_COS is the repository for the **common computation-composition boundary** in The Singularity Workshop architecture.
 
@@ -108,7 +140,7 @@ FSM_COS answers one deliberately general question:
 
 The repository therefore owns the composition contracts, dependency closure, configured loading, arbitration, convergence, and the resulting RuntimeAssembly.
 
-## Current development boundary
+### Current development boundary
 
 The current `development` line is the active architecture workstream. The project file currently declares `0.1.0-alpha.5`; this source declaration is not a claim that this version has been published to NuGet. The runtime contract and documentation are still being refined:
 
@@ -160,29 +192,6 @@ FSM_COS therefore has no architectural preference for:
 
 Those are manifestations or application choices made outside the kernel.
 
-## 02 🟩 Visual identity
-
-Git is static. The architecture does not have to *feel* static.
-
-FSM_COS uses static SVG architecture art as the canonical visual language. The crane is a deliberately simple symbol: it represents the composition boundary doing work, not a UI animation.
-
-The rule for repository visuals is simple: **illustrate the concept, not the decoration**. Architecture diagrams should remain readable, versionable, and useful in GitHub, package documentation, and generated documentation.
-
-## Architecture visual map
-
-The documentation diagrams are deliberately architecture-first: they show where responsibility lives, what crosses the FSM_COS boundary, and where composition stops.
-
-- [FSM_COS system overview](docs/assets/fsm-cos-system.svg)
-- [Composition boundary](docs/assets/composition-boundary.svg)
-- [Composition overview](docs/assets/fsm-cos-overview.svg)
-- [Runtime Manifest publication pipeline](docs/assets/runtime-manifest-pipeline.svg)
-- [Dependency resolution](docs/assets/dependency-resolution.svg)
-- [Arbitration and convergence](docs/assets/arbitration-convergence.svg)
-- [Runtime boundary](docs/assets/runtime-boundary.svg)
-- [Composition crane](docs/assets/fsm-cos-crane.svg)
-- [MicroBundle cartridge](docs/assets/microbundle-cartridge.svg)
-- [RuntimeAssembly handoff](docs/assets/runtime-assembly-handoff.svg)
-
 ## 08 🟢 Quick start
 
 This repository's documented artifact is the .NET 8 FSM_COS library. The README is an architectural orientation, not a claim that every integration scenario below is already exercised end-to-end.
@@ -218,7 +227,7 @@ FSM_COS consumes the published representation.
 
 See [Runtime Manifest Theory](docs/MANIFEST_THEORY.md) and the deeper [FSM_COS Theory](docs/THEORY.md#3-why-the-manifest-exists).
 
-## Consuming MicroBundles
+### Consuming MicroBundles
 
 FSM_COS does not define what a MicroBundle means. **MicroBundleDomain owns that domain.**
 
@@ -243,7 +252,7 @@ A developer is free to supply MicroBundles from memory, a repository, local stor
 
 See [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) for concrete usage patterns.
 
-## Dependency resolution
+### Dependency resolution
 
 The manifest declares roots. Dependencies are discovered from those roots.
 
@@ -266,7 +275,7 @@ before arbitration begins.
 
 Cycles are composition errors. Missing bundles are composition errors. FSM_COS does not guess around either condition.
 
-## Configuration
+### Configuration
 
 Configuration is deliberately **outside the Runtime Manifest**.
 
@@ -292,7 +301,7 @@ This keeps three responsibilities distinct:
 
 When configuration becomes a **serialized representation**, FSM_COS deliberately points downward to **[TheSingularityWorkshop.FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** rather than defining another serializer here. See [FSM_COS Theory — Composition is not serialization](docs/THEORY.md#14-composition-is-not-serialization) and the [FSM_Serialization Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md).
 
-## Arbitration
+### Arbitration
 
 Loading establishes the initial composition.
 
@@ -316,7 +325,7 @@ Non-convergence is an error. FSM_COS does not return an assembly that it knows i
 
 See [Arbitration and Convergence](docs/ARBITRATION.md) and [FSM_COS Theory — Arbitration is composition negotiation](docs/THEORY.md#8-arbitration-is-composition-negotiation).
 
-## RuntimeAssembly is the handoff
+### RuntimeAssembly is the handoff
 
 [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) is the result of composition.
 
@@ -342,11 +351,53 @@ A host receives the assembled result and decides how to execute, present, or enc
 
 **Composition is not manifestation.**
 
-## 11 🩵 Verification and development
+## 10 🟦 Host integration and usage
+
+WebPage is one host and proving ground for FSM_COS; it is not a special case inside the composition kernel. The intended flow is:
+
+~~~text
+WebPage published manifest
+        ↓
+     FsmCos
+        ↓
+IMicroBundleCatalog supplied by WebPage
+        ↓
+ RuntimeAssembly
+        ↓
+WebPage / GUI manifestation
+        ↓
+     Blazor/browser
+~~~
+
+WebPage should reference the TheSingularityWorkshop.FSM_COS package and implement the catalog/host boundary around it. Platform-specific lifecycle, browser APIs, GUI rendering, and Experience presentation remain outside FSM_COS.
+
+The first AI/GUI vertical slice now follows the same boundary: WebPage supplies ProtocolAI, GrammarAI, and GUI-facing MicroBundles through its catalog; FSM_COS composes them and returns them through RuntimeAssembly; the WebPage host uses the shared GUI builder for manifestation and owns clipboard/provider interaction. This keeps the package reusable while proving that the semantic exchange can be assembled as ordinary runtime capability.
+
+For the concrete integration contract, see [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) and [FSM_COS Theory — Same composition, different manifestation](docs/THEORY.md#10-same-composition-different-manifestation).
+
+### Responsibility invariant
+
+~~~text
+FSM_API      → behavior/state primitives
+FSM_COS      → computation composition + stable assembly
+MicroBundle  → focused domain capability/content/behavior
+Repository   → artifact discovery and delivery
+Serialization→ representation
+Host         → execution / manifestation
+Application  → whatever the assembled computation is used to build
+~~~
+
+The boundaries can evolve. The responsibility of FSM_COS should remain clear:
+
+> **Assemble the requested computation. Return a stable composition. Hand it to whatever executes or manifests it.**
+
+---
+
+## 11 🩶 Verification and development
 
 Use the [Development guide](docs/DEVELOPMENT.md) for repository-specific build, test, and contribution instructions. Use the [current GitHub Actions runs](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions) and [coverage report](https://codecov.io/gh/TrentBest/TheSingularityWorkshop.FSM_COS) as live evidence; badges alone do not establish that a particular commit passed.
 
-## 11 🩵 Repository structure and verification
+### Repository structure
 
 ~~~text
 TheSingularityWorkshop.FSM_COS/
@@ -410,58 +461,6 @@ This repository carries its own architecture and theory. The documents here desc
 - [Development](docs/DEVELOPMENT.md) — how to evolve and verify the repository.
 - [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — how the browser host consumes FSM_COS without pulling platform concerns into the kernel.
 
-## 05 🟣 At a glance
-
-**Package:** TheSingularityWorkshop.FSM_COS  
-**Source package version:** `0.1.0-alpha.5`  
-**Direct package dependencies:** `TheSingularityWorkshop.FSM_API 1.0.13`; `TheSingularityWorkshop.MicroBundleDomain 1.0.1`  
-**Target framework:** .NET 8 (`net8.0`)  
-**License:** MIT
-
-The package workflow builds, tests, packs, and uploads artifacts. Its NuGet publication job is currently hard-disabled by an explicit `&& false` guard. A source version or successful build is not evidence that a package version was published, and this documentation change does not authorize publication.
-
-## 10 🟦 Host integration and usage
-
-WebPage is one host and proving ground for FSM_COS; it is not a special case inside the composition kernel. The intended flow is:
-
-~~~text
-WebPage published manifest
-        ↓
-     FsmCos
-        ↓
-IMicroBundleCatalog supplied by WebPage
-        ↓
- RuntimeAssembly
-        ↓
-WebPage / GUI manifestation
-        ↓
-     Blazor/browser
-~~~
-
-WebPage should reference the TheSingularityWorkshop.FSM_COS package and implement the catalog/host boundary around it. Platform-specific lifecycle, browser APIs, GUI rendering, and Experience presentation remain outside FSM_COS.
-
-The first AI/GUI vertical slice now follows the same boundary: WebPage supplies ProtocolAI, GrammarAI, and GUI-facing MicroBundles through its catalog; FSM_COS composes them and returns them through RuntimeAssembly; the WebPage host uses the shared GUI builder for manifestation and owns clipboard/provider interaction. This keeps the package reusable while proving that the semantic exchange can be assembled as ordinary runtime capability.
-
-For the concrete integration contract, see [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) and [FSM_COS Theory — Same composition, different manifestation](docs/THEORY.md#10-same-composition-different-manifestation).
-
-## Responsibility invariant
-
-~~~text
-FSM_API      → behavior/state primitives
-FSM_COS      → computation composition + stable assembly
-MicroBundle  → focused domain capability/content/behavior
-Repository   → artifact discovery and delivery
-Serialization→ representation
-Host         → execution / manifestation
-Application  → whatever the assembled computation is used to build
-~~~
-
-The boundaries can evolve. The responsibility of FSM_COS should remain clear:
-
-> **Assemble the requested computation. Return a stable composition. Hand it to whatever executes or manifests it.**
-
----
-
 ## 13 🟨 Related projects, resources & Workshop support
 
 ### 📦 Get the core packages
@@ -489,7 +488,7 @@ The boundaries can evolve. The responsibility of FSM_COS should remain clear:
 
 ---
 
-## Workshop identity
+### Workshop identity
 
 FSM_COS is one layer in a deliberately troublesome ecosystem:
 
