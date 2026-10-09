@@ -75,19 +75,22 @@ public sealed class RuntimeManifestPlanningTests
         var schedule = new RuntimeManifestSchedule(
             entries,
             new[] { new RuntimeManifestDependency(2, 1) });
-        var plan = new RuntimeManifestLoadPlan(entries);
+        var plan = new RuntimeManifestLoadPlan(entries, schedule);
         var evaluator = new AcceptAllEvaluator();
 
         plan.MarkLocalized(1);
         plan.MarkLocalized(2);
 
-        Assert.Empty(plan.EvaluatePromotions(evaluator, null, schedule)
+        Assert.Empty(plan.EvaluatePromotions(evaluator, null)
             .Where(entry => entry.Reference.BundleId == 2));
+        Assert.Throws<InvalidOperationException>(() => plan.MarkLoaded(2));
 
         plan.MarkLoaded(1);
 
-        Assert.Contains(plan.EvaluatePromotions(evaluator, null, schedule),
+        Assert.Contains(plan.EvaluatePromotions(evaluator, null),
             entry => entry.Reference.BundleId == 2);
+        plan.MarkLoaded(2);
+        Assert.Equal(MicroBundleRuntimeState.Loaded, plan.GetState(2));
     }
 
     private static MicroBundleReference Reference(ulong id, string version) =>
