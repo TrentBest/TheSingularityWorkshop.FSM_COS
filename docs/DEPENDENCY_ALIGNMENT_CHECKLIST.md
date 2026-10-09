@@ -191,3 +191,43 @@ The open draft [MicroBundleRepository PR #17](https://github.com/TrentBest/TheSi
 - [x] Verify PR #17 CI builds the newly included publisher project.
 - [ ] Add an automated test or explicit workflow step that runs the local round-trip against a deterministic test artifact and proves the requested bundle ID is materialized.
 - [ ] Resolve the Core serialization boundary before treating the publisher as a clean architectural example; its end-to-end behavior is valuable, but current project references inherit the master branch's serialization/materializer coupling.
+
+
+### 6. Forge / AnyApp release-readiness assessment (2026-10-09)
+
+This section supersedes older dependency observations above where they conflict with the current inspected development heads. It is a source-level readiness assessment, not a package publication or a claim that consumer builds have passed against the next NuGet version.
+
+#### Consumer findings
+
+| Consumer | Inspected source | Required action for the next FSM_COS package |
+|---|---|---|
+| **AnyApp** | `development/AnyApp.csproj` pins `TheSingularityWorkshop.FSM_COS` `0.1.0-alpha.5`. Its README describes repository-backed artifact resolution, materialization into an `IMicroBundle`, composition through FSM_COS, then host-side GUI.WPF manifestation. It also retains a local compatibility catalog for legacy development manifests. | After the new package is actually available, update the pin in a dedicated consumer change and run the Windows restore/build/test path. Prove both the selected repository-backed route and the local compatibility route; do not treat the README alone as execution proof. No new WPF, REST, repository, GUI, ProtocolAi, GrammarAi, or FSM_UserIO dependency belongs in FSM_COS. |
+| **The Forge** | `forge/native-experience-authoring` references FSM_COS `0.1.0-alpha.3`. Its `ForgeExperience.Compile()` still emits the older `BundleRequest`-based manifest with inline configuration bytes. | Migrate Forge to versioned `MicroBundleManifestEntry` roots and provide a Forge-owned `IMicroBundleConfigurationSource` when executing the compiled manifest. Keep authored configuration documents and persistence in Forge; do not put bytes or a serializer into the FSM_COS manifest. Validate the migration against the actual released package, not an assumed future API. |
+| **WebPage** | FSM_COS's integration guide identifies WebPage as the browser proving ground but records that Living GUI behavior still passes through transitional host-local `PageFSM` / `LivingGuiFsm` code after composition. | Continue the host proof separately. Do not add browser lifecycle, GUI, rendering, or scheduling APIs to FSM_COS merely to make WebPage's local migration easier. |
+
+#### API coverage found in current FSM_COS development source
+
+The inspected development source already contains the core contracts the two immediate hosts need:
+
+- `RuntimeManifest(RuntimeId, Bundles, ExperienceContext)`, with root entries carrying a bundle ID and requested version.
+- `FsmCos.Execute(manifest, configurationSource)`, with configuration source optional.
+- `IMicroBundleConfigurationSource.TryGetConfiguration(runtimeId, bundleId, version, out bytes)`; absent configuration means bundle defaults.
+- Version-aware catalog resolution, dependency closure, bounded arbitration, and a returned `RuntimeAssembly`.
+- Preflight rejection of conflicting requested versions for the same root identity, while repeated requests for the same ID/version are loaded once.
+
+The current development source does **not** appear to need a new host-specific feature solely for Forge or AnyApp. The immediate gap is **consumer alignment and end-to-end verification**, not adding Forge or AnyApp responsibilities to the kernel.
+
+#### Release gate for today's candidate
+
+- [ ] Confirm the exact development commit to be released and run its build/test workflow on that commit.
+- [ ] Verify the package version and package contents match the source contract documented above.
+- [ ] Keep the NuGet workflow's publish condition disabled by default with the explicit `&& false` safeguard. This checklist is not release authorization.
+- [ ] Run a package-consumer smoke test against the candidate package: construct a manifest with a versioned root, execute it through an in-memory catalog, and verify the expected bundle is present in `RuntimeAssembly`.
+- [ ] Add/retain a configuration-source test proving bytes are delivered to the requested runtime/bundle/version and absence falls back to defaults.
+- [ ] Retain regression coverage for same-version duplicate roots and conflicting-version roots failing before any load.
+- [ ] After the package is available, update AnyApp and Forge in separate, reviewable changes; do not bundle their migration into the FSM_COS package release itself.
+- [ ] For AnyApp, verify repository artifact hash/materialization and actual RuntimeAssembly-to-GUI handoff in the Windows path.
+- [ ] For Forge, add tests for versioned manifest compilation, configuration-source lookup, missing-configuration defaults, and no accidental serialization/manifest coupling.
+- [ ] Record exact consumer commit SHAs and build/test results before calling either consumer aligned.
+
+**Disposition:** the kernel contract appears sufficient for the current Forge/AnyApp direction. Do not expand the kernel unless a concrete failing consumer test exposes a missing composition contract. The release is not proven by documentation or source inspection alone, and no publication is authorized by this document.
