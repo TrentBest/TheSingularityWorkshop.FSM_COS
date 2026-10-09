@@ -22,7 +22,7 @@
 | MicroBundleRepository.FSM_COS | Adapter references FSM_COS alpha.5 while inspected FSM_COS source declares alpha.6. | Confirm whether alpha.5 is available and intentional; build the adapter against the selected compatible package/source. |
 | MicroBundleRepository.Core | References FSM_Serialization alpha.2 and Ontology alpha.2; inspected source declarations were Serialization 1.0.0 and Ontology alpha.3. | Check NuGet availability and API/format compatibility; update pins only after validation. |
 | MicroBundleRepository.Rest | References Ontology alpha.2 while inspected Ontology source declares alpha.3. Its FSM_REST alpha.4 reference matches inspected source metadata. | Verify whether alpha.2 is intentionally pinned for compatibility or simply stale. |
-| FSM_COS | Master `RuntimeAssembly.cs` and `RuntimeManifest.cs` use `SemanticIntent` from FSM_UserIO; the development `.cs`/`.csproj` snapshot has no matching reference despite the direct package pin. Both source project files declare FSM_COS alpha.6, FSM_API 1.0.13, FSM_UserIO alpha.1, and MicroBundleDomain 1.0.1. The package workflow also checks out MicroBundleDomain branch `architecture/runtime-contract-ownership` and packs a local dependency for CI. | This is a real API divergence, not proof that FSM_UserIO is unused. Decide whether the intent-bearing manifest/assembly contract from master is the desired direction and port/test it on development, or explicitly redesign the contract before removing the dependency. Confirm the pinned MicroBundleDomain branch is intentional and ensure CI also demonstrates compatibility with the package version consumers actually restore. |
+| FSM_COS | Development preserves the versioned `MicroBundleManifestEntry` roots and external configuration source; it now also carries optional `FSM_UserIO.SemanticIntent` through `RuntimeManifest` to `RuntimeAssembly`, with a direct FSM_UserIO alpha.1 dependency. The package workflow checks out MicroBundleDomain branch `architecture/runtime-contract-ownership` and packs a local dependency for CI. | Verify intent compatibility in CI and confirm the CI-only MicroBundleDomain contract matches published 1.0.1 used by consumers. A clean restore against public package versions is still required before release readiness. |
 | Experiences.Moniker | References GUI.Core alpha.4 and MicroBundleDomain 1.0.1. | Determine whether its experience contract can be host-neutral and presentation loaded separately; avoid breaking current hosts without a proven replacement. |
 | Renderer | References FSM_API 1.0.13, ProtocolAi alpha.2, and MicroBundleDomain 1.0.1. | Trace ProtocolAi usage and decide whether it is an essential renderer contract or an optional semantic adapter. |
 
@@ -235,3 +235,15 @@ The current development source does **not** appear to need a new host-specific f
 - [ ] Record exact consumer commit SHAs and build/test results before calling either consumer aligned.
 
 **Disposition:** the kernel contract appears sufficient for the current Forge/AnyApp direction. Do not expand the kernel unless a concrete failing consumer test exposes a missing composition contract. The release is not proven by documentation or source inspection alone, and no publication is authorized by this document.
+
+### 5. Alpha.6 release-candidate implementation checks (2026-10-09)
+
+- [x] Keep the development version at `0.1.0-alpha.6`; this remains a candidate, not publish authorization.
+- [x] Preserve the master-only optional `SemanticIntent` capability without replacing the newer versioned-root/external-configuration contract: `RuntimeManifest.Intent` flows to `RuntimeAssembly.Intent`, and `RuntimeManifest.Empty` accepts optional intent.
+- [x] Add preflight validation when a published `RuntimeManifestSchedule` is present: resolve the dependency closure and compare bundle IDs, resolved versions, and exact dependency edges before any bundle `Load` side effects.
+- [x] Add tests for matching schedule/dependency graph, graph mismatch rejection before loading, and semantic-intent pass-through.
+- [ ] Confirm the current workflow run passes build, tests, coverage, and pack on the exact candidate commit.
+- [ ] Run a clean restore/build/test/pack using public MicroBundleDomain 1.0.1 instead of the CI-only local branch package; reconcile any API drift before release.
+- [ ] Verify the packed `.nupkg` contents/metadata, README/license inclusion, package dependency list, release notes, and disabled publish condition.
+- [ ] Verify consumer compatibility (at minimum Forge and AnyApp API migration plan); no consumer should be pinned to alpha.6 before the package is actually published.
+- [ ] Final release review by owner; only explicit approval may ever authorize the publish mechanism.
