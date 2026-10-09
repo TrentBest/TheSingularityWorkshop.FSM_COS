@@ -16,10 +16,10 @@ The browser should therefore not become a dependency of FSM_COS.
 
 ## Package boundary
 
-WebPage consumes the published package:
+WebPage consumes the published package. Use a version that is actually available from NuGet; the current source candidate declares `0.1.0-alpha.6`, which does not by itself establish that version has been published:
 
 ~~~xml
-<PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="0.1.0-alpha.5" />
+<PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="x.y.z" />
 ~~~
 
 The package currently targets .NET 8 and depends on FSM_API and MicroBundleDomain. A WebPage project may consume it because the composition kernel is written against platform-neutral .NET APIs.
@@ -71,6 +71,22 @@ public sealed class WebPageMicroBundleCatalog : IMicroBundleCatalog
     public WebPageMicroBundleCatalog(IEnumerable<IMicroBundle> bundles)
     {
         _bundles = bundles.ToDictionary(bundle => bundle.Id);
+    }
+
+    public bool TryResolve(
+        ulong bundleId,
+        string version,
+        out IMicroBundle? bundle)
+    {
+        if (_bundles.TryGetValue(bundleId, out var candidate) &&
+            string.Equals(candidate.Descriptor.Version, version, StringComparison.Ordinal))
+        {
+            bundle = candidate;
+            return true;
+        }
+
+        bundle = null;
+        return false;
     }
 
     public bool TryResolve(ulong bundleId, out IMicroBundle? bundle) =>
@@ -172,7 +188,7 @@ The Warehouse does not become part of the FSM_COS package. It supplies or backs 
 
 ## Current limitation
 
-0.1.0-alpha.5 is a composition kernel, not yet a complete runtime-host framework.
+0.1.0-alpha.5 is a composition kernel, not yet a complete runtime-host framework. This is the current source declaration; it does not establish that the package has been published.
 
 The next meaningful evolution is therefore not adding platform APIs to FSM_COS. It is proving the complete handoff:
 
