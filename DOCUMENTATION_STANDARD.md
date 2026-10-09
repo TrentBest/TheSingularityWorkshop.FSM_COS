@@ -8,22 +8,24 @@ The goal is to **edify, not mystify**: explain the human problem and conceptual 
 
 Unless the repository's purpose makes a section irrelevant, use the shared semantic identifiers below. The identifier belongs to the topic, not merely to its current position: preserve it across repositories so readers learn the visual language once. Omit irrelevant sections rather than renumbering later sections.
 
-| ID | Canonical section | Marker color | Typical content |
+| ID | Opening section | Marker shape and color | Reader purpose |
 |---|---|---|---|
-| **00** | Identity and badges | Graphite `#475569` | Repository/package name, valid license/build/coverage/release badges |
-| **01** | Definition | Cobalt `#2563EB` | One-sentence concrete definition |
-| **02** | Visual identity | Teal `#0F766E` | Project image or architecture visual with useful alt text |
-| **03** | Plain-language explanation | Blue `#1D4ED8` | Problem, motivation, central idea before implementation detail |
-| **04** | Audience / choose your path | Orange `#EA580C` | Reader paths for newcomers, users, developers, architects, evaluators |
-| **05** | At a glance | Violet `#7C3AED` | Package ID, status/version, frameworks, license, install and CI links |
-| **06** | Responsibility boundary | Emerald `#047857` | What the project owns, excludes, and hands off |
-| **07** | Architecture and ecosystem | Amber `#B45309` | Ownership, dependency direction, architecture diagrams |
-| **08** | Quick start | Green `#15803D` | Shortest verified path to a meaningful result |
-| **09** | Core concepts / how it works | Indigo `#4338CA` | Model, lifecycle, invariants, theory and contracts |
-| **10** | Usage and examples | Cyan `#0E7490` | Realistic source/package-version-specific examples |
-| **11** | Verification and development | Slate blue `#475569` | Build, tests, coverage, contribution guidance |
-| **12** | Documentation map / further reading | Purple `#6D28D9` | Reader-oriented routes to authoritative deep dives |
-| **13** | Related projects and Workshop footer | Warm gold `#A16207` | Relevant neighbors and consistent Workshop identity |
+| **00** | Title and identity | **Bold asterisk ✳️ in bright magenta** | Make the project identity immediately recognizable; keep valid badges close by |
+| **01** | Problem and short response | Blue square 🟦 | Name the problem first, then explain in a few sentences how this package responds |
+| **02** | Workshop documentation map | Violet marker 🟣 | Explain the repository ecosystem, document roles, and any local variation from the shared standard |
+| **03** | The problem and solution in depth | Teal marker 🩵 | Build the mental model, show responsibility boundaries, and explain why the design works |
+| **04** | See it in a minute | Bright green circle 🟢 | Give the shortest honest, meaningful, verified proof with expected results |
+| **05** | Documentation and theory | Bright purple marker 🟪 | Link each authoritative guide with a brief description of what the reader will learn |
+
+These six opening sections are a **reader journey**, not an exhaustive table of contents. They should appear in this order when applicable. Place a money-shot visual directly below the title/badges and before section 01. The image must explain or demonstrate the actual package; it must not be generic decoration.
+
+After section 05, continue with concise, useful technical reference sections as needed. Do not keep assigning global numeric IDs to every deep technical heading: the first six IDs describe the common front-door sequence. Use clear local headings for additional detail, and preserve each repository's domain voice.
+
+### Shape, color, and ordering
+
+Put the marker **before** its number and heading text (for example, 🟦 01 The problem—and our response). For section 00, use the high-contrast asterisk ✳️ before 00; do not use the low-contrast gray circle. A marker must remain recognizable in GitHub light and dark themes and must not be the only carrier of meaning—the number and words remain visible.
+
+The marker palette is intentionally vivid. Color creates quick recognition, while the repeated shape/position creates a stable visual rhythm. Use a small consistent palette rather than choosing a new decorative color for every heading. Do not rely on custom HTML/CSS for heading colors; GitHub Markdown does not provide dependable arbitrary heading-color styling. Check mobile and dark-mode readability, and never rely on color alone.
 
 ### How to apply the color system on GitHub
 
@@ -33,23 +35,21 @@ Use headings such as `## 03 🔵 Plain-language explanation` and `## 04 🟠 Aud
 
 This order is a default, not a checklist to pad every README. Deep theory, API detail, tutorials, and decision records belong in focused documents linked from the README.
 
-## 1A. The reader journey: promise, proof, understanding, depth
+## 1A. The reader journey: problem, context, depth, proof, next steps
 
-The README is the public front door, not a manual that happens to be placed first in the repository. Its order must respect how a new reader learns: first identify the thing, then understand why it matters, then see evidence, then decide how deeply to explore.
+The README is the public front door, not a manual compressed into one page. Its opening should follow the reader journey defined by sections 00–05 above:
 
-Use this **reading order** when the topics apply:
+1. **00 — Identity:** make the project and package recognizable.
+2. **Money-shot visual:** show the real package concept or behavior before asking the reader to absorb detail.
+3. **01 — Problem and response:** name the pain, then summarize the package's big-picture response.
+4. **02 — Documentation context:** explain how the Workshop repositories and documentation are organized, and identify any local variation from the shared standard.
+5. **03 — Deeper explanation:** expand the problem, mental model, responsibilities, and the specific way this package addresses them.
+6. **04 — First-minute proof:** let the reader see a meaningful result as quickly as the package's real setup permits.
+7. **05 — Documentation and theory:** provide navigable links to the authoritative guides, with a sentence describing the value of each.
 
-1. **What is it?** Definition and clear identity.
-2. **Why should I care?** The human or engineering problem, the cost/friction, and the outcome this package is designed to improve.
-3. **Show me in about a minute.** The shortest meaningful, verified example or a direct route to a real demonstration. State prerequisites and show the expected result.
-4. **What do I get?** A concise view of capabilities and the audience/use cases that benefit.
-5. **How does it fit?** Responsibility boundary, neighboring packages, and a compact architecture visual.
-6. **How does it work?** The mental model, normal lifecycle, important contracts, and core invariants.
-7. **What else must I know?** Configuration, limitations, compatibility, measured performance, troubleshooting, development, and further reading.
+This sequence is intentional: it answers *why should I care?* before asking the reader to study the architecture, and it provides the document map before the README grows into the complete technical account. Supporting reference sections may follow. Avoid duplicating the same explanation just to satisfy a template.
 
-The shared section IDs in the table below identify **topics**, not a mandatory numeric reading order. Keep an ID/color attached to its canonical topic across repositories, but place the quick-start topic near the top even though its canonical identifier is **08**. The reader should not have to pass through every architecture section before reaching the first proof.
-
-This is progressive disclosure, not a demand to make documentation shallow. The first screen earns attention; the first example earns confidence; the deeper guides earn understanding. A skimming reader should leave with the right idea, a practical reader should find the first success quickly, and a motivated reader should have a clear route into the complete theory and contract.
+A README should not overwhelm newcomers, but it must not hide the proof behind a long tutorial. A skimming reader should understand the promise; a practical reader should find a credible first success; a motivated reader should have a clear route into the complete theory and contracts.
 
 ### The first-minute proof
 
