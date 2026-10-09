@@ -8,11 +8,15 @@
 [![Last commit](https://img.shields.io/github/last-commit/TrentBest/TheSingularityWorkshop.FSM_COS/master)](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commits/master)
 [![Code Coverage](https://codecov.io/gh/TrentBest/TheSingularityWorkshop.FSM_COS/graph/badge.svg)](https://codecov.io/gh/TrentBest/TheSingularityWorkshop.FSM_COS)
 
-## 01 🔵 Definition
+## 🔵 01 Definition
+
+<img src="docs/assets/section-dividers/01-definition.svg" alt="" width="100%">
 
 **FSM_COS is a platform-neutral computation-composition kernel that resolves MicroBundles and assembles a runtime for handoff to a host.**
 
-## 02 🟩 Visual identity
+## 🟩 02 Visual identity
+
+<img src="docs/assets/section-dividers/02-visual-identity.svg" alt="" width="100%">
 
 Git is static. The architecture does not have to *feel* static.
 
@@ -35,7 +39,9 @@ The documentation diagrams are deliberately architecture-first: they show where 
 - [MicroBundle cartridge](docs/assets/microbundle-cartridge.svg)
 - [RuntimeAssembly handoff](docs/assets/runtime-assembly-handoff.svg)
 
-## 03 🔷 Plain-language explanation
+## 🔷 03 Plain-language explanation
+
+<img src="docs/assets/section-dividers/03-plain-language.svg" alt="" width="100%">
 
 > **Engineering identity:** FSM_COS is deliberately a computation platform, not an application platform. It does not know whether the computation will become a WebPage, WebApp, AnyApp, DistributedApp, desktop tool, service, simulation, spreadsheet-like system, or something with no user interface at all.
 
@@ -68,14 +74,18 @@ RuntimeAssembly
 
 > **FSM_COS assembles the computation. It does not become the application.**
 
-## 04 🟠 Choose your path
+## 🟠 04 Choose your path
+
+<img src="docs/assets/section-dividers/04-choose-your-path.svg" alt="" width="100%">
 
 - **New to FSM_COS:** start with the definition and responsibility boundary above, then read [FSM_COS Theory](docs/THEORY.md).
 - **Integrating a host:** read [Runtime Manifest](docs/RUNTIME_MANIFEST.md), [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md), and [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) as applicable.
 - **Building or changing FSM_COS:** use [Development](docs/DEVELOPMENT.md) and the [Documentation Index](DOCUMENTATION_INDEX.md).
 - **Checking ecosystem ownership or package alignment:** use the [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md) and [Dependency Alignment Checklist](docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md).
 
-## 05 🟣 At a glance
+## 🟣 05 At a glance
+
+<img src="docs/assets/section-dividers/05-at-a-glance.svg" alt="" width="100%">
 
 **Package:** TheSingularityWorkshop.FSM_COS  
 **Source package version:** `0.1.0-alpha.5`  
@@ -85,7 +95,9 @@ RuntimeAssembly
 
 The package workflow builds, tests, packs, and uploads artifacts. Its NuGet publication job is currently hard-disabled by an explicit `&& false` guard. A source version or successful build is not evidence that a package version was published, and this documentation change does not authorize publication.
 
-## 06 🟢 Responsibility boundary
+## 🟢 06 Responsibility boundary
+
+<img src="docs/assets/section-dividers/06-responsibility-boundary.svg" alt="" width="100%">
 
 <p align="center">
   <img src="docs/assets/fsm-cos-system.svg" alt="FSM_COS composition kernel between authoring and host manifestation">
@@ -121,7 +133,9 @@ execution / manifestation / next system
 
 See [Theory — what “composition of systems” means](docs/THEORY.md#1-what-does-composition-of-systems-mean) and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md).
 
-## 07 🟡 Architecture and ecosystem
+## 🟡 07 Architecture and ecosystem
+
+<img src="docs/assets/section-dividers/07-architecture-ecosystem.svg" alt="" width="100%">
 
 FSM_COS is the repository for the **common computation-composition boundary** in The Singularity Workshop architecture.
 
@@ -192,7 +206,9 @@ FSM_COS therefore has no architectural preference for:
 
 Those are manifestations or application choices made outside the kernel.
 
-## 08 🟢 Quick start
+## 🟢 08 Quick start
+
+<img src="docs/assets/section-dividers/08-quick-start.svg" alt="" width="100%">
 
 This repository's documented artifact is the .NET 8 FSM_COS library. The README is an architectural orientation, not a claim that every integration scenario below is already exercised end-to-end.
 
@@ -203,7 +219,9 @@ This repository's documented artifact is the .NET 8 FSM_COS library. The README 
 
 **Status note:** source version, NuGet publication, and a successful local build are separate facts. Check the package page and current CI rather than assuming they are interchangeable.
 
-## 09 🟪 Core concepts: the Runtime Manifest
+## 🟪 09 Core concepts: the Runtime Manifest
+
+<img src="docs/assets/section-dividers/09-runtime-manifest.svg" alt="" width="100%">
 
 <p align="center">
   <img src="docs/assets/runtime-manifest-pipeline.svg" alt="Runtime Manifest publication pipeline">
@@ -351,7 +369,9 @@ A host receives the assembled result and decides how to execute, present, or enc
 
 **Composition is not manifestation.**
 
-## 10 🩵 Host integration and usage
+## 🩵 10 Host integration and usage
+
+<img src="docs/assets/section-dividers/10-host-integration.svg" alt="" width="100%">
 
 WebPage is one host and proving ground for FSM_COS; it is not a special case inside the composition kernel. The intended flow is:
 
@@ -393,7 +413,9 @@ The boundaries can evolve. The responsibility of FSM_COS should remain clear:
 
 ---
 
-## 11 🩶 Verification and development
+## 🩶 11 Verification and development
+
+<img src="docs/assets/section-dividers/11-verification-development.svg" alt="" width="100%">
 
 Use the [Development guide](docs/DEVELOPMENT.md) for repository-specific build, test, and contribution instructions. Use the [current GitHub Actions runs](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions) and [coverage report](https://codecov.io/gh/TrentBest/TheSingularityWorkshop.FSM_COS) as live evidence; badges alone do not establish that a particular commit passed.
 
@@ -444,7 +466,9 @@ The old root scaffold that contained only Class1.cs has been removed. The soluti
 
 <p align="center"><strong>AI capabilities are composed like any other capability; FSM_COS does not become the AI framework.</strong></p>
 
-## 12 🟣 Documentation map / further reading
+## 🟣 12 Documentation map / further reading
+
+<img src="docs/assets/section-dividers/12-documentation-map.svg" alt="" width="100%">
 
 This repository follows the shared [Documentation Standard](DOCUMENTATION_STANDARD.md). Use the [Documentation Index](DOCUMENTATION_INDEX.md) to choose a reading path by goal; the README is the entry point, while focused documents remain authoritative for theory, architecture, and individual contracts.
 
@@ -461,7 +485,9 @@ This repository carries its own architecture and theory. The documents here desc
 - [Development](docs/DEVELOPMENT.md) — how to evolve and verify the repository.
 - [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — how the browser host consumes FSM_COS without pulling platform concerns into the kernel.
 
-## 13 🟨 Related projects, resources & Workshop support
+## 🟨 13 Related projects, resources & Workshop support
+
+<img src="docs/assets/section-dividers/13-related-projects.svg" alt="" width="100%">
 
 ### 📦 Get the core packages
 
