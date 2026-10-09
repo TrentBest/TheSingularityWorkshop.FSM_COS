@@ -14,7 +14,7 @@ public sealed class FsmCosTests
         var catalog = new TestCatalog(new TestBundle(2), new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2)));
 
         var assembly = new FsmCos(catalog).Execute(
-            new RuntimeManifest(42, new[] { MicroBundleDependencyRequest.Unconfigured(1) }));
+            new RuntimeManifest(42, new[] { Entry(1) }));
 
         Assert.Equal(new ulong[] { 2, 1 }, assembly.Bundles.Select(x => x.Id));
     }
@@ -26,9 +26,56 @@ public sealed class FsmCosTests
         var bundle = new TestBundle(7);
 
         new FsmCos(new TestCatalog(bundle)).Execute(
-            new RuntimeManifest(42, new[] { new MicroBundleDependencyRequest(7, configuration) }));
+            new RuntimeManifest(42, new[] { Entry(7) }), new TestConfigurationSource((7, "0.1.0-test", configuration)));
 
         Assert.Equal(configuration, bundle.Configuration.ToArray());
+    }
+
+    [Fact]
+    public void Execute_uses_defaults_when_configuration_is_absent()
+    {
+        var bundle = new TestBundle(9);
+
+        new FsmCos(new TestCatalog(bundle)).Execute(
+            new RuntimeManifest(42, new[] { Entry(9) }));
+
+        Assert.Empty(bundle.Configuration.ToArray());
+    }
+
+    [Fact]
+    public void Execute_rejects_a_manifest_version_that_the_catalog_does_not_supply()
+    {
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(new TestBundle(10)))
+                .Execute(new RuntimeManifest(
+                    42,
+                    new[] { new MicroBundleManifestEntry(10, "9.9.9") })));
+
+        Assert.Contains("10", exception.Message);
+        Assert.Contains("9.9.9", exception.Message);
+    }
+
+
+    [Fact]
+    public void ManifestEntry_rejects_empty_versions()
+    {
+        Assert.Throws<ArgumentException>(() =>
+            new MicroBundleManifestEntry(1, " "));
+    }
+
+    [Fact]
+    public void External_configuration_overrides_dependency_request_configuration()
+    {
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(
+            1,
+            new MicroBundleDependencyRequest(2, new byte[] { 1, 2, 3 }));
+
+        new FsmCos(new TestCatalog(dependency, root)).Execute(
+            new RuntimeManifest(42, new[] { Entry(1) }),
+            new TestConfigurationSource((2, "0.1.0-test", new byte[] { 9, 8, 7 })));
+
+        Assert.Equal(new byte[] { 9, 8, 7 }, dependency.Configuration.ToArray());
     }
 
     [Fact]
@@ -38,7 +85,7 @@ public sealed class FsmCosTests
         var root = new TestBundle(1, new MicroBundleDependencyRequest(2, new byte[] { 5, 8, 13 }));
 
         new FsmCos(new TestCatalog(dependency, root)).Execute(
-            new RuntimeManifest(42, new[] { MicroBundleDependencyRequest.Unconfigured(1) }));
+            new RuntimeManifest(42, new[] { Entry(1) }));
 
         Assert.Equal(new byte[] { 5, 8, 13 }, dependency.Configuration.ToArray());
     }
@@ -49,15 +96,28 @@ public sealed class FsmCosTests
         var bundle = new TestBundle(1);
 
         var assembly = new FsmCos(new TestCatalog(bundle)).Execute(
-            new RuntimeManifest(42, new[]
-            {
-                new MicroBundleDependencyRequest(1, new byte[] { 1 }),
-                new MicroBundleDependencyRequest(1, new byte[] { 2 })
-            }));
+            new RuntimeManifest(42, new[] { Entry(1), Entry(1) }));
 
         Assert.Single(assembly.Bundles);
-        Assert.Equal(new byte[] { 1 }, bundle.Configuration.ToArray());
+        Assert.Empty(bundle.Configuration.ToArray());
         Assert.Equal(1, bundle.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_conflicting_versions_for_the_same_root_bundle()
+    {
+        var bundle = new TestBundle(1);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[]
+                {
+                    new MicroBundleManifestEntry(1, "0.1.0-test"),
+                    new MicroBundleManifestEntry(1, "0.2.0-test")
+                })));
+
+        Assert.Contains("conflicting versions", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(0, bundle.LoadCalls);
     }
 
     [Fact]
@@ -70,8 +130,8 @@ public sealed class FsmCosTests
         var assembly = new FsmCos(new TestCatalog(shared, first, second)).Execute(
             new RuntimeManifest(42, new[]
             {
-                MicroBundleDependencyRequest.Unconfigured(1),
-                MicroBundleDependencyRequest.Unconfigured(2)
+                Entry(1),
+                Entry(2)
             }));
 
         Assert.Equal(new ulong[] { 3, 1, 2 }, assembly.Bundles.Select(x => x.Id));
@@ -84,7 +144,7 @@ public sealed class FsmCosTests
         var bundle = new TestBundle(1) { ChangesRemaining = 2 };
 
         var assembly = new FsmCos(new TestCatalog(bundle)).Execute(
-            new RuntimeManifest(42, new[] { MicroBundleDependencyRequest.Unconfigured(1) }));
+            new RuntimeManifest(42, new[] { Entry(1) }));
 
         Assert.Equal(3, bundle.ArbitrationCalls);
         Assert.Equal(2, assembly.ArbitrationRounds);
@@ -96,7 +156,7 @@ public sealed class FsmCosTests
         var bundle = new TestBundle(1);
 
         var assembly = new FsmCos(new TestCatalog(bundle)).Execute(
-            new RuntimeManifest(42, new[] { MicroBundleDependencyRequest.Unconfigured(1) }));
+            new RuntimeManifest(42, new[] { Entry(1) }));
 
         Assert.Equal(1, bundle.ArbitrationCalls);
         Assert.Equal(0, assembly.ArbitrationRounds);
@@ -107,7 +167,7 @@ public sealed class FsmCosTests
     {
         var exception = Assert.Throws<InvalidOperationException>(() =>
             new FsmCos(new TestCatalog()).Execute(
-                new RuntimeManifest(42, new[] { MicroBundleDependencyRequest.Unconfigured(99) })));
+                new RuntimeManifest(42, new[] { Entry(99) })));
 
         Assert.Contains("99", exception.Message);
     }
@@ -120,7 +180,7 @@ public sealed class FsmCosTests
 
         var exception = Assert.Throws<InvalidOperationException>(() =>
             new FsmCos(new TestCatalog(first, second)).Execute(
-                new RuntimeManifest(42, new[] { MicroBundleDependencyRequest.Unconfigured(1) })));
+                new RuntimeManifest(42, new[] { Entry(1) })));
 
         Assert.Contains("cycle", exception.Message, StringComparison.OrdinalIgnoreCase);
     }
@@ -132,7 +192,7 @@ public sealed class FsmCosTests
 
         var exception = Assert.Throws<InvalidOperationException>(() =>
             new FsmCos(new TestCatalog(bundle), maximumArbitrationRounds: 2)
-                .Execute(new RuntimeManifest(42, new[] { MicroBundleDependencyRequest.Unconfigured(1) })));
+                .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
 
         Assert.Contains("did not converge", exception.Message, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(2, bundle.ArbitrationCalls);
@@ -143,7 +203,7 @@ public sealed class FsmCosTests
     {
         Assert.Throws<ArgumentOutOfRangeException>(() =>
             new FsmCos(new TestCatalog()).Execute(
-                new RuntimeManifest(42, new[] { MicroBundleDependencyRequest.Unconfigured(0) })));
+                new RuntimeManifest(42, new[] { Entry(0) })));
     }
 
     [Fact]
@@ -151,7 +211,7 @@ public sealed class FsmCosTests
     {
         var exception = Assert.Throws<InvalidOperationException>(() =>
             new FsmCos(new TestCatalog(new TestBundle(7)))
-                .Execute(new RuntimeManifest(42, new[] { MicroBundleDependencyRequest.Unconfigured(8) })));
+                .Execute(new RuntimeManifest(42, new[] { Entry(8) })));
 
         Assert.Contains("8", exception.Message);
     }
@@ -163,26 +223,10 @@ public sealed class FsmCosTests
         var bundle = new TestBundle(1);
 
         new FsmCos(new TestCatalog(bundle)).Execute(
-            new RuntimeManifest(1234, new[] { MicroBundleDependencyRequest.Unconfigured(1) }, context));
+            new RuntimeManifest(1234, new[] { Entry(1) }, context));
 
         Assert.Equal(1234UL, bundle.SeenRuntimeId);
         Assert.Same(context, bundle.SeenExperienceContext);
-    }
-
-    [Fact]
-    public void Execute_carries_semantic_intent_from_manifest_to_runtime_assembly()
-    {
-        var intent = new SemanticIntent("open.workshop", 0x4201UL);
-
-        var assembly = new FsmCos(new TestCatalog()).Execute(
-            new RuntimeManifest(
-                1234,
-                Array.Empty<MicroBundleDependencyRequest>(),
-                Intent: intent));
-
-        Assert.Same(intent, assembly.Intent);
-        Assert.Equal("open.workshop", assembly.Intent!.Name);
-        Assert.Equal(0x4201UL, assembly.Intent.ProtocolId);
     }
 
     [Fact]
@@ -193,11 +237,10 @@ public sealed class FsmCosTests
         Assert.Equal(77UL, assembly.RuntimeId);
         Assert.Empty(assembly.Bundles);
         Assert.Equal(0, assembly.ArbitrationRounds);
-        Assert.Null(assembly.Intent);
     }
 
     [Fact]
-    public void Core_assembly_references_FSM_API_MicroBundleDomain_and_UserIO()
+    public void Core_assembly_references_FSM_API_and_MicroBundleDomain()
     {
         var references = typeof(FsmCos).Assembly
             .GetReferencedAssemblies()
@@ -206,7 +249,19 @@ public sealed class FsmCosTests
 
         Assert.Contains(typeof(IStateContext).Assembly.GetName().Name!, references);
         Assert.Contains(typeof(MicroBundleDescriptor).Assembly.GetName().Name!, references);
-        Assert.Contains(typeof(SemanticIntent).Assembly.GetName().Name!, references);
+    }
+
+    [Fact]
+    public void Execute_preserves_optional_semantic_intent_on_the_runtime_assembly()
+    {
+        var intent = new SemanticIntent("open-moniker", 123UL);
+
+        var assembly = new FsmCos(new TestCatalog()).Execute(
+            RuntimeManifest.Empty(88, intent: intent));
+
+        Assert.Same(intent, assembly.Intent);
+        Assert.Equal("open-moniker", assembly.Intent!.Name);
+        Assert.Equal(123UL, assembly.Intent.ProtocolId);
     }
 
     [Fact]
@@ -219,17 +274,6 @@ public sealed class FsmCosTests
         Assert.Equal(88UL, manifest.RuntimeId);
         Assert.Empty(manifest.Bundles);
         Assert.Same(context, manifest.ExperienceContext);
-        Assert.Null(manifest.Intent);
-    }
-
-    [Fact]
-    public void RuntimeManifest_empty_can_carry_semantic_intent()
-    {
-        var intent = new SemanticIntent("resume.last.experience");
-
-        var manifest = RuntimeManifest.Empty(88, intent: intent);
-
-        Assert.Same(intent, manifest.Intent);
     }
 
     [Fact]
@@ -257,7 +301,7 @@ public sealed class FsmCosTests
         var bundle = new TestBundle(17);
 
         var assembly = new FsmCos(new TestCatalog(bundle)).Execute(
-            new RuntimeManifest(42, new[] { MicroBundleDependencyRequest.Unconfigured(17) }));
+            new RuntimeManifest(42, new[] { Entry(17) }));
 
         Assert.True(assembly.TryGetBundle(17, out var resolved));
         Assert.Same(bundle, resolved);
@@ -270,7 +314,7 @@ public sealed class FsmCosTests
         var bundle = new TestBundle(23);
 
         var assembly = new FsmCos(new TestCatalog(bundle)).Execute(
-            new RuntimeManifest(42, new[] { MicroBundleDependencyRequest.Unconfigured(23) }));
+            new RuntimeManifest(42, new[] { Entry(23) }));
 
         Assert.True(assembly.TryGetBundle<TestBundle>(23, out var resolved));
         Assert.Same(bundle, resolved);
@@ -284,11 +328,82 @@ public sealed class FsmCosTests
         var bundle = new TestBundle(31);
 
         var assembly = new FsmCos(new TestCatalog(bundle)).Execute(
-            new RuntimeManifest(42, new[] { MicroBundleDependencyRequest.Unconfigured(31) }));
+            new RuntimeManifest(42, new[] { Entry(31) }));
 
         Assert.Same(assembly.Bundles, assembly.LoadedBundles);
         Assert.Single(assembly.LoadedBundles);
         Assert.Same(bundle, assembly.LoadedBundles[0]);
+    }
+
+    [Fact]
+    public void Execute_accepts_a_schedule_that_matches_the_resolved_dependency_graph()
+    {
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var entries = new[]
+        {
+            new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", "sha256:root")),
+            new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", "sha256:dependency"))
+        };
+        var schedule = new RuntimeManifestSchedule(
+            entries,
+            new[] { new RuntimeManifestDependency(1, 2) });
+
+        var assembly = new FsmCos(new TestCatalog(dependency, root)).Execute(
+            new RuntimeManifest(
+                42,
+                new[] { Entry(1) },
+                LoadPlan: entries,
+                Schedule: schedule));
+
+        Assert.Equal(new ulong[] { 2, 1 }, assembly.Bundles.Select(bundle => bundle.Id));
+        Assert.Equal(1, dependency.LoadCalls);
+        Assert.Equal(1, root.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_a_schedule_that_disagrees_with_the_resolved_graph_before_loading()
+    {
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var entries = new[]
+        {
+            new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", "sha256:root")),
+            new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", "sha256:dependency"))
+        };
+        var schedule = new RuntimeManifestSchedule(entries, Array.Empty<RuntimeManifestDependency>());
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(dependency, root)).Execute(
+                new RuntimeManifest(
+                    42,
+                    new[] { Entry(1) },
+                    LoadPlan: entries,
+                    Schedule: schedule)));
+
+        Assert.Contains("dependency edges do not match", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(0, dependency.LoadCalls);
+        Assert.Equal(0, root.LoadCalls);
+    }
+
+    private static MicroBundleManifestEntry Entry(ulong bundleId) =>
+        new(bundleId, "0.1.0-test");
+
+    private sealed class TestConfigurationSource : IMicroBundleConfigurationSource
+    {
+        private readonly Dictionary<(ulong BundleId, string Version), ReadOnlyMemory<byte>> _configuration;
+
+        public TestConfigurationSource(params (ulong BundleId, string Version, byte[] Configuration)[] entries) =>
+            _configuration = entries.ToDictionary(
+                x => (x.BundleId, x.Version),
+                x => (ReadOnlyMemory<byte>)x.Configuration);
+
+        public bool TryGetConfiguration(
+            ulong runtimeId,
+            ulong bundleId,
+            string version,
+            out ReadOnlyMemory<byte> configuration) =>
+            _configuration.TryGetValue((bundleId, version), out configuration);
     }
 
     private sealed class TestCatalog : IMicroBundleCatalog
@@ -297,6 +412,10 @@ public sealed class FsmCosTests
 
         public TestCatalog(params TheSingularityWorkshop.MicroBundleDomain.IMicroBundle[] bundles) =>
             _bundles = bundles.ToDictionary(x => x.Id);
+
+        public bool TryResolve(ulong bundleId, string version, out TheSingularityWorkshop.MicroBundleDomain.IMicroBundle? bundle) =>
+            _bundles.TryGetValue(bundleId, out bundle) &&
+            string.Equals(bundle.Descriptor.Version, version, StringComparison.Ordinal);
 
         public bool TryResolve(ulong bundleId, out TheSingularityWorkshop.MicroBundleDomain.IMicroBundle? bundle) =>
             _bundles.TryGetValue(bundleId, out bundle);
