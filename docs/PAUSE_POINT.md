@@ -88,3 +88,22 @@ This addendum supersedes the older sequencing above until the alpha.6 source rec
 6. Keep NuGet publication disabled with `&& false`. No publish, branch deletion, or merge of the draft integration PR is authorized by this checklist.
 
 Return to WebPage once the source contract is reconciled, the alpha.6 package candidate passes its release-readiness checks, and the RuntimeAssembly host handoff can be evaluated against that stable candidate. A package publish still requires separate explicit owner approval.
+
+
+## Alpha.6 release-candidate progress — 2026-10-09
+
+Latest candidate work on `development`:
+- Preserved the newer versioned-root and external-configuration API while restoring optional `FSM_UserIO.SemanticIntent` pass-through from `RuntimeManifest` to `RuntimeAssembly`.
+- Added schedule preflight validation: when a schedule is present, the catalog-resolved dependency closure, versions, and dependency edges must agree before any MicroBundle `Load` side effects. Tests cover a matching graph and a mismatch rejected before loading.
+- Added `docs/releases/0.1.0-alpha.6.md`; it explicitly says localization, content-hash verification, Bootstrap-only initial composition, and live Deferred promotion are not implemented.
+- Added a separate public-NuGet restore/build/test/pack workflow job that deliberately does not use the CI-only local MicroBundleDomain package. The publish job now requires both verification jobs and still includes `&& false`.
+
+Current verification run to watch: [GitHub Actions](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions). A run from an earlier commit succeeded, but the latest code and workflow changes are still being verified; do not claim the candidate is green until the exact latest code commit has a successful build/test/pack result and the public-feed job passes.
+
+Next:
+1. Verify latest code commit and workflow runs, then fix any build/test/public-feed failures.
+2. Inspect the uploaded package artifacts and confirm package metadata/dependencies/README/license.
+3. Audit the full alpha.6 diff and the `&& false` publish safeguard.
+4. Run the downstream consumer compatibility review for Forge and AnyApp; do not update their package pins before alpha.6 is actually published.
+5. Once those checks pass, present the exact candidate and caveats for owner review. Publication still requires explicit approval.
+6. Then pivot to WebPage and prove its manifest-driven hub invokes real MicroBundle-backed behavior rather than merely rendering tabs.
