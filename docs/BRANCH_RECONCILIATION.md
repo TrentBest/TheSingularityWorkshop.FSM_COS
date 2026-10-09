@@ -171,3 +171,24 @@ Disposition of its unique work:
 - **Do not merge the branch wholesale:** it contains the staged-load implementation already being adapted plus unrelated release-only changes.
 
 The release-prep branch remains **not safe to delete** until the release guide/visual are adapted or consciously dispositioned, the workflow/project changes are resolved, and its open/closed PR history is accounted for.
+
+
+### Forge handoff and alpha.6 compatibility assessment (2026-10-09)
+
+The Forge's durable handoff/TODO belongs in the Forge repository; FSM_COS keeps only the runtime contract and integration acceptance criteria. The current source-level assessment in `docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md` is consistent with the staged-load design and is the working checklist for the next release candidate.
+
+**What FSM_COS already offers to the Forge:**
+- Versioned manifest roots via `MicroBundleManifestEntry` (bundle ID + requested version).
+- An optional host-owned `IMicroBundleConfigurationSource`; configuration remains external, and missing configuration means bundle defaults.
+- Catalog resolution, dependency closure, cycle detection, bounded arbitration, and a `RuntimeAssembly` handoff.
+- Optional staged identity/schedule metadata that can describe immutable artifact identity, dependency prerequisites, and Bootstrap/Resident/Deferred intent without adding a Forge, repository, storage, serializer, GUI, or host dependency to the kernel.
+
+**What is not yet an end-to-end capability:** FSM_COS does not yet localize/verify repository bytes, compose only a Bootstrap subset, or promote Deferred bundles into an already-running assembly. The staged-plan types validate/describe state; they do not implement the three concurrent Forge/runtime clocks. Do not let the Forge pretend those operations exist just because the metadata types compile.
+
+**Compatibility rule:** the Forge must compile its rich authoring model into the published machine-oriented manifest. It must migrate from the older `BundleRequest`/inline-configuration shape to versioned root entries plus its own configuration source. FSM_COS should not import Forge authoring concepts or serialization/storage code to ease that migration.
+
+**Release target correction:** the next intended package is `0.1.0-alpha.6`, not alpha.5. The development project metadata now declares alpha.6. This is a candidate version only; branch/API reconciliation, clean public-package consumer verification, and explicit owner publication approval remain required. Keep the NuGet publish condition hard-disabled with `&& false`.
+
+**Next order of work:** (1) finish reconciling master-only intent support against the development versioned-manifest/configuration contract; (2) test published dependency-graph consistency against resolved MicroBundleDomain dependencies; (3) define the host/repository localization boundary and prove it with a real adapter; (4) only then implement Bootstrap-first composition and deferred promotion end-to-end. Keep the Forge and release-prep branches until all unique work is preserved and verified.
+
+**Disposition:** Forge-facing contract mostly exists; consumer migration and staged runtime execution remain open; alpha.6 is not cleared for publication.
