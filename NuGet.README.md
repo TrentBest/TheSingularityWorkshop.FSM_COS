@@ -31,33 +31,34 @@ RuntimeManifest → FSM_COS → RuntimeAssembly → Host
 
 ## 🟢 04 — See it in a minute
 
-Install the currently published version into a .NET project:
+To install FSM_COS, choose an available version from the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS). If you intend to use a prerelease, request prerelease versions explicitly:
 
 ```bash
-dotnet add package TheSingularityWorkshop.FSM_COS
+dotnet add package TheSingularityWorkshop.FSM_COS --prerelease
 ```
 
-FSM_COS needs a catalog supplied by the host, so installation alone does not create an application. To see dependency resolution proven by a runnable test, clone the source repository and run:
+Installation adds a composition library; it does not create an application. FSM_COS needs a catalog supplied by the host. To see the composition behavior running, clone the source repository and run its minimal consumer sample:
 
 ```bash
 git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git
 cd TheSingularityWorkshop.FSM_COS
-dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --filter "FullyQualifiedName~Execute_loads_dependencies_before_requesting_bundle"
+dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
 ```
 
-The test proves that when bundle `1` depends on bundle `2`, the resulting assembly orders them `2 → 1`. For a consumer's own catalog and bundles, follow [Consuming MicroBundles](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/CONSUMING_MICROBUNDLES.md).
+The sample creates a report bundle that depends on a data-source bundle. The expected result is `Assembly order: 2 -> 1`, proving the dependency is loaded before the requested bundle. It defines its own catalog and example bundles; these are not built-in FSM_COS types. The sample references the local source project so it can be verified before a candidate version is published.
 
-The package targets **.NET 8**. Its direct dependencies are:
+For a complete consumer guide, see [Consuming MicroBundles](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/CONSUMING_MICROBUNDLES.md). The package targets **.NET 8** and its direct dependencies are:
 
 - [FSM_API](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_API) — state/context primitives.
 - [MicroBundleDomain](https://www.nuget.org/packages/TheSingularityWorkshop.MicroBundleDomain) — the MicroBundle contract.
 - [FSM_UserIO](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_UserIO) — the platform-neutral `SemanticIntent` boundary.
 
-This source currently declares version `0.1.0-alpha.6`. A version declaration in source or documentation is not proof that a package is published; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the version actually available.
+This source currently declares version `0.1.0-alpha.6`. A source version declaration alone does not establish publication status; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the version actually available.
 
 ## 🟪 05 — Available documentation and theory
 
 - [Project overview](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/README.md) — the bigger picture and quick proof.
+- [What Is FSM_COS?](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/WHAT_IS_FSM_COS.md) — a plain-language introduction for readers new to software composition.
 - [Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/THEORY.md) — why composition is a distinct operation.
 - [Architecture](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ARCHITECTURE.md) — ownership and runtime flow.
 - [Runtime Manifest](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/RUNTIME_MANIFEST.md) — the composition request.
