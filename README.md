@@ -20,7 +20,7 @@ The result is a `RuntimeAssembly`—a handoff to another system, not a finished 
 
 **In one line:** the manifest says what is requested; FSM_COS assembles what must exist together; the host decides what happens next.
 
-## 🟣 02 — Why give composition its own boundary?
+## 🟣 02 — Why does it exist?
 
 Without a distinct composition layer, each host can end up owning its own dependency logic and capability wiring. That makes reusable behavior harder to share and encourages application-specific concerns to leak into lower-level libraries.
 
@@ -28,7 +28,7 @@ FSM_COS gives that work a focused home. A browser app, desktop program, service,
 
 This is an architectural boundary, not a promise that every capability is automatically portable. Compatibility still depends on the contracts, dependencies, and abilities of the host.
 
-## 🟦 03 — How does the composition flow work?
+## 🩵 03 — How does it work?
 
 ```text
 Runtime Manifest
@@ -56,32 +56,21 @@ Each part has a clear owner:
 
 FSM_COS is not a GUI, engine, artifact repository, transport layer, or application loop. For the exact contracts and responsibility boundaries, see [Architecture](docs/ARCHITECTURE.md) and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md).
 
-## 🟢 04 — See the core behavior
+## 🟢 04 — See it in a minute
 
-A repository test demonstrates the central dependency rule: when bundle `1` depends on bundle `2`, requesting bundle `1` produces an assembly ordered `2 → 1`.
-
-```csharp
-var catalog = new TestCatalog(
-    new TestBundle(2),
-    new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2)));
-
-var assembly = new FsmCos(catalog).Execute(
-    new RuntimeManifest(42, new[] { Entry(1) }));
-
-Assert.Equal(new ulong[] { 2, 1 }, assembly.Bundles.Select(x => x.Id));
-```
-
-This is a **test-fixture excerpt**, not a standalone application: `TestCatalog`, `TestBundle`, and `Entry` are helpers from the test project. It comes from `Execute_loads_dependencies_before_requesting_bundle`.
-
-To run the proof from a repository clone:
+The quickest verifiable way to see FSM_COS do its job is to run the focused test that proves dependency ordering. You need Git and the **.NET 8 SDK**.
 
 ```bash
+git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git
+cd TheSingularityWorkshop.FSM_COS
 dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --filter "FullyQualifiedName~Execute_loads_dependencies_before_requesting_bundle"
 ```
 
-For consumer setup and the full catalog contract, use [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md). The current source targets **.NET 8**. The `0.1.0-alpha.6` package is a candidate and is not published yet; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the actual released version.
+**What should happen?** The test passes: requesting bundle `1`, which depends on bundle `2`, produces an assembly ordered `2 → 1`. This is the shortest runnable proof in the repository; the test creates the small catalog and bundles needed to make that behavior real.
 
-## 🟪 05 — Choose your next step
+To use FSM_COS in your own host, start with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md), which explains how to provide that catalog and the bundle contracts. The source targets **.NET 8**. Version `0.1.0-alpha.6` is a development candidate, not a claim of publication; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the currently available version.
+
+## 🟪 05 — Available documentation and theory
 
 Pick the question you want answered; each document focuses on one topic.
 
