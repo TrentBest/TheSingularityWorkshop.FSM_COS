@@ -23,10 +23,12 @@ Console.WriteLine();
 Console.WriteLine($"Assembly order: {string.Join(" -> ", assembly.Bundles.Select(bundle => bundle.Id))}");
 Console.WriteLine("Expected order: 2 -> 1");
 
-sealed class DemoCatalog(params IMicroBundle[] bundles) : IMicroBundleCatalog
+sealed class DemoCatalog : IMicroBundleCatalog
 {
-    private readonly IReadOnlyDictionary<ulong, IMicroBundle> _bundles =
-        bundles.ToDictionary(bundle => bundle.Id);
+    private readonly IReadOnlyDictionary<ulong, IMicroBundle> _bundles;
+
+    public DemoCatalog(params IMicroBundle[] bundles) =>
+        _bundles = bundles.ToDictionary(bundle => bundle.Id);
 
     public bool TryResolve(ulong bundleId, string version, out IMicroBundle? bundle)
     {
