@@ -16,13 +16,13 @@ The browser should therefore not become a dependency of FSM_COS.
 
 ## Package boundary
 
-WebPage consumes the published package. Use a version that is actually available from NuGet; the current source declaration is `0.1.0-alpha.5`, which does not by itself establish that version has been published:
+WebPage consumes the published package. Use a version that is actually available from NuGet. The current development candidate declares `0.1.0-alpha.6`, but that source declaration does not mean alpha.6 is published:
 
 ~~~xml
 <PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="x.y.z" />
 ~~~
 
-The package currently targets .NET 8 and depends on FSM_API and MicroBundleDomain. A WebPage project may consume it because the composition kernel is written against platform-neutral .NET APIs.
+The alpha.6 candidate targets .NET 8 and directly references FSM_API 1.0.13, MicroBundleDomain 1.0.1, and FSM_UserIO 0.1.0-alpha.1. FSM_UserIO supplies the `SemanticIntent` type exposed as an optional value on `RuntimeManifest` and carried through to `RuntimeAssembly`; NuGet consumers must restore that dependency even when they do not supply an intent. WebPage's currently tested composition path does not require a non-null intent. Keep the dependency decision visible for future minimization rather than implying the package has only two direct dependencies. The kernel itself remains platform-neutral.
 
 A browser-specific adapter is **not** required merely to execute FsmCos.Execute(). An adapter becomes necessary at the point where the assembled result must interact with a host-specific lifecycle or rendering system.
 
@@ -188,7 +188,7 @@ The Warehouse does not become part of the FSM_COS package. It supplies or backs 
 
 ## Current limitation
 
-0.1.0-alpha.5 is a composition kernel, not yet a complete runtime-host framework. This is the current source declaration; it does not establish that the package has been published.
+`0.1.0-alpha.6` is a composition kernel, not a complete runtime-host framework. The alpha.6 source candidate has passed its package workflow and WebPage's source-candidate integration tests, but it is not yet published on NuGet. This does not establish that the visible WebPage experience is fully driven by `RuntimeAssembly`.
 
 The next meaningful evolution is therefore not adding platform APIs to FSM_COS. It is proving the complete handoff:
 
