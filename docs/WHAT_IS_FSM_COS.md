@@ -6,7 +6,7 @@ FSM_COS is The Singularity Workshop's **runtime composition kernel**. In plain l
 
 ## Start with a familiar problem
 
-Imagine you are setting up a workshop for a particular job. You need a set of tools, and some tools require other tools to be available first. You want to describe the job, find the necessary pieces, check that they can work together, and then hand the prepared setup to the person who will actually do the work.
+Imagine you are setting up a workshop for a particular job. You need a set of tools, and some tools require other tools to be available first. You want to describe the job, find the necessary pieces, give them a defined opportunity to reconcile their shared setup, and then hand the prepared setup to the person who will actually do the work.
 
 A software system faces a similar problem. One experience might need several independent capabilities. Some capabilities depend on others. Different hosts may want different combinations.
 
