@@ -24,7 +24,7 @@ The current package is:
 
 ```text
 TheSingularityWorkshop.FSM_COS
-0.1.0-alpha.5
+0.1.0-alpha.6
 ```
 
 The package currently consumes:
@@ -32,9 +32,10 @@ The package currently consumes:
 ```text
 TheSingularityWorkshop.FSM_API       1.0.13
 TheSingularityWorkshop.MicroBundleDomain 1.0.1
+TheSingularityWorkshop.FSM_UserIO       0.1.0-alpha.1
 ```
 
-Those are runtime dependencies because the composition kernel actually consumes their contracts.
+Those are runtime dependencies because the composition kernel actually consumes their contracts. FSM_UserIO supplies the platform-neutral semantic-intent contract carried across the composition boundary.
 
 Other ecosystem packages should remain outside the runtime dependency graph unless a future FSM_COS contract genuinely requires them.
 
