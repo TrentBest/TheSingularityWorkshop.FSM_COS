@@ -131,8 +131,10 @@ jobs:
 
   publish_nuget:
     needs: [build-and-test, public-package-compatibility]
+    # Publishing is available only when deliberately dispatched from development
+    # with the boolean input checked. Pushes and pull requests never publish.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true && github.ref == 'refs/heads/development' }}
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true && false }}
     permissions:
       contents: read
       id-token: write
