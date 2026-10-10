@@ -11,11 +11,11 @@ Unless the repository's purpose makes a section irrelevant, use the shared seman
 | ID | Opening section | Marker shape and color | Reader purpose |
 |---|---|---|---|
 | **00** | Title and identity | **Bright, high-contrast asterisk emoji ✳️** | Make the project identity immediately recognizable; keep valid badges close by |
-| **01** | Problem and short response | Blue square 🟦 | Name the problem first, then explain in a few sentences how this package responds |
-| **02** | Workshop documentation map | Violet marker 🟣 | Explain the repository ecosystem, document roles, and any local variation from the shared standard |
-| **03** | The problem and solution in depth | Teal marker 🩵 | Build the mental model, show responsibility boundaries, and explain why the design works |
-| **04** | See it in a minute | Bright green circle 🟢 | Give the shortest honest, meaningful, verified proof with expected results |
-| **05** | Documentation and theory | Bright purple marker 🟪 | Link each authoritative guide with a brief description of what the reader will learn |
+| **01** | What | Blue square 🟦 | Define the thing plainly and name what it does |
+| **02** | Why | Violet marker 🟣 | Explain the problem it solves and why this project exists |
+| **03** | How | Teal marker 🩵 | Explain the working model and the boundaries that matter |
+| **04** | See it in a minute | Bright green circle 🟢 | Give the simplest honest, verified first use a reader can try, with expected behavior |
+| **05** | Available documentation and theory | Bright purple marker 🟪 | Route readers to short, focused guides and deeper explanations |
 
 These six opening sections are a **reader journey**, not an exhaustive table of contents. They should appear in this order when applicable. Place a money-shot visual directly below the title/badges and before section 01. The image must explain or demonstrate the actual package; it must not be generic decoration.
 
@@ -23,7 +23,9 @@ After section 05, continue with concise, useful technical reference sections as 
 
 ### Shape, color, and ordering
 
-Put the marker **before** its number and heading text (for example, 🟦 01 The problem—and our response). For section 00, use the high-contrast asterisk emoji ✳️ before 00; do not use the low-contrast gray circle. A marker must remain recognizable in GitHub light and dark themes and must not be the only carrier of meaning—the number and words remain visible.
+Put the marker **before** its number and heading text (for example, 🟦 01 What). For section 00, use the high-contrast asterisk emoji ✳️ before 00; do not use the low-contrast gray circle. A marker must remain recognizable in GitHub light and dark themes and must not be the only carrier of meaning—the number and words remain visible.
+
+When a marker shape has an outline, border, or underline, that stroke must use the **same semantic color as the shape**. Make it unmistakable: use a substantially thicker stroke than a hairline (normally at least 4 SVG units at a 20-unit icon scale, proportionally thicker for larger shapes). Do not use a gray or neutral outline around a colored shape unless the neutral outline has a separate, explicitly documented meaning. Keep sufficient contrast against the page background.
 
 The marker palette is intentionally vivid. Color creates quick recognition, while the repeated shape/position creates a stable visual rhythm. Use a small consistent palette rather than choosing a new decorative color for every heading. Do not rely on custom HTML/CSS for heading colors; GitHub Markdown does not provide dependable arbitrary heading-color styling. Check mobile and dark-mode readability, and never rely on color alone.
 
@@ -31,7 +33,7 @@ The marker palette is intentionally vivid. Color creates quick recognition, whil
 
 GitHub Markdown does not provide a dependable repository-wide stylesheet for arbitrary heading colors. Use the **number plus a small colored marker** as the portable visual anchor (for example, a small SVG marker checked into a shared documentation-assets location, or a consistent colored square emoji where assets are not practical). Keep the heading text, numeric ID, marker color, and meaning aligned. Do not rely on custom HTML/CSS rendering that may be sanitized or display differently across clients. The color supplements the number; it must never be the only way to distinguish a section.
 
-Use headings such as `## 03 🔵 Plain-language explanation` and `## 04 🟠 Audience / choose your path` when shared SVG markers are not available. For deep-dive documents, use the same ID/color only when the section belongs to that canonical topic; otherwise use unnumbered local headings rather than assigning a misleading global ID.
+Use headings such as `## 🟦 01 What`, `## 🟣 02 Why`, `## 🩵 03 How`, `## 🟢 04 See it in a minute`, and `## 🟪 05 Available documentation and theory` when shared SVG markers are not available. For deep-dive documents, use the same ID/color only when the section belongs to that canonical topic; otherwise use unnumbered local headings rather than assigning a misleading global ID.
 
 This order is a default, not a checklist to pad every README. Deep theory, API detail, tutorials, and decision records belong in focused documents linked from the README.
 
@@ -41,11 +43,11 @@ The README is the public front door, not a manual compressed into one page. Its 
 
 1. **00 — Identity:** make the project and package recognizable.
 2. **Money-shot visual:** show the real package concept or behavior before asking the reader to absorb detail.
-3. **01 — Problem and response:** name the pain, then summarize the package's big-picture response.
-4. **02 — Documentation context:** explain how the Workshop repositories and documentation are organized, and identify any local variation from the shared standard.
-5. **03 — Deeper explanation:** expand the problem, mental model, responsibilities, and the specific way this package addresses them.
-6. **04 — First-minute proof:** let the reader see a meaningful result as quickly as the package's real setup permits.
-7. **05 — Documentation and theory:** provide navigable links to the authoritative guides, with a sentence describing the value of each.
+3. **01 — What:** define the project plainly and state what it does.
+4. **02 — Why:** name the problem and explain why this project is a distinct solution.
+5. **03 — How:** give the reader the mental model and the essential responsibility boundaries.
+6. **04 — See it in a minute:** provide the shortest real, verified use a reader can try, plus the expected result.
+7. **05 — Available documentation and theory:** link to focused guides, with a brief explanation of what each teaches.
 
 This sequence is intentional: it answers *why should I care?* before asking the reader to study the architecture, and it provides the document map before the README grows into the complete technical account. Supporting reference sections may follow. Avoid duplicating the same explanation just to satisfy a template.
 
@@ -53,12 +55,12 @@ A README should not overwhelm newcomers, but it must not hide the proof behind a
 
 ### The first-minute proof
 
-The quick start belongs immediately after the definition and reason to care, not after a long tour of architecture. A meaningful first proof must:
+The quick start belongs in section 04, immediately after What, Why, and How. It must be the simplest use a reader can actually try—not a test-helper excerpt presented as though it were consumer code. A meaningful first proof must:
 
 - demonstrate the package's real purpose rather than a generic language feature;
 - match the current source API or clearly name the published package version it targets;
-- include the minimum necessary setup and prerequisites;
-- show code or a real demo path plus its expected output/behavior;
+- include only the minimum setup and prerequisites;
+- show a copyable example or a direct command/demo path plus its expected output or behavior;
 - explain the example in plain language;
 - link to the complete usage guide for setup details and realistic scenarios.
 
