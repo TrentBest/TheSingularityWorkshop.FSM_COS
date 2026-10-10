@@ -1,6 +1,6 @@
 # Arbitration and Convergence
 
-> **Arbitration is where interoperability stops being a slogan and becomes a runtime property.**
+> **Arbitration gives a composition a bounded runtime reconciliation step; it does not automatically prove semantic compatibility.**
 
 See [FSM_COS Theory](THEORY.md#8-arbitration-is-composition-negotiation) for the compact model. This document is the deeper treatment.
 
@@ -168,6 +168,25 @@ The current ten-round bound is a safety boundary, not a universal constant.
 The deeper invariant is:
 
 > **No unstable composition crosses the RuntimeAssembly boundary as if it were stable.**
+
+## What convergence proves—and what it does not
+
+A successful arbitration pass establishes a narrow, observable fact: every loaded bundle participated, and a complete round reported no composition changes before the configured limit was reached.
+
+It does **not**, by itself, prove that:
+
+- the bundles' domain assumptions are correct;
+- every semantic compatibility rule has been implemented;
+- external resources are available;
+- the host will execute or present the assembly correctly;
+- a bundle has not incorrectly returned `false` while a requirement remains unsatisfied;
+- the overall application is safe or correct.
+
+Those stronger claims depend on the contracts and implementations supplied by the participants and host. A bundle must encode the compatibility conditions it knows how to evaluate, and tests must exercise those conditions. FSM_COS enforces the bounded round protocol; it cannot infer every domain-specific invariant on behalf of independently authored bundles.
+
+**Precise guarantee:** FSM_COS does not return an assembly when the arbitration protocol reports continued change through the configured maximum. A returned assembly means the participants reported convergence—not that every possible form of interoperability has been proven.
+
+---
 
 ---
 
