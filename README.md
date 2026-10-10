@@ -84,6 +84,7 @@ Pick the question you want answered; each document focuses on one topic.
 - **Wondering how stability is reached?** [Arbitration](docs/ARBITRATION.md) covers reconciliation and convergence.
 - **Integrating a host?** [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) documents one browser-host integration without moving browser concerns into the kernel.
 - **Checking how Workshop packages fit together?** [Ecosystem Integration Map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ECOSYSTEM_INTEGRATION_MAP.md) is a source-repository working snapshot; verify its point-in-time source facts before relying on them.
+- **Checking alpha.6 scope and limitations?** [Release notes](docs/releases/0.1.0-alpha.6.md) describe the source candidate's contracts and explicit non-goals.
 - **Building or contributing?** [Development](docs/DEVELOPMENT.md) covers repository setup, tests, and workflows.
 - **Looking for another topic?** Open the [Documentation Index](DOCUMENTATION_INDEX.md).
 
