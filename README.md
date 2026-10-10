@@ -68,7 +68,7 @@ dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --filter "FullyQualifiedNam
 
 **What should happen?** The test passes: requesting bundle `1`, which depends on bundle `2`, produces an assembly ordered `2 → 1`. This is the shortest runnable proof in the repository; the test creates the small catalog and bundles needed to make that behavior real.
 
-To use FSM_COS in your own host, start with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md), which explains how to provide that catalog and the bundle contracts. The source targets **.NET 8**. Version `0.1.0-alpha.6` is a development candidate, not a claim of publication; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the currently available version.
+To use FSM_COS in your own host, start with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md), which explains how to provide that catalog and the bundle contracts. The source targets **.NET 8** and currently declares version `0.1.0-alpha.6`. A source version declaration alone does not establish publication status; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the version actually available.
 
 ## 🟪 05 — Available documentation and theory
 
