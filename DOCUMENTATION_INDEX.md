@@ -15,7 +15,7 @@ Use this page to find the right level of explanation. The README is the orientat
 | Understand staged loading, dependency planning, and the current implementation boundary | [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md) |
 | Understand the object handed to a host | [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) |
 | Understand what stays outside the kernel | [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) |
-| Run the minimal consumer example | [Minimal Consumer sample](samples/FSM_COS.MinimalConsumer/Program.cs) |
+| Run the minimal consumer example | [Minimal Consumer sample](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.cs) |
 | Learn how MicroBundles are resolved and consumed | [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) |
 | Understand MicroBundle arbitration and convergence | [Arbitration](docs/ARBITRATION.md) |
 | Explore AI-oriented composition | [AI Composition](docs/AI_COMPOSITION.md) |
