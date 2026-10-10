@@ -1,4 +1,4 @@
-# FSM_COS — Runtime Composition Kernel
+# ✳️ 00 The Singularity Workshop — FSM_COS
 
 ![FSM_COS composition flow: a runtime manifest enters FSM_COS, which resolves and composes MicroBundles into a RuntimeAssembly for a host.](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.FSM_COS/development/docs/assets/fsm-cos-overview.svg)
 
