@@ -430,3 +430,7 @@ This is the intended documentation boundary:
 - [Arbitration and Convergence](ARBITRATION.md)
 - [Runtime Boundary](RUNTIME_BOUNDARY.md)
 - [Development](DEVELOPMENT.md)
+
+---
+
+<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
