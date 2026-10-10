@@ -6,7 +6,11 @@
 
 ![FSM_COS runtime boundary](assets/runtime-boundary.svg)
 
+*This overview separates composition responsibilities from the execution, presentation, and platform responsibilities that remain with the host.*
+
 ![FSM_COS composition boundary](assets/composition-boundary.svg)
+
+*This closer view identifies the inputs crossing into the kernel, the composition work it owns, and the `RuntimeAssembly` handoff. The catalog and configuration source remain outside FSM_COS.*
 
 FSM_COS exists to assemble a requested computation. It is not the application or runtime host.
 
