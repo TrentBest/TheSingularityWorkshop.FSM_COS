@@ -45,17 +45,16 @@ Those are examples, not special cases. FSM_COS does not contain a browser model,
 FSM_COS consumes neighboring contracts rather than redefining neighboring domains.
 
 ```text
-FSM_API
-   | state/context primitive consumed by composition
-   v
-FSM_COS <---- MicroBundleDomain runtime contract
-   ^
-   | catalog / resolver supplies resolved artifacts
-   |
-   +---- optional configuration source
-   |
-   v
-RuntimeAssembly
+FSM_API ───────── state/context primitive ─────────────┐
+MicroBundleDomain ─ MicroBundle runtime contract ──────┤
+FSM_UserIO ──────── optional SemanticIntent value ─────┤
+catalog / resolver ─ resolved MicroBundles ────────────┤
+configuration source ─ optional configuration bytes ──┤
+                                                       ▼
+                                                     FSM_COS
+                                                       │
+                                                       ▼
+                                                 RuntimeAssembly
 ```
 
 FSM_COS does not define what a MicroBundle is. It consumes the runtime contract it needs to resolve, load, and arbitrate one.
