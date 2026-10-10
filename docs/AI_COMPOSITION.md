@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Hosts may compose ProtocolAI and GrammarAI MicroBundles through FSM_COS. The kernel should not absorb their responsibilities or take a hard dependency on their concrete packages.
+Hosts may compose ProtocolAi and GrammarAi MicroBundles through FSM_COS. The kernel should not absorb their responsibilities or take a hard dependency on their concrete packages.
 
 The following is a conceptual responsibility stack, **not a chronological execution sequence**. The future-facing layers are architectural proposals, not a claim that every capability is implemented today:
 
@@ -10,10 +10,10 @@ The following is a conceptual responsibility stack, **not a chronological execut
 Domain
   |
   v
-ProtocolAI          WHAT
+ProtocolAi          WHAT
   |
   v
-GrammarAI           HOW
+GrammarAi           HOW
   |
   v
 AI Exchange         WHAT + HOW + CONTEXT + REQUEST
@@ -47,7 +47,7 @@ FSM_COS already answers:
 
 > What must be assembled before a host can receive a stable runtime?
 
-ProtocolAI and GrammarAI can become MicroBundle capabilities that contribute:
+ProtocolAi and GrammarAi can become MicroBundle capabilities that contribute:
 
 - semantic vocabularies;
 - grammar definitions;
@@ -62,9 +62,9 @@ For example:
 ```text
 RuntimeManifest
     |
-    +-- ProtocolAI bundle
+    +-- ProtocolAi bundle
     |
-    +-- GrammarAI bundle
+    +-- GrammarAi bundle
     |
     +-- AI Exchange bundle
     |
@@ -79,7 +79,7 @@ FSM_COS
 RuntimeAssembly
 ```
 
-A different runtime may request only ProtocolAI and GrammarAI.
+A different runtime may request only ProtocolAi and GrammarAi.
 
 Another may add a connected provider.
 
@@ -256,8 +256,8 @@ RuntimeManifest
     |
     +-- AI exchange capability
     |     |
-    |     +-- ProtocolAI
-    |     +-- GrammarAI
+    |     +-- ProtocolAi
+    |     +-- GrammarAi
     |
     +-- GUI-facing capability
     |
@@ -283,7 +283,7 @@ A host supplies an `IMicroBundleCatalog`. The catalog resolves concrete capabili
 
 A GUI-capability bundle could build a platform-neutral semantic tree using `TheSingularityWorkshop.GUI.Core`; a host-specific renderer such as Blazor could manifest that tree. Treat this as the intended integration shape until the complete host path is demonstrated.
 
-The exchange itself can be assembled from the actual ProtocolAI and GrammarAI definitions:
+The exchange itself can be assembled from the actual ProtocolAi and GrammarAi definitions:
 
 ```text
 PROTOCOL
@@ -318,7 +318,7 @@ A plausible future graph is:
           +---------------+----------------+
           |               |                |
           v               v                v
-     ProtocolAI       GrammarAI       GUI / Host
+     ProtocolAi       GrammarAi       GUI / Host
           |               |
           +-------+-------+
                   |
@@ -349,10 +349,10 @@ The AI architecture is broader than the exchange transport.
 The current semantic model is:
 
 ```text
-ProtocolAI
+ProtocolAi
     WHAT exists
        ↓
-GrammarAI
+GrammarAi
     HOW identities may organize
        ↓
 CommandAI
@@ -367,21 +367,21 @@ AppAI
 
 This should be understood as a **capability hierarchy**, not a requirement that every interaction traverse every layer.
 
-### ProtocolAI — meaning
+### ProtocolAi — meaning
 
-ProtocolAI is the foundation.
+ProtocolAi is the foundation.
 
 It provides stable mappings between integer identities and application-owned semantic values. It is deliberately unaware of command execution.
 
-### GrammarAI — legal structure
+### GrammarAi — legal structure
 
-GrammarAI takes protocol identities and describes which combinations form valid semantic statements.
+GrammarAi takes protocol identities and describes which combinations form valid semantic statements.
 
 It is the structural strainer above the vocabulary strainer.
 
 ### CommandAI — executable semantic composition
 
-CommandAI is a candidate layer above GrammarAI.
+CommandAI is a candidate layer above GrammarAi.
 
 Its concern is not merely that a statement is grammatically valid, but that valid grammar can be assembled into a meaningful unit of functionality.
 
@@ -454,13 +454,13 @@ The tooling determines the highest semantic layer required by the interaction.
 
 ```text
 Simple semantic selection
-    ProtocolAI
+    ProtocolAi
 
 Structured statement
-    ProtocolAI + GrammarAI
+    ProtocolAi + GrammarAi
 
 Tool operation
-    ProtocolAI + GrammarAI + CommandAI
+    ProtocolAi + GrammarAi + CommandAI
 
 Cross-tool / system routing
     ... + OperatingSystemAI
@@ -493,7 +493,7 @@ Actions
   Click
 ```
 
-The registration can become integer-backed protocol identities, after which GrammarAI can describe legal composition and CommandAI can assemble the executable semantic unit.
+The registration can become integer-backed protocol identities, after which GrammarAi can describe legal composition and CommandAI can assemble the executable semantic unit.
 
 The resulting exchange is conceptually closer to:
 
