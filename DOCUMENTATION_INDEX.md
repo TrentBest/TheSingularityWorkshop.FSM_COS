@@ -19,7 +19,7 @@ Use this page to find the right level of explanation. The README is the orientat
 | Learn how MicroBundles are resolved and consumed | [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) |
 | Understand MicroBundle arbitration and convergence | [Arbitration](docs/ARBITRATION.md) |
 | Explore AI-oriented composition | [AI Composition](docs/AI_COMPOSITION.md) |
-| Understand the domain FSM_COS owns | [Domain](docs/DOMAIN.md) |
+| Understand the composition domain FSM_COS owns | [Domain](docs/DOMAIN.md) |
 | Integrate with WebPage | [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) |
 | Contribute, build, and verify changes | [Development](docs/DEVELOPMENT.md) |
 
