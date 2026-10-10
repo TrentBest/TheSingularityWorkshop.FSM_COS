@@ -96,33 +96,32 @@ Tests should establish the observable composition contract:
 
 A test that exposes an ambiguous contract is a reason to clarify the contract, not to weaken the assertion.
 
-## Numbered guide standard: 🔺 03 — Package overview
+## Numbered guide standard: 🔺 03 — See It Work in 60 Seconds
 
-The Workshop's numbered guide sections use a colored geometric marker immediately before the section number. For section **03**, use the red triangle marker and keep the purpose consistent across package guides:
+The Workshop's shared guide structure uses stable, two-digit section numbers, with a colored geometric marker immediately before each number. Section **03** has the same purpose across all package guides:
 
-### 🔺 03 — Package overview
+### 🔺 03 — See It Work in 60 Seconds
 
-Section 03 introduces the package itself. It is not a package-specific architecture diagram and it is not a place to duplicate the rest of the guide. Every package guide should use this section to give readers the same kind of orientation, expressed in that package's own terms.
+This section gives the reader a small, real, verifiable demonstration of the package in use. It should make the package's purpose tangible, not merely describe the architecture or show a decorative diagram.
 
-Include, in a concise and consistent order:
+Every package guide should keep the same section concept and reader promise while tailoring the example to its own public contract:
 
-1. **Identity:** display/package name, current version or release status, and the canonical repository/package links where applicable.
-2. **Purpose:** a plain-language, one-sentence statement of the problem the package solves and why it exists.
-3. **Responsibility:** what the package owns, followed by the most important things it deliberately does not own.
-4. **Boundary:** its primary contracts, inputs/outputs, or the result a consumer can expect.
-5. **Place in the ecosystem:** the important dependency/consumer relationships and why they exist, without copying neighboring packages' documentation.
-6. **Start here:** the most useful next section or minimal usage path for a new reader.
+1. **Start from a recognizable outcome.** Say what the reader will see happen.
+2. **Show the shortest credible path.** Include the minimum setup and a compact example that fits the package's real API.
+3. **Make it runnable or verifiable.** State prerequisites and exact steps; link to a maintained sample when the full experience cannot fit inline.
+4. **Show the result.** Include representative output, an expected state/result, or a visual that demonstrates successful behavior.
+5. **Explain the connection.** Briefly identify what the example proves about this package and point to the next guide section for deeper understanding.
 
-The exact facts and examples will vary by package; the **section's job, ordering, and visual treatment do not**. Keep it useful to a reader who has never opened the repository before. Put deep API detail, complete dependency analysis, tutorials, and implementation theory in their dedicated sections.
+The *example* must be package-specific; the *purpose and structure of section 03* must remain consistent across the ecosystem. Do not substitute a generic architecture diagram, an aspirational mock-up, or pseudocode that cannot be related to the published contract. If a package is not yet capable of providing a real runnable demonstration, state that limitation clearly and give the best currently verifiable alternative rather than pretending the feature exists.
 
 #### Visual and heading rules
 
-- Put the colored shape **before** the number: `🔺 03 — Package overview`.
-- Keep the section number `03` and its purpose stable across all package guides.
-- Use the marker as a navigation cue, not as decoration or as a substitute for a meaningful heading.
-- Do not make section 03 a diagram-only section. Use a diagram only when it materially clarifies the package's role, and always explain it in prose.
-- Keep the heading text, purpose, and package overview readable in GitHub Markdown on desktop and mobile.
-- Give any illustrative image meaningful alternative text; do not put essential package facts only inside an image.
+- Put the colored shape **before** the number: `🔺 03 — See It Work in 60 Seconds`.
+- Keep the number `03` and its shared purpose stable across package guides.
+- Use the shape as a navigation cue, not as decoration or as a substitute for a meaningful heading.
+- Keep essential instructions and outcomes in text/code; a diagram or screenshot may support them but must not be the only explanation.
+- Keep the section readable in GitHub Markdown at desktop and mobile widths.
+- Give illustrative images meaningful alternative text.
 
 ## Documentation standard for FSM_COS
 
