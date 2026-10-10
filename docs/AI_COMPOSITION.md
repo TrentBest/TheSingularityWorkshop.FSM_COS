@@ -304,7 +304,7 @@ FSM_COS remains deliberately unaware of:
 - LLM inference;
 - arbitrary response parsing.
 
-This is the first meaningful proof of the architecture: **composition is reusable even when manifestation and transport change**.
+This source-level path is an initial proof of the composition boundary. A full host integration must separately demonstrate that manifestation and transport consume the assembled result end to end.
 
 ---
 
