@@ -7,6 +7,7 @@ Use this page to find the right level of explanation. The README is the orientat
 | If you want to... | Start here |
 |---|---|
 | Understand the purpose and boundary of FSM_COS | [README](README.md) |
+| Start with no programming experience | [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) |
 | Understand how Workshop packages fit together, including package-versus-MicroBundle decisions and Profiles (source-repository working map) | [Ecosystem Integration Map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ECOSYSTEM_INTEGRATION_MAP.md) |
 | Understand the architecture and component ownership | [Architecture](docs/ARCHITECTURE.md) |
 | Learn the conceptual model and rationale | [FSM_COS Theory](docs/THEORY.md) |
@@ -26,13 +27,14 @@ Use this page to find the right level of explanation. The README is the orientat
 For a first encounter:
 
 1. [README](README.md) — identity, responsibility boundary, and quick orientation.
-2. [Architecture](docs/ARCHITECTURE.md) — how the pieces fit together and which layer owns each concern.
-3. [Ecosystem Integration Map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ECOSYSTEM_INTEGRATION_MAP.md) — live cross-repository working map of package responsibilities, integration gaps, and MicroBundle candidates.
-4. [FSM_COS Theory](docs/THEORY.md) — why composition is a distinct operation.
-5. [Runtime Manifest](docs/RUNTIME_MANIFEST.md) — what the caller requests.
-6. [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) — what the host receives.
-7. [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) — where FSM_COS hands off responsibility.
-8. The relevant integration or development guide for the task at hand.
+2. [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) — a plain-language introduction for readers new to software composition.
+3. [Architecture](docs/ARCHITECTURE.md) — how the pieces fit together and which layer owns each concern.
+4. [Ecosystem Integration Map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ECOSYSTEM_INTEGRATION_MAP.md) — live cross-repository working map of package responsibilities, integration gaps, and MicroBundle candidates.
+5. [FSM_COS Theory](docs/THEORY.md) — why composition is a distinct operation.
+6. [Runtime Manifest](docs/RUNTIME_MANIFEST.md) — what the caller requests.
+7. [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) — what the host receives.
+8. [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) — where FSM_COS hands off responsibility.
+9. The relevant integration or development guide for the task at hand.
 
 Experienced readers can jump directly to the contract or integration guide they need.
 
