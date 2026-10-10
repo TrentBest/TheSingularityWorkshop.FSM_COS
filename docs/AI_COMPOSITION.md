@@ -2,11 +2,9 @@
 
 ## Purpose
 
-FSM_COS should eventually consume ProtocolAI and GrammarAI as composable capabilities.
+Hosts may compose ProtocolAI and GrammarAI MicroBundles through FSM_COS. The kernel should not absorb their responsibilities or take a hard dependency on their concrete packages.
 
-It should not absorb their responsibilities.
-
-The intended stack is:
+The following is a conceptual responsibility stack, **not a chronological execution sequence**. The future-facing layers are architectural proposals, not a claim that every capability is implemented today:
 
 ```text
 Domain
@@ -249,9 +247,9 @@ That keeps the same invariant that governs the rest of the kernel:
 
 ---
 
-## Proven host composition pattern
+## Source-level host composition pattern
 
-The first concrete host integration now establishes the intended boundary:
+The source-level integration exercises the intended composition boundary:
 
 ```text
 RuntimeManifest
@@ -277,11 +275,13 @@ host
     +-- provider transport
 ```
 
-The important point is that **FSM_COS does not need to reference the AI or GUI packages to compose them**.
+The source-level proof is limited to the composition contracts and test path; it does not establish that the visible WebPage experience is fully driven by `RuntimeAssembly`. See [WebPage Integration](WEBPAGE_INTEGRATION.md) for that explicit boundary.
+
+The architectural point is that **FSM_COS does not need to reference the AI or GUI packages to compose them**.
 
 A host supplies an `IMicroBundleCatalog`. The catalog resolves concrete capability bundles, while FSM_COS handles dependency ordering, loading, arbitration, and the stable handoff.
 
-The GUI bundle can then build a platform-neutral semantic tree using `TheSingularityWorkshop.GUI.Core`. A host-specific renderer such as Blazor can manifest that tree.
+A GUI-capability bundle could build a platform-neutral semantic tree using `TheSingularityWorkshop.GUI.Core`; a host-specific renderer such as Blazor could manifest that tree. Treat this as the intended integration shape until the complete host path is demonstrated.
 
 The exchange itself can be assembled from the actual ProtocolAI and GrammarAI definitions:
 
@@ -293,7 +293,7 @@ GRAMMAR
   [integer-backed structure]
 ```
 
-The host may expose that deterministic representation through an **Extract** action, send it to an LLM by clipboard or provider transport, and receive a response through the host's input surface.
+A host could expose that deterministic representation through an **Extract** action, send it to an LLM by clipboard or provider transport, and receive a response through the host's input surface. The end-to-end interaction remains a host-level integration concern.
 
 FSM_COS remains deliberately unaware of:
 
