@@ -52,8 +52,13 @@ jobs:
       - name: Build
         run: dotnet build TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore
 
-      - name: Run minimal consumer sample
-        run: dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj --configuration Release --no-build
+      - name: Run and verify minimal consumer sample
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$(dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj --configuration Release --no-build)"
+          printf '%s\\n' "$output"
+          grep -Fq "Assembly order: 2 -> 1" <<< "$output"
 
       - name: Test with coverage
         run: >
@@ -120,8 +125,13 @@ jobs:
       - name: Build against published dependencies
         run: dotnet build TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore
 
-      - name: Run minimal consumer against published dependencies
-        run: dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj --configuration Release --no-build
+      - name: Run and verify minimal consumer against published dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$(dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj --configuration Release --no-build)"
+          printf '%s\\n' "$output"
+          grep -Fq "Assembly order: 2 -> 1" <<< "$output"
 
       - name: Test against published dependencies
         run: dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --configuration Release --no-build --verbosity normal
