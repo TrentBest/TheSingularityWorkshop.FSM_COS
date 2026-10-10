@@ -31,7 +31,7 @@ For a first encounter:
 2. [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) — a plain-language introduction for readers new to software composition.
 3. Run the [Minimal Consumer sample](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.cs) to see dependency ordering.
 4. [Architecture](docs/ARCHITECTURE.md) — how the pieces fit together and which layer owns each concern.
-5. [Ecosystem Integration Map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ECOSYSTEM_INTEGRATION_MAP.md) — live cross-repository working map of package responsibilities, integration gaps, and MicroBundle candidates.
+5. [Ecosystem Integration Map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ECOSYSTEM_INTEGRATION_MAP.md) — cross-repository working snapshot of package responsibilities, integration gaps, and MicroBundle candidates.
 6. [FSM_COS Theory](docs/THEORY.md) — why composition is a distinct operation.
 7. [Runtime Manifest](docs/RUNTIME_MANIFEST.md) — what the caller requests.
 8. [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) — what the host receives.
