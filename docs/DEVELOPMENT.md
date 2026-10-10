@@ -76,23 +76,24 @@ Architecture diagrams are part of that explanation, not decoration.
 ## Current architecture direction
 
 ```text
-MicroBundleDomain
-    │
-    │ defines what a MicroBundle is
-    ▼
-MicroBundleRepository
-    │
-    │ locates and delivers MicroBundle artifacts
-    ▼
-FSM_COS
-    │
-    │ composes the requested runtime
-    ▼
-RuntimeAssembly
-    │
-    ▼
-Host / Experience
+MicroBundleDomain ───────── defines the MicroBundle contract ──────┐
+                                                                   │
+Optional sources / catalogs ─ locate and resolve available bundles ┤
+  ├── in-memory or generated catalog                              │
+  ├── repository-backed catalog                                   │
+  └── host-owned implementation                                   │
+                                                                   ▼
+                                                               FSM_COS
+                                                                   │
+                                                        composes requested runtime
+                                                                   ▼
+                                                            RuntimeAssembly
+                                                                   │
+                                                                   ▼
+                                                            Host / Experience
 ```
+
+MicroBundleRepository is one possible source behind a catalog, not a mandatory hop in every composition. A small host can use an in-memory catalog; another host can supply repository-backed discovery without changing FSM_COS's composition algorithm.
 
 The Runtime Manifest belongs to the composition request:
 
