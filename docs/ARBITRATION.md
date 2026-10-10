@@ -188,8 +188,6 @@ Those stronger claims depend on the contracts and implementations supplied by th
 
 ---
 
----
-
 ## Why bounded convergence matters
 
 An open-ended negotiation loop could permit pathological participants:
