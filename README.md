@@ -81,7 +81,7 @@ Pick the question you want answered; each document focuses on one topic.
 - **Receiving the result?** [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) describes the handoff object.
 - **Wondering how stability is reached?** [Arbitration](docs/ARBITRATION.md) covers reconciliation and convergence.
 - **Integrating a host?** [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) documents one browser-host integration without moving browser concerns into the kernel.
-- **Checking what is implemented versus intended?** [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md) separates verified relationships from future direction.
+- **Checking how Workshop packages fit together?** [Ecosystem Integration Map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ECOSYSTEM_INTEGRATION_MAP.md) is a live cross-repository working map; verify its dated source facts before relying on them.
 - **Building or contributing?** [Development](docs/DEVELOPMENT.md) covers repository setup, tests, and workflows.
 - **Looking for another topic?** Open the [Documentation Index](DOCUMENTATION_INDEX.md).
 
