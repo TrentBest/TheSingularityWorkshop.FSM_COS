@@ -95,6 +95,29 @@ Tests should establish the observable composition contract:
 
 A test that exposes an ambiguous contract is a reason to clarify the contract, not to weaken the assertion.
 
+## Visual standard: diagram 03 — the composition triangle
+
+A diagram must make the relationship easier to understand than the prose alone. If Mermaid's automatic layout makes a central relationship ambiguous, use a purpose-built SVG instead of forcing a flowchart to behave like an illustration.
+
+The canonical composition triangle is the three-part boundary below:
+
+![FSM_COS composition triangle: request, composition, and handoff](assets/composition-triangle.svg)
+
+- **Request — RuntimeManifest:** says what composition is requested.
+- **Composition — FSM_COS:** resolves the dependency closure, loads capabilities, and drives arbitration to convergence.
+- **Handoff — RuntimeAssembly:** carries the stable result to the host.
+- **Outside the triangle:** the host decides execution and manifestation; the catalog decides where capabilities are resolved from. Neither responsibility should be drawn as kernel-owned behavior.
+
+Use the triangle when explaining the *whole contract at a glance*. Use a sequence or flow diagram when explaining *order of operations*. Do not use a triangle as decoration, and do not imply that the three labels are interchangeable layers or that the host is a dependency of FSM_COS.
+
+### Diagram acceptance rules
+
+1. The image must render in GitHub's Markdown view at normal desktop and mobile widths.
+2. Keep labels readable at a glance; do not place explanatory paragraphs inside the graphic.
+3. Give every image meaningful alternative text.
+4. Prefer checked-in SVG assets for authored architecture diagrams. Avoid relying on platform-specific Mermaid extensions or complex automatic layouts for diagrams whose geometry carries meaning.
+5. Keep the surrounding prose as the accessible explanation; the diagram supplements it rather than becoming the only source of meaning.
+
 ## Documentation standard for FSM_COS
 
 A reader should be able to answer these questions without opening another repository:
