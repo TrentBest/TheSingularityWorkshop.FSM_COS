@@ -6,12 +6,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSM_COS", "src\FSM_COS\FSM_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSM_COS.Tests", "tests\FSM_COS.Tests\FSM_COS.Tests.csproj", "{A1A1A1A1-0002-4000-8000-000000000002}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSM_COS.MinimalConsumer", "samples\FSM_COS.MinimalConsumer\FSM_COS.MinimalConsumer.csproj", "{A1A1A1A1-0003-4000-8000-000000000003}"
+EndProject
 Global
 GlobalSection(SolutionConfigurationPlatforms) = preSolution
 Debug|Any CPU = Debug|Any CPU
 Release|Any CPU = Release|Any CPU
 EndGlobalSection
 GlobalSection(ProjectConfigurationPlatforms) = postSolution
+{A1A1A1A1-0003-4000-8000-000000000003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{A1A1A1A1-0003-4000-8000-000000000003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+{A1A1A1A1-0003-4000-8000-000000000003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+{A1A1A1A1-0003-4000-8000-000000000003}.Release|Any CPU.Build.0 = Release|Any CPU
 {A1A1A1A1-0001-4000-8000-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 {A1A1A1A1-0001-4000-8000-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
 {A1A1A1A1-0001-4000-8000-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
