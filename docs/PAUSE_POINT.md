@@ -10,16 +10,19 @@ FSM_COS should stop broadening its scope once the current correctness patch pass
 
 The purpose of this pause is not to declare the Workshop ecosystem complete. It is to keep the composition kernel small and dependable while we prove its value in the browser.
 
-## The kernel's minimum dependency rule
+## The kernel's dependency boundary
 
-The current `development` project references only:
+The current `development` candidate targets .NET 8 and directly references:
 
-- `TheSingularityWorkshop.FSM_API` — foundational state/context contract.
-- `TheSingularityWorkshop.MicroBundleDomain` — the authoritative MicroBundle contract.
+- `TheSingularityWorkshop.FSM_API 1.0.13` — foundational state/context contract.
+- `TheSingularityWorkshop.MicroBundleDomain 1.0.1` — the authoritative MicroBundle contract.
+- `TheSingularityWorkshop.FSM_UserIO 0.1.0-alpha.1` — supplies `SemanticIntent`, an optional value exposed by `RuntimeManifest` and carried through to `RuntimeAssembly`.
 
-That is the right starting point for a minimal composition kernel. ProtocolAi, GrammarAi, GUI, rendering, storage, REST, identity, and other capabilities should remain optional unless the kernel itself demonstrably needs their contracts. A package being published does not make it a mandatory runtime dependency.
+The first two are the composition kernel's foundational dependencies. The third is a real package dependency even when callers leave `Intent` null, because its type appears in the public API. That is a deliberate alpha.6 candidate capability, but it is also a dependency-minimization decision to revisit: do not describe FSM_UserIO as a purely optional package dependency while the public API references its type.
 
-The test project references AI and GUI packages to prove that capability implementations can be composed without adding those packages to the kernel's assembly references. Keep that separation.
+ProtocolAi, GrammarAi, GUI, rendering, storage, REST, identity, and other unrelated capabilities remain outside the kernel unless the kernel demonstrably needs their contracts. The test project can reference AI and GUI packages to prove those capabilities can be composed without adding those packages to the kernel's assembly references.
+
+The alpha.6 candidate has now passed its package CI and WebPage's source-candidate build, browser journey, and experience test suites. Those checks establish compatibility with WebPage's current integration path; they do not prove the host has completed the RuntimeAssembly-to-active-Experience handoff.
 
 ## What the current kernel already owns
 
