@@ -14,7 +14,7 @@ FSM_COS is The Singularity Workshop's **runtime composition kernel**. It takes a
 
 ## 🟦 01 — What is FSM_COS?
 
-Think of a runtime manifest as an order: it says which capabilities are wanted. FSM_COS works out what else must be present for that order to make sense, loads the composition, and checks whether its parts can reach a stable agreement.
+Think of a runtime manifest as an order: it says which capabilities are wanted. FSM_COS works out what else must be present for that order to make sense, loads the composition, and gives its bundles a bounded chance to reconcile their composition state. It hands the result to the host only if that arbitration process reports convergence.
 
 The result is a `RuntimeAssembly`—a handoff to another system, not a finished application.
 
