@@ -21,6 +21,7 @@ Use this page to find the right level of explanation. The README is the orientat
 | Explore AI-oriented composition | [AI Composition](docs/AI_COMPOSITION.md) |
 | Understand the composition domain FSM_COS owns | [Domain](docs/DOMAIN.md) |
 | Integrate with WebPage | [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) |
+| Review alpha.6 scope and explicit limitations | [Release notes](docs/releases/0.1.0-alpha.6.md) |
 | Contribute, build, and verify changes | [Development](docs/DEVELOPMENT.md) |
 
 ## Recommended reading order
