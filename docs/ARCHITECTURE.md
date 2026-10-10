@@ -94,10 +94,9 @@ The composition engine should not need to know where a bundle came from.
        ▼
 RuntimeAssembly
        │
-       ├── WebForge → GUI → browser
-       ├── AnyApp → local runtime
-       ├── Desktop Forge → native manifestation
-       └── MyVR / Domain → encountered Experience
+       ├── WebPage → browser experience
+       ├── AnyApp → desktop/local experience
+       └── other hosts → their own manifestation
 
 ## Current development boundary
 
