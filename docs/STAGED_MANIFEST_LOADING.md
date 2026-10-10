@@ -82,3 +82,7 @@ The published manifest should describe the dependency graph established by the F
 - Integrate deferred promotion without losing configuration precedence, dependency closure, cycle detection, arbitration convergence, or RuntimeAssembly behavior.
 - Demonstrate bootstrap entry while localization continues in the background.
 - Keep NuGet publishing disabled unless the owner explicitly authorizes it.
+
+---
+
+<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
