@@ -157,3 +157,7 @@ FSM_COS should instead explain:
 5. what remains outside FSM_COS.
 
 This keeps package documentation useful without turning every README into an encyclopedia of the entire Workshop.
+
+---
+
+<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
