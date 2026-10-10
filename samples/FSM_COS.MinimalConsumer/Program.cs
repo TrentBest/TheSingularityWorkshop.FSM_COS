@@ -21,7 +21,6 @@ var assembly = new FsmCos(catalog).Execute(manifest);
 
 Console.WriteLine();
 Console.WriteLine($"Assembly order: {string.Join(" -> ", assembly.Bundles.Select(bundle => bundle.Id))}");
-Console.WriteLine("Expected order: 2 -> 1");
 
 sealed class DemoCatalog : IMicroBundleCatalog
 {
