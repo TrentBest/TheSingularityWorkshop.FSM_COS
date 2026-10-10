@@ -1,21 +1,35 @@
 # FSM_COS — Runtime Composition Kernel
 
-![FSM_COS composition flow: a runtime manifest enters FSM_COS, which resolves and composes MicroBundles into a RuntimeAssembly for a host.](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.FSM_COS/2fde7770e3536716bc2a110fcd1326af4c80a5f1/docs/assets/fsm-cos-overview.svg)
+![FSM_COS composition flow: a runtime manifest enters FSM_COS, which resolves and composes MicroBundles into a RuntimeAssembly for a host.](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.FSM_COS/development/docs/assets/fsm-cos-overview.svg)
 
 **FSM_COS composes requested capabilities into a `RuntimeAssembly`. It is a composition boundary—not an application, GUI, engine, repository, or execution loop.**
 
-A host supplies a runtime manifest and a catalog capable of resolving the requested MicroBundles. FSM_COS resolves dependency closure, loads the composition, carries configuration through the relevant contracts, and arbitrates toward a stable result. The host decides how to execute or present that result.
+## 🟦 01 — What it does
 
-## What it owns
+A `RuntimeManifest` identifies the MicroBundles and versions a caller wants. FSM_COS resolves their dependencies, loads the composition, performs bounded arbitration, and returns a `RuntimeAssembly` for the host to use.
 
-- Resolving the MicroBundles requested by a `RuntimeManifest`.
-- Resolving dependency closure and installation order.
-- Loading the selected composition and running bounded arbitration.
-- Returning the resulting `RuntimeAssembly` to the host.
+## 🟣 02 — Why it exists
 
-FSM_COS does not own MicroBundle domain definitions, artifact storage, serialization, transport, GUI rendering, host lifecycle, or application scheduling.
+Hosts should not need to duplicate the same composition and dependency logic for every experience. FSM_COS gives that responsibility a focused home while leaving application behavior and presentation to the host.
 
-## Install
+Compatibility is not automatic: the selected bundles, their contracts, and the host must work together.
+
+## 🟦 03 — Where the boundary sits
+
+```text
+RuntimeManifest → FSM_COS → RuntimeAssembly → Host
+                    │
+                    ├─ resolve MicroBundles and dependencies
+                    ├─ load the composition
+                    └─ arbitrate toward convergence
+```
+
+- **MicroBundleDomain** owns the MicroBundle contract.
+- **The host or repository** supplies the catalog used to resolve bundles.
+- **FSM_COS** composes the requested capabilities.
+- **The host** owns execution, lifecycle, UI, and presentation.
+
+## 🟢 04 — Install and get started
 
 ```bash
 dotnet add package TheSingularityWorkshop.FSM_COS --version 0.1.0-alpha.6
@@ -23,19 +37,32 @@ dotnet add package TheSingularityWorkshop.FSM_COS --version 0.1.0-alpha.6
 
 The package targets **.NET 8**. Its direct dependencies are:
 
-- [FSM_API 1.0.13](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_API) — state/context primitives.
-- [MicroBundleDomain 1.0.1](https://www.nuget.org/packages/TheSingularityWorkshop.MicroBundleDomain) — the canonical MicroBundle contract.
-- [FSM_UserIO 0.1.0-alpha.1](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_UserIO) — the platform-neutral `SemanticIntent` boundary.
+- [FSM_API](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_API) — state/context primitives.
+- [MicroBundleDomain](https://www.nuget.org/packages/TheSingularityWorkshop.MicroBundleDomain) — the MicroBundle contract.
+- [FSM_UserIO](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_UserIO) — the platform-neutral `SemanticIntent` boundary.
 
-## Learn more
+The alpha.6 version is a development candidate until it appears as a published version on NuGet. For the consumer catalog contract and examples, start with [Consuming MicroBundles](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/CONSUMING_MICROBUNDLES.md).
 
-- [Project README and architecture overview](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/README.md)
-- [Documentation index](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_INDEX.md)
-- [Documentation standard](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)
-- [Consuming MicroBundles](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/CONSUMING_MICROBUNDLES.md)
-- [Runtime Manifest](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/RUNTIME_MANIFEST.md)
-- [RuntimeAssembly](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/RUNTIME_ASSEMBLY.md)
-- [Development and verification](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/DEVELOPMENT.md)
-- [Source code, tests, and issues](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
+## 🟪 05 — Follow the topic you need
 
-The README image uses an absolute URL on GitHub's raw-content domain because NuGet.org does not render relative local image paths in package READMEs. The image is also included in the package's documentation assets for offline/reference use.
+- [Project overview](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/README.md) — the bigger picture and quick proof.
+- [Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/THEORY.md) — why composition is a distinct operation.
+- [Architecture](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ARCHITECTURE.md) — ownership and runtime flow.
+- [Runtime Manifest](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/RUNTIME_MANIFEST.md) — the composition request.
+- [RuntimeAssembly](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/RUNTIME_ASSEMBLY.md) — the host handoff.
+- [Arbitration](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ARBITRATION.md) — reconciliation and convergence.
+- [Documentation Index](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_INDEX.md) — all focused guides.
+- [Development](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/DEVELOPMENT.md) — build and verification.
+- [Source and issues](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
+
+---
+
+[![The Singularity Workshop](https://github.com/TrentBest.png?size=200)](https://github.com/TrentBest)
+
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/) · [PayPal](https://www.paypal.com/)
+
+*The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.*
+
+**Because state shouldn't be a mess.**
+
+*And because static boundaries are invitations to cause trouble.*
