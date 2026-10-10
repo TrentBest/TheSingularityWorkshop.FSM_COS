@@ -57,7 +57,7 @@ jobs:
         run: |
           set -euo pipefail
           output="$(dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj --configuration Release --no-build)"
-          printf '%s\\n' "$output"
+          printf '%s\n' "$output"
           grep -Fq "Assembly order: 2 -> 1" <<< "$output"
 
       - name: Test with coverage
@@ -130,7 +130,7 @@ jobs:
         run: |
           set -euo pipefail
           output="$(dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj --configuration Release --no-build)"
-          printf '%s\\n' "$output"
+          printf '%s\n' "$output"
           grep -Fq "Assembly order: 2 -> 1" <<< "$output"
 
       - name: Test against published dependencies
