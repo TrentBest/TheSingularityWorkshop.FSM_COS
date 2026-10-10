@@ -145,3 +145,7 @@ explicit publication
 ```
 
 No automatic branch state should be interpreted as permission to publish a NuGet package.
+
+---
+
+<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
