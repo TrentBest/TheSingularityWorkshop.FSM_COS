@@ -4,17 +4,17 @@
 
 **FSM_COS composes requested capabilities into a `RuntimeAssembly`. It is a composition boundary—not an application, GUI, engine, repository, or execution loop.**
 
-## 🟦 01 — What it does
+## 🟦 01 — What is FSM_COS?
 
 A `RuntimeManifest` identifies the MicroBundles and versions a caller wants. FSM_COS resolves their dependencies, loads the composition, performs bounded arbitration, and returns a `RuntimeAssembly` for the host to use.
 
-## 🟣 02 — Why it exists
+## 🟣 02 — Why does it exist?
 
 Hosts should not need to duplicate the same composition and dependency logic for every experience. FSM_COS gives that responsibility a focused home while leaving application behavior and presentation to the host.
 
 Compatibility is not automatic: the selected bundles, their contracts, and the host must work together.
 
-## 🟦 03 — Where the boundary sits
+## 🩵 03 — How does it work?
 
 ```text
 RuntimeManifest → FSM_COS → RuntimeAssembly → Host
@@ -29,11 +29,23 @@ RuntimeManifest → FSM_COS → RuntimeAssembly → Host
 - **FSM_COS** composes the requested capabilities.
 - **The host** owns execution, lifecycle, UI, and presentation.
 
-## 🟢 04 — Install and get started
+## 🟢 04 — See it in a minute
+
+Install the currently published version into a .NET project:
 
 ```bash
-dotnet add package TheSingularityWorkshop.FSM_COS --version 0.1.0-alpha.6
+dotnet add package TheSingularityWorkshop.FSM_COS
 ```
+
+FSM_COS needs a catalog supplied by the host, so installation alone does not create an application. To see dependency resolution proven by a runnable test, clone the source repository and run:
+
+```bash
+git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git
+cd TheSingularityWorkshop.FSM_COS
+dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --filter "FullyQualifiedName~Execute_loads_dependencies_before_requesting_bundle"
+```
+
+The test proves that when bundle `1` depends on bundle `2`, the resulting assembly orders them `2 → 1`. For a consumer's own catalog and bundles, follow [Consuming MicroBundles](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/CONSUMING_MICROBUNDLES.md).
 
 The package targets **.NET 8**. Its direct dependencies are:
 
@@ -41,9 +53,9 @@ The package targets **.NET 8**. Its direct dependencies are:
 - [MicroBundleDomain](https://www.nuget.org/packages/TheSingularityWorkshop.MicroBundleDomain) — the MicroBundle contract.
 - [FSM_UserIO](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_UserIO) — the platform-neutral `SemanticIntent` boundary.
 
-The alpha.6 version is a development candidate until it appears as a published version on NuGet. For the consumer catalog contract and examples, start with [Consuming MicroBundles](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/CONSUMING_MICROBUNDLES.md).
+The `0.1.0-alpha.6` version is a development candidate, not a claim of publication. Check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the version actually available.
 
-## 🟪 05 — Follow the topic you need
+## 🟪 05 — Available documentation and theory
 
 - [Project overview](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/README.md) — the bigger picture and quick proof.
 - [Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/THEORY.md) — why composition is a distinct operation.
