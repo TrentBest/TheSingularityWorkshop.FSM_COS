@@ -188,7 +188,7 @@ The Warehouse does not become part of the FSM_COS package. It supplies or backs 
 
 ## Current limitation
 
-`0.1.0-alpha.6` is a composition kernel, not a complete runtime-host framework. The source candidate has passed its package workflow and WebPage's source-candidate integration tests. Those checks do not establish that the visible WebPage experience is fully driven by `RuntimeAssembly`; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for this version's publication status.
+`0.1.0-alpha.6` is a composition kernel, not a complete runtime-host framework. The package workflow and WebPage's source-level integration tests provide evidence for the exact commits they ran against; consult their run results rather than treating an earlier pass as proof for a later source change. Those checks do not establish that the visible WebPage experience is fully driven by `RuntimeAssembly`; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for this version's publication status.
 
 The next meaningful evolution is therefore not adding platform APIs to FSM_COS. It is proving the complete handoff:
 
