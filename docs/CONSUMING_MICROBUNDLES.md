@@ -384,7 +384,7 @@ Those systems may feed the composition boundary through contracts, but they do n
 
 ## Dependency consumption summary
 
-FSM_COS currently consumes two foundational package domains:
+FSM_COS currently has three direct package dependencies, each with a distinct responsibility:
 
 | Package | FSM_COS consumes | FSM_COS does not define |
 |---|---|---|
