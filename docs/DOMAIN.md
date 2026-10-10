@@ -130,7 +130,9 @@ These can participate in a composition. They do not redefine the composition ker
 
 ## Developer use
 
-A developer supplies a catalog, manifest, and optional configuration source appropriate to their system, then uses the kernel without adopting a particular application framework.
+A developer supplies a catalog, manifest, and optional configuration source appropriate to their system, then uses the kernel without adopting a particular application framework. The [Minimal Consumer sample](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.cs) provides a complete source-repository example.
+
+The snippet below is schematic: `MyCatalog` and `MyConfigurationSource` are placeholders for implementations supplied by your application, not types included in FSM_COS.
 
 ```csharp
 var catalog = new MyCatalog();
