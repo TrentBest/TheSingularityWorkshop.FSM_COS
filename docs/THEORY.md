@@ -397,7 +397,7 @@ The same semantic request can be assembled for multiple hosts:
                  RuntimeAssembly
                  /        |        \
                 /         |         \
-           WebForge      Unity     Desktop
+           WebPage       Unity     Desktop
               │            │          │
            browser       scene      native host
 ```
