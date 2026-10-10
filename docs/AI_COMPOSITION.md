@@ -91,7 +91,7 @@ The composition mechanism remains the same.
 
 ## Clipboard is a host capability, not a composition primitive
 
-The clipboard round trip is valuable because it proves that the semantic protocol does not require a network connection.
+A clipboard round trip can demonstrate that the semantic protocol does not require a network connection.
 
 ```text
 assembled context
