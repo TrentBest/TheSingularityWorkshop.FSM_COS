@@ -56,7 +56,7 @@ A host may use the RuntimeAssembly to perform those operations, but those operat
 
 A Unity-facing implementation may consume FSM_COS, but Unity-specific code belongs outside this repository's composition kernel.
 
-The same rule applies to WebForge/Blazor:
+The same rule applies to the WebPage/browser host:
 
 ~~~text
 FSM_COS
