@@ -10,8 +10,8 @@
 <g stroke-width="3"><path d="M435 290h100" stroke="#76cfff"/><path d="M865 290h100" stroke="#ffb84d"/></g>
 <path d="M515 280l20 10-20 10M945 280l20 10-20 10" fill="#fff"/>
 <g fill="#fff" text-anchor="middle">
-<text x="270" y="230" font-size="25" font-weight="700">MANIFEST</text><text x="270" y="265" fill="#9eb1c4" font-size="15">published request</text><text x="270" y="300" fill="#9eb1c4" font-size="15">roots + opaque config</text><text x="270" y="335" fill="#9eb1c4" font-size="15">what is requested</text>
-<text x="700" y="210" font-size="25" font-weight="700">RUNTIME ASSEMBLY</text><text x="700" y="252" fill="#76cfff" font-size="15">stable composition</text><text x="700" y="292" fill="#fff" font-size="15">RuntimeId</text><text x="700" y="320" fill="#fff" font-size="15">loaded MicroBundles</text><text x="700" y="348" fill="#fff" font-size="15">arbitration rounds</text><text x="700" y="390" fill="#76cfff" font-size="14">handoff object</text>
+<text x="270" y="230" font-size="25" font-weight="700">MANIFEST</text><text x="270" y="265" fill="#9eb1c4" font-size="15">published request</text><text x="270" y="300" fill="#9eb1c4" font-size="15">roots + versions</text><text x="270" y="335" fill="#9eb1c4" font-size="15">what is requested</text>
+<text x="700" y="210" font-size="25" font-weight="700">RUNTIME ASSEMBLY</text><text x="700" y="252" fill="#76cfff" font-size="15">stable composition</text><text x="700" y="292" fill="#fff" font-size="15">RuntimeId</text><text x="700" y="320" fill="#fff" font-size="15">loaded MicroBundles</text><text x="700" y="348" fill="#fff" font-size="15">arbitration rounds</text><text x="700" y="370" fill="#fff" font-size="14">optional semantic intent</text><text x="700" y="402" fill="#76cfff" font-size="14">handoff object</text>
 <text x="1130" y="230" font-size="25" font-weight="700">HOST</text><text x="1130" y="265" fill="#9eb1c4" font-size="15">execution environment</text><text x="1130" y="300" fill="#9eb1c4" font-size="15">GUI • browser • Unity</text><text x="1130" y="335" fill="#9eb1c4" font-size="15">Experience • platform</text>
 </g>
 <path d="M70 485H1330" stroke="#293a49"/>
