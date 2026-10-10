@@ -1,18 +1,22 @@
 using TheSingularityWorkshop.FSM_COS;
 using TheSingularityWorkshop.MicroBundleDomain;
 
+// This prerequisite has no dependencies of its own.
 var dataBundle = new DemoBundle(
     id: 2,
     version: "1.0.0",
     name: "Data source");
 
+// The requested report depends on the data source.
 var reportBundle = new DemoBundle(
     id: 1,
     version: "1.0.0",
     name: "Report",
     dependencyIds: [dataBundle.Id]);
 
+// The catalog is deliberately in memory; a host can supply another implementation.
 var catalog = new DemoCatalog(dataBundle, reportBundle);
+// Request only the report. FSM_COS discovers its prerequisite from the catalog.
 var manifest = new RuntimeManifest(
     RuntimeId: 1001,
     Bundles: [new MicroBundleManifestEntry(reportBundle.Id, "1.0.0")]);
@@ -22,6 +26,7 @@ var assembly = new FsmCos(catalog).Execute(manifest);
 Console.WriteLine();
 Console.WriteLine($"Assembly order: {string.Join(" -> ", assembly.Bundles.Select(bundle => bundle.Id))}");
 
+// This example implements the resolution contract used by FsmCos.
 sealed class DemoCatalog : IMicroBundleCatalog
 {
     private readonly IReadOnlyDictionary<ulong, IMicroBundle> _bundles;
@@ -46,6 +51,7 @@ sealed class DemoCatalog : IMicroBundleCatalog
         _bundles.TryGetValue(bundleId, out bundle);
 }
 
+// A tiny example bundle: loading is visible in the console and arbitration is stable.
 sealed class DemoBundle : IMicroBundle
 {
     private readonly string _name;
