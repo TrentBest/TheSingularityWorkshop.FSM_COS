@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="src/FSM_COS/FSM_COS.csproj" />
   <Project Path="tests/FSM_COS.Tests/FSM_COS.Tests.csproj" />
+  <Project Path="samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj" />
 </Solution>
