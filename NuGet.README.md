@@ -59,7 +59,7 @@ The alpha.6 version is a development candidate until it appears as a published v
 
 [![The Singularity Workshop](https://github.com/TrentBest.png?size=200)](https://github.com/TrentBest)
 
-[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/) · [PayPal](https://www.paypal.com/)
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J) · [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
 
 *The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.*
 
