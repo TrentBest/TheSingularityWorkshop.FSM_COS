@@ -17,9 +17,9 @@
   <text x="25" y="135" fill="#8da6b8" font-family="monospace" font-size="12">root IDs + requested versions</text>
   <text x="25" y="159" fill="#8da6b8" font-family="monospace" font-size="12">optional intent / plan metadata</text>
   <line x1="25" y1="184" x2="275" y2="184" stroke="#294a5c"/>
-  <text x="25" y="214" fill="#f5c76a" font-family="monospace" font-size="13">Catalog / Resolver</text>
-  <text x="25" y="238" fill="#8da6b8" font-family="monospace" font-size="12">supplied by the outside</text>
-  <text x="25" y="262" fill="#8da6b8" font-family="monospace" font-size="12">world of storage / delivery</text>
+  <text x="25" y="214" fill="#f5c76a" font-family="monospace" font-size="13">Catalog + config source</text>
+  <text x="25" y="238" fill="#8da6b8" font-family="monospace" font-size="12">host-supplied boundaries</text>
+  <text x="25" y="262" fill="#8da6b8" font-family="monospace" font-size="12">resolve bundles / provide config</text>
 </g>
 
 <path d="M365 286H455" stroke="#63e6ff" stroke-width="3" marker-end="url(#arrow)"/>
