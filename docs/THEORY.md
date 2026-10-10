@@ -346,6 +346,8 @@ The current alpha implementation bounds arbitration at ten rounds. If the compos
 
 See [Arbitration and Convergence](ARBITRATION.md).
 
+Stable here means the participants reported no changes during a complete arbitration round. It is a protocol-level convergence result, not an automatic proof that every domain-specific compatibility rule, external dependency, or host behavior is correct. See [Arbitration and Convergence](ARBITRATION.md) for the exact guarantee and its limits.
+
 ---
 
 ## 9. RuntimeAssembly is the handoff object
