@@ -17,11 +17,12 @@
 <text x="175" y="235" font-size="20" font-weight="700">Authoring</text><text x="175" y="267" font-size="14" fill="#9eb1c4">rich editor model</text><text x="175" y="292" font-size="14" fill="#9eb1c4">names • ontology • variants</text>
 <text x="455" y="235" font-size="20" font-weight="700">Validation</text><text x="455" y="267" font-size="14" fill="#9eb1c4">validate relationships</text><text x="455" y="292" font-size="14" fill="#9eb1c4">reject invalid composition</text>
 <text x="735" y="235" font-size="20" font-weight="700">Closure</text><text x="735" y="267" font-size="14" fill="#9eb1c4">resolve dependency graph</text><text x="735" y="292" font-size="14" fill="#9eb1c4">bake required roots</text>
-<text x="1015" y="235" font-size="20" font-weight="700">Bake</text><text x="1015" y="267" font-size="14" fill="#9eb1c4">machine IDs</text><text x="1015" y="292" font-size="14" fill="#9eb1c4">opaque configuration</text>
+<text x="1015" y="235" font-size="20" font-weight="700">Bake</text><text x="1015" y="267" font-size="14" fill="#9eb1c4">machine IDs</text><text x="1015" y="292" font-size="14" fill="#9eb1c4">requested versions</text>
 <text x="1260" y="235" font-size="20" font-weight="700">Manifest</text><text x="1260" y="267" font-size="14" fill="#76cfff">published</text><text x="1260" y="292" font-size="14" fill="#76cfff">runtime request</text>
 </g>
 <path d="M70 430H1330" stroke="#26384b"/>
 <text x="70" y="475" fill="#8fa7bc" font-size="16">The manifest is intentionally smaller than the editor model.</text>
 <text x="70" y="507" fill="#8fa7bc" font-size="16">It carries enough information for deterministic composition without becoming the assembled runtime.</text>
+<text x="70" y="535" fill="#8fa7bc" font-size="16">Per-bundle configuration travels separately through a configuration source.</text>
 <text x="70" y="565" fill="#6e8499" font-size="14" letter-spacing="2">REQUEST ≠ RUNTIME • IDENTIFY WHAT IS REQUIRED • KEEP DOMAIN MEANING OUT OF THE KERNEL</text>
 </g></svg>
