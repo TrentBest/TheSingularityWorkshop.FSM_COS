@@ -100,15 +100,19 @@ Pick the question you want answered; each document focuses on one topic.
 
 <p align="center">
   <a href="https://github.com/TrentBest">
-    <img src="https://avatars.githubusercontent.com/u/10436537?v=4" alt="The Singularity Workshop on GitHub" width="200">
+    <img src="https://github.com/TrentBest.png?size=200" alt="The Singularity Workshop on GitHub" width="200">
   </a>
 </p>
 
 <p align="center">
   <a href="https://github.com/TrentBest">GitHub</a> ·
   <a href="https://coderlegion.com/">Coder Legion</a> ·
-  <a href="https://www.patreon.com/">Patreon</a> ·
-  <a href="https://www.paypal.com/">PayPal</a>
+  <a href="https://www.patreon.com/c/TheSingularityWorkshop">Patreon</a> ·
+  <a href="https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J">PayPal</a>
+  <br>
+  <a href="https://github.com/TrentBest/FSM_API">FSM_API</a> ·
+  <a href="https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization">FSM_Serialization</a> ·
+  <a href="https://github.com/TrentBest/WebPage">WebPage</a>
 </p>
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
