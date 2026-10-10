@@ -147,12 +147,12 @@ For the verified dependency picture, current gaps, and package-versus-MicroBundl
 
 ## Package at a glance
 **Package:** TheSingularityWorkshop.FSM_COS  
-**Source package version:** `0.1.0-alpha.5`  
-**Direct package dependencies:** `TheSingularityWorkshop.FSM_API 1.0.13`; `TheSingularityWorkshop.MicroBundleDomain 1.0.1`  
+**Source package version:** `0.1.0-alpha.6` (candidate; not yet published)  
+**Direct package dependencies:** `TheSingularityWorkshop.FSM_API 1.0.13`; `TheSingularityWorkshop.MicroBundleDomain 1.0.1`; `TheSingularityWorkshop.FSM_UserIO 0.1.0-alpha.1` (for the optional `SemanticIntent` pass-through in `RuntimeManifest` / `RuntimeAssembly`)  
 **Target framework:** .NET 8 (`net8.0`)  
 **License:** MIT
 
-The package workflow builds, tests, packs, and uploads artifacts. Its NuGet publication job is currently hard-disabled by an explicit `&& false` guard. A source version or successful build is not evidence that a package version was published, and this documentation change does not authorize publication.
+The package workflow builds, tests, packs, and uploads artifacts, including a separate restore/build/test/pack check against public NuGet dependencies. Its NuGet publication job remains hard-disabled by an explicit `&& false` guard. The alpha.6 candidate has passed package CI and WebPage's source-candidate integration checks, but it is **not yet published**. A source version or successful build is not evidence that a package version was published, and this documentation change does not authorize publication.
 
 ## Responsibility boundary
 
