@@ -85,6 +85,12 @@ This means:
 
 The catalog/resolver is responsible for locating a compatible artifact. FSM_COS verifies the resolved root reports the requested version before loading it.
 
+### Conflicting requests for the same root identity
+
+A manifest must not request the same MicroBundle ID at two different versions. For example, requesting bundle `10` at both `1.2.0` and `2.0.0` is ambiguous: one runtime composition cannot silently satisfy both root requests by choosing whichever catalog result happens to load first. FSM_COS detects conflicting versions for the same root ID and fails before loading the composition.
+
+If two parts of an application genuinely require incompatible versions of one capability, model that incompatibility explicitly rather than relying on duplicate IDs in one manifest.
+
 ## Version is part of the request
 
 Version belongs in the manifest because the manifest is a publication-level statement of **what composition was requested**.
