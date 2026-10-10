@@ -7,7 +7,7 @@ Use this page to find the right level of explanation. The README is the orientat
 | If you want to... | Start here |
 |---|---|
 | Understand the purpose and boundary of FSM_COS | [README](README.md) |
-| Understand how Workshop packages fit together, including package-versus-MicroBundle decisions and Profiles (source-repository working map) | [Ecosystem Integration Map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ECOSYSTEM_INTEGRATION_MAP.md) |
+| Understand how Workshop packages fit together, including package-versus-MicroBundle decisions and Profiles (source-repository working map) | [Ecosystem Integration Map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ECOSYSTEM_INTEGRATION_MAP.md) |
 | Understand the architecture and component ownership | [Architecture](docs/ARCHITECTURE.md) |
 | Learn the conceptual model and rationale | [FSM_COS Theory](docs/THEORY.md) |
 | Understand the request that enters the kernel | [Runtime Manifest](docs/RUNTIME_MANIFEST.md), then [Manifest Theory](docs/MANIFEST_THEORY.md) |
