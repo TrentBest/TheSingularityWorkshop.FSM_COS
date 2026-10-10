@@ -113,73 +113,31 @@ If no configuration exists, the bundle receives no external configuration and us
 
 ## Minimal composition
 
-A developer can start with an entirely in-memory composition.
+Start by running the complete, source-controlled example:
 
-```csharp
-var catalog = new InMemoryCatalog(
-    guiBundle,
-    inputBundle,
-    physicsBundle);
-
-var manifest = new RuntimeManifest(
-    RuntimeId: 1001,
-    Bundles:
-    [
-        new MicroBundleManifestEntry(guiBundle.Id, "1.0.0"),
-        new MicroBundleManifestEntry(inputBundle.Id, "1.0.0")
-    ]);
-
-var cos = new FsmCos(catalog);
-
-RuntimeAssembly assembly = cos.Execute(manifest);
+```bash
+dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
 ```
 
-No repository is required.
+The [Minimal Consumer sample](../samples/FSM_COS.MinimalConsumer/Program.cs) is intentionally small and includes the pieces a real composition needs: a catalog, two MicroBundles, a versioned manifest, and the call to `FsmCos.Execute`. Its output demonstrates that a requested bundle's dependency is loaded first.
 
-No configuration source is required.
+The sample references the local FSM_COS project so it can be built and checked before a candidate version is published. It is not a package-installation test. Once using a published package, reference the available version from NuGet and use the same public contracts.
 
-No GUI framework is required.
-
-No serialization framework is required.
+The sample uses an in-memory catalog. No repository is required. No configuration source is required. No GUI framework is required. No serialization framework is required.
 
 The composition kernel is useful with only the contracts it actually consumes.
 
 ## Adding configuration
 
-Configuration can be added without changing the manifest.
+Configuration is optional and separate from the manifest. To supply it, implement the public `IMicroBundleConfigurationSource` contract and pass that implementation as the second argument to `FsmCos.Execute`.
 
 ```csharp
-var configuration = new FileBackedConfigurationSource(
-    configurationDirectory);
-
-RuntimeAssembly assembly = cos.Execute(
-    manifest,
-    configuration);
+RuntimeAssembly assembly = cos.Execute(manifest, configurationSource);
 ```
 
-The important architectural property is that the configuration source is replaceable.
+Here, `cos`, `manifest`, and `configurationSource` refer to objects your application has already created; `configurationSource` must implement `IMicroBundleConfigurationSource`. FSM_COS does not ship a built-in file, Azure, or repository-backed configuration reader. Those are application or adapter responsibilities.
 
-The same manifest can therefore be composed using:
-
-```text
-local files
-     ↓
-configuration source
-
-Azure Blob
-     ↓
-configuration source
-
-repository artifact
-     ↓
-configuration source
-
-generated defaults
-     ↓
-configuration source
-```
-
-FSM_COS sees the same contract.
+The source can obtain configuration from local files, Azure Blob, a repository artifact, generated resources, or another application-owned location. FSM_COS receives the bytes through the contract and does not interpret their format. If no configuration exists, the MicroBundle uses its own defaults.
 
 ## Using a repository
 
