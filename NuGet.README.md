@@ -65,6 +65,7 @@ This source currently declares version `0.1.0-alpha.6`. A source version declara
 - [RuntimeAssembly](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/RUNTIME_ASSEMBLY.md) — the host handoff.
 - [Arbitration](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ARBITRATION.md) — reconciliation and convergence.
 - [Documentation Index](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_INDEX.md) — all focused guides.
+- [Alpha.6 release notes](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/releases/0.1.0-alpha.6.md) — included contracts and explicit limitations.
 - [Development](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/DEVELOPMENT.md) — build and verification.
 - [Source and issues](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
 
