@@ -163,7 +163,7 @@ round 3 → unchanged
           CONVERGED
 ~~~
 
-The current ten-round bound is a safety boundary, not a universal constant.
+The current ten-round bound is a safety boundary, not a universal constant. The `RuntimeAssembly.ArbitrationRounds` property records the **zero-based index** of the converging round: `0` means the first round completed without changes. Therefore, it is not the total count of calls made to `Arbitrate`; a successful assembly with value `0` still means every loaded bundle participated in one round.
 
 The deeper invariant is:
 
