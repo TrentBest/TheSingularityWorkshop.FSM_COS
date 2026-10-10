@@ -143,8 +143,8 @@ jobs:
       - name: Download NuGet package
         uses: actions/download-artifact@v8
         with:
-          name: fsm-cos-nuget-package
-          path: ./artifacts
+          name: fsm-cos-nuget-package-public-feed
+          path: ./artifacts-public
 
       - name: Authenticate with NuGet Trusted Publishing
         uses: NuGet/login@v1
@@ -153,4 +153,4 @@ jobs:
           user: TheSingularityWorkshop
 
       - name: Publish package to NuGet.org
-        run: dotnet nuget push "./artifacts/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
+        run: dotnet nuget push "./artifacts-public/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
