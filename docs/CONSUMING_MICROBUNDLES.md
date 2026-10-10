@@ -390,6 +390,7 @@ FSM_COS currently has three direct package dependencies, each with a distinct re
 |---|---|---|
 | **FSM_API** | state/context primitives, including optional runtime experience context | state-machine semantics beyond what composition requires |
 | **MicroBundleDomain** | MicroBundle identity, version metadata, dependencies, load context, arbitration context, and runtime contract | the meaning, ontology, authoring model, or storage of MicroBundles |
+| **FSM_UserIO** | the optional `SemanticIntent` value carried from `RuntimeManifest` to `RuntimeAssembly` | input-device handling, UI presentation, or execution authority |
 
 This is the intended documentation boundary:
 
