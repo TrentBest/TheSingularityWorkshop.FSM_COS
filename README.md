@@ -143,7 +143,7 @@ For the verified dependency picture, current gaps, and package-versus-MicroBundl
 - **New to FSM_COS:** start with the definition and responsibility boundary above, then read [FSM_COS Theory](docs/THEORY.md).
 - **Integrating a host:** read [Runtime Manifest](docs/RUNTIME_MANIFEST.md), [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md), and [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) as applicable.
 - **Building or changing FSM_COS:** use [Development](docs/DEVELOPMENT.md) and the [Documentation Index](DOCUMENTATION_INDEX.md).
-- **Checking ecosystem ownership or package alignment:** use the [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md) and [Dependency Alignment Checklist](docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md).
+- **Checking ecosystem ownership and package boundaries:** use the [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md).
 
 ## Package at a glance
 **Package:** TheSingularityWorkshop.FSM_COS  
