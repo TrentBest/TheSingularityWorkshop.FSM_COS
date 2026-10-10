@@ -74,7 +74,7 @@ To use FSM_COS in your own host, start with [Consuming MicroBundles](docs/CONSUM
 
 Pick the question you want answered; each document focuses on one topic.
 
-- **New to the idea?** [FSM_COS Theory](docs/THEORY.md) explains why composition is a distinct operation and develops the mental model.
+- **New to software or this architecture?** [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) introduces the problem and key terms without assuming programming experience. [FSM_COS Theory](docs/THEORY.md) develops the deeper rationale.
 - **Need the system map?** [Architecture](docs/ARCHITECTURE.md) explains component ownership and runtime flow.
 - **Building a consumer?** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) shows how to provide a catalog and bundles.
 - **Defining a request?** [Runtime Manifest](docs/RUNTIME_MANIFEST.md) explains requested bundle identities and versions; [Manifest Theory](docs/MANIFEST_THEORY.md) explains the design rationale.
