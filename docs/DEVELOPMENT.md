@@ -115,6 +115,14 @@ FSM_COS may consume configuration through an abstraction, but it does not become
 
 ## Verification
 
+Run the minimal consumer sample as part of validating the public composition path:
+
+```bash
+dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
+```
+
+It should load bundle 2 before bundle 1 and print `Assembly order: 2 -> 1`. The sample references the source project and is a source-level integration proof, not proof that a particular NuGet version is published or installable.
+
 Before a development change is considered complete:
 
 - production code builds with zero warnings;
