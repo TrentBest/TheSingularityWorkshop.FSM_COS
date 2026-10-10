@@ -96,28 +96,33 @@ Tests should establish the observable composition contract:
 
 A test that exposes an ambiguous contract is a reason to clarify the contract, not to weaken the assertion.
 
-## Visual standard: diagram 03 — the composition triangle
+## Numbered guide standard: 🔺 03 — Package overview
 
-A diagram must make the relationship easier to understand than the prose alone. If Mermaid's automatic layout makes a central relationship ambiguous, use a purpose-built SVG instead of forcing a flowchart to behave like an illustration.
+The Workshop's numbered guide sections use a colored geometric marker immediately before the section number. For section **03**, use the red triangle marker and keep the purpose consistent across package guides:
 
-The canonical composition triangle is the three-part boundary below:
+### 🔺 03 — Package overview
 
-![FSM_COS composition triangle: request, composition, and handoff](assets/composition-triangle.svg)
+Section 03 introduces the package itself. It is not a package-specific architecture diagram and it is not a place to duplicate the rest of the guide. Every package guide should use this section to give readers the same kind of orientation, expressed in that package's own terms.
 
-- **Request — RuntimeManifest:** says what composition is requested.
-- **Composition — FSM_COS:** resolves the dependency closure, loads capabilities, and drives arbitration to convergence.
-- **Handoff — RuntimeAssembly:** carries the stable result to the host.
-- **Outside the triangle:** the host decides execution and manifestation; the catalog decides where capabilities are resolved from. Neither responsibility should be drawn as kernel-owned behavior.
+Include, in a concise and consistent order:
 
-Use the triangle when explaining the *whole contract at a glance*. Use a sequence or flow diagram when explaining *order of operations*. Do not use a triangle as decoration, and do not imply that the three labels are interchangeable layers or that the host is a dependency of FSM_COS.
+1. **Identity:** display/package name, current version or release status, and the canonical repository/package links where applicable.
+2. **Purpose:** a plain-language, one-sentence statement of the problem the package solves and why it exists.
+3. **Responsibility:** what the package owns, followed by the most important things it deliberately does not own.
+4. **Boundary:** its primary contracts, inputs/outputs, or the result a consumer can expect.
+5. **Place in the ecosystem:** the important dependency/consumer relationships and why they exist, without copying neighboring packages' documentation.
+6. **Start here:** the most useful next section or minimal usage path for a new reader.
 
-### Diagram acceptance rules
+The exact facts and examples will vary by package; the **section's job, ordering, and visual treatment do not**. Keep it useful to a reader who has never opened the repository before. Put deep API detail, complete dependency analysis, tutorials, and implementation theory in their dedicated sections.
 
-1. The image must render in GitHub's Markdown view at normal desktop and mobile widths.
-2. Keep labels readable at a glance; do not place explanatory paragraphs inside the graphic.
-3. Give every image meaningful alternative text.
-4. Prefer checked-in SVG assets for authored architecture diagrams. Avoid relying on platform-specific Mermaid extensions or complex automatic layouts for diagrams whose geometry carries meaning.
-5. Keep the surrounding prose as the accessible explanation; the diagram supplements it rather than becoming the only source of meaning.
+#### Visual and heading rules
+
+- Put the colored shape **before** the number: `🔺 03 — Package overview`.
+- Keep the section number `03` and its purpose stable across all package guides.
+- Use the marker as a navigation cue, not as decoration or as a substitute for a meaningful heading.
+- Do not make section 03 a diagram-only section. Use a diagram only when it materially clarifies the package's role, and always explain it in prose.
+- Keep the heading text, purpose, and package overview readable in GitHub Markdown on desktop and mobile.
+- Give any illustrative image meaningful alternative text; do not put essential package facts only inside an image.
 
 ## Documentation standard for FSM_COS
 
