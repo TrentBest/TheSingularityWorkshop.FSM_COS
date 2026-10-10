@@ -305,7 +305,7 @@ The assembly exposes:
 
 - the runtime identity;
 - the loaded MicroBundles;
-- the number of arbitration rounds.
+- the zero-based index of the converging arbitration round (`0` means the first round converged; it is not the total number of `Arbitrate` calls).
 
 A host can retrieve a bundle by identity:
 
