@@ -86,17 +86,29 @@ These limits are intentional. Keeping the composition kernel focused makes it po
 
 ## How to try something real
 
-If you have Git and the **.NET 8 SDK** installed, run this from a terminal:
+If you have Git and the **.NET 8 SDK** installed, clone the source repository and run its minimal consumer:
 
 ```bash
 git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git
 cd TheSingularityWorkshop.FSM_COS
+dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
+```
+
+The sample creates an in-memory catalog with a report bundle that depends on a data-source bundle. You should see loading messages followed by:
+
+```text
+Assembly order: 2 -> 1
+```
+
+That output is the important result: FSM_COS loaded the prerequisite before the requested report. The catalog and example bundles are defined by the sample; they are not extra built-in types supplied by FSM_COS.
+
+If you want to verify the behavior with a focused test instead, run:
+
+```bash
 dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --filter "FullyQualifiedName~Execute_loads_dependencies_before_requesting_bundle"
 ```
 
-This runs a focused test in the source repository; it is not an end-user application or a complete consumer project. The test verifies that when bundle `1` depends on bundle `2`, the resulting assembly orders bundle `2` before bundle `1`.
-
-A test is useful here because FSM_COS is infrastructure: the visible result is a correct composition handoff, not a window or a screen. To build your own consumer, continue with [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md), which explains the catalog, manifest, configuration, and bundle contracts in practical terms.
+This test checks the same dependency-ordering rule. FSM_COS is infrastructure, so its proof is a correct composition handoff—not a window or a screen. To build your own consumer, continue with [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md), which explains the catalog, manifest, configuration, and bundle contracts in practical terms.
 
 ## A two-minute exercise
 
