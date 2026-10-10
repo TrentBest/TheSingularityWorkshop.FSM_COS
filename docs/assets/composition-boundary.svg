@@ -14,8 +14,8 @@
   <text x="150" y="38" text-anchor="middle" fill="#f2f7fa" font-family="monospace" font-size="18">INPUT</text>
   <text x="25" y="78" fill="#63e6ff" font-family="monospace" font-size="14">RuntimeManifest</text>
   <text x="25" y="111" fill="#8da6b8" font-family="monospace" font-size="12">runtime identity</text>
-  <text x="25" y="135" fill="#8da6b8" font-family="monospace" font-size="12">root BundleRequests</text>
-  <text x="25" y="159" fill="#8da6b8" font-family="monospace" font-size="12">opaque configuration</text>
+  <text x="25" y="135" fill="#8da6b8" font-family="monospace" font-size="12">root IDs + requested versions</text>
+  <text x="25" y="159" fill="#8da6b8" font-family="monospace" font-size="12">optional intent / plan metadata</text>
   <line x1="25" y1="184" x2="275" y2="184" stroke="#294a5c"/>
   <text x="25" y="214" fill="#f5c76a" font-family="monospace" font-size="13">Catalog / Resolver</text>
   <text x="25" y="238" fill="#8da6b8" font-family="monospace" font-size="12">supplied by the outside</text>
