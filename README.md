@@ -137,14 +137,6 @@ This is not a claim that every Workshop package is already a MicroBundle, that e
 
 For the verified dependency picture, current gaps, and package-versus-MicroBundle decisions, see the [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md). It deliberately distinguishes current repository facts from proposed architecture so that confidence does not turn into an unsupported compatibility promise.
 
-## Additional technical reference
-
-## Choose your path
-- **New to FSM_COS:** start with the definition and responsibility boundary above, then read [FSM_COS Theory](docs/THEORY.md).
-- **Integrating a host:** read [Runtime Manifest](docs/RUNTIME_MANIFEST.md), [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md), and [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) as applicable.
-- **Building or changing FSM_COS:** use [Development](docs/DEVELOPMENT.md) and the [Documentation Index](DOCUMENTATION_INDEX.md).
-- **Checking ecosystem ownership and package boundaries:** use the [Ecosystem Integration Map](docs/ECOSYSTEM_INTEGRATION_MAP.md).
-
 ## Package at a glance
 **Package:** TheSingularityWorkshop.FSM_COS  
 **Source package version:** `0.1.0-alpha.6` (candidate; not yet published)  
@@ -152,7 +144,7 @@ For the verified dependency picture, current gaps, and package-versus-MicroBundl
 **Target framework:** .NET 8 (`net8.0`)  
 **License:** MIT
 
-The package workflow builds, tests, packs, and uploads artifacts, including a separate restore/build/test/pack check against public NuGet dependencies. Its NuGet publication job remains hard-disabled by an explicit `&& false` guard. The alpha.6 candidate has passed package CI and WebPage's source-candidate integration checks, but it is **not yet published**. A source version or successful build is not evidence that a package version was published, and this documentation change does not authorize publication.
+The package workflow builds and tests the source-branch integration candidate, then separately restores, builds, tests, and packs against the published NuGet dependencies. **Only the public-feed package artifact is eligible for publication.** Publishing requires a deliberate manual dispatch from `development` with the `publish` input enabled; pushes and pull requests do not publish. The current package configuration must pass CI before release. Version `0.1.0-alpha.6` is a candidate and is **not yet published**.
 
 ## Responsibility boundary
 
