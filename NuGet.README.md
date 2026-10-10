@@ -53,7 +53,7 @@ The package targets **.NET 8**. Its direct dependencies are:
 - [MicroBundleDomain](https://www.nuget.org/packages/TheSingularityWorkshop.MicroBundleDomain) — the MicroBundle contract.
 - [FSM_UserIO](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_UserIO) — the platform-neutral `SemanticIntent` boundary.
 
-The `0.1.0-alpha.6` version is a development candidate, not a claim of publication. Check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the version actually available.
+This source currently declares version `0.1.0-alpha.6`. A version declaration in source or documentation is not proof that a package is published; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the version actually available.
 
 ## 🟪 05 — Available documentation and theory
 
