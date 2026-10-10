@@ -98,6 +98,12 @@ This runs a focused test in the source repository; it is not an end-user applica
 
 A test is useful here because FSM_COS is infrastructure: the visible result is a correct composition handoff, not a window or a screen. To build your own consumer, continue with [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md), which explains the catalog, manifest, configuration, and bundle contracts in practical terms.
 
+## A two-minute exercise
+
+**Without writing code:** think of an experience you know—such as a report, a map, or a classroom page. Name one capability the experience requests, one other capability it might depend on, and the host responsibility that remains outside composition (for example, showing the result on screen). There is no single correct answer; the goal is to practice separating the request, its prerequisites, and the host.
+
+**If you have the .NET 8 SDK:** run the sample above, then open `samples/FSM_COS.MinimalConsumer/Program.cs`. In the `RuntimeManifest`, change the requested root from `reportBundle.Id` to `dataBundle.Id` and run the sample again. The assembly should contain only bundle `2`, because the request no longer asks for the report bundle. Restore the original line afterwards. This small experiment changes the request, not the composition algorithm.
+
 ## A learning path, at your own pace
 
 <details>
