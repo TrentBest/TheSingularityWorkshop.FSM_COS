@@ -58,18 +58,20 @@ FSM_COS is not a GUI, engine, artifact repository, transport layer, or applicati
 
 ## 🟢 04 — See it in a minute
 
-The quickest verifiable way to see FSM_COS do its job is to run the focused test that proves dependency ordering. You need Git and the **.NET 8 SDK**.
+The repository includes a tiny runnable consumer that demonstrates the package's actual purpose: assembling a requested bundle and its dependency. You need Git and the **.NET 8 SDK**.
 
 ```bash
 git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git
 cd TheSingularityWorkshop.FSM_COS
-dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --filter "FullyQualifiedName~Execute_loads_dependencies_before_requesting_bundle"
+dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
 ```
 
-**What should happen?** The test passes: requesting bundle `1`, which depends on bundle `2`, produces an assembly ordered `2 → 1`. This is the shortest runnable proof in the repository; the test creates the small catalog and bundles needed to make that behavior real.
+**What should happen?** The sample loads bundle `2` (the data-source prerequisite) before bundle `1` (the report), then prints `Assembly order: 2 -> 1`. The sample defines its own in-memory catalog and two tiny MicroBundles; those are example code, not extra types supplied by FSM_COS.
 
-To use FSM_COS in your own host, start with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md), which explains how to provide that catalog and the bundle contracts. The source targets **.NET 8** and currently declares version `0.1.0-alpha.6`. A source version declaration alone does not establish publication status; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the version actually available.
+This is a source-repository example and references the local FSM_COS project so it can be verified before a release is published. For the exact published package status, check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS). To build your own host, start with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md), which explains the catalog, manifest, configuration, and bundle contracts.
 
+The source targets **.NET 8** and currently declares version `0.1.0-alpha.6`; a source version declaration alone does not establish publication status.
+  
 ## 🟪 05 — Available documentation and theory
 
 Pick the question you want answered; each document focuses on one topic.
