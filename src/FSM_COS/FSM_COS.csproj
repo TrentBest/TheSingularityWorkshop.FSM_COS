@@ -29,7 +29,7 @@
     <None Include="../../DOCUMENTATION_INDEX.md" Pack="true" PackagePath="" />
     <None Include="../../LICENSE.txt" Pack="true" PackagePath="" />
     <None Include="../../docs/*.md"
-          Exclude="../../docs/BRANCH_RECONCILIATION.md;../../docs/CONTINUATION_BRIEF_ALPHA6_FORGE_ANYAPP_WEBPAGE.md;../../docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md;../../docs/PAUSE_POINT.md"
+          Exclude="../../docs/BRANCH_RECONCILIATION.md;../../docs/CONTINUATION_BRIEF_ALPHA6_FORGE_ANYAPP_WEBPAGE.md;../../docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md;../../docs/ECOSYSTEM_INTEGRATION_MAP.md;../../docs/PAUSE_POINT.md"
           Pack="true"
           PackagePath="docs/" />
     <None Include="../../docs/releases/*.md" Pack="true" PackagePath="docs/releases/" />
