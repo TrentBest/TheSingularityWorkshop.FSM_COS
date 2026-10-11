@@ -29,11 +29,6 @@ public sealed class FsmCos : IFsmCos
         ArgumentNullException.ThrowIfNull(manifest.Bundles);
         manifest.ValidateStagedPlan();
 
-        // If a published schedule is supplied, verify it against the catalog's actual
-        // dependency graph before any MicroBundle Load method can have side effects.
-        if (manifest.Schedule is not null)
-            ValidateScheduleAgainstResolvedGraph(manifest);
-
         // Validate root identity/version requests before loading anything. Explicit root
         // versions also take precedence when those same bundles appear as dependencies.
         var requestedVersions = new Dictionary<ulong, string>();
@@ -60,6 +55,11 @@ public sealed class FsmCos : IFsmCos
             ValidateResolvedBundle(bundleId, version, bundle);
             requestedRoots.Add(bundleId, bundle);
         }
+
+        // Validate the schedule against the same explicitly selected root versions that
+        // composition will use, still before any MicroBundle Load method can have side effects.
+        if (manifest.Schedule is not null)
+            ValidateScheduleAgainstResolvedGraph(manifest, requestedRoots);
 
         var loaded = new List<IMicroBundle>();
         var loadedIds = new HashSet<ulong>();
@@ -102,7 +102,9 @@ public sealed class FsmCos : IFsmCos
         return new RuntimeAssembly(manifest.RuntimeId, loaded, rounds, manifest.Intent);
     }
 
-    private void ValidateScheduleAgainstResolvedGraph(RuntimeManifest manifest)
+    private void ValidateScheduleAgainstResolvedGraph(
+        RuntimeManifest manifest,
+        IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots)
     {
         var schedule = manifest.Schedule!;
         var plannedById = schedule.Entries.ToDictionary(entry => entry.Reference.BundleId);
@@ -113,9 +115,19 @@ public sealed class FsmCos : IFsmCos
 
         IMicroBundle Resolve(ulong id, string? requestedVersion = null)
         {
-            var resolved = requestedVersion is null
-                ? _catalog.TryResolve(id, out var byId) ? byId : null
-                : _catalog.TryResolve(id, requestedVersion, out var byVersion) ? byVersion : null;
+            IMicroBundle? resolved;
+            if (requestedRoots.TryGetValue(id, out var requestedRoot) &&
+                (requestedVersion is null ||
+                 string.Equals(requestedRoot.Descriptor.Version, requestedVersion, StringComparison.Ordinal)))
+            {
+                resolved = requestedRoot;
+            }
+            else
+            {
+                resolved = requestedVersion is null
+                    ? _catalog.TryResolve(id, out var byId) ? byId : null
+                    : _catalog.TryResolve(id, requestedVersion, out var byVersion) ? byVersion : null;
+            }
 
             if (resolved is null)
                 throw new InvalidOperationException(
