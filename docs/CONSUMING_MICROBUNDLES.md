@@ -113,73 +113,31 @@ If no configuration exists, the bundle receives no external configuration and us
 
 ## Minimal composition
 
-A developer can start with an entirely in-memory composition.
+Start by running the complete, source-controlled example:
 
-```csharp
-var catalog = new InMemoryCatalog(
-    guiBundle,
-    inputBundle,
-    physicsBundle);
-
-var manifest = new RuntimeManifest(
-    RuntimeId: 1001,
-    Bundles:
-    [
-        new MicroBundleManifestEntry(guiBundle.Id, "1.0.0"),
-        new MicroBundleManifestEntry(inputBundle.Id, "1.0.0")
-    ]);
-
-var cos = new FsmCos(catalog);
-
-RuntimeAssembly assembly = cos.Execute(manifest);
+```bash
+dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
 ```
 
-No repository is required.
+The [Minimal Consumer sample in the source repository](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.cs) is intentionally small and includes the pieces a real composition needs: a catalog, two MicroBundles, a versioned manifest, and the call to `FsmCos.Execute`. Its output demonstrates that a requested bundle's dependency is loaded first.
 
-No configuration source is required.
+The sample references the local FSM_COS project so it can be built and checked before a candidate version is published. It is not a package-installation test. Once using a published package, reference the available version from NuGet and use the same public contracts.
 
-No GUI framework is required.
-
-No serialization framework is required.
+The sample uses an in-memory catalog. No repository is required. No configuration source is required. No GUI framework is required. No serialization framework is required.
 
 The composition kernel is useful with only the contracts it actually consumes.
 
 ## Adding configuration
 
-Configuration can be added without changing the manifest.
+Configuration is optional and separate from the manifest. To supply it, implement the public `IMicroBundleConfigurationSource` contract and pass that implementation as the second argument to `FsmCos.Execute`.
 
 ```csharp
-var configuration = new FileBackedConfigurationSource(
-    configurationDirectory);
-
-RuntimeAssembly assembly = cos.Execute(
-    manifest,
-    configuration);
+RuntimeAssembly assembly = cos.Execute(manifest, configurationSource);
 ```
 
-The important architectural property is that the configuration source is replaceable.
+Here, `cos`, `manifest`, and `configurationSource` refer to objects your application has already created; `configurationSource` must implement `IMicroBundleConfigurationSource`. FSM_COS does not ship a built-in file, Azure, or repository-backed configuration reader. Those are application or adapter responsibilities.
 
-The same manifest can therefore be composed using:
-
-```text
-local files
-     ↓
-configuration source
-
-Azure Blob
-     ↓
-configuration source
-
-repository artifact
-     ↓
-configuration source
-
-generated defaults
-     ↓
-configuration source
-```
-
-FSM_COS sees the same contract.
+The source can obtain configuration from local files, Azure Blob, a repository artifact, generated resources, or another application-owned location. FSM_COS receives the bytes through the contract and does not interpret their format. If no configuration exists, the MicroBundle uses its own defaults.
 
 ## Using a repository
 
@@ -320,6 +278,21 @@ If the composition still reports changes after the maximum, FSM_COS fails rather
 
 See [Arbitration and Convergence](ARBITRATION.md).
 
+## Troubleshooting
+
+| Symptom | What to check |
+|---|---|
+| A requested root cannot be resolved | Confirm the catalog contains the requested bundle ID **and exact manifest version**. Root resolution uses both values. |
+| A dependency cannot be resolved | Confirm the catalog can resolve every dependency ID declared by the bundle. Dependency lookup uses the domain-declared identity. |
+| The catalog returns the wrong bundle or version | Check the catalog's identity mapping. FSM_COS validates root identity and version rather than silently accepting a substitute. |
+| Composition reports a dependency cycle | Trace the dependency chain and remove the cycle or redesign the participating contracts. FSM_COS cannot choose a meaningful substitute for a cycle. |
+| Arbitration does not converge | Review each bundle's `Arbitrate` implementation. A bundle should return `true` only when it actually changes composition-relevant state; repeated changes must eventually stop. The default limit is ten rounds. |
+| A bundle receives no configuration | Configuration is optional. Check whether your `IMicroBundleConfigurationSource` returns configuration for the runtime ID, bundle ID, and resolved version. If none is available, the bundle should use its own defaults. |
+| The sample does not start | Run it from a clone of the source repository with the .NET 8 SDK installed. The sample references the local FSM_COS project; it is not included in the NuGet package. |
+| Source CI passes but a package consumer cannot restore | Check the exact package versions and the public-feed compatibility job. A local development feed and the public NuGet feed are different dependency environments. |
+
+These checks help locate the failing boundary. Avoid fixing a catalog or host problem by adding storage, UI, or transport responsibilities to FSM_COS itself.
+
 ## RuntimeAssembly
 
 Successful composition produces:
@@ -332,7 +305,7 @@ The assembly exposes:
 
 - the runtime identity;
 - the loaded MicroBundles;
-- the number of arbitration rounds.
+- the zero-based index of the converging arbitration round (`0` means the first round converged; it is not the total number of `Arbitrate` calls).
 
 A host can retrieve a bundle by identity:
 
@@ -411,12 +384,13 @@ Those systems may feed the composition boundary through contracts, but they do n
 
 ## Dependency consumption summary
 
-FSM_COS currently consumes two foundational package domains:
+FSM_COS currently has three direct package dependencies, each with a distinct responsibility:
 
 | Package | FSM_COS consumes | FSM_COS does not define |
 |---|---|---|
 | **FSM_API** | state/context primitives, including optional runtime experience context | state-machine semantics beyond what composition requires |
 | **MicroBundleDomain** | MicroBundle identity, version metadata, dependencies, load context, arbitration context, and runtime contract | the meaning, ontology, authoring model, or storage of MicroBundles |
+| **FSM_UserIO** | the optional `SemanticIntent` value carried from `RuntimeManifest` to `RuntimeAssembly` | input-device handling, UI presentation, or execution authority |
 
 This is the intended documentation boundary:
 
@@ -430,3 +404,7 @@ This is the intended documentation boundary:
 - [Arbitration and Convergence](ARBITRATION.md)
 - [Runtime Boundary](RUNTIME_BOUNDARY.md)
 - [Development](DEVELOPMENT.md)
+
+---
+
+<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
