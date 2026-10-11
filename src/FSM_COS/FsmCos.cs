@@ -204,7 +204,6 @@ public sealed class FsmCos : IFsmCos
         HashSet<ulong> loading,
         MicroBundleLoadContext loadContext,
         IMicroBundleConfigurationSource? configurationSource,
-        IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots,
         ulong runtimeId)
     {
         if (loadedIds.Contains(entry.BundleId))
@@ -248,6 +247,7 @@ public sealed class FsmCos : IFsmCos
         HashSet<ulong> loading,
         MicroBundleLoadContext loadContext,
         IMicroBundleConfigurationSource? configurationSource,
+        IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots,
         ulong runtimeId)
     {
         if (loadedIds.Contains(bundle.Id))
