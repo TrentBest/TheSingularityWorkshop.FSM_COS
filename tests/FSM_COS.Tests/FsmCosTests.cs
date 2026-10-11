@@ -387,6 +387,28 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_rejects_an_unresolvable_explicit_root_version_before_loading_dependencies()
+    {
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(dependency, root)).Execute(
+                new RuntimeManifest(
+                    42,
+                    new[]
+                    {
+                        Entry(1),
+                        new MicroBundleManifestEntry(2, "9.9.9")
+                    })));
+
+        Assert.Contains("2", exception.Message);
+        Assert.Contains("9.9.9", exception.Message);
+        Assert.Equal(0, dependency.LoadCalls);
+        Assert.Equal(0, root.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_rejects_a_schedule_missing_a_resolved_dependency_before_loading()
     {
         var dependency = new TestBundle(2);
