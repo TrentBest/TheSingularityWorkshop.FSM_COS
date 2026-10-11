@@ -237,3 +237,19 @@ Codecov's PR #25 report separately recorded **69.43% patch coverage, with 96 cha
 - The selective candidate's verified commit can be used to reconstruct a review branch, but its PR was closed and its branch deleted; restoring a review surface is a separate action, not an implicit merge.
 - Alpha.6 remains a source candidate, not publication authorization. Before release, reconcile the public contract on the intended release line, close the meaningful coverage gaps, rerun clean public-feed compatibility against the exact release commit, inspect the produced package, and obtain explicit owner approval for any merge or publication.
 
+
+### Alpha.6 contract review — explicit root-version precedence (2026-10-11)
+
+A source review found a correctness hole in the versioned manifest contract: if a requested root was first encountered as another root's dependency, the loader could mark that bundle ID as loaded and then skip the explicit root request without checking its requested version. The staged-schedule validator also resolved dependencies by default catalog identity even when that same bundle ID was explicitly requested as a root at a particular version.
+
+**Correction on `development`:**
+
+- Resolve and validate every distinct explicit root ID/version before any MicroBundle `Load` call.
+- Reuse the selected root instance whenever that ID appears in another root's dependency closure, so load order cannot silently substitute the catalog's default version.
+- Validate an optional published schedule against those same selected root instances, keeping the pre-load graph check and the actual composition path consistent.
+- Add regression tests for an unavailable explicit root version failing before loads, explicit root-version precedence over the catalog's default dependency version, schedule validation using the explicit version, scheduled dependency closure/version mismatches, and staged-manifest/load-plan validation guards.
+
+The implementation is on `development` at commit `50aa6e454c90f7f711133221d0e5491087d966fe`; the latest related test commit is `0759056467eeffce30229747749f860dc98e3615`. The tests have been added to `FsmCosTests.cs` and `RuntimeManifestPlanningTests.cs`.
+
+**Verification status:** the GitHub connector has not yet returned workflow runs or commit-status checks for the latest `development` head. These are source changes with regression tests, **not yet CI-verified**. Do not carry them into the release candidate or claim the fix passes until the exact head completes build, tests, and public-feed compatibility. This also means the earlier alpha.6 candidate's green run does not cover this correction.
+
