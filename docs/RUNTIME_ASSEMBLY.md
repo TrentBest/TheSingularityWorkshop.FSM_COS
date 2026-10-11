@@ -18,6 +18,7 @@ public sealed class RuntimeAssembly
     public ulong RuntimeId { get; }
     public IReadOnlyList<IMicroBundle> Bundles { get; }
     public int ArbitrationRounds { get; }
+    public SemanticIntent? Intent { get; }
 }
 ```
 
@@ -25,7 +26,8 @@ The assembly records:
 
 - the runtime identity;
 - the loaded MicroBundles;
-- how many arbitration rounds were required to converge.
+- `ArbitrationRounds`: the zero-based index of the round that reported convergence (`0` means the first round converged), not the total number of `Arbitrate` calls;
+- the optional application-owned semantic intent carried by the manifest, when supplied.
 
 It does not become a host, renderer, scheduler, or Experience.
 
@@ -100,7 +102,7 @@ That separation is what allows a single composition request to be consumed by di
 ## Related concepts
 
 - [Runtime Manifest](RUNTIME_MANIFEST.md)
-- [MicroBundles](MICROBUNDLES.md)
+- [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md)
 - [Runtime Boundary](RUNTIME_BOUNDARY.md)
 
 
