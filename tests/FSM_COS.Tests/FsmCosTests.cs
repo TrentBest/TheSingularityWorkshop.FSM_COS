@@ -387,6 +387,30 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Explicit_root_version_wins_when_that_bundle_is_also_a_dependency()
+    {
+        var defaultDependency = new TestBundle(2, "1.0.0");
+        var requestedDependency = new TestBundle(2, "2.0.0");
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var catalog = new VersionedTestCatalog(
+            new TheSingularityWorkshop.MicroBundleDomain.IMicroBundle[] { root, defaultDependency },
+            new TheSingularityWorkshop.MicroBundleDomain.IMicroBundle[] { root, requestedDependency });
+
+        var assembly = new FsmCos(catalog).Execute(
+            new RuntimeManifest(
+                42,
+                new[]
+                {
+                    Entry(1),
+                    new MicroBundleManifestEntry(2, "2.0.0")
+                }));
+
+        Assert.Same(requestedDependency, assembly.Bundles.Single(bundle => bundle.Id == 2));
+        Assert.Equal(0, defaultDependency.LoadCalls);
+        Assert.Equal(1, requestedDependency.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_rejects_an_unresolvable_explicit_root_version_before_loading_dependencies()
     {
         var dependency = new TestBundle(2);
@@ -494,17 +518,43 @@ public sealed class FsmCosTests
             _bundles.TryGetValue(bundleId, out bundle);
     }
 
+    private sealed class VersionedTestCatalog : IMicroBundleCatalog
+    {
+        private readonly Dictionary<ulong, TheSingularityWorkshop.MicroBundleDomain.IMicroBundle> _byId;
+        private readonly Dictionary<(ulong BundleId, string Version), TheSingularityWorkshop.MicroBundleDomain.IMicroBundle> _byVersion;
+
+        public VersionedTestCatalog(
+            TheSingularityWorkshop.MicroBundleDomain.IMicroBundle[] byId,
+            TheSingularityWorkshop.MicroBundleDomain.IMicroBundle[] byVersion)
+        {
+            _byId = byId.ToDictionary(bundle => bundle.Id);
+            _byVersion = byVersion.ToDictionary(
+                bundle => (bundle.Id, bundle.Descriptor.Version));
+        }
+
+        public bool TryResolve(ulong bundleId, string version, out TheSingularityWorkshop.MicroBundleDomain.IMicroBundle? bundle) =>
+            _byVersion.TryGetValue((bundleId, version), out bundle);
+
+        public bool TryResolve(ulong bundleId, out TheSingularityWorkshop.MicroBundleDomain.IMicroBundle? bundle) =>
+            _byId.TryGetValue(bundleId, out bundle);
+    }
+
     private sealed class TestBundle : TheSingularityWorkshop.MicroBundleDomain.IMicroBundle
     {
         private readonly IReadOnlyList<MicroBundleDependencyRequest> _dependencies;
 
         public TestBundle(ulong id, params MicroBundleDependencyRequest[] dependencies)
+            : this(id, "0.1.0-test", dependencies)
+        {
+        }
+
+        public TestBundle(ulong id, string version, params MicroBundleDependencyRequest[] dependencies)
         {
             Id = id;
             _dependencies = dependencies;
             Descriptor = new MicroBundleDescriptor(
                 id,
-                "0.1.0-test",
+                version,
                 dependencies.Select(x => new MicroBundleDependency(x.BundleId)));
         }
 
