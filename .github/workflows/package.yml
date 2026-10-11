@@ -81,7 +81,17 @@ jobs:
             exit 1
           fi
           cp "$coverage_file" ./TestResults/coverage.cobertura.xml
-          echo "Prepared coverage report: $coverage_file"
+
+          # Keep one canonical Cobertura report so Codecov does not ingest the same
+          # test coverage multiple times from the nested collector output and root copy.
+          find ./TestResults -type f -name 'coverage.cobertura.xml' ! -path './TestResults/coverage.cobertura.xml' -delete
+          remaining_coverage_files="$(find ./TestResults -type f -name 'coverage.cobertura.xml' | wc -l)"
+          if [[ "$remaining_coverage_files" -ne 1 ]]; then
+            echo "Expected exactly one canonical Cobertura report, found $remaining_coverage_files."
+            find ./TestResults -type f -name 'coverage.cobertura.xml' -print
+            exit 1
+          fi
+          echo "Prepared canonical coverage report: ./TestResults/coverage.cobertura.xml"
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v6
