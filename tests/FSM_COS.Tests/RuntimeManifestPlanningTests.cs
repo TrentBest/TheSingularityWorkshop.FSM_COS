@@ -226,4 +226,9 @@ public sealed class RuntimeManifestPlanningTests
     {
         public bool ShouldLoad(RuntimeManifestEntry entry, IStateContext? experienceContext) => true;
     }
+
+    private sealed class DeclineDeferredEvaluator : IManifestLoadEvaluator
+    {
+        public bool ShouldLoad(RuntimeManifestEntry entry, IStateContext? experienceContext) => false;
+    }
 }
