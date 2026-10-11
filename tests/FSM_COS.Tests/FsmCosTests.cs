@@ -411,6 +411,36 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Schedule_validation_uses_an_explicit_root_version_when_it_is_also_a_dependency()
+    {
+        var defaultDependency = new TestBundle(2, "1.0.0");
+        var requestedDependency = new TestBundle(2, "2.0.0");
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var rootEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+        var dependencyEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(2, "2.0.0", "sha256:selected-dependency"));
+        var entries = new[] { rootEntry, dependencyEntry };
+        var schedule = new RuntimeManifestSchedule(
+            entries,
+            new[] { new RuntimeManifestDependency(1, 2) });
+        var catalog = new VersionedTestCatalog(
+            new TheSingularityWorkshop.MicroBundleDomain.IMicroBundle[] { root, defaultDependency },
+            new TheSingularityWorkshop.MicroBundleDomain.IMicroBundle[] { root, requestedDependency });
+
+        var assembly = new FsmCos(catalog).Execute(
+            new RuntimeManifest(
+                42,
+                new[] { Entry(1), new MicroBundleManifestEntry(2, "2.0.0") },
+                LoadPlan: entries,
+                Schedule: schedule));
+
+        Assert.Same(requestedDependency, assembly.Bundles.Single(bundle => bundle.Id == 2));
+        Assert.Equal(0, defaultDependency.LoadCalls);
+        Assert.Equal(1, requestedDependency.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_rejects_an_unresolvable_explicit_root_version_before_loading_dependencies()
     {
         var dependency = new TestBundle(2);
