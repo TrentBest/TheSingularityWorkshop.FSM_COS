@@ -114,6 +114,19 @@ public sealed class RuntimeManifestPlanningTests
     }
 
     [Fact]
+    public void Published_reference_validity_and_manifest_matching_are_explicit()
+    {
+        var reference = Reference(7, "1.2.0");
+        Assert.True(reference.IsValid);
+        Assert.True(reference.Matches(new MicroBundleManifestEntry(7, "1.2.0")));
+        Assert.False(reference.Matches(new MicroBundleManifestEntry(7, "2.0.0")));
+        Assert.False(reference.Matches(new MicroBundleManifestEntry(8, "1.2.0")));
+        Assert.False(new MicroBundleReference(0, "1.2.0", "sha256:content").IsValid);
+        Assert.False(new MicroBundleReference(7, " ", "sha256:content").IsValid);
+        Assert.False(new MicroBundleReference(7, "1.2.0", " ").IsValid);
+    }
+
+    [Fact]
     public void Schedule_rejects_invalid_entries_edges_and_duplicate_relationships()
     {
         var valid = new RuntimeManifestEntry(Reference(1, "1.0.0"));
