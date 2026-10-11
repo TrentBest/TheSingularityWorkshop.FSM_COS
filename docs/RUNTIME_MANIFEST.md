@@ -85,6 +85,14 @@ This means:
 
 The catalog/resolver is responsible for locating a compatible artifact. FSM_COS verifies the resolved root reports the requested version before loading it.
 
+### Conflicting requests for the same root identity
+
+A manifest must not request the same MicroBundle ID at two different versions. For example, requesting bundle `10` at both `1.2.0` and `2.0.0` is ambiguous: one runtime composition cannot silently satisfy both root requests by choosing whichever catalog result happens to load first. FSM_COS detects conflicting versions for the same root ID and fails before loading the composition.
+
+If two parts of an application genuinely require incompatible versions of one capability, model that incompatibility explicitly rather than relying on duplicate IDs in one manifest.
+
+**An explicit root version also remains authoritative when that same MicroBundle is reached through another root's dependency graph.** FSM_COS resolves the distinct root ID/version requests before invoking any MicroBundle `Load` method, then reuses those selected root instances during dependency traversal. If a requested root version cannot be resolved, composition fails before loading begins. When a published schedule is supplied, its dependency-graph validation uses those same selected root instances, so the schedule check and actual composition cannot silently disagree about the version chosen for an explicitly requested root.
+
 ## Version is part of the request
 
 Version belongs in the manifest because the manifest is a publication-level statement of **what composition was requested**.
@@ -300,3 +308,7 @@ It means the composition request remains meaningful when moved between hosts.
 - [RuntimeAssembly](RUNTIME_ASSEMBLY.md)
 - [Arbitration and Convergence](ARBITRATION.md)
 - [Development](DEVELOPMENT.md)
+
+---
+
+<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
