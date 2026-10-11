@@ -261,7 +261,7 @@ A direct comparison of the current `master` project file with the verified alpha
 - `master` sets `PackageReadmeFile` to `README.md`; the selective candidate uses the focused `NuGet.README.md`.
 - `master` packs `README.md`, `LICENSE.txt`, and `docs/*.md`, but does not pack `docs/assets/**/*` or `docs/releases/*.md`.
 - The master README references `docs/assets/fsm-cos-crane.gif`; the project file does not include that asset in the package. The alpha.6 release notes are also absent from the master package contents.
-- The selective candidate project includes package project/repository metadata, `NuGet.README.md`, the shared documentation standard/index, release notes, and documentation assets while excluding internal branch-planning records.
+- **Correction after inspecting the exact tested candidate commit:** `release/fsm-cos-alpha6-candidate` at `385bec07588185d7cc98471db1f1015e9da69e5c` does **not** yet include all of those package improvements. Its project file sets `PackageReadmeFile` to `README.md`, packs `README.md`, `LICENSE.txt`, `docs/*.md`, and `docs/releases/*.md`, but does not pack `NuGet.README.md`, root documentation-standard/index files, or `docs/assets/**/*`; it also lacks the package project/repository URL metadata present on current `development`. The previous bullet overstated what was in the candidate package and is superseded by this correction.
 
 The candidate's artifact inspection recorded these content checks as passing on its tested head. They do **not** describe the current `master` package. Before release, restore/recreate the selective candidate from a reviewable commit and verify the actual generated `.nupkg` contents again after applying the root-version fix and coverage tests.
 
