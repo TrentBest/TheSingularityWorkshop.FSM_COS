@@ -191,7 +191,7 @@ public sealed class RuntimeManifestPlanningTests
         Assert.Throws<KeyNotFoundException>(() => plan.MarkLocalized(99));
         Assert.Throws<KeyNotFoundException>(() => plan.MarkLoaded(99));
         Assert.Throws<InvalidOperationException>(() => plan.MarkLoaded(1));
-        Assert.Throws<ArgumentNullException>(() => plan.EvaluatePromotions(null!, null));
+        Assert.Throws<ArgumentNullException>(() => plan.EvaluatePromotions(null!, null).ToArray());
 
         plan.MarkLocalized(1);
         plan.MarkLoaded(1);
