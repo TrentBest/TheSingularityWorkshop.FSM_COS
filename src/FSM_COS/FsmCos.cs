@@ -29,14 +29,8 @@ public sealed class FsmCos : IFsmCos
         ArgumentNullException.ThrowIfNull(manifest.Bundles);
         manifest.ValidateStagedPlan();
 
-        // If a published schedule is supplied, verify it against the catalog's actual
-        // dependency graph before any MicroBundle Load method can have side effects.
-        if (manifest.Schedule is not null)
-            ValidateScheduleAgainstResolvedGraph(manifest);
-
-        // A manifest cannot request two versions of the same root identity.
-        // Without this preflight, the first request would silently win because
-        // subsequent requests are skipped once that bundle ID is loaded.
+        // Validate root identity/version requests before loading anything. Explicit root
+        // versions also take precedence when those same bundles appear as dependencies.
         var requestedVersions = new Dictionary<ulong, string>();
         foreach (var entry in manifest.Bundles)
         {
@@ -51,6 +45,22 @@ public sealed class FsmCos : IFsmCos
             requestedVersions[entry.BundleId] = entry.Version;
         }
 
+        var requestedRoots = new Dictionary<ulong, IMicroBundle>();
+        foreach (var (bundleId, version) in requestedVersions)
+        {
+            if (!_catalog.TryResolve(bundleId, version, out var bundle) || bundle is null)
+                throw new InvalidOperationException(
+                    $"MicroBundle {bundleId} version '{version}' could not be resolved.");
+
+            ValidateResolvedBundle(bundleId, version, bundle);
+            requestedRoots.Add(bundleId, bundle);
+        }
+
+        // Validate the schedule against the same explicitly selected root versions that
+        // composition will use, still before any MicroBundle Load method can have side effects.
+        if (manifest.Schedule is not null)
+            ValidateScheduleAgainstResolvedGraph(manifest, requestedRoots);
+
         var loaded = new List<IMicroBundle>();
         var loadedIds = new HashSet<ulong>();
         var loading = new HashSet<ulong>();
@@ -60,6 +70,7 @@ public sealed class FsmCos : IFsmCos
         {
             LoadRoot(
                 entry,
+                requestedRoots,
                 loaded,
                 loadedIds,
                 loading,
@@ -91,7 +102,9 @@ public sealed class FsmCos : IFsmCos
         return new RuntimeAssembly(manifest.RuntimeId, loaded, rounds, manifest.Intent);
     }
 
-    private void ValidateScheduleAgainstResolvedGraph(RuntimeManifest manifest)
+    private void ValidateScheduleAgainstResolvedGraph(
+        RuntimeManifest manifest,
+        IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots)
     {
         var schedule = manifest.Schedule!;
         var plannedById = schedule.Entries.ToDictionary(entry => entry.Reference.BundleId);
@@ -102,9 +115,19 @@ public sealed class FsmCos : IFsmCos
 
         IMicroBundle Resolve(ulong id, string? requestedVersion = null)
         {
-            var resolved = requestedVersion is null
-                ? _catalog.TryResolve(id, out var byId) ? byId : null
-                : _catalog.TryResolve(id, requestedVersion, out var byVersion) ? byVersion : null;
+            IMicroBundle? resolved;
+            if (requestedRoots.TryGetValue(id, out var requestedRoot) &&
+                (requestedVersion is null ||
+                 string.Equals(requestedRoot.Descriptor.Version, requestedVersion, StringComparison.Ordinal)))
+            {
+                resolved = requestedRoot;
+            }
+            else
+            {
+                resolved = requestedVersion is null
+                    ? _catalog.TryResolve(id, out var byId) ? byId : null
+                    : _catalog.TryResolve(id, requestedVersion, out var byVersion) ? byVersion : null;
+            }
 
             if (resolved is null)
                 throw new InvalidOperationException(
@@ -187,6 +210,7 @@ public sealed class FsmCos : IFsmCos
 
     private void LoadRoot(
         MicroBundleManifestEntry entry,
+        IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots,
         List<IMicroBundle> loaded,
         HashSet<ulong> loadedIds,
         HashSet<ulong> loading,
@@ -195,7 +219,11 @@ public sealed class FsmCos : IFsmCos
         ulong runtimeId)
     {
         if (loadedIds.Contains(entry.BundleId))
+        {
+            var alreadyLoaded = loaded.First(bundle => bundle.Id == entry.BundleId);
+            ValidateResolvedBundle(entry.BundleId, entry.Version, alreadyLoaded);
             return;
+        }
 
         if (!loading.Add(entry.BundleId))
             throw new InvalidOperationException(
@@ -203,10 +231,7 @@ public sealed class FsmCos : IFsmCos
 
         try
         {
-            if (!_catalog.TryResolve(entry.BundleId, entry.Version, out var bundle) || bundle is null)
-                throw new InvalidOperationException(
-                    $"MicroBundle {entry.BundleId} version '{entry.Version}' could not be resolved.");
-
+            var bundle = requestedRoots[entry.BundleId];
             ValidateResolvedBundle(entry.BundleId, entry.Version, bundle);
 
             LoadBundle(
@@ -217,6 +242,7 @@ public sealed class FsmCos : IFsmCos
                 loading,
                 loadContext,
                 configurationSource,
+                requestedRoots,
                 runtimeId);
         }
         finally
@@ -233,6 +259,7 @@ public sealed class FsmCos : IFsmCos
         HashSet<ulong> loading,
         MicroBundleLoadContext loadContext,
         IMicroBundleConfigurationSource? configurationSource,
+        IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots,
         ulong runtimeId)
     {
         if (loadedIds.Contains(bundle.Id))
@@ -260,12 +287,21 @@ public sealed class FsmCos : IFsmCos
 
             try
             {
-                if (!_catalog.TryResolve(dependency.BundleId, out var dependencyBundle) ||
-                    dependencyBundle is null)
+                IMicroBundle? dependencyBundle;
+                if (requestedRoots.TryGetValue(dependency.BundleId, out var requestedRoot))
+                {
+                    dependencyBundle = requestedRoot;
+                }
+                else if (!_catalog.TryResolve(dependency.BundleId, out dependencyBundle) ||
+                         dependencyBundle is null)
                 {
                     throw new InvalidOperationException(
                         $"MicroBundle {dependency.BundleId} could not be resolved.");
                 }
+
+                if (dependencyBundle is null)
+                    throw new InvalidOperationException(
+                        $"MicroBundle {dependency.BundleId} could not be resolved.");
 
                 if (dependencyBundle.Descriptor is null)
                     throw new InvalidOperationException(
@@ -283,6 +319,7 @@ public sealed class FsmCos : IFsmCos
                     loading,
                     loadContext,
                     configurationSource,
+                    requestedRoots,
                     runtimeId);
             }
             finally
