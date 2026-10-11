@@ -253,3 +253,15 @@ The implementation is on `development` at commit `50aa6e454c90f7f711133221d0e549
 
 **Verification status:** the GitHub connector has not yet returned workflow runs or commit-status checks for the latest `development` head. These are source changes with regression tests, **not yet CI-verified**. Do not carry them into the release candidate or claim the fix passes until the exact head completes build, tests, and public-feed compatibility. This also means the earlier alpha.6 candidate's green run does not cover this correction.
 
+
+### Master package-content audit (2026-10-11)
+
+A direct comparison of the current `master` project file with the verified alpha.6 candidate shows a second release blocker beyond the public API drift:
+
+- `master` sets `PackageReadmeFile` to `README.md`; the selective candidate uses the focused `NuGet.README.md`.
+- `master` packs `README.md`, `LICENSE.txt`, and `docs/*.md`, but does not pack `docs/assets/**/*` or `docs/releases/*.md`.
+- The master README references `docs/assets/fsm-cos-crane.gif`; the project file does not include that asset in the package. The alpha.6 release notes are also absent from the master package contents.
+- The selective candidate project includes package project/repository metadata, `NuGet.README.md`, the shared documentation standard/index, release notes, and documentation assets while excluding internal branch-planning records.
+
+The candidate's artifact inspection recorded these content checks as passing on its tested head. They do **not** describe the current `master` package. Before release, restore/recreate the selective candidate from a reviewable commit and verify the actual generated `.nupkg` contents again after applying the root-version fix and coverage tests.
+
