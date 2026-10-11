@@ -113,6 +113,112 @@ public sealed class RuntimeManifestPlanningTests
         Assert.Equal(MicroBundleRuntimeState.Loaded, plan.GetState(2));
     }
 
+    [Fact]
+    public void Schedule_rejects_invalid_entries_edges_and_duplicate_relationships()
+    {
+        var valid = new RuntimeManifestEntry(Reference(1, "1.0.0"));
+        var invalid = new RuntimeManifestEntry(new MicroBundleReference(0, "", ""));
+
+        Assert.Throws<ArgumentNullException>(() =>
+            new RuntimeManifestSchedule(null!, Array.Empty<RuntimeManifestDependency>()));
+        Assert.Throws<ArgumentNullException>(() =>
+            new RuntimeManifestSchedule(new[] { valid }, null!));
+        Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestSchedule(new[] { invalid }, Array.Empty<RuntimeManifestDependency>()));
+        Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestSchedule(new[] { valid, valid }, Array.Empty<RuntimeManifestDependency>()));
+        Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestSchedule(new[] { valid }, new[] { new RuntimeManifestDependency(1, 1) }));
+        Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestSchedule(new[] { valid }, new[] { new RuntimeManifestDependency(1, 2) }));
+        Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestSchedule(
+                new[] { valid, new RuntimeManifestEntry(Reference(2, "1.0.0")) },
+                new[] { new RuntimeManifestDependency(2, 1), new RuntimeManifestDependency(2, 1) }));
+    }
+
+    [Fact]
+    public void Schedule_readiness_rejects_unknown_entries_and_null_predicates()
+    {
+        var schedule = new RuntimeManifestSchedule(
+            new[] { new RuntimeManifestEntry(Reference(1, "1.0.0")) },
+            Array.Empty<RuntimeManifestDependency>());
+
+        Assert.Throws<ArgumentNullException>(() => schedule.IsDependencyReady(1, null!));
+        Assert.Throws<KeyNotFoundException>(() => schedule.IsDependencyReady(99, _ => true));
+    }
+
+    [Fact]
+    public void Load_plan_rejects_invalid_entries_and_a_different_schedule()
+    {
+        var valid = new RuntimeManifestEntry(Reference(1, "1.0.0"), ManifestLoadStage.Resident);
+        var differentStage = new RuntimeManifestEntry(Reference(1, "1.0.0"), ManifestLoadStage.Deferred);
+        var schedule = new RuntimeManifestSchedule(
+            new[] { differentStage },
+            Array.Empty<RuntimeManifestDependency>());
+
+        Assert.Throws<ArgumentNullException>(() => new RuntimeManifestLoadPlan(null!));
+        Assert.Throws<ArgumentException>(() => new RuntimeManifestLoadPlan(new[]
+        {
+            new RuntimeManifestEntry(new MicroBundleReference(0, "", ""))
+        }));
+        Assert.Throws<ArgumentException>(() => new RuntimeManifestLoadPlan(new[] { valid, valid }));
+        Assert.Throws<ArgumentException>(() => new RuntimeManifestLoadPlan(new[] { valid }, schedule));
+    }
+
+    [Fact]
+    public void Load_plan_guards_state_transitions_and_unknown_ids()
+    {
+        var plan = new RuntimeManifestLoadPlan(new[]
+        {
+            new RuntimeManifestEntry(Reference(1, "1.0.0"))
+        });
+
+        Assert.Throws<KeyNotFoundException>(() => plan.GetState(99));
+        Assert.Throws<KeyNotFoundException>(() => plan.MarkLocalized(99));
+        Assert.Throws<KeyNotFoundException>(() => plan.MarkLoaded(99));
+        Assert.Throws<InvalidOperationException>(() => plan.MarkLoaded(1));
+        Assert.Throws<ArgumentNullException>(() => plan.EvaluatePromotions(null!, null));
+
+        plan.MarkLocalized(1);
+        plan.MarkLoaded(1);
+        Assert.Equal(MicroBundleRuntimeState.Loaded, plan.GetState(1));
+    }
+
+    [Fact]
+    public void Manifest_plan_requires_every_requested_root_and_matching_schedule_metadata()
+    {
+        var planned = new RuntimeManifestEntry(Reference(2, "1.0.0"));
+        var manifestMissingRoot = new RuntimeManifest(
+            42,
+            new[] { new MicroBundleManifestEntry(1, "1.0.0") },
+            LoadPlan: new[] { planned });
+
+        Assert.Throws<InvalidOperationException>(manifestMissingRoot.ValidateStagedPlan);
+
+        var resident = new RuntimeManifestEntry(Reference(1, "1.0.0"), ManifestLoadStage.Resident);
+        var deferred = new RuntimeManifestEntry(Reference(1, "1.0.0"), ManifestLoadStage.Deferred);
+        var manifestWithMismatch = new RuntimeManifest(
+            42,
+            new[] { new MicroBundleManifestEntry(1, "1.0.0") },
+            LoadPlan: new[] { resident },
+            Schedule: new RuntimeManifestSchedule(new[] { deferred }, Array.Empty<RuntimeManifestDependency>()));
+
+        Assert.Throws<InvalidOperationException>(manifestWithMismatch.ValidateStagedPlan);
+    }
+
+    [Fact]
+    public void Deferred_evaluator_can_decline_a_localized_bundle()
+    {
+        var deferred = new RuntimeManifestEntry(Reference(2, "1.0.0"), ManifestLoadStage.Deferred);
+        var plan = new RuntimeManifestLoadPlan(new[] { deferred });
+        plan.MarkLocalized(2);
+
+        var promotions = plan.EvaluatePromotions(new DeclineDeferredEvaluator(), null);
+
+        Assert.Empty(promotions);
+    }
+
     private static MicroBundleReference Reference(ulong id, string version) =>
         new(id, version, $"sha256:{id}-{version}");
 
