@@ -24,7 +24,7 @@ FSM_COS is a small composition kernel. This document describes how its pieces co
 ## Core contracts
 
 ### RuntimeManifest
-Identifies the runtime being assembled and supplies root MicroBundle manifest entries. It is composition input, not application behavior. See [Runtime Manifest](RUNTIME_MANIFEST.md) and [Runtime Manifest Theory](MANIFEST_THEORY.md).
+Identifies the runtime being assembled and supplies versioned root MicroBundle entries. It can also carry an optional host-provided `SemanticIntent`, an optional load-plan description, and an optional dependency schedule. Intent is passed through to the result; staged metadata is validated according to the current alpha contract and does not, by itself, activate repository localization or staged execution. The manifest is composition input, not application behavior. See [Runtime Manifest](RUNTIME_MANIFEST.md) and [Runtime Manifest Theory](MANIFEST_THEORY.md).
 
 ### MicroBundle manifest entries
 A manifest entry identifies a requested MicroBundle and its requested version. Configuration is intentionally not part of the manifest. A separate configuration source may provide per-MicroBundle configuration at runtime.
@@ -42,7 +42,7 @@ Carries runtime identity and configuration available during installation. Config
 Exposes runtime identity, the currently loaded bundle set, and an optional FSM_API `IStateContext` supplied by the host. It is composition context, not host lifecycle state.
 
 ### RuntimeAssembly
-The result surface of the composition pass: runtime identity, loaded bundles, and arbitration count. See [RuntimeAssembly](RUNTIME_ASSEMBLY.md) and [FSM_COS Theory — RuntimeAssembly is the handoff object](THEORY.md#9-runtimeassembly-is-the-handoff-object).
+The result surface of the composition pass: runtime identity, loaded bundles, the zero-based index of the round that reported convergence, and the optional `SemanticIntent` carried by the request. An `ArbitrationRounds` value of `0` means the first round converged; it is not the number of `Arbitrate` calls. Intent is passed through for the host; it does not make FSM_COS an input handler or presentation layer. See [RuntimeAssembly](RUNTIME_ASSEMBLY.md) and [FSM_COS Theory — RuntimeAssembly is the handoff object](THEORY.md#9-runtimeassembly-is-the-handoff-object).
 
 ![Dependency closure and installation order](assets/dependency-resolution.svg)
 
@@ -70,7 +70,7 @@ Configuration is an external runtime input. FSM_COS accepts configuration throug
 
 ## Arbitration
 
-After reachable bundles are loaded, FSM_COS creates one ArbitrationContext.
+When a manifest supplies a dependency schedule, FSM_COS resolves the catalog's actual reachable dependency graph and checks it against the schedule before calling any MicroBundle `Load` method. This is a validation boundary, not a claim that FSM_COS localizes artifacts or implements staged/background loading. After reachable bundles are loaded, FSM_COS creates one ArbitrationContext.
 
     for each round
         for each loaded bundle
@@ -94,10 +94,9 @@ The composition engine should not need to know where a bundle came from.
        ▼
 RuntimeAssembly
        │
-       ├── WebForge → GUI → browser
-       ├── AnyApp → local runtime
-       ├── Desktop Forge → native manifestation
-       └── MyVR / Domain → encountered Experience
+       ├── WebPage → browser experience
+       ├── AnyApp → desktop/local experience
+       └── other hosts → their own manifestation
 
 ## Current development boundary
 
