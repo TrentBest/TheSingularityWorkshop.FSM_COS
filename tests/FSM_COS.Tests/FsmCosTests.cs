@@ -386,6 +386,57 @@ public sealed class FsmCosTests
         Assert.Equal(0, root.LoadCalls);
     }
 
+    [Fact]
+    public void Execute_rejects_a_schedule_missing_a_resolved_dependency_before_loading()
+    {
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var rootEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+        var schedule = new RuntimeManifestSchedule(
+            new[] { rootEntry },
+            Array.Empty<RuntimeManifestDependency>());
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(dependency, root)).Execute(
+                new RuntimeManifest(
+                    42,
+                    new[] { Entry(1) },
+                    LoadPlan: new[] { rootEntry },
+                    Schedule: schedule)));
+
+        Assert.Contains("resolved dependency closure", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(0, dependency.LoadCalls);
+        Assert.Equal(0, root.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_a_scheduled_dependency_version_mismatch_before_loading()
+    {
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var rootEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+        var dependencyEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(2, "9.9.9", "sha256:dependency"));
+        var entries = new[] { rootEntry, dependencyEntry };
+        var schedule = new RuntimeManifestSchedule(
+            entries,
+            new[] { new RuntimeManifestDependency(1, 2) });
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(dependency, root)).Execute(
+                new RuntimeManifest(
+                    42,
+                    new[] { Entry(1) },
+                    LoadPlan: entries,
+                    Schedule: schedule)));
+
+        Assert.Contains("expects MicroBundle 2 version", exception.Message);
+        Assert.Equal(0, dependency.LoadCalls);
+        Assert.Equal(0, root.LoadCalls);
+    }
+
     private static MicroBundleManifestEntry Entry(ulong bundleId) =>
         new(bundleId, "0.1.0-test");
 
