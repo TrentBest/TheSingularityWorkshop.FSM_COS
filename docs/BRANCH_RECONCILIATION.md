@@ -265,3 +265,16 @@ A direct comparison of the current `master` project file with the verified alpha
 
 The candidate's artifact inspection recorded these content checks as passing on its tested head. They do **not** describe the current `master` package. Before release, restore/recreate the selective candidate from a reviewable commit and verify the actual generated `.nupkg` contents again after applying the root-version fix and coverage tests.
 
+
+### Alpha.6 review candidate restored and verified (2026-10-11)
+
+The deleted selective candidate was reconstructed on `release/fsm-cos-alpha6-final`, then updated with the explicit-root-version fix, regression tests, current contract documentation, and complete package-content rules. This is the current review surface; the historical PR #25 and commit `385bec07588185d7cc98471db1f1015e9da69e5c` are not the current release candidate.
+
+- **PR [#28](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/28)** is open and ready for owner review, targeting `master`. Head: `aa52a56be4b3a7814e673909434e63ef59d9ec59`. The branch compares **50 commits ahead / 0 behind** `master`; it has not been merged.
+- Actions run [38104839539](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/38104839539) succeeded on that exact head: **58/58 tests passed** in both the local dependency path and the clean public-NuGet path; both builds reported zero warnings/errors; package and coverage artifacts uploaded; `publish_nuget` was skipped.
+- The latest Cobertura artifact reports **96.38% line coverage and 90.30% branch coverage overall**. Codecov's visible PR comment still reports 83.53% patch coverage from an earlier head; do not treat that comment as the current head's patch result until Codecov refreshes it.
+- The public-feed artifact was inspected after packing: `TheSingularityWorkshop.FSM_COS 0.1.0-alpha.6`, 43 package entries, 12 visual assets, the focused `NuGet.README.md`, license, root documentation index/standard, alpha.6 release notes, and 39 XML API documentation members. Direct dependencies are FSM_API 1.0.13, FSM_UserIO 0.1.0-alpha.1, and MicroBundleDomain 1.0.1. The internal ecosystem map and branch-planning documents are excluded.
+- The publication job now downloads `fsm-cos-nuget-package-public-feed`, the artifact that passed compatibility checks against published dependencies. The publish condition remains hard-disabled with `&& false`; the workflow has not published anything.
+
+The older package-content finding above was valid for the original PR #25 candidate commit, but PR #28 now addresses it. The master branch itself remains unchanged and still has the older manifest contract and incomplete package-content rules. Do not wholesale-merge `master` and `development` to resolve this; review the selective PR #28 diff instead. Merge and publication still require explicit owner approval.
+
