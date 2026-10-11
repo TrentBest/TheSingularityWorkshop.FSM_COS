@@ -113,37 +113,26 @@ public sealed class FsmCos : IFsmCos
         var visiting = new HashSet<ulong>();
         var visited = new HashSet<ulong>();
 
-        IMicroBundle Resolve(ulong id, string? requestedVersion = null)
+        IMicroBundle Resolve(ulong id)
         {
             IMicroBundle? resolved;
-            if (requestedRoots.TryGetValue(id, out var requestedRoot) &&
-                (requestedVersion is null ||
-                 string.Equals(requestedRoot.Descriptor.Version, requestedVersion, StringComparison.Ordinal)))
+            if (requestedRoots.TryGetValue(id, out var requestedRoot))
             {
                 resolved = requestedRoot;
             }
-            else
+            else if (!_catalog.TryResolve(id, out resolved))
             {
-                resolved = requestedVersion is null
-                    ? _catalog.TryResolve(id, out var byId) ? byId : null
-                    : _catalog.TryResolve(id, requestedVersion, out var byVersion) ? byVersion : null;
+                throw new InvalidOperationException(
+                    $"Scheduled MicroBundle {id} could not be resolved.");
             }
 
             if (resolved is null)
                 throw new InvalidOperationException(
-                    $"Scheduled MicroBundle {id}" +
-                    (requestedVersion is null ? string.Empty : $" version '{requestedVersion}'") +
-                    " could not be resolved.");
+                    $"Scheduled MicroBundle {id} could not be resolved.");
 
             if (resolved.Descriptor is null || resolved.Id != id)
                 throw new InvalidOperationException(
                     $"MicroBundle catalog resolved request {id} to an invalid or mismatched bundle.");
-
-            if (requestedVersion is not null &&
-                !string.Equals(resolved.Descriptor.Version, requestedVersion, StringComparison.Ordinal))
-                throw new InvalidOperationException(
-                    $"MicroBundle {id} resolved to version '{resolved.Descriptor.Version}', " +
-                    $"but manifest requested '{requestedVersion}'.");
 
             return resolved;
         }
@@ -172,7 +161,7 @@ public sealed class FsmCos : IFsmCos
         }
 
         foreach (var root in manifest.Bundles)
-            Visit(Resolve(root.BundleId, root.Version));
+            Visit(Resolve(root.BundleId));
 
         var resolvedIds = resolvedById.Keys.ToHashSet();
         if (!resolvedIds.SetEquals(plannedById.Keys))
@@ -262,9 +251,6 @@ public sealed class FsmCos : IFsmCos
         IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots,
         ulong runtimeId)
     {
-        if (loadedIds.Contains(bundle.Id))
-            return;
-
         var version = bundle.Descriptor.Version;
         var configuration = dependencyConfiguration;
 
@@ -298,10 +284,6 @@ public sealed class FsmCos : IFsmCos
                     throw new InvalidOperationException(
                         $"MicroBundle {dependency.BundleId} could not be resolved.");
                 }
-
-                if (dependencyBundle is null)
-                    throw new InvalidOperationException(
-                        $"MicroBundle {dependency.BundleId} could not be resolved.");
 
                 if (dependencyBundle.Descriptor is null)
                     throw new InvalidOperationException(
