@@ -8,9 +8,12 @@
     <Version>0.1.0-alpha.6</Version>
     <Authors>Trent Best</Authors>
     <Company>The Singularity Workshop</Company>
-    <Description>Runtime composition substrate for assembling Experiences from FSM infrastructure and MicroBundles.</Description>
+    <PackageProjectUrl>https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>Platform-neutral computation composition kernel for resolving, loading, arbitrating, and assembling MicroBundle-based computation.</Description>
     <PackageTags>FSM;runtime;composition;microbundle;experience</PackageTags>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>NuGet.README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
@@ -24,7 +27,15 @@
 
   <ItemGroup>
     <None Include="../../README.md" Pack="true" PackagePath="" />
+    <None Include="../../NuGet.README.md" Pack="true" PackagePath="" />
+    <None Include="../../DOCUMENTATION_STANDARD.md" Pack="true" PackagePath="" />
+    <None Include="../../DOCUMENTATION_INDEX.md" Pack="true" PackagePath="" />
     <None Include="../../LICENSE.txt" Pack="true" PackagePath="" />
-    <None Include="../../docs/*.md" Pack="true" PackagePath="docs/" />
+    <None Include="../../docs/*.md"
+          Exclude="../../docs/BRANCH_RECONCILIATION.md;../../docs/CONTINUATION_BRIEF_ALPHA6_FORGE_ANYAPP_WEBPAGE.md;../../docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md;../../docs/ECOSYSTEM_INTEGRATION_MAP.md;../../docs/PAUSE_POINT.md"
+          Pack="true"
+          PackagePath="docs/" />
+    <None Include="../../docs/releases/*.md" Pack="true" PackagePath="docs/releases/" />
+    <None Include="../../docs/assets/**/*" Pack="true" PackagePath="docs/assets/%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 </Project>

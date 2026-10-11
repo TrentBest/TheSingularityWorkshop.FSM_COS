@@ -16,13 +16,13 @@ The browser should therefore not become a dependency of FSM_COS.
 
 ## Package boundary
 
-WebPage consumes the published package:
+WebPage consumes the published package. Use a version that is actually available from NuGet. The current development source declares `0.1.0-alpha.6`; verify the package page before selecting a version:
 
 ~~~xml
-<PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="0.1.0-alpha.5" />
+<PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="x.y.z" />
 ~~~
 
-The package currently targets .NET 8 and depends on FSM_API and MicroBundleDomain. A WebPage project may consume it because the composition kernel is written against platform-neutral .NET APIs.
+The alpha.6 candidate targets .NET 8 and directly references FSM_API 1.0.13, MicroBundleDomain 1.0.1, and FSM_UserIO 0.1.0-alpha.1. FSM_UserIO supplies the `SemanticIntent` type exposed as an optional value on `RuntimeManifest` and carried through to `RuntimeAssembly`; NuGet consumers must restore that dependency even when they do not supply an intent. WebPage's currently tested composition path does not require a non-null intent. Keep the dependency decision visible for future minimization rather than implying the package has only two direct dependencies. The kernel itself remains platform-neutral.
 
 A browser-specific adapter is **not** required merely to execute FsmCos.Execute(). An adapter becomes necessary at the point where the assembled result must interact with a host-specific lifecycle or rendering system.
 
@@ -71,6 +71,22 @@ public sealed class WebPageMicroBundleCatalog : IMicroBundleCatalog
     public WebPageMicroBundleCatalog(IEnumerable<IMicroBundle> bundles)
     {
         _bundles = bundles.ToDictionary(bundle => bundle.Id);
+    }
+
+    public bool TryResolve(
+        ulong bundleId,
+        string version,
+        out IMicroBundle? bundle)
+    {
+        if (_bundles.TryGetValue(bundleId, out var candidate) &&
+            string.Equals(candidate.Descriptor.Version, version, StringComparison.Ordinal))
+        {
+            bundle = candidate;
+            return true;
+        }
+
+        bundle = null;
+        return false;
     }
 
     public bool TryResolve(ulong bundleId, out IMicroBundle? bundle) =>
@@ -172,7 +188,7 @@ The Warehouse does not become part of the FSM_COS package. It supplies or backs 
 
 ## Current limitation
 
-0.1.0-alpha.5 is a composition kernel, not yet a complete runtime-host framework.
+`0.1.0-alpha.6` is a composition kernel, not a complete runtime-host framework. The package workflow and WebPage's source-level integration tests provide evidence for the exact commits they ran against; consult their run results rather than treating an earlier pass as proof for a later source change. Those checks do not establish that the visible WebPage experience is fully driven by `RuntimeAssembly`; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for this version's publication status.
 
 The next meaningful evolution is therefore not adding platform APIs to FSM_COS. It is proving the complete handoff:
 

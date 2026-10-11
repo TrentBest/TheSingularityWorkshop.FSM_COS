@@ -36,7 +36,7 @@ public sealed class AiGuiCapabilityHandoffTests
                 new TestCatalog(protocol, grammar, gui))
             .Execute(new RuntimeManifest(
                 0xCAFEUL,
-                new[] { MicroBundleDependencyRequest.Unconfigured(gui.Id) }));
+                new[] { new MicroBundleManifestEntry(gui.Id, "0.1.0-test") }));
 
         Assert.Equal(
             new[] { protocol.Id, grammar.Id, gui.Id },
@@ -71,7 +71,7 @@ public sealed class AiGuiCapabilityHandoffTests
                 new TestCatalog(protocol, grammar))
             .Execute(new RuntimeManifest(
                 0xBEEFUL,
-                new[] { MicroBundleDependencyRequest.Unconfigured(grammar.Id) }));
+                new[] { new MicroBundleManifestEntry(grammar.Id, "0.1.0-test") }));
 
         Assert.Equal(protocol.Protocol.Id, grammar.Grammar.Rules
             .SelectMany(rule => rule.RightHandSide)
@@ -88,6 +88,10 @@ public sealed class AiGuiCapabilityHandoffTests
 
         public TestCatalog(params IMicroBundle[] bundles) =>
             _bundles = bundles.ToDictionary(x => x.Id);
+
+        public bool TryResolve(ulong bundleId, string version, out IMicroBundle? bundle) =>
+            _bundles.TryGetValue(bundleId, out bundle) &&
+            string.Equals(bundle.Descriptor.Version, version, StringComparison.Ordinal);
 
         public bool TryResolve(ulong bundleId, out IMicroBundle? bundle) =>
             _bundles.TryGetValue(bundleId, out bundle);

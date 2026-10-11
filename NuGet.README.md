@@ -1,0 +1,84 @@
+# ✳️ 00 The Singularity Workshop — FSM_COS
+
+![FSM_COS composition flow: a runtime manifest enters FSM_COS, which resolves and composes MicroBundles into a RuntimeAssembly for a host.](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.FSM_COS/master/docs/assets/fsm-cos-overview.svg)
+
+**FSM_COS composes requested capabilities into a `RuntimeAssembly`. It is a composition boundary—not an application, GUI, engine, repository, or execution loop.**
+
+## 🟦 01 — What is FSM_COS?
+
+A `RuntimeManifest` identifies the MicroBundles and versions a caller wants. FSM_COS resolves their dependencies, loads the composition, performs bounded arbitration, and returns a `RuntimeAssembly` for the host to use.
+
+## 🟣 02 — Why does it exist?
+
+Hosts should not need to duplicate the same composition and dependency logic for every experience. FSM_COS gives that responsibility a focused home while leaving application behavior and presentation to the host.
+
+Compatibility is not automatic: the selected bundles, their contracts, and the host must work together.
+
+## 🩵 03 — How does it work?
+
+```text
+RuntimeManifest → FSM_COS → RuntimeAssembly → Host
+                    │
+                    ├─ resolve MicroBundles and dependencies
+                    ├─ load the composition
+                    └─ arbitrate toward convergence
+```
+
+- **MicroBundleDomain** owns the MicroBundle contract.
+- **The host or repository** supplies the catalog used to resolve bundles.
+- **FSM_COS** composes the requested capabilities.
+- **The host** owns execution, lifecycle, UI, and presentation.
+
+## 🟢 04 — See it in a minute
+
+To install FSM_COS, choose an available version from the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS). If you intend to use a prerelease, request prerelease versions explicitly:
+
+```bash
+dotnet add package TheSingularityWorkshop.FSM_COS --prerelease
+```
+
+Installation adds a composition library; it does not create an application. FSM_COS needs a catalog supplied by the host. To see the composition behavior running, clone the source repository and run its minimal consumer sample:
+
+```bash
+git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git
+cd TheSingularityWorkshop.FSM_COS
+dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
+```
+
+The sample creates a report bundle that depends on a data-source bundle. The expected result is `Assembly order: 2 -> 1`, proving the dependency is loaded before the requested bundle. It defines its own catalog and example bundles; these are not built-in FSM_COS types. The sample references the local source project so it can be verified before a candidate version is published.
+
+For a complete consumer guide, see [Consuming MicroBundles](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/master/docs/CONSUMING_MICROBUNDLES.md). The package targets **.NET 8** and its direct dependencies are:
+
+- [FSM_API](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_API) — state/context primitives.
+- [MicroBundleDomain](https://www.nuget.org/packages/TheSingularityWorkshop.MicroBundleDomain) — the MicroBundle contract.
+- [FSM_UserIO](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_UserIO) — the platform-neutral `SemanticIntent` boundary.
+
+This source candidate declares version `0.1.0-alpha.6`; a source version declaration alone does not establish publication status. Check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the version actually available.
+
+If that page still lists `0.1.0-alpha.5` as the latest version, do not assume it has the same API as this alpha.6 source: alpha.6 uses explicit versioned `MicroBundleManifestEntry` roots and an external configuration-source contract. The source-repository sample demonstrates the candidate contract without pretending the newer package is already published.
+
+## 🟪 05 — Available documentation and theory
+
+- [Project overview](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/master/README.md) — the bigger picture and quick proof.
+- [What Is FSM_COS?](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/master/docs/WHAT_IS_FSM_COS.md) — a plain-language introduction for readers new to software composition.
+- [Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/master/docs/THEORY.md) — why composition is a distinct operation.
+- [Architecture](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/master/docs/ARCHITECTURE.md) — ownership and runtime flow.
+- [Runtime Manifest](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/master/docs/RUNTIME_MANIFEST.md) — the composition request.
+- [RuntimeAssembly](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/master/docs/RUNTIME_ASSEMBLY.md) — the host handoff.
+- [Arbitration](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/master/docs/ARBITRATION.md) — reconciliation and convergence.
+- [Documentation Index](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/master/DOCUMENTATION_INDEX.md) — all focused guides.
+- [Alpha.6 release notes](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/master/docs/releases/0.1.0-alpha.6.md) — included contracts and explicit limitations.
+- [Development](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/master/docs/DEVELOPMENT.md) — build and verification.
+- [Source and issues](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
+
+---
+
+[![The Singularity Workshop](https://github.com/TrentBest.png?size=200)](https://github.com/TrentBest)
+
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J) · [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
+
+*The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.*
+
+**Because state shouldn't be a mess.**
+
+*And because static boundaries are invitations to cause trouble.*

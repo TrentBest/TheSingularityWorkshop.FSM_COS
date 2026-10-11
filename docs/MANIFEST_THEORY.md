@@ -20,7 +20,7 @@ FSM_COS does not require those structures to survive intact.
           ↓
   dependency closure
           ↓
-  baked IDs/configuration
+  baked MicroBundle IDs + versions
           ↓
     RuntimeManifest
 
@@ -30,9 +30,9 @@ The manifest is therefore a publication artifact. It contains enough information
 
 A RuntimeManifest is a semantic composition request. Its eventual JSON, binary, generated-code, or other representation is a separate concern.
 
-The current contract is intentionally small: runtime identity plus MicroBundleDependencyRequest values, where each request contains a machine ID and opaque configuration bytes.
+The required composition request remains small: runtime identity plus versioned MicroBundle root entries. The current source contract also exposes optional fields for a host-provided state context, semantic intent, and staged load-plan/schedule metadata. These optional fields have distinct purposes: the context can be shared with arbitration, intent is passed through to `RuntimeAssembly`, and a supplied schedule is checked against the catalog's resolved dependency graph before loading. They do not turn the manifest into an application configuration file or make FSM_COS responsible for artifact localization, serialization, or background execution.
 
-This keeps FSM_COS independent from the serialization format selected by authoring/tooling.
+Configuration remains intentionally outside the manifest. This keeps FSM_COS independent from the serialization format selected by authoring/tooling.
 
 When that representation becomes a concrete byte-level contract, the reusable serialization boundary belongs to [TheSingularityWorkshop.FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization). See its [serialization theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md).
 
@@ -42,7 +42,7 @@ The manifest is a request, not the assembled runtime.
 
 It should not become a duplicate MicroBundle implementation, a renderer description, a host lifecycle, a Warehouse database, or a second FSM system.
 
-It identifies what is required and supplies the data needed to compose it.
+It identifies what MicroBundles and versions are required. A separate configuration source supplies optional per-MicroBundle configuration.
 
 ## Manifest stability
 
@@ -59,13 +59,14 @@ The Warehouse can eventually provide the data needed to resolve a manifest, but 
     Manifest
        │
        ▼
-    FSM_COS
-       │
-       ▼
- Catalog / resolver
-       │
-       ▼
-    Warehouse
+ Catalog / resolver ───── Configuration source
+       │                         │
+       ▼                         ▼
+ MicroBundle artifact       optional config
+       │                         │
+       └──────────┬──────────────┘
+                  ▼
+               FSM_COS
 
 The manifest requests. The resolver locates. The Warehouse delivers. FSM_COS assembles.
 

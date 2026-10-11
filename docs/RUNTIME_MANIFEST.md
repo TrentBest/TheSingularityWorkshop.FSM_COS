@@ -1,116 +1,203 @@
 # Runtime Manifest
 
-> **The manifest is the request. FSM_COS turns that request into a composition; it does not treat the manifest as an application configuration file.**
+> **The manifest says which MicroBundles and versions are requested. Configuration is a separate concern. FSM_COS composes the request.**
 
-The **Runtime Manifest** is the published request that crosses from authoring/tooling into FSM_COS.
+The **Runtime Manifest** is the machine-oriented composition request that crosses from authoring/tooling into FSM_COS.
 
-It answers one question:
+It answers:
 
-> **What runtime composition is being requested?**
+> **Which MicroBundles, at which requested versions, belong in this runtime composition?**
 
-It does not contain the runtime itself, application lifecycle, GUI instructions, host behavior, or the complete dependency graph.
+It deliberately does **not** answer:
+
+- how a MicroBundle is configured;
+- where a MicroBundle artifact is stored;
+- how configuration is serialized;
+- how the host presents the resulting Experience;
+- how the assembled runtime is scheduled after composition.
 
 ![Runtime Manifest publication pipeline](assets/runtime-manifest-pipeline.svg)
 
-## The actual alpha contract
+## The contract
 
-The current implementation is deliberately small:
+The current development contract is intentionally small:
 
 ```csharp
 public sealed record RuntimeManifest(
     ulong RuntimeId,
-    IReadOnlyList<MicroBundleDependencyRequest> Bundles,
+    IReadOnlyList<MicroBundleManifestEntry> Bundles,
     IStateContext? ExperienceContext = null,
+    IReadOnlyList<RuntimeManifestEntry>? LoadPlan = null,
+    RuntimeManifestSchedule? Schedule = null,
     SemanticIntent? Intent = null);
 ```
 
-The request type is owned by [MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain).
+Each entry identifies one root MicroBundle and the version requested by the manifest:
 
-Each root request identifies a MicroBundle and may carry opaque configuration:
+```csharp
+public readonly record struct MicroBundleManifestEntry(
+    ulong BundleId,
+    string Version);
+```
+
+The concrete implementation validates that the ID is non-zero and the version is present.
+
+Conceptually:
 
 ```text
 RuntimeManifest
 ├── RuntimeId
 ├── Bundles
-├── ExperienceContext
-└── SemanticIntent
-    ├── BundleId + Configuration
-    ├── BundleId + Configuration
-    └── BundleId + Configuration
+│   ├── MicroBundle ID + requested version
+│   ├── MicroBundle ID + requested version
+│   └── MicroBundle ID + requested version
+├── optional ExperienceContext
+├── optional staged LoadPlan + Schedule
+└── optional FSM_UserIO SemanticIntent
 ```
 
-The manifest names the **roots**. FSM_COS discovers the dependency closure from those roots.
+The manifest names **roots**. FSM_COS discovers the dependency closure from those roots.
 
-The optional `SemanticIntent` comes from [FSM_UserIO](https://github.com/TrentBest/FSM_UserIO). FSM_COS carries it through the composition boundary without interpreting or executing it. The resulting intent is available on `RuntimeAssembly.Intent` for the host or manifestation layer.
+## Optional intent and published dependency plan
 
-## Why the request type is domain-owned
+`Intent` carries an optional `FSM_UserIO.SemanticIntent` to the returned `RuntimeAssembly`. It describes application-owned semantic intent; it does not grant device authority or cause an Experience to start.
 
-The same dependency-request concept appears in two places:
+`LoadPlan` and `Schedule` are optional published metadata. When a schedule is present, FSM_COS resolves the dependency closure before loading and verifies that the scheduled bundle IDs, resolved versions, and dependency edges match the domain-owned MicroBundle declarations. A mismatch fails before any bundle `Load` call. This is a consistency check, not artifact localization or hash verification.
+
+## Example
+
+```csharp
+var manifest = new RuntimeManifest(
+    RuntimeId: 1001,
+    Bundles:
+    [
+        new MicroBundleManifestEntry(10, "1.2.0"),
+        new MicroBundleManifestEntry(20, "3.1.0")
+    ]);
+```
+
+This means:
+
+- runtime `1001` is being assembled;
+- MicroBundle `10` is requested at `1.2.0`;
+- MicroBundle `20` is requested at `3.1.0`;
+- configuration is **not** embedded in the manifest.
+
+The catalog/resolver is responsible for locating a compatible artifact. FSM_COS verifies the resolved root reports the requested version before loading it.
+
+### Conflicting requests for the same root identity
+
+A manifest must not request the same MicroBundle ID at two different versions. For example, requesting bundle `10` at both `1.2.0` and `2.0.0` is ambiguous: one runtime composition cannot silently satisfy both root requests by choosing whichever catalog result happens to load first. FSM_COS detects conflicting versions for the same root ID and fails before loading the composition.
+
+If two parts of an application genuinely require incompatible versions of one capability, model that incompatibility explicitly rather than relying on duplicate IDs in one manifest.
+
+**An explicit root version also remains authoritative when that same MicroBundle is reached through another root's dependency graph.** FSM_COS resolves the distinct root ID/version requests before invoking any MicroBundle `Load` method, then reuses those selected root instances during dependency traversal. If a requested root version cannot be resolved, composition fails before loading begins. When a published schedule is supplied, its dependency-graph validation uses those same selected root instances, so the schedule check and actual composition cannot silently disagree about the version chosen for an explicitly requested root.
+
+## Version is part of the request
+
+Version belongs in the manifest because the manifest is a publication-level statement of **what composition was requested**.
 
 ```text
-MicroBundle
+Manifest
     │
-    └── declares MicroBundleDependencyRequest
-                         ▲
-                         │
-                  RuntimeManifest
-                         ▲
-                         │
-                      FSM_COS
+    ├── Bundle 10 → version 1.2.0
+    └── Bundle 20 → version 3.1.0
+
+Catalog / Repository
+    │
+    └── locate those requested artifacts
+
+FSM_COS
+    │
+    └── compose the resolved artifacts
 ```
 
-That is intentional.
+The manifest does not need to know whether an artifact came from an in-memory catalog, a repository, Azure Blob, a package cache, or another delivery mechanism.
 
-A capability author should not have to define one request type for MicroBundleDomain and another request type for FSM_COS. The composition host consumes the same contract that the capability declares.
+## Configuration is deliberately outside the manifest
 
-This also keeps FSM_COS from inventing a competing MicroBundle domain model.
+Configuration answers a different question:
 
-## A conceptual manifest
+> **How should this particular MicroBundle participate in this particular runtime?**
 
-The semantic shape can be represented however an authoring or transport system requires:
+That information belongs in a separate configuration source.
 
 ```text
-RuntimeId
-  └── root dependency requests
-          ├── identity
-          └── opaque configuration
+runtime 1001
+
+MicroBundle 10
+    └── configuration file exists
+            ↓
+        configuration bytes
+
+MicroBundle 20
+    └── no configuration file
+            ↓
+        use MicroBundle defaults
 ```
 
-FSM_COS does **not** prescribe JSON, XML, YAML, binary, or another wire format.
+FSM_COS exposes the composition boundary through:
 
-If the semantic request crosses a concrete byte/serialization boundary, use [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization). FSM_COS consumes the semantic runtime request; it does not become the serialization framework.
+```csharp
+public interface IMicroBundleConfigurationSource
+{
+    bool TryGetConfiguration(
+        ulong runtimeId,
+        ulong bundleId,
+        string version,
+        out ReadOnlyMemory<byte> configuration);
+}
+```
 
-## Authoring → publication
+The interface is intentionally about **availability**, not storage.
 
-An editor may know substantially more than the runtime needs:
+The implementation might read a local configuration file, an Azure Blob, a repository artifact, generated resources, or another application-owned source.
+
+FSM_COS does not choose among those.
+
+### No configuration means defaults
+
+This is an important semantic rule:
 
 ```text
-rich authoring model
-        │
-        ├── names
-        ├── ontology
-        ├── variants
-        ├── provenance
-        ├── dependency relationships
-        └── visual/editor metadata
+configuration exists
         │
         ▼
-     validation
+provide bytes to the MicroBundle
         │
         ▼
- published root requests
+MicroBundle interprets its own configuration
+
+configuration absent
         │
         ▼
- RuntimeManifest
+provide no external configuration
+        │
+        ▼
+MicroBundle loads its defaults
 ```
 
-This is an intentional publication boundary.
+There is no empty “default configuration file” requirement. Absence itself has meaning.
 
-The manifest should be **small enough to publish and stable enough to consume** without becoming a second copy of the authoring system.
+## Configuration format is not an FSM_COS concern
+
+FSM_COS does not parse JSON, YAML, XML, binary records, generated C#, or any other configuration representation.
+
+If configuration becomes a serialized byte-level contract, the serialization responsibility remains with the appropriate serialization layer.
+
+```text
+representation
+     ↓
+configuration source
+     ↓
+FSM_COS
+     ↓
+MicroBundle
+```
 
 ## Roots versus dependencies
 
-Suppose the manifest requests:
+Suppose the requested root is:
 
 ```text
 A
@@ -119,10 +206,10 @@ A
 └── D
 ```
 
-The manifest only needs to name the root:
+The manifest only needs:
 
 ```text
-[A]
+[A @ requested-version]
 ```
 
 FSM_COS discovers:
@@ -131,13 +218,15 @@ FSM_COS discovers:
 C → B → D → A
 ```
 
-The resulting order is derived from the dependency graph, not manually encoded into the manifest.
+and loads dependencies before the root.
 
-See [Dependency Resolution](ARCHITECTURE.md#dependency-resolution).
+A dependency's domain-owned `MicroBundleDependencyRequest` may still carry dependency-specific configuration for compatibility with the MicroBundleDomain runtime contract. When an external configuration source supplies configuration for that dependency, the external value is used.
 
-## What does not belong in a manifest?
+That compatibility detail does **not** move configuration into the manifest.
 
-A Runtime Manifest should not quietly become:
+## What does not belong in a Runtime Manifest?
+
+A manifest should not quietly become:
 
 - an application configuration file;
 - a GUI layout;
@@ -145,40 +234,81 @@ A Runtime Manifest should not quietly become:
 - a Unity scene;
 - a Warehouse database;
 - an Experience execution script;
-- a serialized RuntimeAssembly.
+- a serialized RuntimeAssembly;
+- a repository API response.
 
-The manifest requests.
+The boundary is:
 
-**FSM_COS composes.**
+```text
+Manifest
+    = what MicroBundles + which versions
 
-The host manifests the result.
+Configuration
+    = how a MicroBundle is configured
+
+Repository / Resolver
+    = where the artifact comes from
+
+FSM_COS
+    = how the requested composition is assembled
+
+RuntimeAssembly
+    = what FSM_COS successfully assembled
+```
+
+## Authoring → publication → composition
+
+A rich authoring environment may know far more than the runtime needs:
+
+```text
+rich authoring model
+        │
+        ├── names
+        ├── ontology
+        ├── variants
+        ├── dependencies
+        ├── provenance
+        └── editor metadata
+        │
+        ▼
+     validation
+        │
+        ▼
+MicroBundle IDs + requested versions
+        │
+        ▼
+ Runtime Manifest
+        │
+        ├─────────────── optional configuration source
+        │                                  │
+        ▼                                  ▼
+ Catalog / Resolver ───────────────► FSM_COS
+                                        │
+                                        ▼
+                                 RuntimeAssembly
+```
+
+This is a compression boundary: authoring can be rich without forcing the composition kernel to become an editor.
 
 ## Stability
 
 A useful long-term property is:
 
-> The same semantic manifest should produce the same composition when resolved against the same compatible catalog and bundle versions.
+> **The same semantic manifest, resolved against the same compatible catalog and versions, should produce the same composition.**
 
-That does not mean every host must render the result identically. It means the composition request remains meaningful when moved between hosts.
+That does not require every host to render or execute the result identically.
 
-## Related concepts
+It means the composition request remains meaningful when moved between hosts.
+
+## Related documents
 
 - [FSM_COS Architecture](ARCHITECTURE.md)
-- [MicroBundles](MICROBUNDLES.md)
+- [FSM_COS Theory](THEORY.md)
+- [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md)
 - [RuntimeAssembly](RUNTIME_ASSEMBLY.md)
 - [Arbitration and Convergence](ARBITRATION.md)
-
+- [Development](DEVELOPMENT.md)
 
 ---
-
-## 🔗 The Singularity Workshop
-
-FSM_COS is one layer in a deliberately troublesome ecosystem:
-
-- **[FSM_API](https://github.com/TrentBest/FSM_API)** — behavior and state.
-- **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
-- **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
-- **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>

@@ -2,242 +2,136 @@
 
 > **Architecture answers how the composition kernel performs the theory.** For the deeper “why,” start with [FSM_COS Theory](THEORY.md).
 
-FSM_COS is a small composition kernel. This document describes how its pieces cooperate while leaving neighboring domains to their own packages.
+FSM_COS is a small composition kernel. This document describes how its pieces cooperate rather than redefining concepts owned by neighboring systems.
 
 ## Runtime flow
 
 ![FSM_COS runtime flow](assets/fsm-cos-overview.svg)
 
-```text
-RuntimeManifest
-      │
-      ▼
-   FsmCos.Execute
-      │
-      ├── resolve requested MicroBundle
-      ├── recursively resolve dependencies
-      ├── propagate opaque configuration
-      ├── Load()
-      ├── Arbitrate() until stable
-      ▼
-RuntimeAssembly
-```
+    RuntimeManifest
+          │
+          ▼
+       FsmCos.Execute
+          │
+          ├── resolve requested bundle
+          ├── recursively resolve dependencies
+          ├── pass configuration
+          ├── Load()
+          ├── Arbitrate() until stable
+          ▼
+    RuntimeAssembly
 
 ## Core contracts
 
 ### RuntimeManifest
+Identifies the runtime being assembled and supplies versioned root MicroBundle entries. It can also carry an optional host-provided `SemanticIntent`, an optional load-plan description, and an optional dependency schedule. Intent is passed through to the result; staged metadata is validated according to the current alpha contract and does not, by itself, activate repository localization or staged execution. The manifest is composition input, not application behavior. See [Runtime Manifest](RUNTIME_MANIFEST.md) and [Runtime Manifest Theory](MANIFEST_THEORY.md).
 
-Identifies the runtime being assembled and supplies root `MicroBundleDependencyRequest` values.
-
-The manifest is composition input, not application behavior. See [Runtime Manifest](RUNTIME_MANIFEST.md) and [Runtime Manifest Theory](MANIFEST_THEORY.md).
-
-### MicroBundleDependencyRequest
-
-The root request is the domain-owned dependency request from [MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain).
-
-FSM_COS does not create a second request type for its own convenience. It consumes the same request contract that MicroBundles use to declare dependencies.
-
-This is important because the capability author and the composition host now speak the same request language.
+### MicroBundle manifest entries
+A manifest entry identifies a requested MicroBundle and its requested version. Configuration is intentionally not part of the manifest. A separate configuration source may provide per-MicroBundle configuration at runtime.
 
 ### IMicroBundleCatalog
-
-Resolves a bundle identity to the domain-owned `IMicroBundle` required for installation.
-
-The catalog is supplied by the host, so a future Warehouse-backed, generated, cached, or in-memory resolver does not require a different composition algorithm.
+Resolves a bundle identity to the IMicroBundle required for installation. The catalog is supplied by the host, so future Warehouse-backed or generated resolvers do not require a different composition algorithm.
 
 ### IMicroBundle
+Consumes the domain-owned `MicroBundleDescriptor` for identity/version/providers, while retaining composition-specific dependency configuration, Load, and Arbitrate behavior. FSM_COS does not redefine MicroBundle domain metadata. It does not expose a GUI, web server, or host lifecycle contract.
 
-The canonical MicroBundle contract comes from MicroBundleDomain.
+### MicroBundleLoadContext
+Carries runtime identity and configuration available during installation. Configuration remains opaque to FSM_COS.
 
-FSM_COS consumes:
-
-- `Descriptor` for identity and domain metadata;
-- `Dependencies` for dependency closure;
-- `Load()` for installation;
-- `Arbitrate()` for composition reconciliation.
-
-FSM_COS does not redefine the MicroBundle domain model.
-
-### IMicroBundleLoadContext
-
-The domain-owned load context supplies the runtime-specific information a MicroBundle may need while it enters the composition.
-
-FSM_COS implements/provides the context required by the domain contract while retaining ownership of the composition semantics.
-
-### IMicroBundleArbitrationContext
-
-The domain-owned arbitration context exposes the shared composition to participating bundles.
-
-FSM_COS creates the context and drives the arbitration rounds. A MicroBundle decides what its own participation means.
+### ArbitrationContext
+Exposes runtime identity, the currently loaded bundle set, and an optional FSM_API `IStateContext` supplied by the host. It is composition context, not host lifecycle state.
 
 ### RuntimeAssembly
+The result surface of the composition pass: runtime identity, loaded bundles, the zero-based index of the round that reported convergence, and the optional `SemanticIntent` carried by the request. An `ArbitrationRounds` value of `0` means the first round converged; it is not the number of `Arbitrate` calls. Intent is passed through for the host; it does not make FSM_COS an input handler or presentation layer. See [RuntimeAssembly](RUNTIME_ASSEMBLY.md) and [FSM_COS Theory — RuntimeAssembly is the handoff object](THEORY.md#9-runtimeassembly-is-the-handoff-object).
 
-The result surface of composition: runtime identity, loaded MicroBundles, and arbitration result.
+![Dependency closure and installation order](assets/dependency-resolution.svg)
 
-RuntimeAssembly is a handoff object, not a host application object.
-
-See [RuntimeAssembly](RUNTIME_ASSEMBLY.md).
-
----
+The conceptual reason for deriving this order rather than encoding it in the manifest is explained in [FSM_COS Theory — Composition starts with roots, not a giant object graph](THEORY.md#4-composition-starts-with-roots-not-a-giant-object-graph).
 
 ## Dependency resolution
 
 FSM_COS performs depth-first dependency resolution.
 
-```text
-requested A
-   │
-   ├── B
-   │   └── C
-   └── D
-```
+    requested A
+       │
+       ├── B
+       │   └── C
+       └── D
 
-The resulting installation order is:
+The resulting installation order is C, B, D, A.
 
-```text
-C → B → D → A
-```
-
-Two guards are fundamental:
-
-1. already-loaded identities are not installed twice;
-2. identities currently being resolved are tracked so dependency cycles can be rejected.
+Two guards are fundamental: already-loaded IDs are skipped, and IDs currently loading are tracked to detect cycles.
 
 Missing bundles and dependency cycles are composition failures.
 
-The manifest names roots. The graph determines the closure.
-
----
-
 ## Configuration propagation
 
-Configuration belongs to the dependency request that caused installation.
-
-FSM_COS carries the configuration through its load context without interpreting its domain meaning.
-
-```text
-request
-  │
-  ├── BundleId
-  └── opaque configuration
-          │
-          ▼
-       LoadContext
-          │
-          ▼
-     owning bundle
-```
-
-If those bytes have a concrete representation, that representation belongs to the serialization boundary rather than the composition algorithm.
-
-See [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization).
-
----
+Configuration is an external runtime input. FSM_COS accepts configuration through an abstraction supplied by the host/repository layer; it does not read configuration files or interpret their format. If no configuration is available for a bundle, the bundle is loaded without external configuration and uses its defaults.
 
 ## Arbitration
 
-After reachable bundles are loaded, FSM_COS creates the domain-owned arbitration context and drives bounded rounds.
+When a manifest supplies a dependency schedule, FSM_COS resolves the catalog's actual reachable dependency graph and checks it against the schedule before calling any MicroBundle `Load` method. This is a validation boundary, not a claim that FSM_COS localizes artifacts or implements staged/background loading. After reachable bundles are loaded, FSM_COS creates one ArbitrationContext.
 
-Conceptually:
+    for each round
+        for each loaded bundle
+            changed |= bundle.Arbitrate(context, round)
+        if no change → converged
 
-```text
-round
-  │
-  ├── bundle A → changed?
-  ├── bundle B → changed?
-  ├── bundle C → changed?
-  │
-  ├── no changes → CONVERGED
-  └── changes → next round
-```
-
-The current default maximum is ten rounds.
-
-A complete round with no changes is convergence.
-
-If the maximum is reached without convergence, FSM_COS fails rather than returning an assembly it knows is unstable.
-
-See [Arbitration and Convergence](ARBITRATION.md).
-
----
+If the configured maximum is reached without convergence, FSM_COS throws instead of returning an unstable assembly. The current default is ten rounds.
 
 ## Catalog boundary
 
 The catalog stays outside the composition algorithm:
 
-```text
-FSM_COS ← catalog / resolver
-              ▲
-              │
-       memory / cache /
-       repository / Warehouse /
-       generated registry
-```
+    FSM_COS ← Catalog ← in-memory / generated registry / Warehouse / cache / Domain resolver
 
-FSM_COS does not need to know where a capability came from.
-
-This is the same boundary principle used throughout the ecosystem: **storage and delivery are not composition.**
-
----
+The composition engine should not need to know where a bundle came from.
 
 ## Host boundary
 
-```text
-FSM_COS
-   │
-   ▼
+    FSM_COS
+       │
+       ▼
 RuntimeAssembly
-   │
-   ├── WebPage → GUI → browser
-   ├── AnyApp → local runtime
-   ├── Desktop Forge → native manifestation
-   └── another host / Experience
-```
+       │
+       ├── WebPage → browser experience
+       ├── AnyApp → desktop/local experience
+       └── other hosts → their own manifestation
 
-The host owns execution and manifestation.
+## Current development boundary
 
-FSM_COS owns the composition result.
-
----
-
-## Current alpha boundary
-
-The current `0.1.0-alpha.5` slice is:
+The active development line is refining the manifest/configuration boundary while preserving the small composition kernel:
 
 ```text
-RuntimeManifest
-    ↓
-root requests
-    ↓
+Manifest (bundle + version)
+        ↓
+resolver / catalog
+        ↓
+configuration source (optional)
+        ↓
 dependency closure
-    ↓
-configured load
-    ↓
-bounded arbitration
-    ↓
-stable RuntimeAssembly
+        ↓
+Load()
+        ↓
+Arbitrate() until stable
+        ↓
+RuntimeAssembly
 ```
 
-It deliberately stops before:
+File I/O, repository transport, serialization, host lifecycle, and presentation remain outside the kernel.
 
-- host execution scheduling;
-- GUI rendering;
-- browser/desktop/Unity lifecycle;
-- Warehouse implementation;
-- networking;
-- telemetry/metaDev adaptation;
-- Experience presentation.
-
-Those may consume the assembly later without becoming responsibilities of the kernel.
+Execution scheduling, resource allocation, Warehouse integration, and host lifecycle belong to later layers when their contracts are sufficiently clear.
 
 ---
 
-## Related documents
+## 🔗 The Singularity Workshop
 
-- [Dependency & Boundary Guide](DEPENDENCIES.md)
-- [Runtime Manifest](RUNTIME_MANIFEST.md)
-- [MicroBundles](MICROBUNDLES.md)
-- [Arbitration and Convergence](ARBITRATION.md)
-- [RuntimeAssembly](RUNTIME_ASSEMBLY.md)
-- [Runtime Boundary](RUNTIME_BOUNDARY.md)
-- [Theory](THEORY.md)
+FSM_COS is one layer in a deliberately troublesome ecosystem:
+
+- **[FSM_API](https://github.com/TrentBest/FSM_API)** — behavior and state.
+- **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
+- **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
+- **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
+- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
+
+<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
