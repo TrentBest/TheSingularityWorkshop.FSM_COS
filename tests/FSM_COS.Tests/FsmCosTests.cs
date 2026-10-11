@@ -513,6 +513,113 @@ public sealed class FsmCosTests
         Assert.Equal(0, root.LoadCalls);
     }
 
+    [Fact]
+    public void Execute_rejects_a_catalog_that_returns_a_root_at_the_wrong_version()
+    {
+        var bundle = new TestBundle(1, "1.0.0");
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new FixedCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[] { new MicroBundleManifestEntry(1, "2.0.0") })));
+
+        Assert.Contains("resolved to version '1.0.0'", exception.Message);
+        Assert.Equal(0, bundle.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_a_catalog_that_returns_a_different_root_identity()
+    {
+        var bundle = new TestBundle(99);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new FixedCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("resolved request 1 to bundle 99", exception.Message);
+        Assert.Equal(0, bundle.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_a_root_without_a_descriptor_before_loading()
+    {
+        var bundle = new MalformedBundle(1);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new FixedCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("MicroBundle 1 returned no descriptor", exception.Message);
+        Assert.Equal(0, bundle.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_a_dependency_without_a_descriptor_before_loading()
+    {
+        var dependency = new MalformedBundle(2);
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, dependency)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("MicroBundle 2 returned no descriptor", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, dependency.LoadCalls);
+    }
+
+    [Fact]
+    public void Schedule_validation_rejects_an_unresolvable_dependency_before_loading()
+    {
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var rootEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+        var dependencyEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(2, "0.1.0-test", "sha256:missing"));
+        var entries = new[] { rootEntry, dependencyEntry };
+        var schedule = new RuntimeManifestSchedule(
+            entries,
+            new[] { new RuntimeManifestDependency(1, 2) });
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root)).Execute(
+                new RuntimeManifest(
+                    42,
+                    new[] { Entry(1) },
+                    LoadPlan: entries,
+                    Schedule: schedule)));
+
+        Assert.Contains("Scheduled MicroBundle 2 could not be resolved", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+    }
+
+    [Fact]
+    public void Schedule_validation_rejects_a_cycle_in_the_resolved_graph_before_loading()
+    {
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var dependency = new TestBundle(2, MicroBundleDependencyRequest.Unconfigured(1));
+        var rootEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+        var dependencyEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(2, "0.1.0-test", "sha256:dependency"));
+        var entries = new[] { rootEntry, dependencyEntry };
+        // The published schedule is acyclic, but the domain-owned declarations are not.
+        var schedule = new RuntimeManifestSchedule(
+            entries,
+            new[] { new RuntimeManifestDependency(1, 2) });
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, dependency)).Execute(
+                new RuntimeManifest(
+                    42,
+                    new[] { Entry(1) },
+                    LoadPlan: entries,
+                    Schedule: schedule)));
+
+        Assert.Contains("dependency cycle detected at 1", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, dependency.LoadCalls);
+    }
+
     private static MicroBundleManifestEntry Entry(ulong bundleId) =>
         new(bundleId, "0.1.0-test");
 
@@ -546,6 +653,39 @@ public sealed class FsmCosTests
 
         public bool TryResolve(ulong bundleId, out TheSingularityWorkshop.MicroBundleDomain.IMicroBundle? bundle) =>
             _bundles.TryGetValue(bundleId, out bundle);
+    }
+
+    private sealed class FixedCatalog : IMicroBundleCatalog
+    {
+        private readonly IMicroBundle _bundle;
+
+        public FixedCatalog(IMicroBundle bundle) => _bundle = bundle;
+
+        public bool TryResolve(ulong bundleId, string version, out IMicroBundle? bundle)
+        {
+            bundle = _bundle;
+            return true;
+        }
+
+        public bool TryResolve(ulong bundleId, out IMicroBundle? bundle)
+        {
+            bundle = _bundle;
+            return true;
+        }
+    }
+
+    private sealed class MalformedBundle : IMicroBundle
+    {
+        public MalformedBundle(ulong id) => Id = id;
+
+        public ulong Id { get; }
+        public MicroBundleDescriptor Descriptor => null!;
+        public IReadOnlyList<MicroBundleDependencyRequest> Dependencies =>
+            Array.Empty<MicroBundleDependencyRequest>();
+        public int LoadCalls { get; private set; }
+
+        public void Load(IMicroBundleLoadContext context) => LoadCalls++;
+        public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex) => false;
     }
 
     private sealed class VersionedTestCatalog : IMicroBundleCatalog
