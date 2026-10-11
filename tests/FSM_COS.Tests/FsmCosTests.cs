@@ -620,6 +620,33 @@ public sealed class FsmCosTests
         Assert.Equal(0, dependency.LoadCalls);
     }
 
+    [Fact]
+    public void Schedule_validation_rejects_a_dependency_without_a_descriptor_before_loading()
+    {
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var dependency = new MalformedBundle(2);
+        var rootEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+        var dependencyEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(2, "0.1.0-test", "sha256:dependency"));
+        var entries = new[] { rootEntry, dependencyEntry };
+        var schedule = new RuntimeManifestSchedule(
+            entries,
+            new[] { new RuntimeManifestDependency(1, 2) });
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, dependency)).Execute(
+                new RuntimeManifest(
+                    42,
+                    new[] { Entry(1) },
+                    LoadPlan: entries,
+                    Schedule: schedule)));
+
+        Assert.Contains("invalid or mismatched bundle", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, dependency.LoadCalls);
+    }
+
     private static MicroBundleManifestEntry Entry(ulong bundleId) =>
         new(bundleId, "0.1.0-test");
 
