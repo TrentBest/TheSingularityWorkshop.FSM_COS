@@ -210,3 +210,30 @@ Temporary branch `release/fsm-cos-alpha6-candidate` was created from `master` an
 PR #25 is now open, ready for review, mergeable, and unmerged. Its exact head `385bec07588185d7cc98471db1f1015e9da69e5c` passed [Actions run 37992111115](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/37992111115): both build/test/coverage/pack and public-feed compatibility succeeded, and the publish job was skipped. The package artifact was inspected: alpha.6 version/dependencies, README, license, release notes, and internal-doc exclusions are correct; the TRX artifact reports 39/39 passing tests. The .NET build reported zero compiler warnings/errors.
 
 **Next:** owner review and approval to merge PR #25 into master. After merge, verify the exact master-head workflow and artifact before any separate publication approval. Keep the temporary branch until its unique work is accepted or explicitly dispositioned; it is not safe to delete now.
+
+
+### Current release and branch state re-check (2026-10-11)
+
+This section supersedes the *current-state* statements above where GitHub has since changed. Earlier commit counts and PR states remain useful as historical snapshots, not as present-tense facts.
+
+**Observed repository state:**
+
+- PR [#14](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/14) remains open and is explicitly a draft integration checkpoint from `development` into `master`. It is not a narrow fix. The current comparison reports `development` **297 commits ahead and 40 behind** `master`.
+- PR [#25](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/25), the selective alpha.6 candidate, was **closed on 2026-10-10 without merging**. Its temporary branch `release/fsm-cos-alpha6-candidate` no longer appears among repository branches. Do not describe that PR as open or reviewable.
+- The verified candidate commit `385bec07588185d7cc98471db1f1015e9da69e5c` still exists and compares as **33 commits ahead / 0 behind** `master`. It is recoverable source evidence, not the current `master` head and not proof that its changes were integrated.
+- Both `master` and `development` project files currently declare `0.1.0-alpha.6`, but they do **not** expose the same public manifest contract. On `master`, `RuntimeManifest.Bundles` is still `IReadOnlyList<MicroBundleDependencyRequest>`; on `development`, it is `IReadOnlyList<MicroBundleManifestEntry>` with explicit requested versions plus optional staged-plan/schedule metadata. The development contract also supports external configuration-source resolution. The shared version string therefore does not make these source lines interchangeable.
+- The `master` package workflow has the normal build/test/pack job and a hard-disabled publication job, but does not include the separate clean public-NuGet compatibility job present on `development`. Keep the publication condition hard-disabled with `&& false`.
+
+**Evidence and caveats for the selective candidate:**
+
+The recorded Actions run [37992111115](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/37992111115) succeeded for both build/test/pack and public-feed compatibility at the exact candidate head; publication was skipped. The recorded artifact inspection and 39/39 test result are useful evidence for that commit, but they do not validate later commits or the current `master` head.
+
+Codecov's PR #25 report separately recorded **69.43% patch coverage, with 96 changed lines not covered**. The main uncovered areas included `FsmCos.cs`, `RuntimeManifest.cs`, `RuntimeManifestSchedule.cs`, `RuntimeManifestLoadPlan.cs`, and `MicroBundleReference.cs`. A green build is not the same as complete branch/edge coverage. Before treating the candidate as review-ready, inspect those gaps and add tests where they protect meaningful public contracts or failure paths; document any deliberately untested defensive code rather than optimizing for a percentage alone.
+
+**Disposition:**
+
+- Do **not** merge `master` wholesale into `development`, or `development` wholesale into `master`, merely to resolve the divergent history.
+- Do **not** treat PR #14 as a release-ready integration without a selective contract review.
+- The selective candidate's verified commit can be used to reconstruct a review branch, but its PR was closed and its branch deleted; restoring a review surface is a separate action, not an implicit merge.
+- Alpha.6 remains a source candidate, not publication authorization. Before release, reconcile the public contract on the intended release line, close the meaningful coverage gaps, rerun clean public-feed compatibility against the exact release commit, inspect the produced package, and obtain explicit owner approval for any merge or publication.
+
