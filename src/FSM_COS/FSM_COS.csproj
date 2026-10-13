@@ -20,10 +20,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TheSingularityWorkshop.FSM_API" Version="1.0.13" />
-    <PackageReference Include="TheSingularityWorkshop.FSM_UserIO" Version="0.1.0-alpha.1" />
-    <PackageReference Include="TheSingularityWorkshop.MicroBundleDomain" Version="1.0.1" />
+    <PackageReference Include="TheSingularityWorkshop.FSM_API" Version="1.0.13" Condition="'$(WorkshopUseRepositorySources)' != 'true'" />
+    <PackageReference Include="TheSingularityWorkshop.FSM_UserIO" Version="0.1.0-alpha.1" Condition="'$(WorkshopUseRepositorySources)' != 'true'" />
+    <PackageReference Include="TheSingularityWorkshop.MicroBundleDomain" Version="1.0.1" Condition="'$(WorkshopUseRepositorySources)' != 'true'" />
+    <ProjectReference Include="..\..\..\FSM_API\FSM_API\FSM_API.csproj" Condition="'$(WorkshopUseRepositorySources)' == 'true'" />
+    <ProjectReference Include="..\..\..\FSM_UserIO\TheSingularityWorkshop.FSM_UserIO.csproj" Condition="'$(WorkshopUseRepositorySources)' == 'true'" />
+    <ProjectReference Include="..\..\..\TheSingularityWorkshop.MicroBundleDomain\TheSingularityWorkshop.MicroBundleDomain.csproj" Condition="'$(WorkshopUseRepositorySources)' == 'true'" />
   </ItemGroup>
+
+  <Target Name="ValidateWorkshopRepositorySources" BeforeTargets="PrepareForBuild" Condition="'$(WorkshopUseRepositorySources)' == 'true'">
+    <Error Condition="!Exists('..\..\..\FSM_API\FSM_API\FSM_API.csproj')" Text="Workshop source mode requires sibling repository FSM_API on development." />
+    <Error Condition="!Exists('..\..\..\FSM_UserIO\TheSingularityWorkshop.FSM_UserIO.csproj')" Text="Workshop source mode requires sibling repository FSM_UserIO on development." />
+    <Error Condition="!Exists('..\..\..\TheSingularityWorkshop.MicroBundleDomain\TheSingularityWorkshop.MicroBundleDomain.csproj')" Text="Workshop source mode requires sibling repository TheSingularityWorkshop.MicroBundleDomain on development." />
+  </Target>
 
   <ItemGroup>
     <None Include="../../README.md" Pack="true" PackagePath="" />
