@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: TrentBest/TheSingularityWorkshop.MicroBundleDomain
-          ref: architecture/runtime-contract-ownership
+          ref: development
           path: _dependencies/MicroBundleDomain
 
       - name: Setup .NET
