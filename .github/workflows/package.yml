@@ -212,7 +212,7 @@ jobs:
         run: dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --configuration Release --no-build --verbosity normal -p:WorkshopUseRepositorySources=true
 
   publish_nuget:
-    needs: [build-and-test, public-package-compatibility]
+    needs: [build-and-test, public-package-compatibility, source-integration]
     # Publishing is available only when deliberately dispatched from development
     # with the boolean input checked. Pushes and pull requests never publish.
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true && github.ref == 'refs/heads/development' }}
