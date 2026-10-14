@@ -114,6 +114,22 @@ Configuration source
 
 FSM_COS may consume configuration through an abstraction, but it does not become a file reader, serializer, repository, or application configuration framework.
 
+## Dependency modes in CI
+
+The same repository has two deliberately different dependency modes. They answer different questions and must not be blended into one ambiguous build.
+
+| Context | MicroBundleDomain source | What the build proves |
+|---|---|---|
+| Push to `development` or a pull request targeting it | Checkout the dependency's `development` branch and pack it into an isolated local feed | Current integration code is tested against current dependency development code |
+| Push to `master`, or a pull request targeting another base | Restore dependencies from public NuGet | The stable/release line does not silently rely on an unpublished source checkout |
+| Public-package compatibility job | Public NuGet only, with no local dependency feed | The documented package dependency graph can restore and build as a consumer would |
+
+For development restores, NuGet package-source mapping routes **only** `TheSingularityWorkshop.MicroBundleDomain` to the locally packed development package. Other package IDs resolve from nuget.org. This matters because the development checkout can carry the same declared package version as the published package: adding a local feed without source mapping would not prove which copy restore selected.
+
+The public-package compatibility job remains separate from the development integration build. A green development build is not evidence that a new package version is published, and a green public-feed build is not evidence that the latest dependency development code has been integrated.
+
+This workflow is verification, not release authorization. Publication remains behind the existing explicit workflow-dispatch input and disabled safety gate; do not remove that gate or publish as part of routine development.
+
 ## Verification
 
 Run the minimal consumer sample as part of validating the public composition path:
