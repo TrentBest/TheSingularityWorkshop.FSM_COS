@@ -155,6 +155,62 @@ jobs:
           name: fsm-cos-nuget-package-public-feed
           path: ./artifacts-public/*.nupkg
 
+  source-integration:
+    runs-on: ubuntu-24.04
+    steps:
+      # Place each repository as a sibling so the csproj's relative source references resolve.
+      - name: Checkout FSM_COS source
+        uses: actions/checkout@v7
+        with:
+          path: FSM_COS
+
+      - name: Checkout FSM_API source
+        uses: actions/checkout@v7
+        with:
+          repository: TrentBest/FSM_API
+          ref: development
+          path: FSM_API
+
+      - name: Checkout FSM_UserIO source
+        uses: actions/checkout@v7
+        with:
+          repository: TrentBest/FSM_UserIO
+          ref: development
+          path: FSM_UserIO
+
+      - name: Checkout MicroBundleDomain source
+        uses: actions/checkout@v7
+        with:
+          repository: TrentBest/TheSingularityWorkshop.MicroBundleDomain
+          ref: development
+          path: TheSingularityWorkshop.MicroBundleDomain
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore complete development source graph
+        working-directory: FSM_COS
+        run: dotnet restore TheSingularityWorkshop.FSM_COS.sln -p:WorkshopUseRepositorySources=true
+
+      - name: Build complete development source graph
+        working-directory: FSM_COS
+        run: dotnet build TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore -p:WorkshopUseRepositorySources=true
+
+      - name: Verify minimal consumer against development source graph
+        working-directory: FSM_COS
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$(dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj --configuration Release --no-build)"
+          printf '%s\\n' "$output"
+          grep -Fq "Assembly order: 2 -> 1" <<< "$output"
+
+      - name: Test complete development source graph
+        working-directory: FSM_COS
+        run: dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --configuration Release --no-build --verbosity normal -p:WorkshopUseRepositorySources=true
+
   publish_nuget:
     needs: [build-and-test, public-package-compatibility]
     # Publishing is available only when deliberately dispatched from development
