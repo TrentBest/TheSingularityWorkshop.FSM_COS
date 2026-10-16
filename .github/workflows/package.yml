@@ -24,7 +24,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Checkout MicroBundleDomain dependency
+      - name: Checkout MicroBundleDomain development dependency
+        if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
         uses: actions/checkout@v7
         with:
           repository: TrentBest/TheSingularityWorkshop.MicroBundleDomain
@@ -36,18 +37,46 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Pack MicroBundleDomain dependency
+      - name: Pack MicroBundleDomain development dependency
+        if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
         run: |
           dotnet restore _dependencies/MicroBundleDomain/TheSingularityWorkshop.MicroBundleDomain.slnx
           dotnet build _dependencies/MicroBundleDomain/TheSingularityWorkshop.MicroBundleDomain.slnx --configuration Release --no-restore
           mkdir -p _dependencies/nuget
           dotnet pack _dependencies/MicroBundleDomain/TheSingularityWorkshop.MicroBundleDomain.csproj --configuration Release --no-build --output _dependencies/nuget
 
-      - name: Add local dependency feed
-        run: dotnet nuget add source "$GITHUB_WORKSPACE/_dependencies/nuget" --name MicroBundleDomainLocal
+      - name: Configure development dependency feed
+        if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .ci
+          cat > .ci/NuGet.Development.config <<EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <configuration>
+            <packageSources>
+              <clear />
+              <add key="MicroBundleDomainDevelopment" value="$GITHUB_WORKSPACE/_dependencies/nuget" />
+              <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+            </packageSources>
+            <packageSourceMapping>
+              <packageSource key="MicroBundleDomainDevelopment">
+                <package pattern="TheSingularityWorkshop.MicroBundleDomain" />
+              </packageSource>
+              <packageSource key="nuget.org">
+                <package pattern="*" />
+              </packageSource>
+            </packageSourceMapping>
+          </configuration>
+          EOF
 
-      - name: Restore
-        run: dotnet restore TheSingularityWorkshop.FSM_COS.sln
+      - name: Restore using development dependencies
+        if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
+        run: dotnet restore TheSingularityWorkshop.FSM_COS.sln --configfile .ci/NuGet.Development.config
+
+      - name: Restore using published NuGet dependencies
+        if: ${{ !( (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' ) }}
+        run: dotnet restore TheSingularityWorkshop.FSM_COS.sln --source https://api.nuget.org/v3/index.json
 
       - name: Build
         run: dotnet build TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore
