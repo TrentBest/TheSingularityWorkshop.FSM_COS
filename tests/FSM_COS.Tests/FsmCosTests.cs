@@ -647,6 +647,34 @@ public sealed class FsmCosTests
         Assert.Equal(0, dependency.LoadCalls);
     }
 
+    [Fact]
+    public void Arbitration_accepts_matching_domain_contracts_not_just_matching_provider_labels()
+    {
+        var tanker = new DockingContractBundle(31, "dock-v1", "shared-capture-envelope-v1");
+        var station = new DockingContractBundle(32, "dock-v1", "shared-capture-envelope-v1");
+
+        var assembly = new FsmCos(new TestCatalog(tanker, station)).Execute(
+            new RuntimeManifest(42, new[] { Entry(31), Entry(32) }));
+
+        Assert.Equal(new ulong[] { 31, 32 }, assembly.Bundles.Select(bundle => bundle.Id));
+        Assert.Equal(1, tanker.ArbitrationCalls);
+        Assert.Equal(1, station.ArbitrationCalls);
+    }
+
+    [Fact]
+    public void Arbitration_rejects_shared_provider_label_when_domain_contracts_conflict()
+    {
+        var tanker = new DockingContractBundle(31, "dock-v1", "tanker-capture-envelope-v1");
+        var station = new DockingContractBundle(32, "dock-v1", "station-capture-envelope-v2");
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(tanker, station)).Execute(
+                new RuntimeManifest(42, new[] { Entry(31), Entry(32) })));
+
+        Assert.Contains("docking", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("contract", exception.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
     private static MicroBundleManifestEntry Entry(ulong bundleId) =>
         new(bundleId, "0.1.0-test");
 
@@ -734,6 +762,46 @@ public sealed class FsmCosTests
 
         public bool TryResolve(ulong bundleId, out TheSingularityWorkshop.MicroBundleDomain.IMicroBundle? bundle) =>
             _byId.TryGetValue(bundleId, out bundle);
+    }
+
+    /// <summary>
+    /// Test-owned domain contract. The shared provider label is discovery metadata;
+    /// this fixture's explicit contract identity is what determines compatibility.
+    /// </summary>
+    private sealed class DockingContractBundle : TheSingularityWorkshop.MicroBundleDomain.IMicroBundle
+    {
+        public DockingContractBundle(ulong id, string version, string contractId)
+        {
+            Id = id;
+            ContractId = contractId;
+            Descriptor = new MicroBundleDescriptor(
+                id,
+                version,
+                providers: new[] { new MicroBundleProvider("docking") });
+        }
+
+        public ulong Id { get; }
+        public string ContractId { get; }
+        public MicroBundleDescriptor Descriptor { get; }
+        public IReadOnlyList<MicroBundleDependencyRequest> Dependencies =>
+            Array.Empty<MicroBundleDependencyRequest>();
+        public int ArbitrationCalls { get; private set; }
+
+        public void Load(IMicroBundleLoadContext context) { }
+
+        public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex)
+        {
+            ArbitrationCalls++;
+            foreach (var peer in context.Bundles.OfType<DockingContractBundle>())
+            {
+                if (peer.Id != Id && !StringComparer.Ordinal.Equals(ContractId, peer.ContractId))
+                    throw new InvalidOperationException(
+                        $"Incompatible docking contract between MicroBundles {Id} and {peer.Id}: " +
+                        $"'{ContractId}' versus '{peer.ContractId}'.");
+            }
+
+            return false;
+        }
     }
 
     private sealed class TestBundle : TheSingularityWorkshop.MicroBundleDomain.IMicroBundle
