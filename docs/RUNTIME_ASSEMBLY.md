@@ -66,6 +66,14 @@ Once it receives the assembly, the host can:
 
 Those actions are deliberately outside FSM_COS.
 
+### Provider declarations are not provider invocation
+
+A loaded bundle's `MicroBundleDescriptor.Providers` advertises provider IDs. The descriptor does not contain the provider instances, their CLR contract types, semantic contract versions, or an invocation mechanism. `RuntimeAssembly.TryGetBundle(...)` locates a loaded MicroBundle; it does not resolve a provider ID declared by that bundle.
+
+Therefore the host or a separately authored integration MicroBundle must explicitly resolve and invoke providers. It should validate the expected semantic contract and compatibility before invocation; matching strings alone are not proof of compatibility. Keep domain-specific policy—such as Physics contact evidence to a Gestures recovery recommendation—outside this composition kernel.
+
+See [MicroBundleDomain's Provider Resolution Contract](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/blob/development/docs/PROVIDER_RESOLUTION_CONTRACT.md) for the current descriptor boundary and the minimum checks proposed before standardizing a resolver.
+
 ## What the assembly does not promise
 
 A RuntimeAssembly does not promise:
