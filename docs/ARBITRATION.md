@@ -217,7 +217,9 @@ The runtime/experience owns the policy for what to do with an incompatible or un
 - **FSM_COS arbitration:** provides the bounded reconciliation phase. It does not infer a universal compatibility schema from capability names.
 - **Host / experience / simulation:** owns the higher-level choice and the authoritative execution outcome.
 
-The current arbitration callback reports whether a participant changed the composition; it is **not** a structured compatibility-diagnostics API. If callers need machine-readable rejection categories or explanations, that needs an explicit contract extension or domain-owned result surface. Do not disguise a missing compatibility check as successful convergence, and do not add a universal schema here before real domain contracts establish what it must express.
+The current arbitration callback reports whether a participant changed the composition; it is **not** a structured compatibility-diagnostics API.
+
+The test suite now includes a deliberately domain-owned example in `FsmCosTests`: two bundles advertise the same `docking` provider label, while their test-only contract identities determine whether arbitration accepts the pairing or throws on a known conflict. This demonstrates the existing extension point, **not** a built-in FSM_COS compatibility validator or a production docking schema. The exception is a fail-closed fixture; machine-readable compatible / incompatible / unresolved results remain future contract work. If callers need machine-readable rejection categories or explanations, that needs an explicit contract extension or domain-owned result surface. Do not disguise a missing compatibility check as successful convergence, and do not add a universal schema here before real domain contracts establish what it must express.
 
 ---
 
