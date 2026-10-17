@@ -186,6 +186,39 @@ Those stronger claims depend on the contracts and implementations supplied by th
 
 **Precise guarantee:** FSM_COS does not return an assembly when the arbitration protocol reports continued change through the configured maximum. A returned assembly means the participants reported convergence—not that every possible form of interoperability has been proven.
 
+
+## Example: a shared capability name is not compatibility
+
+Imagine a tanker MicroBundle and a station MicroBundle both advertise **docking**. That shared word is discovery metadata, not evidence that the operations can safely compose.
+
+A domain-owned docking contract might need to compare facts such as:
+
+- docking-interface or protocol identity and compatible contract versions;
+- the geometry and reference frame of each docking port;
+- permitted approach and capture envelopes;
+- size, mass, clearance, or load limits relevant to the operation;
+- units, coordinate conventions, and timebase where those affect interpretation.
+
+These are illustrative contract facts, **not fields that the current MicroBundle descriptor automatically supplies**. The bundle author or a domain-specific adapter must define which facts are required, where they come from, and how they are evaluated. A generic label, a matching provider name, or the fact that both bundles loaded is insufficient.
+
+The composition should therefore distinguish three outcomes in its domain logic:
+
+1. **Compatible:** the declared contracts and configuration provide enough evidence to permit this pairing.
+2. **Incompatible:** a known contract condition fails; the pairing must not be treated as usable.
+3. **Unresolved:** required evidence is absent or cannot be interpreted; absence of a known conflict is not proof of compatibility.
+
+The runtime/experience owns the policy for what to do with an incompatible or unresolved pairing—reject it, request different bundles or configuration, or present the reason to the author. The bundles own the domain facts they can validate. The authoritative host or simulation still determines whether a permitted docking attempt is physically feasible and what actually happens.
+
+### Keep the responsibilities separate
+
+- **Runtime manifest:** selects MicroBundle identities and requested versions. It does not embed each bundle's configuration.
+- **Configuration source:** supplies configuration separately for each selected MicroBundle. FSM_COS passes that configuration through; it does not interpret domain-specific fields.
+- **MicroBundle contract and implementation:** define capabilities, requirements, and the domain-specific checks a participant can actually perform.
+- **FSM_COS arbitration:** provides the bounded reconciliation phase. It does not infer a universal compatibility schema from capability names.
+- **Host / experience / simulation:** owns the higher-level choice and the authoritative execution outcome.
+
+The current arbitration callback reports whether a participant changed the composition; it is **not** a structured compatibility-diagnostics API. If callers need machine-readable rejection categories or explanations, that needs an explicit contract extension or domain-owned result surface. Do not disguise a missing compatibility check as successful convergence, and do not add a universal schema here before real domain contracts establish what it must express.
+
 ---
 
 ## Why bounded convergence matters
