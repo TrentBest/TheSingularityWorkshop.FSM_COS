@@ -128,7 +128,7 @@ For development restores, NuGet package-source mapping routes **only** `TheSingu
 
 The public-package compatibility job remains separate from the development integration build. A green development build is not evidence that a new package version is published, and a green public-feed build is not evidence that the latest dependency development code has been integrated.
 
-This workflow is verification, not release authorization. Publication remains behind the existing explicit workflow-dispatch input and disabled safety gate; do not remove that gate or publish as part of routine development.
+This workflow is verification, not release authorization. Publication remains behind the required `workflow_dispatch` boolean input (`publish`, default `false`) and is allowed only when the workflow is deliberately dispatched from `development` with that input set to `true`. Pushes and pull requests never publish. Do not weaken this safeguard or publish as part of routine development.
 
 ## Verification
 
