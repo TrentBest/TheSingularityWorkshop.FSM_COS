@@ -9,13 +9,13 @@
 
 This status supersedes older operational instructions in the dated notes below where they conflict.
 
-- FSM_COS `0.1.0-alpha.6` is the current declared package version; do not treat the source version alone as release authorization.
+- FSM_COS `0.1.0-alpha.7` is the current source candidate; source version and generated artifacts do not by themselves establish publication.
 - The current package workflow uses a manual `workflow_dispatch` input named `publish`, defaulting to `false`. Publishing is eligible only from `development` when that input is deliberately set to `true`, and only after build/test, public-package compatibility, and development-source integration jobs succeed. Ordinary pushes and pull requests do not publish.
 - Older statements below that describe publication as disabled by `&& false` record the historical gate at the time they were written. They are not instructions for the current workflow.
-- The recent documentation/footer changes passed all three verification jobs on development. This validates that commit's build and integration paths; it does not establish a new package version or authorize publication.
-- Keep the kernel boundary narrow. Staged manifest metadata and schedule preflight validation exist, but artifact localization/hash verification, Bootstrap-only composition, background localization, and live Deferred promotion remain unimplemented end-to-end.
+- The alpha.7 candidate passed build/test, public-package compatibility, and development-source integration in [run 39104094243](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39104094243). Both packed candidates also passed the new archive-content/metadata verifier. The publish job was skipped; no NuGet publication has occurred.
+- The release-worthy runtime fix makes `RuntimeAssembly` and staged-plan collection surfaces read-only snapshots, preventing consumers from mutating the underlying collections after composition/validation. Regression tests cover attempted mutation. Keep the kernel boundary narrow: artifact localization/hash verification, Bootstrap-only composition, background localization, and live Deferred promotion remain unimplemented end-to-end.
 - Do not merge divergent `master` and `development` histories mechanically. Preserve the requested-version manifest and external-configuration contract on `development`; reconcile API differences selectively with tests.
-- No NuGet publication or branch deletion is authorized by this status.
+- The owner has delegated preparation through the next release. Publication has not occurred: this GitHub connection can inspect runs and artifacts but cannot dispatch the required `workflow_dispatch` action. Do not bypass the repository's manual publish gate; the final release action still requires a deliberate run from `development` with `publish=true`. No branch deletion is authorized by this status.
 
 
 ## Decision
