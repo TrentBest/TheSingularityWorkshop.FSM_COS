@@ -34,6 +34,7 @@ def verify(package_dir: Path, project_path: Path) -> None:
         for item in property_group
     }
     package_id = project_values.get("PackageId")
+    assembly_name = project_values.get("AssemblyName") or project_path.stem
     version = project_values.get("Version")
     readme_name = project_values.get("PackageReadmeFile")
     license_name = project_values.get("PackageLicenseFile")
@@ -77,10 +78,10 @@ def verify(package_dir: Path, project_path: Path) -> None:
         if missing:
             fail("Package is missing required files: " + ", ".join(missing))
 
-        assembly_path = f"lib/net8.0/{package_id}.dll"
+        assembly_path = f"lib/net8.0/{assembly_name}.dll"
         if assembly_path not in names:
             fail(f"Package is missing target assembly {assembly_path!r}.")
-        xml_doc_path = f"lib/net8.0/{package_id}.xml"
+        xml_doc_path = f"lib/net8.0/{assembly_name}.xml"
         if xml_doc_path not in names:
             fail(f"Package is missing XML API documentation {xml_doc_path!r}.")
 
