@@ -650,8 +650,8 @@ public sealed class FsmCosTests
     [Fact]
     public void Arbitration_accepts_matching_domain_contracts_not_just_matching_provider_labels()
     {
-        var tanker = new DockingContractBundle(31, "dock-v1", "shared-capture-envelope-v1");
-        var station = new DockingContractBundle(32, "dock-v1", "shared-capture-envelope-v1");
+        var tanker = new DockingContractBundle(31, "docking", "shared-capture-envelope-v1");
+        var station = new DockingContractBundle(32, "docking", "shared-capture-envelope-v1");
 
         var assembly = new FsmCos(new TestCatalog(tanker, station)).Execute(
             new RuntimeManifest(42, new[] { Entry(31), Entry(32) }));
@@ -664,8 +664,8 @@ public sealed class FsmCosTests
     [Fact]
     public void Arbitration_rejects_shared_provider_label_when_domain_contracts_conflict()
     {
-        var tanker = new DockingContractBundle(31, "dock-v1", "tanker-capture-envelope-v1");
-        var station = new DockingContractBundle(32, "dock-v1", "station-capture-envelope-v2");
+        var tanker = new DockingContractBundle(31, "docking", "tanker-capture-envelope-v1");
+        var station = new DockingContractBundle(32, "docking", "station-capture-envelope-v2");
 
         var exception = Assert.Throws<InvalidOperationException>(() =>
             new FsmCos(new TestCatalog(tanker, station)).Execute(
@@ -770,7 +770,7 @@ public sealed class FsmCosTests
     /// </summary>
     private sealed class DockingContractBundle : TheSingularityWorkshop.MicroBundleDomain.IMicroBundle
     {
-        public DockingContractBundle(ulong id, string version, string contractId)
+        public DockingContractBundle(ulong id, string providerLabel, string contractId)
         {
             Id = id;
             ContractId = contractId;
@@ -779,7 +779,7 @@ public sealed class FsmCosTests
             Descriptor = new MicroBundleDescriptor(
                 id,
                 "0.1.0-test",
-                providers: new[] { new MicroBundleProvider("docking") });
+                providers: new[] { new MicroBundleProvider(providerLabel) });
         }
 
         public ulong Id { get; }
