@@ -63,11 +63,12 @@ This source currently declares version `0.1.0-alpha.7`. A source version declara
 - [What Is FSM_COS?](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/WHAT_IS_FSM_COS.md) — a plain-language introduction for readers new to software composition.
 - [Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/THEORY.md) — why composition is a distinct operation.
 - [Architecture](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ARCHITECTURE.md) — ownership and runtime flow.
+- [Domain completion roadmap](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/DOMAIN_COMPLETION_ROADMAP.md) — implemented capabilities, deferred work, dependency order, and release gates.
 - [Runtime Manifest](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/RUNTIME_MANIFEST.md) — the composition request.
 - [RuntimeAssembly](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/RUNTIME_ASSEMBLY.md) — the host handoff.
 - [Arbitration](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ARBITRATION.md) — reconciliation and convergence.
 - [Documentation Index](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_INDEX.md) — all focused guides.
-- [Alpha.6 release notes](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/releases/0.1.0-alpha.6.md) — included contracts and explicit limitations.
+- [Alpha.7 release notes](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/releases/0.1.0-alpha.7.md) — included contracts and explicit limitations.
 - [Development](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/DEVELOPMENT.md) — build and verification.
 - [Source and issues](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
 
