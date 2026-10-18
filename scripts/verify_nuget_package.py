@@ -92,7 +92,7 @@ def verify(package_dir: Path, project_path: Path) -> None:
             if local_name(item.tag) == "PackageReference"
             and item.attrib.get("Include")
             and item.attrib.get("Version")
-            and "Condition" not in item.attrib
+            and "WorkshopUseRepositorySources' == 'true'" not in item.attrib.get("Condition", "")
         }
         dependencies_node = next(
             (item for item in metadata if local_name(item.tag) == "dependencies"),
@@ -104,13 +104,27 @@ def verify(package_dir: Path, project_path: Path) -> None:
                 if local_name(group.tag) == "dependency":
                     package_dependencies[group.attrib.get("id", "")] = group.attrib.get("version", "")
 
+        if set(package_dependencies) != set(project_dependencies):
+            fail(
+                "Package dependency IDs differ from the project contract: "
+                f"project={sorted(project_dependencies)}, package={sorted(package_dependencies)}."
+            )
+
+        def lower_bound(version_range: str) -> str:
+            # NuGet may encode a PackageReference as a lower-bounded range, e.g. [1.2.3, ).
+            return version_range.strip().lstrip("[(").split(",", 1)[0].rstrip("]) ").strip()
+
         for dependency_id, dependency_version in project_dependencies.items():
-            actual_dependency_version = package_dependencies.get(dependency_id)
-            if actual_dependency_version != dependency_version:
+            actual_dependency_version = package_dependencies.get(dependency_id, "")
+            if lower_bound(actual_dependency_version) != dependency_version:
                 fail(
                     f"Dependency mismatch for {dependency_id}: project={dependency_version!r}, "
                     f"package={actual_dependency_version!r}."
                 )
+
+        readme_metadata = child_text(metadata, "readme")
+        if readme_metadata != readme_name:
+            fail(f"Package readme metadata mismatch: project={readme_name!r}, package={readme_metadata!r}.")
 
         print(f"Verified {package.name}")
         print(f"  identity: {actual_id} {actual_version}")
