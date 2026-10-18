@@ -774,9 +774,11 @@ public sealed class FsmCosTests
         {
             Id = id;
             ContractId = contractId;
+            // The runtime manifest pins the fixture package version; the separate
+            // contract identity below models domain compatibility, not package version.
             Descriptor = new MicroBundleDescriptor(
                 id,
-                version,
+                "0.1.0-test",
                 providers: new[] { new MicroBundleProvider("docking") });
         }
 
