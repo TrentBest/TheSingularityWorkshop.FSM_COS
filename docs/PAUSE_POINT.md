@@ -4,6 +4,20 @@
 
 **Continuation checklist:** [WebPage Working Task List](https://github.com/TrentBest/WebPage/blob/development/docs/WORKING_TASKS.md) is the durable cross-session handoff. On resumption, read it, verify current branch heads and workflow runs, then continue the highest-priority unfinished task.
 
+
+## Current continuation status — 2026-10-18
+
+This status supersedes older operational instructions in the dated notes below where they conflict.
+
+- FSM_COS `0.1.0-alpha.6` is the current declared package version; do not treat the source version alone as release authorization.
+- The current package workflow uses a manual `workflow_dispatch` input named `publish`, defaulting to `false`. Publishing is eligible only from `development` when that input is deliberately set to `true`, and only after build/test, public-package compatibility, and development-source integration jobs succeed. Ordinary pushes and pull requests do not publish.
+- Older statements below that describe publication as disabled by `&& false` record the historical gate at the time they were written. They are not instructions for the current workflow.
+- The recent documentation/footer changes passed all three verification jobs on development. This validates that commit's build and integration paths; it does not establish a new package version or authorize publication.
+- Keep the kernel boundary narrow. Staged manifest metadata and schedule preflight validation exist, but artifact localization/hash verification, Bootstrap-only composition, background localization, and live Deferred promotion remain unimplemented end-to-end.
+- Do not merge divergent `master` and `development` histories mechanically. Preserve the requested-version manifest and external-configuration contract on `development`; reconcile API differences selectively with tests.
+- No NuGet publication or branch deletion is authorized by this status.
+
+
 ## Decision
 
 FSM_COS should stop broadening its scope once the current correctness patch passes CI. The next major block of work belongs in WebPage: prove that the host consumes the composed `RuntimeAssembly` for actual Experience behavior, then prepare the public site for launch.
