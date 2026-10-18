@@ -21,8 +21,9 @@ Use this page to find the right level of explanation. The README is the orientat
 | Understand MicroBundle arbitration and convergence | [Arbitration](docs/ARBITRATION.md) |
 | Explore AI-oriented composition | [AI Composition](docs/AI_COMPOSITION.md) |
 | Understand the composition domain FSM_COS owns | [Domain](docs/DOMAIN.md) |
+| See implemented domain capabilities, explicit deferrals, dependency order, and release gates | [Domain Completion and Release Roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) |
 | Integrate with WebPage | [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) |
-| Review alpha.6 scope and explicit limitations | [Release notes](docs/releases/0.1.0-alpha.6.md) |
+| Review alpha.7 scope and explicit limitations | [Release notes](docs/releases/0.1.0-alpha.7.md) |
 | Contribute, build, and verify changes | [Development](docs/DEVELOPMENT.md) |
 
 ## Recommended reading order
