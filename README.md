@@ -72,7 +72,7 @@ dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csp
 
 This is a source-repository example and references the local FSM_COS project so it can be verified before a release is published. For the exact published package status, check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS). To build your own host, start with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md), which explains the catalog, manifest, configuration, and bundle contracts.
 
-The source targets **.NET 8** and currently declares version `0.1.0-alpha.6`; a source version declaration alone does not establish publication status.
+The source targets **.NET 8** and currently declares version `0.1.0-alpha.7`. This is a source candidate, not proof of publication; verify availability on the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS).
   
 ## 🟪 05 — Available documentation and theory
 
@@ -87,7 +87,9 @@ Pick the question you want answered; each document focuses on one topic.
 - **Wondering how stability is reached?** [Arbitration](docs/ARBITRATION.md) covers reconciliation and convergence.
 - **Integrating a host?** [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) documents one browser-host integration without moving browser concerns into the kernel.
 - **Checking how Workshop packages fit together?** [Ecosystem Integration Map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ECOSYSTEM_INTEGRATION_MAP.md) is a source-repository working snapshot; verify its point-in-time source facts before relying on them.
-- **Checking alpha.6 scope and limitations?** [Release notes](docs/releases/0.1.0-alpha.6.md) describe the source candidate's contracts and explicit non-goals.
+- **Checking alpha.7 scope and limitations?** [Release notes](docs/releases/0.1.0-alpha.7.md) describe the source candidate's contracts and explicit non-goals.
+- **What is in the domain, and what remains?** [Domain Completion and Release Roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) separates implemented behavior from deferred capabilities and defines evidence required to close them.
+- **Preparing a release?** [Domain Completion and Release Roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) records the dependency gate, verification evidence, and release checklist.
 - **Building or contributing?** [Development](docs/DEVELOPMENT.md) covers repository setup, tests, and workflows.
 - **Looking for another topic?** Open the [Documentation Index](DOCUMENTATION_INDEX.md).
 
