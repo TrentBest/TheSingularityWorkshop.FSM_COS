@@ -133,6 +133,9 @@ jobs:
       - name: Pack
         run: dotnet pack src/FSM_COS/FSM_COS.csproj --configuration Release --no-build --output ./artifacts
 
+      - name: Verify NuGet package contents and metadata
+        run: python3 scripts/verify_nuget_package.py --package-dir ./artifacts --project src/FSM_COS/FSM_COS.csproj
+
       - name: Upload NuGet package artifact
         uses: actions/upload-artifact@v7
         with:
@@ -177,6 +180,9 @@ jobs:
 
       - name: Pack against published dependencies
         run: dotnet pack src/FSM_COS/FSM_COS.csproj --configuration Release --no-build --output ./artifacts-public
+
+      - name: Verify public-feed NuGet package contents and metadata
+        run: python3 scripts/verify_nuget_package.py --package-dir ./artifacts-public --project src/FSM_COS/FSM_COS.csproj
 
       - name: Upload public-feed package artifact
         uses: actions/upload-artifact@v7
