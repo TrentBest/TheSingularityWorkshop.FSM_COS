@@ -89,7 +89,7 @@ Pick the question you want answered; each document focuses on one topic.
 - **Checking how Workshop packages fit together?** [Ecosystem Integration Map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ECOSYSTEM_INTEGRATION_MAP.md) is a source-repository working snapshot; verify its point-in-time source facts before relying on them.
 - **Checking alpha.7 scope and limitations?** [Release notes](docs/releases/0.1.0-alpha.7.md) describe the source candidate's contracts and explicit non-goals.
 - **What is in the domain, and what remains?** [Domain Completion and Release Roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) separates implemented behavior from deferred capabilities and defines evidence required to close them.
-- **Preparing a release?** [Domain Completion and Release Roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) records the dependency gate, verification evidence, and release checklist.
+- **Preparing a release?** [Domain Completion and Release Roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) records the dependency gate, verification evidence, and release checklist. The [alpha.7 Release Readiness checklist](docs/0.1.0-alpha.7-READINESS.md) tracks candidate-specific gates and remaining work.
 - **Building or contributing?** [Development](docs/DEVELOPMENT.md) covers repository setup, tests, and workflows.
 - **Looking for another topic?** Open the [Documentation Index](DOCUMENTATION_INDEX.md).
 
