@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 860" role="img" aria-labelledby="title desc">
+  <title id="title">FSM_COS domain and completion boundary</title>
+  <desc id="desc">Solid blue blocks show the current composition kernel lifecycle. Grey blocks are owned by external domains or the host. Dashed amber blocks list known deferred capabilities.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07101a"/><stop offset="1" stop-color="#172337"/></linearGradient>
+    <linearGradient id="kernel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#103b50"/><stop offset="1" stop-color="#174a67"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#76cfff"/></marker>
+  </defs>
+  <rect width="1440" height="860" rx="26" fill="url(#bg)"/>
+  <g font-family="Arial,Helvetica,sans-serif">
+    <text x="58" y="62" fill="#f1f7ff" font-size="30" font-weight="700" letter-spacing="3">FSM_COS / DOMAIN MAP</text>
+    <text x="60" y="92" fill="#76cfff" font-size="15" letter-spacing="2">WHAT THE KERNEL OWNS — AND WHAT IT DOES NOT CLAIM YET</text>
+    <g fill="none" stroke="#76cfff" stroke-width="3" marker-end="url(#arrow)">
+      <path d="M245 208H292"/><path d="M492 208H539"/><path d="M739 208H786"/><path d="M986 208H1033"/><path d="M1233 208H1270"/>
+    </g>
+    <g stroke-width="2">
+      <rect x="58" y="151" width="187" height="114" rx="15" fill="#202a36" stroke="#68798b"/>
+      <rect x="292" y="151" width="200" height="114" rx="15" fill="url(#kernel)" stroke="#76cfff"/>
+      <rect x="539" y="151" width="200" height="114" rx="15" fill="url(#kernel)" stroke="#76cfff"/>
+      <rect x="786" y="151" width="200" height="114" rx="15" fill="url(#kernel)" stroke="#76cfff"/>
+      <rect x="1033" y="151" width="200" height="114" rx="15" fill="url(#kernel)" stroke="#76cfff"/>
+      <rect x="1270" y="151" width="112" height="114" rx="15" fill="#202a36" stroke="#68798b"/>
+    </g>
+    <g fill="#f1f7ff" text-anchor="middle">
+      <text x="151" y="190" font-size="19" font-weight="700">Manifest</text><text x="151" y="217" fill="#a8b8c8" font-size="13">requested IDs</text><text x="151" y="237" fill="#a8b8c8" font-size="13">and versions</text>
+      <text x="392" y="190" font-size="19" font-weight="700">Resolve</text><text x="392" y="217" fill="#bcecff" font-size="13">catalog boundary</text><text x="392" y="237" fill="#bcecff" font-size="13">supplies bundles</text>
+      <text x="639" y="190" font-size="19" font-weight="700">Plan</text><text x="639" y="217" fill="#bcecff" font-size="13">dependency closure</text><text x="639" y="237" fill="#bcecff" font-size="13">ordered load plan</text>
+      <text x="886" y="190" font-size="19" font-weight="700">Load</text><text x="886" y="217" fill="#bcecff" font-size="13">ordered bundles</text><text x="886" y="237" fill="#bcecff" font-size="13">configuration</text>
+      <text x="1133" y="190" font-size="19" font-weight="700">Arbitrate</text><text x="1133" y="217" fill="#bcecff" font-size="13">bounded rounds</text><text x="1133" y="237" fill="#bcecff" font-size="13">convergence</text>
+      <text x="1326" y="195" font-size="16" font-weight="700">Assembly</text><text x="1326" y="220" fill="#a8b8c8" font-size="12">handoff</text>
+    </g>
+    <path d="M1326 265V312H1170" stroke="#76cfff" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+    <rect x="936" y="294" width="446" height="64" rx="12" fill="#202a36" stroke="#68798b" stroke-width="2"/>
+    <text x="1159" y="320" text-anchor="middle" fill="#f1f7ff" font-size="18" font-weight="700">Host / Experience</text>
+    <text x="1159" y="341" text-anchor="middle" fill="#a8b8c8" font-size="13">execution • lifecycle • UI • transport</text>
+    <rect x="58" y="311" width="810" height="47" rx="10" fill="#0d2532" stroke="#2e6f91"/>
+    <text x="80" y="340" fill="#76cfff" font-size="15" font-weight="700">CURRENT KERNEL CONTRACT</text>
+    <text x="343" y="340" fill="#c2d6e8" font-size="14">compose → converge → return; do not execute the application</text>
+    <text x="58" y="417" fill="#f1f7ff" font-size="21" font-weight="700">Known deferred capabilities</text>
+    <text x="58" y="443" fill="#a8b8c8" font-size="14">Amber dashed boxes are explicit future work, not alpha.7 functionality.</text>
+    <g stroke="#ffbd59" stroke-width="2" stroke-dasharray="8 6" fill="#2b2115">
+      <rect x="58" y="474" width="246" height="92" rx="13"/><rect x="326" y="474" width="246" height="92" rx="13"/><rect x="594" y="474" width="246" height="92" rx="13"/><rect x="862" y="474" width="246" height="92" rx="13"/><rect x="1130" y="474" width="252" height="92" rx="13"/>
+    </g>
+    <g fill="#ffe0a3" text-anchor="middle">
+      <text x="181" y="512" font-size="17" font-weight="700">Repository localization</text><text x="181" y="537" font-size="13">location / resolver semantics</text>
+      <text x="449" y="512" font-size="17" font-weight="700">Content-hash checks</text><text x="449" y="537" font-size="13">trusted bytes and mismatch path</text>
+      <text x="717" y="512" font-size="17" font-weight="700">Bootstrap-only start</text><text x="717" y="537" font-size="13">initial composition semantics</text>
+      <text x="985" y="512" font-size="17" font-weight="700">Background localization</text><text x="985" y="537" font-size="13">async / cancel / errors</text>
+      <text x="1256" y="512" font-size="17" font-weight="700">Deferred promotion</text><text x="1256" y="537" font-size="13">safe live assembly changes</text>
+    </g>
+    <text x="58" y="624" fill="#f1f7ff" font-size="21" font-weight="700">Outside this package's ownership</text>
+    <g stroke="#58687a" stroke-width="1.5" fill="#1b2532">
+      <rect x="58" y="650" width="300" height="64" rx="11"/><rect x="378" y="650" width="300" height="64" rx="11"/><rect x="698" y="650" width="300" height="64" rx="11"/><rect x="1018" y="650" width="364" height="64" rx="11"/>
+    </g>
+    <g fill="#d5e1ed" text-anchor="middle">
+      <text x="208" y="677" font-size="16" font-weight="700">MicroBundleDomain</text><text x="208" y="699" font-size="13">bundle contract / meaning</text>
+      <text x="528" y="677" font-size="16" font-weight="700">Repository / Catalog</text><text x="528" y="699" font-size="13">artifact discovery / delivery</text>
+      <text x="848" y="677" font-size="16" font-weight="700">Host</text><text x="848" y="699" font-size="13">execution / lifecycle / scheduling</text>
+      <text x="1200" y="677" font-size="16" font-weight="700">Presentation / Infrastructure</text><text x="1200" y="699" font-size="13">GUI • storage • network • credentials</text>
+    </g>
+    <path d="M58 756H1382" stroke="#31465b" stroke-width="2"/>
+    <text x="58" y="790" fill="#6e8499" font-size="14" letter-spacing="1.5">SOLID BLUE = IMPLEMENTED DOMAIN • AMBER DASH = DEFERRED • GREY = EXTERNAL OWNER</text>
+    <text x="1382" y="823" text-anchor="end" fill="#6e8499" font-size="13">THE SINGULARITY WORKSHOP / FSM_COS</text>
+  </g>
+</svg>
