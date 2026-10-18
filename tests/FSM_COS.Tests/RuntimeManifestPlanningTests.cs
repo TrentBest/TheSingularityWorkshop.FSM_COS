@@ -244,4 +244,29 @@ public sealed class RuntimeManifestPlanningTests
     {
         public bool ShouldLoad(RuntimeManifestEntry entry, IStateContext? experienceContext) => false;
     }
+
+    [Fact]
+    public void Schedule_and_load_plan_collections_are_read_only_after_validation()
+    {
+        var first = new RuntimeManifestEntry(Reference(1, "1.0.0"));
+        var second = new RuntimeManifestEntry(Reference(2, "1.0.0"));
+        var edge = new RuntimeManifestDependency(2, 1);
+        var schedule = new RuntimeManifestSchedule(new[] { first, second }, new[] { edge });
+        var plan = new RuntimeManifestLoadPlan(new[] { first, second }, schedule);
+
+        Assert.Throws<NotSupportedException>(() =>
+            ((IList<RuntimeManifestEntry>)schedule.Entries).Add(
+                new RuntimeManifestEntry(Reference(3, "1.0.0"))));
+        Assert.Throws<NotSupportedException>(() =>
+            ((IList<RuntimeManifestDependency>)schedule.Dependencies).Add(
+                new RuntimeManifestDependency(1, 2)));
+        Assert.Throws<NotSupportedException>(() =>
+            ((IList<RuntimeManifestEntry>)schedule.IndependentEntries)[0] = second);
+        Assert.Throws<NotSupportedException>(() =>
+            ((IList<RuntimeManifestEntry>)plan.Entries).Add(
+                new RuntimeManifestEntry(Reference(3, "1.0.0"))));
+
+        Assert.Equal(new ulong[] { 1, 2 }, schedule.Entries.Select(entry => entry.Reference.BundleId));
+        Assert.Equal(new[] { edge }, schedule.Dependencies);
+    }
 }

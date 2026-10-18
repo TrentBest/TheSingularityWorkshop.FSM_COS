@@ -55,7 +55,7 @@ For a complete consumer guide, see [Consuming MicroBundles](https://github.com/T
 - [MicroBundleDomain](https://www.nuget.org/packages/TheSingularityWorkshop.MicroBundleDomain) — the MicroBundle contract.
 - [FSM_UserIO](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_UserIO) — the platform-neutral `SemanticIntent` boundary.
 
-This source currently declares version `0.1.0-alpha.6`. A source version declaration alone does not establish publication status; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the version actually available.
+This source currently declares version `0.1.0-alpha.7`. A source version declaration alone does not establish publication status; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the version actually available.
 
 ## 🟪 05 — Available documentation and theory
 

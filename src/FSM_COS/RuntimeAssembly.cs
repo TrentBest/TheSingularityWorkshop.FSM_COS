@@ -16,7 +16,7 @@ public sealed class RuntimeAssembly
     internal RuntimeAssembly(ulong runtimeId, IReadOnlyList<IMicroBundle> bundles, int arbitrationRounds, SemanticIntent? intent)
     {
         RuntimeId = runtimeId;
-        Bundles = bundles;
+        Bundles = Array.AsReadOnly(bundles.ToArray());
         ArbitrationRounds = arbitrationRounds;
         Intent = intent;
     }

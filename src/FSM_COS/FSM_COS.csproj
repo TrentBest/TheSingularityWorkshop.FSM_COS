@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>TheSingularityWorkshop.FSM_COS</PackageId>
-    <Version>0.1.0-alpha.6</Version>
+    <Version>0.1.0-alpha.7</Version>
     <Authors>Trent Best</Authors>
     <Company>The Singularity Workshop</Company>
     <PackageProjectUrl>https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS</PackageProjectUrl>

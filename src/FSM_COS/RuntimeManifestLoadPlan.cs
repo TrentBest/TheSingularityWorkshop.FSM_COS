@@ -27,7 +27,7 @@ public sealed class RuntimeManifestLoadPlan
         if (entries.Select(entry => entry.Reference.BundleId).Distinct().Count() != entries.Count)
             throw new ArgumentException("Load-plan entries must have unique MicroBundle IDs.", nameof(entries));
 
-        Entries = entries.ToArray();
+        Entries = Array.AsReadOnly(entries.ToArray());
         _schedule = schedule;
         if (_schedule is not null)
         {

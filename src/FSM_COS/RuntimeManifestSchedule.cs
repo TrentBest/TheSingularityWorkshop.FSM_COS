@@ -33,12 +33,12 @@ public sealed class RuntimeManifestSchedule
         if (dependencies.Distinct().Count() != dependencies.Count)
             throw new ArgumentException("Duplicate dependency edges are not allowed.", nameof(dependencies));
 
-        Entries = entries.ToArray();
-        Dependencies = dependencies.ToArray();
+        Entries = Array.AsReadOnly(entries.ToArray());
+        Dependencies = Array.AsReadOnly(dependencies.ToArray());
 
         var entriesWithPrerequisites = dependencies.Select(edge => edge.BundleId).ToHashSet();
-        IndependentEntries = Entries.Where(entry => !entriesWithPrerequisites.Contains(entry.Reference.BundleId)).ToArray();
-        DependencyEntries = Entries.Where(entry => entriesWithPrerequisites.Contains(entry.Reference.BundleId)).ToArray();
+        IndependentEntries = Array.AsReadOnly(Entries.Where(entry => !entriesWithPrerequisites.Contains(entry.Reference.BundleId)).ToArray());
+        DependencyEntries = Array.AsReadOnly(Entries.Where(entry => entriesWithPrerequisites.Contains(entry.Reference.BundleId)).ToArray());
 
         ValidateAcyclic(ids);
     }

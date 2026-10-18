@@ -860,4 +860,17 @@ public sealed class FsmCosTests
         public string Name { get; set; } = "test";
         public bool IsValid { get; set; } = true;
     }
+
+    [Fact]
+    public void RuntimeAssembly_exposes_a_read_only_snapshot_of_composed_bundles()
+    {
+        var bundle = new TestBundle(1);
+        var assembly = new FsmCos(new TestCatalog(bundle)).Execute(
+            new RuntimeManifest(42, new[] { Entry(1) }));
+
+        var exposedBundles = Assert.IsAssignableFrom<IList<IMicroBundle>>(assembly.Bundles);
+        Assert.Throws<NotSupportedException>(() => exposedBundles.Add(new TestBundle(2)));
+        Assert.Single(assembly.Bundles);
+        Assert.Same(bundle, assembly.Bundles[0]);
+    }
 }
