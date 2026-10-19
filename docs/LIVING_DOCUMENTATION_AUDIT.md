@@ -2,7 +2,7 @@
 
 **Purpose:** make FSM_COS documentation easier to understand through accurate diagrams, animated SVGs, interactive examples, and other living visuals where they materially teach the subject.
 
-**Status:** audit started; coverage is not yet complete. This checklist is intentionally evidence-based: an SVG existing in `docs/assets` does not mean it is embedded in the relevant document, and an embedded picture does not automatically qualify as a useful living visual.
+**Current status:** the Markdown inventory and inline local-link pass are complete; source-to-diagram accuracy and hosted/accessibility verification remain open. An SVG existing in `docs/assets` does not mean it is embedded in the relevant document, and an embedded picture does not automatically qualify as a useful living visual.
 
 ## Standard
 
@@ -84,46 +84,27 @@ Use the status labels consistently:
 
 This is an initial prioritized pass, not a claim that the remaining documents have been exhaustively inspected. Add rows for any further document where a visual would genuinely improve comprehension.
 
-## Progress recorded on 2026-10-19
+## Current verification boundary
 
-- [x] Created and indexed this coverage audit; standardized the living-visual requirements in `DOCUMENTATION_STANDARD.md`.
-- [x] Embedded explanatory SVGs in `WHAT_IS_FSM_COS.md`, `CONSUMING_MICROBUNDLES.md`, `STAGED_MANIFEST_LOADING.md`, `DOMAIN.md`, `AI_COMPOSITION.md`, and `ECOSYSTEM_INTEGRATION_MAP.md`.
-- [x] Reconciled the audit with existing visuals in `THEORY.md`, `RUNTIME_MANIFEST.md`, `MANIFEST_THEORY.md`, `ARBITRATION.md`, `RUNTIME_ASSEMBLY.md`, `RUNTIME_BOUNDARY.md`, and `WEBPAGE_INTEGRATION.md`; these are recorded as **embedded / verify**, not as fully validated.
-- [x] Verify documentation CI for the initial visual pass, audit reconciliation, and ecosystem-map update; workflows `39185334121`, `39185518082`, and `39185482305` all completed successfully. The latest Development workflow-diagram change is pending CI.
-- [x] Finish the full Markdown inventory and audit inline Markdown link destinations across all 29 tracked Markdown files on `development`, including image links. The pass found one broken relative link in `docs/0.1.0-alpha.7-READINESS.md` (`RELEASING.md`); it was corrected to the existing `DEVELOPMENT.md`. The correction's workflow passed: [run 39193803043](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39193803043). No broken inline Markdown link targets remain in this audit. Reference-style link definitions and external-link reachability are separate checks. Source-accuracy verification remains open.
-- [x] Converted `dependency-resolution.svg` from static to semantic animation: the outline steps through the illustrative dependency-first order and disables animation under `prefers-reduced-motion`. Linked the explanation to source and tests; added embedded SVG `<title>` and `<desc>` metadata while retaining Markdown alt text. Hosted rendering and assistive-technology behavior still need visual verification.
-- [x] Added a Mermaid verification/release-gate flow to `docs/DEVELOPMENT.md`, based on the current package workflow's three required verification jobs and manual publish condition.
-- [x] Added a source-aligned Mermaid diagram to the alpha.7 release notes showing collection snapshot protection and the limitation that MicroBundle instances remain domain-owned.
+The following findings are verified at the source-markup level:
 
-**Important distinction:** most visuals inspected in this pass remain static diagrams; `dependency-resolution.svg` is now the first semantic animated exception. Static diagrams improve visual coverage but do not, by themselves, satisfy the stronger goal of animated or interactive living documentation. The animated asset still needs hosted rendering and accessibility verification, and a source-connected interactive example remains future work.
+- The 12 substantive SVG diagrams in `docs/assets` each include an embedded `<title>`, `<desc>`, `role="img"`, and `aria-labelledby`.
+- The 13 section-divider SVGs are decorative and use `role="presentation"` with `aria-hidden="true"`.
+- The four section-marker SVGs expose concise accessible labels.
+- `dependency-resolution.svg` uses reduced-motion-aware animation to illustrate an example dependency-first order. It is not a live execution trace.
+- The inventory covered all 29 tracked Markdown documents and found no unresolved inline relative Markdown or image/asset targets after the release-runbook link was corrected.
 
-## Execution order
+These findings do **not** establish complete semantic accuracy for every visual, hosted SVG rendering, browser accessibility-tree exposure, keyboard behavior, screen-reader output, or external-link reachability. Those require their own evidence and must not be inferred from source markup or a green build.
 
-### Pass 1 — canonical visuals in high-value contract docs
-- [x] Verified `arbitration-convergence.svg` against `FsmCos.Execute`; documented the zero-based `RuntimeAssembly.ArbitrationRounds` value and no-assembly-on-nonconvergence behavior.
-- [x] Verified `dependency-resolution.svg` against `FsmCos.LoadRoot`; documented dependency-first loading, duplicate-ID skipping, cycle detection, and that the pictured graph is illustrative.
-- [x] Verified the `RUNTIME_MANIFEST.md` pipeline graphic against `RuntimeManifest` and `FsmCos.Execute`; clarified that editor authoring, closure baking, and publication are conceptual upstream stages, not shipped FSM_COS behavior.
-- [x] Verified `runtime-assembly-handoff.svg` against `RuntimeAssembly` and `FsmCos.Execute`; added alt text and a caption that distinguishes the implemented assembly contract from host-owned execution.
-- [x] Verified `runtime-boundary.svg` and `composition-boundary.svg` against `FsmCos.Execute`, `IFsmCos`, and `RuntimeAssembly`; clarified the difference between invoking an external contract and owning its implementation.
-- [ ] Continue verifying remaining SVGs against current source and each document's exact topic.
-- [ ] Embed the existing relevant SVG in the best canonical home instead of creating near-duplicates.
-- [ ] Add concise alt text and a caption that explains the visual's point.
-- [x] Ensure inline relative Markdown links and image/asset targets resolve on `development` across all 29 Markdown files; no broken targets remain after the release-runbook link fix. External URLs and reference-style links are outside this pass.
+## Remaining work
 
-### Pass 2 — living behavior, not just static architecture
-- [x] Identify dependency resolution as the first animated-visual candidate; the animated outline teaches dependency-first loading without implying the diagram is a live trace.
-- [x] Animate meaningful behavior: sequential dependency-first load order. The SVG includes a `prefers-reduced-motion: reduce` fallback.
-- [ ] Keep a static accessible explanation available; do not make animation essential to understanding.
-- [ ] Where feasible, link diagrams to the exact source, sample, or test that substantiates them.
-
-### Pass 3 — coverage verification
-- [x] Inventory every Markdown document in the repository, including release notes and working/continuation documents (29 files; all 29 have a unique audit row).
-- [x] Validate inline Markdown links and image/asset targets in all 29 Markdown files; fixed the one broken target and verified the fix's workflow. Source-accuracy and living-visual rendering/accessibility checks remain open.
-- [ ] For each document, record **visual added**, **existing visual verified**, or **no visual needed (with reason)**.
-- [x] Validate local inline image/asset link targets. Alt-text quality and rendering/accessibility still require document-by-document review.
-- [ ] Confirm no visual implies an unimplemented feature or contradicts source/tests.
-- [ ] Keep this checklist updated in the same documentation pass as visual changes.
+- [ ] Verify each diagram's claims against its linked implementation and tests, not only its metadata and caption.
+- [ ] Check hosted rendering in GitHub and relevant light/dark and narrow-width views.
+- [ ] Verify accessibility-tree exposure and screen-reader behavior for substantive and animated visuals.
+- [ ] Check reference-style Markdown link definitions and external-link reachability.
+- [ ] Decide whether the remaining `Review` / `Embedded / verify` entries in the coverage table need correction, removal, or explicit closure; do not leave stale status labels.
+- [ ] Consider a source-connected interactive example only if it demonstrates actual FSM_COS behavior better than the existing minimal consumer and tests.
 
 ## Definition of done
 
-This audit is complete only when every documentation file has been considered, every visual that materially helps is present and source-aligned, every local asset reference is valid, and remaining text-only documents have a recorded reason. “There are many SVGs in the repository” is not a completion criterion.
+This audit is complete only when every documentation file has been considered, each visual that materially helps is present and source-aligned, every local asset reference is valid, remaining text-only documents have a recorded reason, and the open verification boundaries above are closed or explicitly accepted with a documented rationale. Visual quantity is not a completion criterion.
