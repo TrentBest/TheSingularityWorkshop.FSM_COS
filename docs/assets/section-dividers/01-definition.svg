@@ -1,1 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="20" viewBox="0 0 1200 20" role="presentation" aria-hidden="true"><rect x="0" y="4" width="1200" height="12" rx="6" fill="#2563EB"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="20" viewBox="0 0 1200 20" role="presentation" aria-hidden="true" role="img" aria-labelledby="asset-title asset-desc">
+<title id="asset-title">Definition section divider</title>
+<desc id="asset-desc">Decorative section marker for the definition section; the surrounding heading provides the section meaning.</desc><rect x="0" y="4" width="1200" height="12" rx="6" fill="#2563EB"/></svg>
