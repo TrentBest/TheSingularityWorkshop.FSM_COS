@@ -95,7 +95,7 @@ This is an initial prioritized pass, not a claim that the remaining documents ha
 - [x] Added a Mermaid verification/release-gate flow to `docs/DEVELOPMENT.md`, based on the current package workflow's three required verification jobs and manual publish condition.
 - [x] Added a source-aligned Mermaid diagram to the alpha.7 release notes showing collection snapshot protection and the limitation that MicroBundle instances remain domain-owned.
 
-**Important distinction:** the current SVGs inspected in this pass are static diagrams. They improve visual coverage but do not, by themselves, satisfy the stronger goal of animated or interactive living documentation. That remains an explicit follow-up, not a completed claim.
+**Important distinction:** most visuals inspected in this pass remain static diagrams; `dependency-resolution.svg` is now the first semantic animated exception. Static diagrams improve visual coverage but do not, by themselves, satisfy the stronger goal of animated or interactive living documentation. The animated asset still needs hosted rendering and accessibility verification, and a source-connected interactive example remains future work.
 
 ## Execution order
 
