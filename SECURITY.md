@@ -4,7 +4,7 @@ FSM_COS is a composition kernel that invokes host-supplied catalog, configuratio
 
 ## Security boundary
 
-FSM_COS validates identity, dependency declarations, graph consistency, and optional published schedule metadata before invoking any bundle's `Load` method. It snapshots the root/load-plan collections, resolved bundle instances, dependency request structures, and configuration bytes used during loading. Graph traversal and arbitration are bounded by cycle detection and the configured arbitration-round limit.
+FSM_COS validates identity, dependency declarations, graph consistency, and optional published schedule metadata before invoking any bundle's `Load` method. It snapshots the root/load-plan collections, resolved bundle instances, dependency request structures, and configuration bytes used during loading. Graph traversal is iterative and rejects manifests above the configured bundle and dependency-request limits (defaults: 10,000 bundles and 100,000 dependency requests); arbitration is bounded by the configured round limit.
 
 **FSM_COS is not a sandbox.** A catalog, configuration provider, `Load`, or `Arbitrate` implementation executes in-process with the process's permissions. Malicious code can access files, network, environment variables, other process memory available to it, or mutate shared state if the host grants those capabilities. Use process/OS isolation, least-privilege identities, containers, or virtualization when executing code that is not trusted. Do not treat a MicroBundle descriptor, hash string, or manifest as proof that executable code is trustworthy.
 
@@ -25,7 +25,7 @@ Composition is not transactional. If a bundle mutates external state and then th
 | Malformed package or accidental GUI dependency | Package metadata/content verifier and runtime assembly boundary test | Verify exact candidate package, dependency list, and assembly references |
 | Vulnerable transitive dependencies / unsafe code patterns | Must be checked by dependency audit and static analysis in CI | Record the tool, database date, findings, and disposition; a clean unit-test run is not evidence of a clean security scan |
 | Untrusted bundle code / privilege abuse | Outside the in-process kernel's security boundary | Host isolation and least privilege; do not claim sandboxing |
-| Resource exhaustion from extremely large manifests/graphs or pathological callbacks | Must be constrained by host input limits and execution policy | Explicit size limits, timeout/cancellation strategy at the owning layer, and stress tests |
+| Resource exhaustion from extremely large manifests/graphs or pathological callbacks | Configurable bundle/dependency-request limits and iterative traversal; arbitrary callbacks still need host execution policy | Tests for configured limits and deep graphs; host-level timeout/cancellation remains necessary |
 
 ## Release security checklist
 
