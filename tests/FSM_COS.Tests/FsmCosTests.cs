@@ -475,6 +475,22 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_snapshots_mutable_manifest_collections_before_bundle_callbacks()
+    {
+        var roots = new List<MicroBundleManifestEntry> { Entry(1), Entry(2) };
+        var root = new TestBundle(1);
+        var second = new TestBundle(2);
+        root.LoadAction = () => roots.RemoveAt(1);
+
+        var assembly = new FsmCos(new TestCatalog(root, second)).Execute(
+            new RuntimeManifest(42, roots));
+
+        Assert.Single(roots);
+        Assert.Equal(new ulong[] { 1, 2 }, assembly.Bundles.Select(bundle => bundle.Id));
+        Assert.Equal(1, second.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_supports_an_empty_manifest()
     {
         var assembly = new FsmCos(new TestCatalog()).Execute(RuntimeManifest.Empty(77));
@@ -1438,6 +1454,7 @@ public sealed class FsmCosTests
         public ReadOnlyMemory<byte> Configuration { get; private set; }
         public int LoadCalls { get; private set; }
         public Exception? LoadException { get; set; }
+        public Action? LoadAction { get; set; }
         public Exception? ArbitrationException { get; set; }
         public int ChangesRemaining { get; set; }
         public int ArbitrationCalls { get; private set; }
@@ -1453,6 +1470,7 @@ public sealed class FsmCosTests
             Configuration = context.TryGetConfiguration(Id, out var value)
                 ? value
                 : ReadOnlyMemory<byte>.Empty;
+            LoadAction?.Invoke();
         }
 
         public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex)
