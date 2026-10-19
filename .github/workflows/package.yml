@@ -22,11 +22,11 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Checkout MicroBundleDomain development dependency
         if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: TrentBest/TheSingularityWorkshop.MicroBundleDomain
           ref: development
@@ -36,14 +36,14 @@ jobs:
       # This source/tooling dependency is confined to the visual generator, not the FSM_COS package.
       - name: Checkout GUI.SVG source for documentation visual generation
         if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: TrentBest/TheSingularityWorkshop.GUI
           ref: 6fd9632547421034212f9a64a2e429b86d4bab4a
           path: _dependencies/GUI
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
         with:
           dotnet-version: 8.0.x
 
@@ -57,7 +57,7 @@ jobs:
 
       - name: Upload generated FSM_COS validation visual
         if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: fsm-cos-generated-visuals
           path: docs/assets/fsm-cos-preflight.svg
@@ -158,7 +158,7 @@ jobs:
           echo "Prepared canonical coverage report: ./TestResults/coverage.cobertura.xml"
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: TrentBest/TheSingularityWorkshop.FSM_COS
@@ -172,13 +172,13 @@ jobs:
         run: python3 scripts/verify_nuget_package.py --package-dir ./artifacts --project src/FSM_COS/FSM_COS.csproj
 
       - name: Upload NuGet package artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: fsm-cos-nuget-package
           path: ./artifacts/*.nupkg
 
       - name: Upload test and coverage artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: fsm-cos-test-results
           path: ./TestResults/*
@@ -187,10 +187,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
         with:
           dotnet-version: 8.0.x
 
@@ -231,7 +231,7 @@ jobs:
         run: python3 scripts/verify_nuget_package.py --package-dir ./artifacts-public --project src/FSM_COS/FSM_COS.csproj
 
       - name: Upload public-feed package artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: fsm-cos-nuget-package-public-feed
           path: ./artifacts-public/*.nupkg
@@ -241,33 +241,33 @@ jobs:
     steps:
       # Place each repository as a sibling so the csproj's relative source references resolve.
       - name: Checkout FSM_COS source
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           path: FSM_COS
 
       - name: Checkout FSM_API source
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: TrentBest/FSM_API
           ref: development
           path: FSM_API
 
       - name: Checkout FSM_UserIO source
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: TrentBest/FSM_UserIO
           ref: development
           path: FSM_UserIO
 
       - name: Checkout MicroBundleDomain source
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: TrentBest/TheSingularityWorkshop.MicroBundleDomain
           ref: development
           path: TheSingularityWorkshop.MicroBundleDomain
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
         with:
           dotnet-version: 8.0.x
 
@@ -304,13 +304,13 @@ jobs:
 
     steps:
       - name: Download NuGet package
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: fsm-cos-nuget-package-public-feed
           path: ./artifacts-public
 
       - name: Authenticate with NuGet Trusted Publishing
-        uses: NuGet/login@v1
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1
         id: login
         with:
           user: TheSingularityWorkshop
