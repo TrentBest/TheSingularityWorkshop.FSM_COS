@@ -39,7 +39,16 @@ public sealed record RuntimeManifest(
         if (LoadPlan is null && Schedule is null)
             return;
 
-        var plan = LoadPlan ?? Schedule!.Entries;
+        // Bound enumeration here too: callers can invoke this public validator directly,
+        // without going through FsmCos.Execute's input snapshots.
+        var bundles = SnapshotBounded(
+            Bundles,
+            RuntimeManifestSchedule.DefaultMaximumEntryCount,
+            "Runtime manifest root bundles");
+        var plan = SnapshotBounded(
+            LoadPlan ?? Schedule!.Entries,
+            RuntimeManifestSchedule.DefaultMaximumEntryCount,
+            "Runtime manifest load plan");
         for (var index = 0; index < plan.Count; index++)
         {
             var entry = plan[index];
@@ -59,7 +68,7 @@ public sealed record RuntimeManifest(
                 $"Runtime manifest load plan contains duplicate MicroBundle ID {duplicateId.Value}.");
 
         var byId = plan.ToDictionary(entry => entry.Reference.BundleId);
-        foreach (var requested in Bundles)
+        foreach (var requested in bundles)
         {
             if (!byId.TryGetValue(requested.BundleId, out var planned))
                 throw new InvalidOperationException(
@@ -74,8 +83,12 @@ public sealed record RuntimeManifest(
         if (Schedule is null || LoadPlan is null)
             return;
 
-        var scheduleById = Schedule.Entries.ToDictionary(entry => entry.Reference.BundleId);
-        foreach (var entry in LoadPlan)
+        var scheduleEntries = SnapshotBounded(
+            Schedule.Entries,
+            RuntimeManifestSchedule.DefaultMaximumEntryCount,
+            "Runtime manifest schedule");
+        var scheduleById = scheduleEntries.ToDictionary(entry => entry.Reference.BundleId);
+        foreach (var entry in plan)
         {
             if (!scheduleById.TryGetValue(entry.Reference.BundleId, out var scheduled) ||
                 scheduled.Reference != entry.Reference ||
@@ -92,5 +105,22 @@ public sealed record RuntimeManifest(
             throw new InvalidOperationException(
                 $"Runtime manifest schedule contains MicroBundle IDs absent from the load plan: [{string.Join(", ", unexpected)}].");
         }
+    }
+
+    private static T[] SnapshotBounded<T>(
+        IEnumerable<T> source,
+        int maximumCount,
+        string description)
+    {
+        var snapshot = new List<T>(Math.Min(maximumCount, 256));
+        foreach (var item in source)
+        {
+            if (snapshot.Count >= maximumCount)
+                throw new InvalidOperationException(
+                    $"{description} exceeds the configured maximum of {maximumCount} entries.");
+            snapshot.Add(item);
+        }
+
+        return snapshot.ToArray();
     }
 }
