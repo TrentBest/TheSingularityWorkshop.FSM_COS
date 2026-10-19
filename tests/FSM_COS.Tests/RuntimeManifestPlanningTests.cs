@@ -141,8 +141,14 @@ public sealed class RuntimeManifestPlanningTests
             new RuntimeManifestSchedule(null!, Array.Empty<RuntimeManifestDependency>()));
         Assert.Throws<ArgumentNullException>(() =>
             new RuntimeManifestSchedule(new[] { valid }, null!));
-        Assert.Throws<ArgumentException>(() =>
+        var invalidEntry = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { invalid }, Array.Empty<RuntimeManifestDependency>()));
+        Assert.Contains("index 0", invalidEntry.Message);
+        Assert.Contains("MicroBundle 0", invalidEntry.Message);
+        var invalidEdge = Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestSchedule(new[] { valid }, new[] { new RuntimeManifestDependency(0, 1) }));
+        Assert.Contains("index 0", invalidEdge.Message);
+        Assert.Contains("MicroBundle 0 -> 1", invalidEdge.Message);
         var duplicateEntries = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { valid, valid }, Array.Empty<RuntimeManifestDependency>()));
         Assert.Contains("unique MicroBundle IDs", duplicateEntries.Message);
@@ -180,10 +186,12 @@ public sealed class RuntimeManifestPlanningTests
             Array.Empty<RuntimeManifestDependency>());
 
         Assert.Throws<ArgumentNullException>(() => new RuntimeManifestLoadPlan(null!));
-        Assert.Throws<ArgumentException>(() => new RuntimeManifestLoadPlan(new[]
+        var invalidEntry = Assert.Throws<ArgumentException>(() => new RuntimeManifestLoadPlan(new[]
         {
             new RuntimeManifestEntry(new MicroBundleReference(0, "", ""))
         }));
+        Assert.Contains("index 0", invalidEntry.Message);
+        Assert.Contains("MicroBundle 0", invalidEntry.Message);
         Assert.Throws<ArgumentException>(() => new RuntimeManifestLoadPlan(new[] { valid, valid }));
         Assert.Throws<ArgumentException>(() => new RuntimeManifestLoadPlan(new[] { valid }, schedule));
     }
@@ -234,6 +242,23 @@ public sealed class RuntimeManifestPlanningTests
 
         var mismatch = Assert.Throws<InvalidOperationException>(manifestWithMismatch.ValidateStagedPlan);
         Assert.Contains("disagree for MicroBundle 1", mismatch.Message);
+    }
+
+    [Fact]
+    public void Manifest_plan_reports_invalid_staged_entries_with_index_and_identity()
+    {
+        var manifest = new RuntimeManifest(
+            42,
+            new[] { new MicroBundleManifestEntry(1, "1.0.0") },
+            LoadPlan: new[]
+            {
+                new RuntimeManifestEntry(new MicroBundleReference(0, "", ""))
+            });
+
+        var exception = Assert.Throws<InvalidOperationException>(manifest.ValidateStagedPlan);
+
+        Assert.Contains("index 0", exception.Message);
+        Assert.Contains("MicroBundle 0", exception.Message);
     }
 
     [Fact]
