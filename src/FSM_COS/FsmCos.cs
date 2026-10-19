@@ -328,6 +328,34 @@ public sealed class FsmCos : IFsmCos
         if (descriptor.Id != requestedId)
             throw new InvalidOperationException(
                 $"MicroBundle {requestedId} has a descriptor for bundle {descriptor.Id}.");
+
+        var requests = bundle.Dependencies;
+        if (requests is null)
+            throw new InvalidOperationException(
+                $"MicroBundle {requestedId} returned no dependency request list.");
+
+        var requestIds = new HashSet<ulong>();
+        foreach (var request in requests)
+        {
+            if (request.BundleId == 0)
+                throw new InvalidOperationException(
+                    $"MicroBundle {requestedId} declares dependency ID 0.");
+
+            if (!requestIds.Add(request.BundleId))
+                throw new InvalidOperationException(
+                    $"MicroBundle {requestedId} declares dependency {request.BundleId} more than once.");
+        }
+
+        var descriptorIds = descriptor.Dependencies.Select(dependency => dependency.BundleId).ToHashSet();
+        if (!descriptorIds.SetEquals(requestIds))
+        {
+            var missingRequests = descriptorIds.Except(requestIds).OrderBy(id => id);
+            var unexpectedRequests = requestIds.Except(descriptorIds).OrderBy(id => id);
+            throw new InvalidOperationException(
+                $"MicroBundle {requestedId} descriptor dependency declarations do not match dependency requests. " +
+                $"Missing requests: [{string.Join(", ", missingRequests)}]; " +
+                $"unexpected requests: [{string.Join(", ", unexpectedRequests)}].");
+        }
     }
 
     private static void ValidateResolvedBundle(
