@@ -50,7 +50,7 @@ The conceptual reason for deriving this order rather than encoding it in the man
 
 ## Dependency resolution
 
-FSM_COS performs depth-first dependency resolution.
+FSM_COS first resolves and validates the complete reachable dependency closure before calling any bundle's `Load`. This rejects missing dependencies, malformed dependency contracts, identity mismatches, and cycles before bundle loading can create side effects. It snapshots the resolved bundle objects and dependency requests for the load pass, so the catalog is not queried a second time during loading. The subsequent depth-first installation order is iterative rather than recursive, avoiding call-stack exhaustion on deep graphs.
 
     requested A
        │
@@ -60,7 +60,7 @@ FSM_COS performs depth-first dependency resolution.
 
 The resulting installation order is C, B, D, A.
 
-Two guards are fundamental: already-loaded IDs are skipped, and IDs currently loading are tracked to detect cycles.
+Two guards remain fundamental during installation: already-loaded IDs are skipped, and IDs currently loading are tracked to detect cycles. The preflight graph validation independently detects cycles before installation begins.
 
 Missing bundles and dependency cycles are composition failures.
 
@@ -70,7 +70,7 @@ Configuration is an external runtime input. FSM_COS accepts configuration throug
 
 ## Arbitration
 
-When a manifest supplies a dependency schedule, FSM_COS resolves the catalog's actual reachable dependency graph and checks it against the schedule before calling any MicroBundle `Load` method. This is a validation boundary, not a claim that FSM_COS localizes artifacts or implements staged/background loading. After reachable bundles are loaded, FSM_COS creates one ArbitrationContext.
+FSM_COS resolves the catalog's actual reachable dependency graph and validates identity/dependency declarations before calling any MicroBundle `Load` method. When a manifest supplies a dependency schedule, it also checks the resolved closure, versions, and edges against that schedule before loading. This is a validation boundary, not a claim that FSM_COS localizes artifacts or implements staged/background loading. After reachable bundles are loaded, FSM_COS creates one ArbitrationContext.
 
     for each round
         for each loaded bundle
