@@ -12,6 +12,11 @@ Every candidate must be classified by responsibility, runtime needs, reuse, and 
 
 ## The target shape
 
+![FSM_COS composition kernel between authoring, foundational contracts, capability composition, and host manifestation](assets/fsm-cos-system.svg)
+
+*This is the conceptual target shape. It is not a verified dependency graph; the source snapshot and status notes below distinguish inspected package facts from proposed integration decisions.*
+
+
 ```text
 Host applications (WebPage, AnyApp, WebApp, other hosts)
                     |
