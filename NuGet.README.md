@@ -28,7 +28,7 @@ RuntimeManifest → FSM_COS → RuntimeAssembly → Host
                     └─ arbitrate toward convergence
 ```
 
-![FSM_COS validation and composition path, generated with GUI.SVG](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.FSM_COS/b36fab5dc04b28d1cf4b894d93730b6acdf2ea8b/docs/assets/fsm-cos-preflight.svg)
+![FSM_COS validation and composition path, generated with GUI.SVG](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.FSM_COS/6d0efa34d08134c1f75cfd12955072cec465c86e/docs/assets/fsm-cos-preflight.svg)
 
 *This is a source-backed contract map, not a live execution trace.*
 
