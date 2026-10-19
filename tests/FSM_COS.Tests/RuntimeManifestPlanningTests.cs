@@ -33,7 +33,10 @@ public sealed class RuntimeManifestPlanningTests
             new[] { new MicroBundleManifestEntry(7, "2.0.0") },
             LoadPlan: new[] { entry });
 
-        Assert.Throws<InvalidOperationException>(manifest.ValidateStagedPlan);
+        var exception = Assert.Throws<InvalidOperationException>(manifest.ValidateStagedPlan);
+        Assert.Contains("MicroBundle 7", exception.Message);
+        Assert.Contains("2.0.0", exception.Message);
+        Assert.Contains("1.2.0", exception.Message);
     }
 
     [Fact]
@@ -193,10 +196,15 @@ public sealed class RuntimeManifestPlanningTests
             new RuntimeManifestEntry(Reference(1, "1.0.0"))
         });
 
-        Assert.Throws<KeyNotFoundException>(() => plan.GetState(99));
-        Assert.Throws<KeyNotFoundException>(() => plan.MarkLocalized(99));
-        Assert.Throws<KeyNotFoundException>(() => plan.MarkLoaded(99));
-        Assert.Throws<InvalidOperationException>(() => plan.MarkLoaded(1));
+        var unknownState = Assert.Throws<KeyNotFoundException>(() => plan.GetState(99));
+        Assert.Contains("MicroBundle 99", unknownState.Message);
+        Assert.Contains("load plan", unknownState.Message);
+        var unknownLocalization = Assert.Throws<KeyNotFoundException>(() => plan.MarkLocalized(99));
+        Assert.Contains("MicroBundle 99", unknownLocalization.Message);
+        var unknownLoad = Assert.Throws<KeyNotFoundException>(() => plan.MarkLoaded(99));
+        Assert.Contains("MicroBundle 99", unknownLoad.Message);
+        var prematureLoad = Assert.Throws<InvalidOperationException>(() => plan.MarkLoaded(1));
+        Assert.Contains("localized before it can be loaded", prematureLoad.Message);
         Assert.Throws<ArgumentNullException>(() => plan.EvaluatePromotions(null!, null).ToArray());
 
         plan.MarkLocalized(1);
@@ -213,7 +221,8 @@ public sealed class RuntimeManifestPlanningTests
             new[] { new MicroBundleManifestEntry(1, "1.0.0") },
             LoadPlan: new[] { planned });
 
-        Assert.Throws<InvalidOperationException>(manifestMissingRoot.ValidateStagedPlan);
+        var missingRoot = Assert.Throws<InvalidOperationException>(manifestMissingRoot.ValidateStagedPlan);
+        Assert.Contains("missing requested MicroBundle 1", missingRoot.Message);
 
         var resident = new RuntimeManifestEntry(Reference(1, "1.0.0"), ManifestLoadStage.Resident);
         var deferred = new RuntimeManifestEntry(Reference(1, "1.0.0"), ManifestLoadStage.Deferred);
@@ -223,7 +232,8 @@ public sealed class RuntimeManifestPlanningTests
             LoadPlan: new[] { resident },
             Schedule: new RuntimeManifestSchedule(new[] { deferred }, Array.Empty<RuntimeManifestDependency>()));
 
-        Assert.Throws<InvalidOperationException>(manifestWithMismatch.ValidateStagedPlan);
+        var mismatch = Assert.Throws<InvalidOperationException>(manifestWithMismatch.ValidateStagedPlan);
+        Assert.Contains("disagree for MicroBundle 1", mismatch.Message);
     }
 
     [Fact]
