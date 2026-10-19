@@ -27,6 +27,16 @@ public sealed class FsmCos : IFsmCos
     {
         ArgumentNullException.ThrowIfNull(manifest);
         ArgumentNullException.ThrowIfNull(manifest.Bundles);
+
+        // Snapshot caller-owned collections once so concurrent or callback-driven mutation
+        // cannot change the request between validation, resolution, loading, and handoff.
+        manifest = manifest with
+        {
+            Bundles = Array.AsReadOnly(manifest.Bundles.ToArray()),
+            LoadPlan = manifest.LoadPlan is null
+                ? null
+                : Array.AsReadOnly(manifest.LoadPlan.ToArray())
+        };
         manifest.ValidateStagedPlan();
 
         // Validate root identity/version requests before loading anything. Explicit root
