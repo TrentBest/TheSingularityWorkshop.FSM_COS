@@ -23,7 +23,7 @@ scene.Child("svg-defs", "definitions", defs => defs
             .Property("points", "0,0 10,5 0,10").Property("fill", "#7ee0bd"))));
 
 scene.Child("svg-text", "heading", text => text
-    .Text("FSM_COS  |  VALIDATION → COMPOSITION → HANDOFF")
+    .Text("FSM_COS  |  VALIDATION / COMPOSITION / HANDOFF")
     .Property("x", "3").Property("y", "3.2")
     .Property("font-family", "sans-serif").Property("font-size", "2.1")
     .Property("font-weight", "700").Property("fill", "#eef6ff"));
@@ -135,7 +135,7 @@ scene.Child("svg-text", "preflight-failure-label", text => text
     .Text("Preflight rejection").Property("x", "25").Property("y", "40")
     .Property("text-anchor", "middle").Property("font-family", "sans-serif").Property("font-size", "1.5").Property("font-weight", "700").Property("fill", "#fff1f3"));
 scene.Child("svg-text", "preflight-failure-sub-label", text => text
-    .Text("Bad root identity or scheduled graph → no Load()").Property("x", "25").Property("y", "42.5")
+    .Text("Bad root identity or scheduled graph: reject before Load()").Property("x", "25").Property("y", "42.5")
     .Property("text-anchor", "middle").Property("font-family", "sans-serif").Property("font-size", "1.15").Property("fill", "#ffd5dc"));
 
 scene.Child("svg-rect", "runtime-failure-box", node => node
@@ -145,7 +145,7 @@ scene.Child("svg-text", "runtime-failure-label", text => text
     .Text("Runtime failure").Property("x", "75").Property("y", "40")
     .Property("text-anchor", "middle").Property("font-family", "sans-serif").Property("font-size", "1.5").Property("font-weight", "700").Property("fill", "#fff1f3"));
 scene.Child("svg-text", "runtime-failure-sub-label", text => text
-    .Text("Load / arbitration / non-convergence → no assembly").Property("x", "75").Property("y", "42.5")
+    .Text("Load / arbitration / non-convergence: no assembly").Property("x", "75").Property("y", "42.5")
     .Property("text-anchor", "middle").Property("font-family", "sans-serif").Property("font-size", "1.1").Property("fill", "#ffd5dc"));
 
 scene.Child("svg-text", "stage-note", text => text
