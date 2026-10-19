@@ -162,13 +162,14 @@ public sealed class RuntimeManifestPlanningTests
         Assert.Contains("MicroBundle 0 -> 1", invalidEdge.Message);
         var duplicateEntries = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { valid, valid }, Array.Empty<RuntimeManifestDependency>()));
-        Assert.Contains("unique MicroBundle IDs", duplicateEntries.Message);
+        Assert.Contains("duplicate MicroBundle ID 1", duplicateEntries.Message);
         var selfDependency = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { valid }, new[] { new RuntimeManifestDependency(1, 1) }));
         Assert.Contains("1 -> 1", selfDependency.Message);
         var missingEntry = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { valid }, new[] { new RuntimeManifestDependency(1, 2) }));
-        Assert.Contains("reference an entry in the manifest", missingEntry.Message);
+        Assert.Contains("1 -> 99", missingEntry.Message);
+        Assert.Contains("absent from the manifest entries", missingEntry.Message);
         var duplicateEdges = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(
                 new[] { valid, new RuntimeManifestEntry(Reference(2, "1.0.0")) },
