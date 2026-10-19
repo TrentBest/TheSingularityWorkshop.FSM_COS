@@ -101,22 +101,49 @@ public sealed class RuntimeManifestSchedule
 
     private void ValidateAcyclic(HashSet<ulong> ids)
     {
-        var visited = new HashSet<ulong>();
-        var visiting = new HashSet<ulong>();
+        // Use adjacency lists and an explicit stack so untrusted/deep plans cannot exhaust the process stack.
+        var outgoing = Dependencies
+            .GroupBy(edge => edge.BundleId)
+            .ToDictionary(group => group.Key, group => group.Select(edge => edge.DependencyId).ToArray());
+        var states = new Dictionary<ulong, byte>();
 
-        void Visit(ulong id)
+        foreach (var rootId in ids)
         {
-            if (visited.Contains(id)) return;
-            if (!visiting.Add(id))
-                throw new ArgumentException($"Manifest dependency cycle detected at MicroBundle {id}.", nameof(Dependencies));
+            if (states.ContainsKey(rootId))
+                continue;
 
-            foreach (var edge in Dependencies.Where(edge => edge.BundleId == id))
-                Visit(edge.DependencyId);
+            states[rootId] = 1;
+            var stack = new List<(ulong BundleId, int NextDependencyIndex)> { (rootId, 0) };
 
-            visiting.Remove(id);
-            visited.Add(id);
+            while (stack.Count > 0)
+            {
+                var (bundleId, nextDependencyIndex) = stack[^1];
+                var dependencies = outgoing.TryGetValue(bundleId, out var found)
+                    ? found
+                    : Array.Empty<ulong>();
+
+                if (nextDependencyIndex < dependencies.Length)
+                {
+                    stack[^1] = (bundleId, nextDependencyIndex + 1);
+                    var dependencyId = dependencies[nextDependencyIndex];
+
+                    if (states.TryGetValue(dependencyId, out var state))
+                    {
+                        if (state == 1)
+                            throw new ArgumentException(
+                                $"Manifest dependency cycle detected at MicroBundle {dependencyId}.",
+                                nameof(Dependencies));
+                        continue;
+                    }
+
+                    states[dependencyId] = 1;
+                    stack.Add((dependencyId, 0));
+                    continue;
+                }
+
+                stack.RemoveAt(stack.Count - 1);
+                states[bundleId] = 2;
+            }
         }
-
-        foreach (var id in ids) Visit(id);
     }
 }
