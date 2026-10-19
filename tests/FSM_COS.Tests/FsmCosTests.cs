@@ -9,6 +9,65 @@ namespace FSM_COS.Tests;
 public sealed class FsmCosTests
 {
     [Fact]
+    public void Constructor_rejects_nonpositive_composition_resource_limits()
+    {
+        var catalog = new TestCatalog();
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 0, 1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 1, 0));
+    }
+
+    [Fact]
+    public void Execute_rejects_root_count_over_limit_before_catalog_resolution()
+    {
+        var first = new TestBundle(1);
+        var second = new TestBundle(2);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(first, second), 10, 1, 10)
+                .Execute(new RuntimeManifest(42, new[] { Entry(1), Entry(2) })));
+
+        Assert.Contains("configured maximum is 1", exception.Message);
+        Assert.Equal(0, first.LoadCalls);
+        Assert.Equal(0, second.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_dependency_graph_over_limit_before_loading_any_bundle()
+    {
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, dependency), 10, 1, 10)
+                .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("configured maximum of 1 bundles", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, dependency.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_dependency_request_count_over_limit_before_resolving_or_loading()
+    {
+        var firstDependency = new TestBundle(2);
+        var secondDependency = new TestBundle(3);
+        var root = new TestBundle(
+            1,
+            MicroBundleDependencyRequest.Unconfigured(2),
+            MicroBundleDependencyRequest.Unconfigured(3));
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, firstDependency, secondDependency), 10, 10, 1)
+                .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("configured maximum of 1 dependency requests", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, firstDependency.LoadCalls);
+        Assert.Equal(0, secondDependency.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_loads_dependencies_before_requesting_bundle()
     {
         var catalog = new TestCatalog(new TestBundle(2), new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2)));
