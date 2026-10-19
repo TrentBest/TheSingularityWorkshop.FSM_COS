@@ -14,6 +14,7 @@ This index is the navigation map. It does not duplicate the contracts below.
 | Integrate the package | [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) |
 | Review the candidate's scope and limitations | [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) |
 | Verify release readiness | [Alpha.7 readiness gate](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) |
+| Review trust assumptions and adversarial security coverage | [Security](SECURITY.md) |
 | Build, test, and understand CI modes | [Development](docs/DEVELOPMENT.md) |
 
 ## Contract authority map
@@ -35,6 +36,7 @@ Use one primary document for each question. Related pages should explain context
 | WebPage host integration | [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) | Host-specific integration boundary |
 | Release-specific behavior | [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) | Version scope and deferrals |
 | Release gate | [Alpha.7 readiness](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) | Evidence and release criteria |
+| Security boundaries and adversarial test plan | [Security](SECURITY.md) | Threat model, mitigations, external baselines, and residual risks |
 
 ## Documentation layers
 
