@@ -8,12 +8,12 @@ This index is the navigation map. It does not duplicate the contracts below.
 |---|---|
 | Understand the package quickly | [README](README.md) |
 | Learn the idea without assuming programming experience | [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) |
-| Run a concrete consumer | [Minimal consumer sample](samples/FSM_COS.MinimalConsumer/Program.cs) |
+| Run a concrete consumer | [Minimal consumer sample](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.cs) |
 | Understand ownership and runtime flow | [Architecture](docs/ARCHITECTURE.md) |
 | Understand the rationale and design invariants | [Theory](docs/THEORY.md) |
 | Integrate the package | [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) |
 | Review the candidate's scope and limitations | [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) |
-| Verify release readiness | [Alpha.7 readiness gate](docs/0.1.0-alpha.7-READINESS.md) |
+| Verify release readiness | [Alpha.7 readiness gate](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) |
 | Build, test, and understand CI modes | [Development](docs/DEVELOPMENT.md) |
 
 ## Contract authority map
@@ -34,13 +34,13 @@ Use one primary document for each question. Related pages should explain context
 | AI-related composition concepts | [AI Composition](docs/AI_COMPOSITION.md) | Architectural exploration; not proof of provider integration |
 | WebPage host integration | [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) | Host-specific integration boundary |
 | Release-specific behavior | [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) | Version scope and deferrals |
-| Release gate | [Alpha.7 readiness](docs/0.1.0-alpha.7-READINESS.md) | Evidence and release criteria |
+| Release gate | [Alpha.7 readiness](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) | Evidence and release criteria |
 
 ## Documentation layers
 
 - **Public orientation:** `README.md` and `NuGet.README.md`. The root README is the repository entry point; the NuGet README is the package-consumer entry point.
 - **Current contract and explanation:** the primary authority documents listed above.
-- **Repository process:** [Development](docs/DEVELOPMENT.md), [Documentation Standard](DOCUMENTATION_STANDARD.md), and [AI agent instructions](AGENTS.md).
+- **Repository process:** [Development](docs/DEVELOPMENT.md), [Documentation Standard](DOCUMENTATION_STANDARD.md), and [AI agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/AGENTS.md).
 - **Working and historical records:** branch reconciliation, dependency alignment, ecosystem integration, continuation, and pause-point documents are planning records. They are not API specifications or release evidence; verify any current-state statement against source, tests, and current CI before acting on it. These records are intentionally excluded from the consumer package.
 
 ## Accuracy and release evidence
