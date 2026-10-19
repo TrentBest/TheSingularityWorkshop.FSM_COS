@@ -155,5 +155,5 @@ scene.Child("svg-text", "stage-note", text => text
 
 var svg = new SvgGuiRenderer().Render(scene.Build(), width: 1600, height: 900);
 Directory.CreateDirectory(Path.GetDirectoryName(output)!);
-File.WriteAllText(output, svg);
+File.WriteAllText(output, svg + Environment.NewLine);
 Console.WriteLine($"Generated FSM_COS preflight visual with GUI.SVG: {output}");
