@@ -270,6 +270,24 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_propagates_catalog_failure_while_resolving_an_unplanned_dependency_before_loading_root()
+    {
+        var expected = new InvalidOperationException("catalog dependency load lookup failed");
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var catalog = new ThrowingCatalog(
+            new TestCatalog(root),
+            failingBundleId: 2,
+            expected);
+
+        var actual = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(catalog).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Same(expected, actual);
+        Assert.Equal(0, root.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_throws_when_dependencies_form_a_cycle()
     {
         var first = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
