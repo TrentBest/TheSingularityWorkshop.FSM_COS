@@ -222,6 +222,8 @@ public sealed class FsmCosTests
                 new RuntimeManifest(42, new[] { Entry(99) })));
 
         Assert.Contains("99", exception.Message);
+        Assert.Contains("version", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("0.1.0-test", exception.Message);
     }
 
     [Fact]
@@ -298,6 +300,7 @@ public sealed class FsmCosTests
                 new RuntimeManifest(42, new[] { Entry(1) })));
 
         Assert.Contains("cycle", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("1", exception.Message);
     }
 
     [Fact]
@@ -310,6 +313,8 @@ public sealed class FsmCosTests
                 .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
 
         Assert.Contains("did not converge", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("2", exception.Message);
+        Assert.Contains("rounds", exception.Message, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(2, bundle.ArbitrationCalls);
     }
 
