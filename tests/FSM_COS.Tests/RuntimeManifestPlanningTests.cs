@@ -152,15 +152,18 @@ public sealed class RuntimeManifestPlanningTests
         var duplicateEntries = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { valid, valid }, Array.Empty<RuntimeManifestDependency>()));
         Assert.Contains("unique MicroBundle IDs", duplicateEntries.Message);
-        Assert.Throws<ArgumentException>(() =>
+        var selfDependency = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { valid }, new[] { new RuntimeManifestDependency(1, 1) }));
+        Assert.Contains("1 -> 1", selfDependency.Message);
         var missingEntry = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { valid }, new[] { new RuntimeManifestDependency(1, 2) }));
         Assert.Contains("reference an entry in the manifest", missingEntry.Message);
-        Assert.Throws<ArgumentException>(() =>
+        var duplicateEdges = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(
                 new[] { valid, new RuntimeManifestEntry(Reference(2, "1.0.0")) },
                 new[] { new RuntimeManifestDependency(2, 1), new RuntimeManifestDependency(2, 1) }));
+        Assert.Contains("duplicate", duplicateEdges.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("2 -> 1", duplicateEdges.Message);
     }
 
     [Fact]
@@ -192,8 +195,13 @@ public sealed class RuntimeManifestPlanningTests
         }));
         Assert.Contains("index 0", invalidEntry.Message);
         Assert.Contains("MicroBundle 0", invalidEntry.Message);
-        Assert.Throws<ArgumentException>(() => new RuntimeManifestLoadPlan(new[] { valid, valid }));
-        Assert.Throws<ArgumentException>(() => new RuntimeManifestLoadPlan(new[] { valid }, schedule));
+        var duplicateEntries = Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestLoadPlan(new[] { valid, valid }));
+        Assert.Contains("unique MicroBundle IDs", duplicateEntries.Message);
+        var scheduleMismatch = Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestLoadPlan(new[] { valid }, schedule));
+        Assert.Contains("schedule", scheduleMismatch.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("MicroBundle 1", scheduleMismatch.Message);
     }
 
     [Fact]
