@@ -57,13 +57,15 @@ public sealed class RuntimeManifestPlanningTests
         var first = new RuntimeManifestEntry(Reference(1, "1.0.0"));
         var second = new RuntimeManifestEntry(Reference(2, "1.0.0"));
 
-        Assert.Throws<ArgumentException>(() => new RuntimeManifestSchedule(
+        var exception = Assert.Throws<ArgumentException>(() => new RuntimeManifestSchedule(
             new[] { first, second },
             new[]
             {
                 new RuntimeManifestDependency(1, 2),
                 new RuntimeManifestDependency(2, 1)
             }));
+
+        Assert.Contains("Manifest dependency cycle detected at MicroBundle", exception.Message);
     }
 
     [Fact]
@@ -138,12 +140,14 @@ public sealed class RuntimeManifestPlanningTests
             new RuntimeManifestSchedule(new[] { valid }, null!));
         Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { invalid }, Array.Empty<RuntimeManifestDependency>()));
-        Assert.Throws<ArgumentException>(() =>
+        var duplicateEntries = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { valid, valid }, Array.Empty<RuntimeManifestDependency>()));
+        Assert.Contains("unique MicroBundle IDs", duplicateEntries.Message);
         Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { valid }, new[] { new RuntimeManifestDependency(1, 1) }));
-        Assert.Throws<ArgumentException>(() =>
+        var missingEntry = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { valid }, new[] { new RuntimeManifestDependency(1, 2) }));
+        Assert.Contains("reference an entry in the manifest", missingEntry.Message);
         Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(
                 new[] { valid, new RuntimeManifestEntry(Reference(2, "1.0.0")) },
@@ -158,7 +162,9 @@ public sealed class RuntimeManifestPlanningTests
             Array.Empty<RuntimeManifestDependency>());
 
         Assert.Throws<ArgumentNullException>(() => schedule.IsDependencyReady(1, null!));
-        Assert.Throws<KeyNotFoundException>(() => schedule.IsDependencyReady(99, _ => true));
+        var unknownEntry = Assert.Throws<KeyNotFoundException>(() => schedule.IsDependencyReady(99, _ => true));
+        Assert.Contains("MicroBundle 99", unknownEntry.Message);
+        Assert.Contains("not present in the schedule", unknownEntry.Message);
     }
 
     [Fact]
