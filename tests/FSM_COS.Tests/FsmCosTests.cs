@@ -444,6 +444,23 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_propagates_a_later_arbitration_failure_after_earlier_state_changes()
+    {
+        var first = new TestBundle(1) { ChangesRemaining = 1 };
+        var expected = new InvalidOperationException("later arbitration failed");
+        var later = new TestBundle(2) { ArbitrationException = expected };
+
+        var actual = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(first, later)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1), Entry(2) })));
+
+        Assert.Same(expected, actual);
+        Assert.Equal(1, first.ArbitrationCalls);
+        Assert.Equal(0, first.ChangesRemaining);
+        Assert.Equal(1, later.ArbitrationCalls);
+    }
+
+    [Fact]
     public void Execute_rejects_zero_bundle_ids()
     {
         Assert.Throws<ArgumentOutOfRangeException>(() =>
