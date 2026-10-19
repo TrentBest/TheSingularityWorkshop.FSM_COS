@@ -24,6 +24,7 @@ Use this page to find the right level of explanation. The README is the orientat
 | See implemented domain capabilities, explicit deferrals, dependency order, and release gates | [Domain Completion and Release Roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) |
 | Integrate with WebPage | [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) |
 | Review alpha.7 scope and explicit limitations | [Release notes](docs/releases/0.1.0-alpha.7.md) |
+| Audit and track useful diagrams, animated SVGs, and living examples across docs | [Living Documentation Visual Audit](docs/LIVING_DOCUMENTATION_AUDIT.md) |
 | Check alpha.7 release gates and outstanding evidence | [Alpha.7 Release Readiness](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) |
 | Contribute, build, and verify changes | [Development](docs/DEVELOPMENT.md) |
 
@@ -43,6 +44,10 @@ For a first encounter:
 10. The relevant integration or development guide for the task at hand.
 
 Experienced readers can jump directly to the contract or integration guide they need.
+
+## Living documentation
+
+The [Living Documentation Visual Audit](docs/LIVING_DOCUMENTATION_AUDIT.md) tracks visual coverage document by document. Existing SVG assets count only when they are embedded where useful, accurate against current behavior, accessible, and maintained with the relevant contract.
 
 ## Documentation authority
 
