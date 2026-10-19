@@ -147,3 +147,23 @@ These findings do **not** establish complete semantic accuracy for every visual,
 ## Definition of done
 
 This audit is complete only when every documentation file has been considered, each visual that materially helps is present and source-aligned, every local asset reference is valid, remaining text-only documents have a recorded reason, and the open verification boundaries above are closed or explicitly accepted with a documented rationale. Visual quantity is not a completion criterion.
+
+## Asset classification and behavior-to-evidence mapping
+
+The inventory above deliberately separates **semantic diagrams** from **conceptual illustrations**. In particular, `docs/assets/fsm-cos-crane.svg` is a conceptual metaphor, not a source-accurate flow diagram: its title and description explicitly frame the crane as a visual metaphor. Count it as a conceptual illustration, not as evidence that a sequence or class contract is diagrammed. Keep the inventory's raw asset count at 13, but report semantic-diagram coverage separately after reviewing each asset's claims and its use in the relevant document.
+
+| Behavior / contract | Primary evidence inspected | Visual implication / remaining check |
+|---|---|---|
+| Composition inputs, dependency resolution, and host handoff | `FsmCosTests.cs`, `FsmCos.cs`, `RuntimeAssembly.cs`, `fsm-cos-overview.svg`, `runtime-assembly-handoff.svg` | Overview correction is in PR #31; the class diagram should show injected catalog/configuration boundaries and return of `RuntimeAssembly` to the host, not imply host execution is inside FSM_COS. |
+| Dependency-first ordering, cycles, and complete preflight before loading | `FsmCosTests.cs`, `dependency-resolution.svg`, `fsm-cos-preflight.svg` generated from `samples/DocumentationVisuals/Program.cs` | Existing visuals cover the high-level flow; verify edge labels, failure branches, and source-generated asset parity. The diagram is not a live runtime trace. |
+| Arbitration convergence, bounded rounds, and failure | `FsmCosTests.cs`, `arbitration-convergence.svg` | Sequence/state view should distinguish a zero-based convergence index from call count, stable round from failed non-convergence, and exceptions from ordinary change aggregation. |
+| Staged manifest, schedule, promotion, and load-plan transitions | `RuntimeManifestPlanningTests.cs`, `SnapshotIsolationTests.cs`, `STAGED_MANIFEST_LOADING.md` | Dedicated state/sequence visual is justified because metadata validation, readiness, localization, and actual loading are distinct. The plan itself does not localize or load bundles. |
+| Snapshot isolation and collection immutability | `SnapshotIsolationTests.cs`, `FsmCosTests.cs` | Prefer concise source-linked proof/tests and a compact ownership note over a standalone decorative diagram. Keep the distinction between read-only collection structure and mutable domain-owned bundle instances. |
+| Public GUI capability handoff | `AiGuiCapabilityHandoffTests.cs` | Keep the clipboard/GUI capability contract tied to its tests; add a diagram only if the guide explains a multi-step handoff that prose and tests do not make clear. |
+
+### Coverage claims and limits
+
+- The current test source has dedicated coverage for pre-load rejection, dependency ordering and graph failures, configuration bounds/copying, catalog/configuration/load/arbitration failures, convergence/non-convergence, staged-plan and schedule consistency, promotion/readiness transitions, and collection snapshot behavior. These are source-level observations, not a substitute for the exact candidate's CI results.
+- The count of methods marked `[Fact]` or `[Theory]` is not the same as the number of executed test cases: theories can expand into multiple cases, and a method count does not establish a passing run. Use the workflow for the exact candidate as the pass/fail authority.
+- No UML generation or animated sequence-highlighting capability is claimed to exist yet. The next useful UML artifact is an execution sequence grounded in `FsmCos.Execute` and the corresponding tests, followed by a type diagram grounded in public declarations. Hosted rendering, accessibility-tree exposure, keyboard navigation, and screen-reader behavior remain unverified.
+
