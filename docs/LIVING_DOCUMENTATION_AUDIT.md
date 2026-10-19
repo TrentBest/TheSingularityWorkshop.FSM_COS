@@ -46,34 +46,33 @@ There are also section divider/marker assets. These are a starting library, not 
 ## Coverage checklist
 
 Use the status labels consistently:
-- **Embedded / verify:** a visual appears to exist in the document; verify accuracy, accessibility, and that it explains the specific topic.
-- **Add / improve:** an explanatory visual is likely useful and needs to be embedded, created, or materially improved.
-- **Review:** inspect the full document before deciding; do not assume an image is necessary.
+- **Source reviewed; hosted checks pending:** the asset, caption, and linked contract have been compared at source level; this does not establish hosted rendering or assistive-technology behavior.
+
 
 | Document | Visual intent | Initial action | Status |
 |---|---|---|---|
 | `AGENTS.md` | Repository-specific operating guardrails | Plain-language constraints are the point; a diagram risks obscuring authoritative instructions | No visual needed — operational rules are best kept explicit |
-| `README.md` | One-screen composition overview | Verified the overview SVG against the README and architecture boundary; clarified that the host decides what happens after handoff | Existing visual verified |
-| `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Added the overview SVG with an explanatory caption; validate visual semantics and accessibility | Embedded / verify |
-| `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Verify existing system SVG and reuse focused diagrams only where they add clarity | Embedded / verify |
-| `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | Verified the system SVG against the runtime contract; labels the left side as conceptual upstream context and explains that the implemented input is `RuntimeManifest` | Existing visual verified |
-| `docs/DOMAIN.md` | What FSM_COS owns versus adjacent domains | Added domain map with caption; verify every edge against current ownership | Embedded / verify |
+| `README.md` | One-screen composition overview | Overview SVG compared with the README and architecture boundary; host ownership after handoff is explicit | Source reviewed; hosted checks pending |
+| `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Overview SVG and alt text reviewed against the plain-language contract and host handoff | Source reviewed; hosted checks pending |
+| `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Embedded overview and dependency-resolution SVGs compared with `FsmCos.Execute`, dependency traversal, and dependency-order tests; the document does not embed the system SVG | Source reviewed; hosted checks pending |
+| `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | System SVG marks upstream authoring context as conceptual and identifies `RuntimeManifest` as the implemented input | Source reviewed; hosted checks pending |
+| `docs/DOMAIN.md` | What FSM_COS owns versus adjacent domains | Domain map reviewed against kernel ownership, host responsibilities, and deferred-capability caveats | Source reviewed; hosted checks pending |
 | `docs/DOMAIN_COMPLETION_ROADMAP.md` | Implemented behavior versus deferred capabilities and follow-on work | Existing domain map explains the composition boundary; the capability table distinguishes implemented behavior from deferred work without duplicating the release gate | No additional visual needed — the map plus status table is clearer than a second capability/status diagram |
-| `docs/RUNTIME_MANIFEST.md` | Caller request and manifest contents | Added alt text and explicit scope note: the authoring/validation/closure/bake SVG is conceptual; implemented contract begins at `RuntimeManifest` and `FsmCos.Execute` | Existing visual verified with scope caveat |
-| `docs/MANIFEST_THEORY.md` | Semantic request versus serialized representation | Existing manifest-pipeline SVG is embedded; verify that the editor-time/published-request distinction is clear | Embedded / verify |
-| `docs/STAGED_MANIFEST_LOADING.md` | Preflight, planning, validation, loading, failure boundaries | Dependency-resolution SVG now uses a reduced-motion-aware animated outline to teach the illustrative dependency-first sequence (`C → B → D → A`); caption links to `FsmCos.LoadBundle` and its tests and explicitly says this is not a live runtime trace | Animated visual added with embedded SVG title/description, descriptive Markdown alt text, and reduced-motion fallback; hosted rendering/accessibility still requires visual verification |
-| `docs/CONSUMING_MICROBUNDLES.md` | Consumer flow, catalog responsibility, dependency ordering | Verified dependency graph and depth-first dependency-before-dependent load order against `FsmCos.LoadRoot`; alt text distinguishes illustrative graph from runtime contract | Existing visual verified |
-| `docs/ARBITRATION.md` | Iterations, convergence, limit, non-convergence | Verified against `FsmCos.Execute`; added alt text and a caption documenting the zero-based converging-round index and failure at the limit | Existing visual verified |
-| `docs/RUNTIME_ASSEMBLY.md` | Result shape and handoff | Verified `runtime-assembly-handoff.svg` against `RuntimeAssembly` and `FsmCos.Execute`; added descriptive alt text and a caption separating the implemented composition boundary from host-owned execution | Existing visual verified |
-| `docs/RUNTIME_BOUNDARY.md` | Explicitly excluded responsibilities | Verified both boundary SVGs against `FsmCos.Execute`, `IFsmCos`, and `RuntimeAssembly`; clarified that catalog/configuration are external contracts invoked by the kernel, not kernel-owned implementations | Existing visuals verified |
-| `docs/AI_COMPOSITION.md` | AI-oriented composition contracts and current limits | Added AI-composition SVG and explicit conceptual/status caveat; verify diagram labels against current domains | Embedded / verify |
-| `docs/ECOSYSTEM_INTEGRATION_MAP.md` | Package roles and dependency direction | Added system SVG to the conceptual target section with a caveat separating target architecture from verified package facts | Embedded / verify |
-| `docs/WEBPAGE_INTEGRATION.md` | Kernel/host separation and WebPage handoff | Existing overview SVG is embedded; verify it explains the host asymmetry without implying full runtime integration | Embedded / verify |
-| `NuGet.README.md` | Package-first overview for NuGet consumers | Overview SVG and moniker are embedded; verify remote asset rendering and package inclusion | Embedded / verify |
-| `docs/DEVELOPMENT.md` | Build/test/release verification path | Added a Mermaid flow matching the three verification jobs and manual publish gate in `.github/workflows/package.yml` | Embedded / verify |
-| `docs/0.1.0-alpha.7-READINESS.md` | Release gates, evidence, exact candidate/package identity | Checklist and evidence links are the clearest current proof; a separate flow may duplicate Development's diagram | Review |
-| `docs/releases/0.1.0-alpha.7.md` | Scope and behavioral change | Added a Mermaid view of the read-only snapshot contract, including the explicit mutable-element caveat | Embedded / verify |
-| `docs/releases/0.1.0-alpha.6.md` | Historical release scope and contract | Keep as a historical record; add a visual only if it explains a contract not already covered elsewhere | Review |
+| `docs/RUNTIME_MANIFEST.md` | Caller request and manifest contents | Pipeline SVG is explicitly conceptual; the text scopes the implemented contract to `RuntimeManifest` and `FsmCos.Execute` | Source reviewed; hosted checks pending |
+| `docs/MANIFEST_THEORY.md` | Semantic request versus serialized representation | Pipeline SVG and text distinguish rich authoring context from the compact runtime request and separate configuration source | Source reviewed; hosted checks pending |
+| `docs/STAGED_MANIFEST_LOADING.md` | Preflight, planning, validation, loading, failure boundaries | Dependency-resolution SVG illustrates dependency-first order, links to `FsmCos.LoadBundle` and tests, and explicitly disclaims a live trace or implemented host localization; reduced-motion fallback is present | Source reviewed; hosted checks pending |
+| `docs/CONSUMING_MICROBUNDLES.md` | Consumer flow, catalog responsibility, dependency ordering | Dependency graph and alt text distinguish an illustrative graph from the actual dependency-before-dependent loading contract | Source reviewed; hosted checks pending |
+| `docs/ARBITRATION.md` | Iterations, convergence, limit, non-convergence | Diagram and caption distinguish convergence from failure at the configured round limit and explain the zero-based convergence index | Source reviewed; hosted checks pending |
+| `docs/RUNTIME_ASSEMBLY.md` | Result shape and handoff | Handoff SVG and caption match `RuntimeAssembly` and keep host execution outside the composition boundary | Source reviewed; hosted checks pending |
+| `docs/RUNTIME_BOUNDARY.md` | Explicitly excluded responsibilities | Boundary SVGs and text distinguish kernel-owned composition from external catalog/configuration contracts and host-owned execution | Source reviewed; hosted checks pending |
+| `docs/AI_COMPOSITION.md` | AI-oriented composition contracts and current limits | AI-composition SVG is explicitly conceptual and not chronological; text distinguishes proposed layers from implemented kernel behavior | Source reviewed; hosted checks pending |
+| `docs/ECOSYSTEM_INTEGRATION_MAP.md` | Package roles and dependency direction | System SVG is a conceptual target; its dated package inventory is not current dependency or release evidence | Source reviewed; hosted checks pending |
+| `docs/WEBPAGE_INTEGRATION.md` | Kernel/host separation and WebPage handoff | Overview SVG illustrates the kernel/host boundary; guide now matches the alpha.7 source declaration and disclaims proof of a fully `RuntimeAssembly`-driven experience | Source reviewed; hosted checks pending |
+| `NuGet.README.md` | Package-first overview for NuGet consumers | Candidate package includes the overview SVG and current README; the moniker is remote, so hosted asset rendering remains a separate check | Source reviewed; hosted checks pending |
+| `docs/DEVELOPMENT.md` | Build/test/release verification path | Mermaid flow compared with the three verification jobs and manual `workflow_dispatch` publish condition in `.github/workflows/package.yml` | Source reviewed; hosted checks pending |
+| `docs/0.1.0-alpha.7-READINESS.md` | Release gates, evidence, exact candidate/package identity | Checklist is intentionally text-based; another flow would duplicate the Development diagram and obscure exact-candidate evidence | No visual needed — exact gates and evidence are clearest as a checklist |
+| `docs/releases/0.1.0-alpha.7.md` | Scope and behavioral change | Mermaid view matches the read-only collection-structure contract and preserves the mutable-element caveat | Source reviewed; hosted checks pending |
+| `docs/releases/0.1.0-alpha.6.md` | Historical release scope and contract | Historical release record; current contract is documented in alpha.7 notes | No visual needed — historical release notes do not need a duplicate diagram |
 | `DOCUMENTATION_INDEX.md` | Navigation by reader goal | Text links and grouped navigation are appropriate; no diagram currently needed | No visual needed — navigation is the purpose |
 | `DOCUMENTATION_STANDARD.md` | Shared rules for visual, living documentation | Text-first normative standard; examples and requirements are clearer than a decorative summary image | No visual needed — rules and checklists are the authoritative form |
 | `docs/BRANCH_RECONCILIATION.md` | Branch inventory and disposition decisions | Existing comparison tables are the useful visual structure; a diagram would add little to the branch-by-branch evidence | No additional visual needed — inventory tables already serve the task |
@@ -96,12 +95,12 @@ These findings do **not** establish complete semantic accuracy for every visual,
 
 ## Remaining work
 
-- [ ] Verify each diagram's claims against its linked implementation and tests, not only its metadata and caption.
+- [x] Source-review diagram claims against linked implementation/tests and clarify conceptual versus implemented behavior in adjacent text and alt descriptions.
 - [ ] Check hosted rendering in GitHub and relevant light/dark and narrow-width views.
 - [ ] Verify accessibility-tree exposure and screen-reader behavior for substantive and animated visuals.
 - [ ] Check reference-style Markdown link definitions and external-link reachability.
-- [ ] Decide whether the remaining `Review` / `Embedded / verify` entries in the coverage table need correction, removal, or explicit closure; do not leave stale status labels.
-- [ ] Consider a source-connected interactive example only if it demonstrates actual FSM_COS behavior better than the existing minimal consumer and tests.
+- [x] Reconcile status labels where reviewed: source-reviewed visuals explicitly retain hosted checks as pending, while text-only and historical documents record why no visual is needed.
+- [x] No additional interactive example is justified at this stage: the minimal consumer and regression tests demonstrate actual behavior more directly than a second illustrative GUI.
 
 ## Definition of done
 
