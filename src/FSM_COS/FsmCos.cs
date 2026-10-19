@@ -138,10 +138,7 @@ public sealed class FsmCos : IFsmCos
                 throw new InvalidOperationException(
                     $"Scheduled MicroBundle {id} could not be resolved.");
 
-            if (resolved.Descriptor is null || resolved.Id != id)
-                throw new InvalidOperationException(
-                    $"MicroBundle catalog resolved request {id} to an invalid or mismatched bundle.");
-
+            ValidateResolvedIdentity(id, resolved);
             return resolved;
         }
 
@@ -293,13 +290,7 @@ public sealed class FsmCos : IFsmCos
                         $"MicroBundle {dependency.BundleId} could not be resolved.");
                 }
 
-                if (dependencyBundle.Descriptor is null)
-                    throw new InvalidOperationException(
-                        $"MicroBundle {dependency.BundleId} returned no descriptor.");
-
-                if (dependencyBundle.Id != dependency.BundleId)
-                    throw new InvalidOperationException(
-                        $"MicroBundle catalog resolved request {dependency.BundleId} to bundle {dependencyBundle.Id}.");
+                ValidateResolvedIdentity(dependency.BundleId, dependencyBundle);
 
                 LoadBundle(
                     dependencyBundle,
@@ -323,18 +314,28 @@ public sealed class FsmCos : IFsmCos
         loadedIds.Add(bundle.Id);
     }
 
-    private static void ValidateResolvedBundle(
-        ulong requestedId,
-        string requestedVersion,
-        IMicroBundle bundle)
+    private static void ValidateResolvedIdentity(ulong requestedId, IMicroBundle bundle)
     {
-        if (bundle.Descriptor is null)
+        var descriptor = bundle.Descriptor;
+        if (descriptor is null)
             throw new InvalidOperationException(
                 $"MicroBundle {requestedId} returned no descriptor.");
 
         if (bundle.Id != requestedId)
             throw new InvalidOperationException(
                 $"MicroBundle catalog resolved request {requestedId} to bundle {bundle.Id}.");
+
+        if (descriptor.Id != requestedId)
+            throw new InvalidOperationException(
+                $"MicroBundle {requestedId} has a descriptor for bundle {descriptor.Id}.");
+    }
+
+    private static void ValidateResolvedBundle(
+        ulong requestedId,
+        string requestedVersion,
+        IMicroBundle bundle)
+    {
+        ValidateResolvedIdentity(requestedId, bundle);
 
         if (!string.Equals(bundle.Descriptor.Version, requestedVersion, StringComparison.Ordinal))
             throw new InvalidOperationException(
