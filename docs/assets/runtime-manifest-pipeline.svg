@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620" role="img" aria-labelledby="pipeline-title pipeline-desc">
+<title id="pipeline-title">Runtime manifest publication pipeline</title>
+<desc id="pipeline-desc">Conceptual pipeline from rich authoring through validation, dependency closure, and baking to a compact runtime manifest. This is a design-level publication flow; not every authoring and baking stage is implemented in FSM_COS. Per-bundle configuration travels separately.</desc>
 <defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#080c13"/><stop offset="1" stop-color="#111c2b"/></linearGradient></defs>
 <rect width="1400" height="620" rx="26" fill="url(#bg)"/>
 <g font-family="Arial,Helvetica,sans-serif">
