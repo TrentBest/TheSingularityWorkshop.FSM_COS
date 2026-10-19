@@ -113,7 +113,8 @@ jobs:
           --no-restore
           -p:EnableNETAnalyzers=true
           -p:AnalysisLevel=latest-all
-          -p:WarningsAsErrors=CA2100%3BCA3001%3BCA3002%3BCA3003%3BCA3004%3BCA3005%3BCA3006%3BCA3007%3BCA3008%3BCA3009%3BCA3010%3BCA3011%3BCA3012%3BCA5350%3BCA5351%3BCA5358%3BCA5394%3BCA5397%3BCA5398
+          -p:BuildProjectReferences=false
+          -warnaserror
 
       - name: Run and verify minimal consumer sample
         shell: bash
