@@ -72,7 +72,7 @@ Use the status labels consistently:
 | `NuGet.README.md` | Package-first overview for NuGet consumers | Overview SVG and moniker are embedded; verify remote asset rendering and package inclusion | Embedded / verify |
 | `docs/DEVELOPMENT.md` | Build/test/release verification path | Added a Mermaid flow matching the three verification jobs and manual publish gate in `.github/workflows/package.yml` | Embedded / verify |
 | `docs/0.1.0-alpha.7-READINESS.md` | Release gates, evidence, exact candidate/package identity | Checklist and evidence links are the clearest current proof; a separate flow may duplicate Development's diagram | Review |
-| `docs/releases/0.1.0-alpha.7.md` | Scope and behavioral change | Link to the relevant contract visuals; avoid duplicating the README hero | Review |
+| `docs/releases/0.1.0-alpha.7.md` | Scope and behavioral change | Added a Mermaid view of the read-only snapshot contract, including the explicit mutable-element caveat | Embedded / verify |
 | `docs/releases/0.1.0-alpha.6.md` | Historical release scope and contract | Keep as a historical record; add a visual only if it explains a contract not already covered elsewhere | Review |
 | `DOCUMENTATION_INDEX.md` | Navigation by reader goal | Text links and grouped navigation are appropriate; no diagram currently needed | No visual needed — navigation is the purpose |
 | `DOCUMENTATION_STANDARD.md` | Shared rules for visual, living documentation | Text-first normative standard; examples and requirements are clearer than a decorative summary image | No visual needed — rules and checklists are the authoritative form |
@@ -93,6 +93,7 @@ This is an initial prioritized pass, not a claim that the remaining documents ha
 - [ ] Finish the full Markdown inventory and verify existing diagrams against implementation. Every tracked Markdown file now has a row or an explicit no-additional-visual rationale; source-accuracy verification is still open.
 - [ ] Establish which visuals can be made genuinely living (semantic animation or source-backed GUI) and verify rendering/accessibility rather than assuming a static SVG is animated.
 - [x] Added a Mermaid verification/release-gate flow to `docs/DEVELOPMENT.md`, based on the current package workflow's three required verification jobs and manual publish condition.
+- [x] Added a source-aligned Mermaid diagram to the alpha.7 release notes showing collection snapshot protection and the limitation that MicroBundle instances remain domain-owned.
 
 **Important distinction:** the current SVGs inspected in this pass are static diagrams. They improve visual coverage but do not, by themselves, satisfy the stronger goal of animated or interactive living documentation. That remains an explicit follow-up, not a completed claim.
 
