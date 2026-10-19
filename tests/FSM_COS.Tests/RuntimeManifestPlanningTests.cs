@@ -168,7 +168,7 @@ public sealed class RuntimeManifestPlanningTests
         Assert.Contains("1 -> 1", selfDependency.Message);
         var missingEntry = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(new[] { valid }, new[] { new RuntimeManifestDependency(1, 2) }));
-        Assert.Contains("1 -> 99", missingEntry.Message);
+        Assert.Contains("1 -> 2", missingEntry.Message);
         Assert.Contains("absent from the manifest entries", missingEntry.Message);
         var duplicateEdges = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestSchedule(
