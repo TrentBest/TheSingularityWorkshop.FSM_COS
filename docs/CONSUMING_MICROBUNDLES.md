@@ -10,6 +10,11 @@ This document is intentionally narrow. It explains what an FSM_COS consumer supp
 
 ## The boundary
 
+![Dependency resolution: requested roots expand into their required dependencies before the composition is handed off](assets/dependency-resolution.svg)
+
+*This diagram focuses on the consumer-visible dependency relationship. The catalog supplies resolution; FSM_COS owns the composition algorithm.*
+
+
 ```text
 your MicroBundle source
         │
