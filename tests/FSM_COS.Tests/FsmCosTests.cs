@@ -48,6 +48,67 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_propagates_dependency_configuration_failure_before_loading_any_bundle()
+    {
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var expected = new InvalidOperationException("dependency configuration failed");
+
+        var actual = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(dependency, root)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) }),
+                new SelectiveThrowingConfigurationSource(2, expected)));
+
+        Assert.Same(expected, actual);
+        Assert.Equal(0, dependency.LoadCalls);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, dependency.ArbitrationCalls);
+        Assert.Equal(0, root.ArbitrationCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_descriptor_dependency_declarations_that_do_not_match_runtime_requests()
+    {
+        var missingRuntimeRequest = new DependencyContractBundle(
+            id: 1,
+            descriptorDependencyIds: new[] { 2UL },
+            runtimeDependencies: Array.Empty<MicroBundleDependencyRequest>());
+        var unexpectedRuntimeRequest = new DependencyContractBundle(
+            id: 3,
+            descriptorDependencyIds: Array.Empty<ulong>(),
+            runtimeDependencies: new[] { MicroBundleDependencyRequest.Unconfigured(4) });
+
+        var missing = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new FixedCatalog(missingRuntimeRequest))
+                .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+        var unexpected = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new FixedCatalog(unexpectedRuntimeRequest))
+                .Execute(new RuntimeManifest(42, new[] { Entry(3) })));
+
+        Assert.Contains("descriptor dependency declarations do not match", missing.Message);
+        Assert.Contains("Missing requests: [2]", missing.Message);
+        Assert.Contains("unexpected requests: [4]", unexpected.Message);
+        Assert.Equal(0, missingRuntimeRequest.LoadCalls);
+        Assert.Equal(0, unexpectedRuntimeRequest.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_a_default_dependency_request_with_zero_id_before_loading()
+    {
+        var bundle = new DependencyContractBundle(
+            id: 1,
+            descriptorDependencyIds: Array.Empty<ulong>(),
+            runtimeDependencies: new[] { default(MicroBundleDependencyRequest) });
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new FixedCatalog(bundle))
+                .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("declares dependency ID 0", exception.Message);
+        Assert.Equal(0, bundle.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_propagates_bundle_load_failure_without_arbitrating_or_returning_assembly()
     {
         var expected = new InvalidOperationException("bundle load failed");
@@ -1029,6 +1090,31 @@ public sealed class FsmCosTests
         {
             configuration = ReadOnlyMemory<byte>.Empty;
             throw _exception;
+        }
+    }
+
+    private sealed class SelectiveThrowingConfigurationSource : IMicroBundleConfigurationSource
+    {
+        private readonly ulong _failingBundleId;
+        private readonly Exception _exception;
+
+        public SelectiveThrowingConfigurationSource(ulong failingBundleId, Exception exception)
+        {
+            _failingBundleId = failingBundleId;
+            _exception = exception ?? throw new ArgumentNullException(nameof(exception));
+        }
+
+        public bool TryGetConfiguration(
+            ulong runtimeId,
+            ulong bundleId,
+            string version,
+            out ReadOnlyMemory<byte> configuration)
+        {
+            configuration = ReadOnlyMemory<byte>.Empty;
+            if (bundleId == _failingBundleId)
+                throw _exception;
+
+            return false;
         }
     }
 
