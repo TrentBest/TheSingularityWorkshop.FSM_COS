@@ -16,7 +16,9 @@ It deliberately does **not** answer:
 - how the host presents the resulting Experience;
 - how the assembled runtime is scheduled after composition.
 
-![Runtime Manifest publication pipeline](assets/runtime-manifest-pipeline.svg)
+![Conceptual authoring-to-manifest pipeline: authoring, validation, dependency closure, and baking produce a small versioned runtime request](assets/runtime-manifest-pipeline.svg)
+
+*Scope note: this is the intended authoring/publication pipeline, not a claim that FSM_COS currently ships those editor, validation, closure-baking, or manifest-publication stages. The implemented contract begins with `RuntimeManifest`; `FsmCos.Execute` validates and composes that request.*
 
 ## The contract
 
