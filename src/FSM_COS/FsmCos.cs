@@ -192,7 +192,13 @@ public sealed class FsmCos : IFsmCos
             if (declaredDependencies is null)
                 throw new InvalidOperationException($"MicroBundle {id} returned no dependency request list.");
 
-            var dependencySnapshot = declaredDependencies.ToArray();
+            // Copy the configuration bytes as well as the request structs. ReadOnlyMemory
+            // prevents writes through this view; it does not make the backing array immutable.
+            var dependencySnapshot = declaredDependencies
+                .Select(request => new MicroBundleDependencyRequest(
+                    request.BundleId,
+                    request.Configuration.ToArray()))
+                .ToArray();
             ValidateResolvedIdentity(id, bundle, dependencySnapshot);
             resolvedBundles.Add(id, bundle);
             dependencyRequestsById.Add(id, dependencySnapshot);
@@ -316,7 +322,9 @@ public sealed class FsmCos : IFsmCos
                 if (configurationSource is not null &&
                     configurationSource.TryGetConfiguration(runtimeId, bundle.Id, version, out var externalConfiguration))
                 {
-                    configuration = externalConfiguration;
+                    // A configuration provider may return memory over a mutable buffer.
+                    // Copy it before storing it in the shared load context.
+                    configuration = externalConfiguration.ToArray();
                 }
 
                 loadContext.SetConfiguration(bundle.Id, configuration);
