@@ -176,6 +176,7 @@ public sealed class FsmCos : IFsmCos
                 continue;
 
             var bundle = discovered[id];
+            ValidateResolvedDescriptorIdentity(id, bundle);
             var declaredDependencies = bundle.Dependencies;
             if (declaredDependencies is null)
                 throw new InvalidOperationException($"MicroBundle {id} returned no dependency request list.");
@@ -331,20 +332,7 @@ public sealed class FsmCos : IFsmCos
         }
     }
 
-    private static void ValidateResolvedIdentity(ulong requestedId, IMicroBundle bundle)
-    {
-        var requests = bundle.Dependencies;
-        if (requests is null)
-            throw new InvalidOperationException(
-                $"MicroBundle {requestedId} returned no dependency request list.");
-
-        ValidateResolvedIdentity(requestedId, bundle, requests);
-    }
-
-    private static void ValidateResolvedIdentity(
-        ulong requestedId,
-        IMicroBundle bundle,
-        IReadOnlyList<MicroBundleDependencyRequest> requests)
+    private static void ValidateResolvedDescriptorIdentity(ulong requestedId, IMicroBundle bundle)
     {
         var descriptor = bundle.Descriptor;
         if (descriptor is null)
@@ -358,6 +346,25 @@ public sealed class FsmCos : IFsmCos
         if (descriptor.Id != requestedId)
             throw new InvalidOperationException(
                 $"MicroBundle {requestedId} has a descriptor for bundle {descriptor.Id}.");
+    }
+
+    private static void ValidateResolvedIdentity(ulong requestedId, IMicroBundle bundle)
+    {
+        ValidateResolvedDescriptorIdentity(requestedId, bundle);
+        var requests = bundle.Dependencies;
+        if (requests is null)
+            throw new InvalidOperationException(
+                $"MicroBundle {requestedId} returned no dependency request list.");
+
+        ValidateResolvedIdentity(requestedId, bundle, requests);
+    }
+
+    private static void ValidateResolvedIdentity(
+        ulong requestedId,
+        IMicroBundle bundle,
+        IReadOnlyList<MicroBundleDependencyRequest> requests)
+    {
+        ValidateResolvedDescriptorIdentity(requestedId, bundle);
 
         var requestIds = new HashSet<ulong>();
         foreach (var request in requests)
@@ -371,7 +378,7 @@ public sealed class FsmCos : IFsmCos
                     $"MicroBundle {requestedId} declares dependency {request.BundleId} more than once.");
         }
 
-        var descriptorIds = descriptor.Dependencies.Select(dependency => dependency.BundleId).ToHashSet();
+        var descriptorIds = bundle.Descriptor.Dependencies.Select(dependency => dependency.BundleId).ToHashSet();
         if (!descriptorIds.SetEquals(requestIds))
         {
             var missingRequests = descriptorIds.Except(requestIds).OrderBy(id => id);
