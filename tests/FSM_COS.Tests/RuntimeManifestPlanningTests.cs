@@ -346,6 +346,45 @@ public sealed class RuntimeManifestPlanningTests
         Assert.Empty(promotions);
     }
 
+    [Fact]
+    public void Schedule_rejects_undefined_load_stage_with_entry_index_and_identity()
+    {
+        var invalid = new RuntimeManifestEntry(Reference(7, "1.0.0"), (ManifestLoadStage)999);
+
+        var exception = Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestSchedule(new[] { invalid }, Array.Empty<RuntimeManifestDependency>()));
+
+        Assert.Contains("index 0", exception.Message);
+        Assert.Contains("MicroBundle 7", exception.Message);
+    }
+
+    [Fact]
+    public void Load_plan_rejects_undefined_load_stage_with_entry_index_and_identity()
+    {
+        var invalid = new RuntimeManifestEntry(Reference(7, "1.0.0"), (ManifestLoadStage)999);
+
+        var exception = Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestLoadPlan(new[] { invalid }));
+
+        Assert.Contains("index 0", exception.Message);
+        Assert.Contains("MicroBundle 7", exception.Message);
+    }
+
+    [Fact]
+    public void Staged_manifest_rejects_undefined_load_stage_with_entry_index_and_identity()
+    {
+        var invalid = new RuntimeManifestEntry(Reference(7, "1.0.0"), (ManifestLoadStage)999);
+        var manifest = new RuntimeManifest(
+            42,
+            new[] { new MicroBundleManifestEntry(7, "1.0.0") },
+            LoadPlan: new[] { invalid });
+
+        var exception = Assert.Throws<InvalidOperationException>(manifest.ValidateStagedPlan);
+
+        Assert.Contains("index 0", exception.Message);
+        Assert.Contains("MicroBundle 7", exception.Message);
+    }
+
     private static MicroBundleReference Reference(ulong id, string version) =>
         new(id, version, $"sha256:{id}-{version}");
 
