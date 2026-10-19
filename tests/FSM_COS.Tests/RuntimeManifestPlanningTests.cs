@@ -307,8 +307,10 @@ public sealed class RuntimeManifestPlanningTests
         plan.MarkLocalized(1);
         plan.MarkLocalized(2);
 
-        Assert.Throws<ArgumentException>(() =>
+        var mismatch = Assert.Throws<ArgumentException>(() =>
             plan.EvaluatePromotions(new AcceptAllEvaluator(), null, incompleteSchedule).ToArray());
+        Assert.Contains("MicroBundle 1", mismatch.Message);
+        Assert.Contains("identity or stage", mismatch.Message);
     }
 
     [Fact]
@@ -326,8 +328,9 @@ public sealed class RuntimeManifestPlanningTests
         plan.MarkLocalized(1);
         plan.MarkLocalized(2);
 
-        Assert.Throws<ArgumentException>(() =>
+        var mismatch = Assert.Throws<ArgumentException>(() =>
             plan.EvaluatePromotions(new AcceptAllEvaluator(), null, weakenedSchedule).ToArray());
+        Assert.Contains("dependency edges", mismatch.Message);
     }
 
     [Fact]
