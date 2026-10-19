@@ -87,6 +87,28 @@ public sealed class RuntimeManifestLoadPlan
     {
         ArgumentNullException.ThrowIfNull(evaluator);
         schedule ??= _schedule;
+        if (schedule is not null)
+        {
+            var scheduled = schedule.Entries.ToDictionary(entry => entry.Reference.BundleId);
+            if (scheduled.Count != Entries.Count ||
+                Entries.Any(entry =>
+                    !scheduled.TryGetValue(entry.Reference.BundleId, out var scheduledEntry) ||
+                    scheduledEntry.Reference != entry.Reference ||
+                    scheduledEntry.Stage != entry.Stage))
+            {
+                throw new ArgumentException(
+                    "The promotion schedule must contain the same identities and stages as the load plan.",
+                    nameof(schedule));
+            }
+
+            if (_schedule is not null &&
+                !_schedule.Dependencies.SequenceEqual(schedule.Dependencies))
+            {
+                throw new ArgumentException(
+                    "The promotion schedule must preserve the dependency edges validated for this load plan.",
+                    nameof(schedule));
+            }
+        }
 
         foreach (var entry in Entries.OrderBy(entry => entry.Stage))
         {
