@@ -22,9 +22,9 @@ All normal FSM_COS evolution should happen here unless a short-lived branch is g
 
 ### Short-lived branches
 
-A temporary branch is acceptable for a substantial architecture experiment, focused documentation overhaul, risky implementation change, or benchmark/investigation that should remain isolated.
+The durable branch set should remain exactly `master` and `development`. Prefer working directly on `development`; use a temporary branch only when a substantial architecture experiment or risky change genuinely needs isolation.
 
-When accepted, merge it into `development` and close the temporary PR. Do not allow old branches to become competing definitions of “current.”
+When a temporary branch is used, consolidate it into `development`, close its PR, and delete the branch. Do not retain feature, release, or experiment branches as additional sources of truth.
 
 ## Consolidation record
 
