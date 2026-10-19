@@ -24,6 +24,34 @@ Every visual must:
 - have a canonical source asset and a clear place to update it when the contract changes;
 - avoid requiring JavaScript or remote runtime services just to display ordinary documentation.
 
+## Measurable baseline and UML coverage
+
+Inventory snapshot from the repository tree on `development`:
+
+| Metric | Count | Interpretation |
+|---|---:|---|
+| Tracked Markdown documents | 30 | Every document needs an explicit visual decision, not necessarily an image |
+| SVG assets outside the divider/marker directories | 13 | Candidate semantic diagrams/illustrations; asset existence alone does not prove document coverage |
+| Section-divider SVGs | 13 | Navigation/branding assets, not technical subject diagrams |
+| Section-marker SVGs | 4 | Navigation/branding assets, not technical subject diagrams |
+| C# source files in `src/FSM_COS` | 16 | Current implementation surface to map against the diagrams |
+| C# test files in `tests/FSM_COS.Tests` | 5 | Behavioral evidence for diagram claims |
+| Dedicated UML class/sequence diagram assets | 0 identified | No committed UML-specific diagram format or class/sequence visual was found in the repository tree |
+
+These are **inventory counts, not a coverage score**. The next audit pass must measure per-document use separately: (1) visual embedded directly, (2) visual shared from another document, (3) source-generated visual, or (4) deliberately text-only with rationale. A shared overview should not be counted as equivalent to a subject-specific diagram when the document teaches a more complex contract.
+
+### UML candidates to prioritize
+
+Use actual public/internal type definitions and tests as the source of truth; show visibility and relationships honestly. Do not imply that a conceptual box is an implemented class.
+
+1. **Composition contract class diagram** — `FsmCos`, `IFsmCos`, `IMicroBundleCatalog`, `IMicroBundleConfigurationSource`, `RuntimeManifest`, `RuntimeAssembly`, `ArbitrationContext`, and the domain-owned `IMicroBundle` boundary. This should make constructor-injected dependencies and the host handoff explicit.
+2. **Manifest and dependency-plan class diagram** — `RuntimeManifest`, `MicroBundleManifestEntry`, `MicroBundleReference`, `RuntimeManifestEntry`, `RuntimeManifestDependency`, `RuntimeManifestSchedule`, `RuntimeManifestLoadPlan`, and `ManifestLoadStage`. Distinguish value/record types from stateful plan objects and show ownership/cardinality only where the code supports it.
+3. **Execute sequence diagram** — caller/host → `IFsmCos.Execute` / `FsmCos.Execute` → catalog/configuration boundaries → preflight and dependency-first load → bounded arbitration → `RuntimeAssembly` or propagated failure. This is the best candidate for an animated highlight path.
+4. **Staged metadata versus actual loading sequence** — show validation/state transitions separately from repository localization and bundle loading. This is a high-risk teaching point because the code explicitly does not implement a repository or host localization pipeline.
+5. **Arbitration sequence/state view** — per-round `Arbitrate` calls, change aggregation, convergence, configured limit, and failure. Keep the zero-based convergence index distinct from the number of calls.
+
+Until the GUI.SVG class-definition-to-diagram capability is available, treat these as **diagram requirements**, not claims that generated UML or animation already exists. Once available, prefer generation from code definitions plus a small, reviewable semantic overlay; generated type boxes alone cannot prove control flow or runtime behavior.
+
 ## Existing visual assets discovered
 
 The repository already contains a useful SVG library, including:
@@ -94,7 +122,7 @@ Use the status labels consistently:
 
 The following findings are verified at the source-markup level:
 
-- The 12 substantive SVG diagrams in `docs/assets` each include an embedded `<title>`, `<desc>`, `role="img"`, and `aria-labelledby`.
+- The previous markup audit recorded 12 substantive SVG diagrams with embedded `<title>`, `<desc>`, `role="img"`, and `aria-labelledby`. The repository tree now shows 13 SVG assets outside the divider/marker directories; reconcile the classification and verify the thirteenth asset before treating the count as closed.
 - The 13 section-divider SVGs are decorative and use `role="presentation"` with `aria-hidden="true"`.
 - The four section-marker SVGs expose concise accessible labels.
 - `dependency-resolution.svg` uses reduced-motion-aware animation to illustrate an example dependency-first order. It is not a live execution trace.
