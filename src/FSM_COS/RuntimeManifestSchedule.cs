@@ -17,11 +17,28 @@ public sealed class RuntimeManifestSchedule
         ArgumentNullException.ThrowIfNull(entries);
         ArgumentNullException.ThrowIfNull(dependencies);
 
-        if (entries.Any(entry => entry is null || !entry.IsValid))
-            throw new ArgumentException("All manifest entries must have valid published identities.", nameof(entries));
+        for (var index = 0; index < entries.Count; index++)
+        {
+            var entry = entries[index];
+            if (entry is null || !entry.IsValid)
+            {
+                var identity = entry is null ? "null entry" : $"MicroBundle {entry.Reference.BundleId}";
+                throw new ArgumentException(
+                    $"Manifest entry at index {index} must have a valid published identity ({identity}).",
+                    nameof(entries));
+            }
+        }
 
-        if (dependencies.Any(dependency => !dependency.IsValid))
-            throw new ArgumentException("All dependency edges must be valid.", nameof(dependencies));
+        for (var index = 0; index < dependencies.Count; index++)
+        {
+            var dependency = dependencies[index];
+            if (!dependency.IsValid)
+            {
+                throw new ArgumentException(
+                    $"Dependency edge at index {index} (MicroBundle {dependency.BundleId} -> {dependency.DependencyId}) must be valid.",
+                    nameof(dependencies));
+            }
+        }
 
         var ids = entries.Select(entry => entry.Reference.BundleId).ToHashSet();
         if (ids.Count != entries.Count)
