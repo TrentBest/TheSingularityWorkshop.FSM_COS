@@ -102,7 +102,7 @@ public sealed class RuntimeManifestLoadPlan
             }
 
             if (_schedule is not null &&
-                !_schedule.Dependencies.SequenceEqual(schedule.Dependencies))
+                !_schedule.Dependencies.ToHashSet().SetEquals(schedule.Dependencies))
             {
                 throw new ArgumentException(
                     "The promotion schedule must preserve the dependency edges validated for this load plan.",
