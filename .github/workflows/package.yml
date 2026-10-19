@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: TrentBest/TheSingularityWorkshop.GUI
-          ref: 435a2898be8aed8c44da3a97716fad54f3a339ee
+          ref: 51fa7e890bddaeeb01a02ebf5399a303219f8f43
           path: _dependencies/GUI
 
       - name: Setup .NET
