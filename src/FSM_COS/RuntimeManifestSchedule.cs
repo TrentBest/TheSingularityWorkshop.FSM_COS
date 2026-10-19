@@ -10,6 +10,9 @@ namespace TheSingularityWorkshop.FSM_COS;
 /// </remarks>
 public sealed class RuntimeManifestSchedule
 {
+    public const int DefaultMaximumEntryCount = 10_000;
+    public const int DefaultMaximumDependencyCount = 100_000;
+
     public RuntimeManifestSchedule(
         IReadOnlyList<RuntimeManifestEntry> entries,
         IReadOnlyList<RuntimeManifestDependency> dependencies)
@@ -17,9 +20,10 @@ public sealed class RuntimeManifestSchedule
         ArgumentNullException.ThrowIfNull(entries);
         ArgumentNullException.ThrowIfNull(dependencies);
 
-        // Validate a stable snapshot rather than caller-owned mutable collections.
-        entries = entries.ToArray();
-        dependencies = dependencies.ToArray();
+        // Bound enumeration before allocating snapshots; IReadOnlyList implementations
+        // can lie about Count or expose a pathological enumerator.
+        entries = SnapshotBounded(entries, DefaultMaximumEntryCount, nameof(entries));
+        dependencies = SnapshotBounded(dependencies, DefaultMaximumDependencyCount, nameof(dependencies));
 
         for (var index = 0; index < entries.Count; index++)
         {
@@ -101,6 +105,24 @@ public sealed class RuntimeManifestSchedule
             throw new KeyNotFoundException($"MicroBundle {bundleId} is not present in the schedule.");
 
         return DependenciesOf(bundleId).All(edge => isLoaded(edge.DependencyId));
+    }
+
+    private static T[] SnapshotBounded<T>(
+        IEnumerable<T> source,
+        int maximumCount,
+        string parameterName)
+    {
+        var snapshot = new List<T>(Math.Min(maximumCount, 256));
+        foreach (var item in source)
+        {
+            if (snapshot.Count >= maximumCount)
+                throw new ArgumentException(
+                    $"Schedule input exceeds the maximum of {maximumCount} entries.",
+                    parameterName);
+            snapshot.Add(item);
+        }
+
+        return snapshot.ToArray();
     }
 
     private void ValidateAcyclic(HashSet<ulong> ids)
