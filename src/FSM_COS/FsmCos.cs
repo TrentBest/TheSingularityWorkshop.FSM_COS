@@ -99,7 +99,10 @@ public sealed class FsmCos : IFsmCos
                 "Runtime manifest root bundles")),
             LoadPlan = manifest.LoadPlan is null
                 ? null
-                : Array.AsReadOnly(manifest.LoadPlan.ToArray())
+                : Array.AsReadOnly(SnapshotBounded(
+                    manifest.LoadPlan,
+                    _maximumBundleCount,
+                    "Runtime manifest load plan"))
         };
         manifest.ValidateStagedPlan();
 
