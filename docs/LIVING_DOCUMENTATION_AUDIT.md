@@ -72,7 +72,18 @@ Use the status labels consistently:
 | `docs/0.1.0-alpha.7-READINESS.md` | Release gates, evidence, exact candidate/package identity | Keep checklist authoritative; consider a compact gate flow only if it improves scanability | Review |
 | `docs/releases/0.1.0-alpha.7.md` | Scope and behavioral change | Link to the relevant contract visuals; avoid duplicating the README hero | Review |
 | `DOCUMENTATION_INDEX.md` | Navigation by reader goal | Add this audit to the document map; avoid a visual on every index row | Review |
-| `DOCUMENTATION_STANDARD.md` | Shared rules for visual, living documentation | Extend standard with explicit coverage and maintenance requirements | Add / improve |
+| `NuGet.README.md` | Package-first overview for NuGet consumers | Overview SVG and moniker are embedded; verify remote asset rendering and package inclusion | Embedded / verify |
+| `docs/DEVELOPMENT.md` | Build/test/release verification path | Added a Mermaid flow matching the three verification jobs and manual publish gate in `.github/workflows/package.yml` | Embedded / verify |
+| `docs/0.1.0-alpha.7-READINESS.md` | Release gates, evidence, exact candidate/package identity | Checklist and evidence links are the clearest current proof; a separate flow may duplicate Development's diagram | Review |
+| `docs/releases/0.1.0-alpha.7.md` | Scope and behavioral change | Link to the relevant contract visuals; avoid duplicating the README hero | Review |
+| `docs/releases/0.1.0-alpha.6.md` | Historical release scope and contract | Keep as a historical record; add a visual only if it explains a contract not already covered elsewhere | Review |
+| `DOCUMENTATION_INDEX.md` | Navigation by reader goal | Text links and grouped navigation are appropriate; no diagram currently needed | No visual needed — navigation is the purpose |
+| `DOCUMENTATION_STANDARD.md` | Shared rules for visual, living documentation | Text-first normative standard; examples and requirements are clearer than a decorative summary image | No visual needed — rules and checklists are the authoritative form |
+| `docs/BRANCH_RECONCILIATION.md` | Branch inventory and disposition decisions | Existing comparison tables are the useful visual structure; a diagram would add little to the branch-by-branch evidence | No additional visual needed — inventory tables already serve the task |
+| `docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md` | Package/version drift and ordered remediation | Existing tables and ordered checklist make state and action explicit | No additional visual needed — tables/checklist are more precise |
+| `docs/CONTINUATION_BRIEF_ALPHA6_FORGE_ANYAPP_WEBPAGE.md` | Historical handoff and integration constraints | Dated continuation brief; prioritize correcting stale instructions rather than adding a diagram | Review — historical operational claims may be stale |
+| `docs/PAUSE_POINT.md` | Current pause gate and historical operational notes | Current status bullets and guardrails are the proof; inspect stale dated notes before adding visuals | Review — historical operational claims may be stale |
+| `docs/LIVING_DOCUMENTATION_AUDIT.md` | Coverage, validation, and completion criteria | This document is the coverage record; a separate picture would duplicate the status table | No visual needed — checklist is the source of truth |
 
 This is an initial prioritized pass, not a claim that the remaining documents have been exhaustively inspected. Add rows for any further document where a visual would genuinely improve comprehension.
 
@@ -81,9 +92,10 @@ This is an initial prioritized pass, not a claim that the remaining documents ha
 - [x] Created and indexed this coverage audit; standardized the living-visual requirements in `DOCUMENTATION_STANDARD.md`.
 - [x] Embedded explanatory SVGs in `WHAT_IS_FSM_COS.md`, `CONSUMING_MICROBUNDLES.md`, `STAGED_MANIFEST_LOADING.md`, `DOMAIN.md`, `AI_COMPOSITION.md`, and `ECOSYSTEM_INTEGRATION_MAP.md`.
 - [x] Reconciled the audit with existing visuals in `THEORY.md`, `RUNTIME_MANIFEST.md`, `MANIFEST_THEORY.md`, `ARBITRATION.md`, `RUNTIME_ASSEMBLY.md`, `RUNTIME_BOUNDARY.md`, and `WEBPAGE_INTEGRATION.md`; these are recorded as **embedded / verify**, not as fully validated.
-- [ ] Verify the latest documentation CI runs for those changes.
-- [ ] Audit all remaining Markdown files and verify existing diagrams against implementation.
+- [x] Verify documentation CI for the initial visual pass, audit reconciliation, and ecosystem-map update; workflows `39185334121`, `39185518082`, and `39185482305` all completed successfully. The latest Development workflow-diagram change is pending CI.
+- [ ] Finish the full Markdown inventory and verify existing diagrams against implementation. Every tracked Markdown file now has a row or an explicit no-additional-visual rationale; source-accuracy verification is still open.
 - [ ] Establish which visuals can be made genuinely living (semantic animation or source-backed GUI) and verify rendering/accessibility rather than assuming a static SVG is animated.
+- [x] Added a Mermaid verification/release-gate flow to `docs/DEVELOPMENT.md`, based on the current package workflow's three required verification jobs and manual publish condition.
 
 **Important distinction:** the current SVGs inspected in this pass are static diagrams. They improve visual coverage but do not, by themselves, satisfy the stronger goal of animated or interactive living documentation. That remains an explicit follow-up, not a completed claim.
 
