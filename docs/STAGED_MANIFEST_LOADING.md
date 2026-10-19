@@ -4,6 +4,11 @@
 
 ## Four responsibilities, four boundaries
 
+![Dependency resolution and prerequisite relationships used during composition](assets/dependency-resolution.svg)
+
+*This visual represents dependency relationships, not a claim that host localization or end-to-end deferred loading is implemented. The ownership table below remains authoritative for the current boundary.*
+
+
 The staged-loading work must keep these concerns distinct:
 
 | Concern | Owner | Responsibility |
