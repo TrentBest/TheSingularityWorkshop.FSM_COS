@@ -90,7 +90,7 @@ This is an initial prioritized pass, not a claim that the remaining documents ha
 - [x] Embedded explanatory SVGs in `WHAT_IS_FSM_COS.md`, `CONSUMING_MICROBUNDLES.md`, `STAGED_MANIFEST_LOADING.md`, `DOMAIN.md`, `AI_COMPOSITION.md`, and `ECOSYSTEM_INTEGRATION_MAP.md`.
 - [x] Reconciled the audit with existing visuals in `THEORY.md`, `RUNTIME_MANIFEST.md`, `MANIFEST_THEORY.md`, `ARBITRATION.md`, `RUNTIME_ASSEMBLY.md`, `RUNTIME_BOUNDARY.md`, and `WEBPAGE_INTEGRATION.md`; these are recorded as **embedded / verify**, not as fully validated.
 - [x] Verify documentation CI for the initial visual pass, audit reconciliation, and ecosystem-map update; workflows `39185334121`, `39185518082`, and `39185482305` all completed successfully. The latest Development workflow-diagram change is pending CI.
-- [ ] Finish the full Markdown inventory and verify existing diagrams against implementation. Every tracked Markdown file now has a row or an explicit no-additional-visual rationale; source-accuracy verification is still open.
+- [x] Finish the full Markdown inventory and audit inline Markdown link destinations across all 29 tracked Markdown files on `development`, including image links. The pass found one broken relative link in `docs/0.1.0-alpha.7-READINESS.md` (`RELEASING.md`); it was corrected to the existing `DEVELOPMENT.md`. The correction's workflow passed: [run 39193803043](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39193803043). No broken inline Markdown link targets remain in this audit. Reference-style link definitions and external-link reachability are separate checks. Source-accuracy verification remains open.
 - [ ] Establish which visuals can be made genuinely living (semantic animation or source-backed GUI) and verify rendering/accessibility rather than assuming a static SVG is animated.
 - [x] Added a Mermaid verification/release-gate flow to `docs/DEVELOPMENT.md`, based on the current package workflow's three required verification jobs and manual publish condition.
 - [x] Added a source-aligned Mermaid diagram to the alpha.7 release notes showing collection snapshot protection and the limitation that MicroBundle instances remain domain-owned.
@@ -108,7 +108,7 @@ This is an initial prioritized pass, not a claim that the remaining documents ha
 - [ ] Continue verifying remaining SVGs against current source and each document's exact topic.
 - [ ] Embed the existing relevant SVG in the best canonical home instead of creating near-duplicates.
 - [ ] Add concise alt text and a caption that explains the visual's point.
-- [ ] Ensure relative asset links resolve on `development` (full-repository validation still pending).
+- [x] Ensure inline relative Markdown links and image/asset targets resolve on `development` across all 29 Markdown files; no broken targets remain after the release-runbook link fix. External URLs and reference-style links are outside this pass.
 
 ### Pass 2 — living behavior, not just static architecture
 - [ ] Identify the best candidate for an animated, semantic SVG or a small working GUI.
@@ -117,9 +117,10 @@ This is an initial prioritized pass, not a claim that the remaining documents ha
 - [ ] Where feasible, link diagrams to the exact source, sample, or test that substantiates them.
 
 ### Pass 3 — coverage verification
-- [x] Inventory every Markdown document in the repository, including release notes and working/continuation documents (29 files; all 29 have a unique audit row). Source-accuracy and link validation remain open.
+- [x] Inventory every Markdown document in the repository, including release notes and working/continuation documents (29 files; all 29 have a unique audit row).
+- [x] Validate inline Markdown links and image/asset targets in all 29 Markdown files; fixed the one broken target and verified the fix's workflow. Source-accuracy and living-visual rendering/accessibility checks remain open.
 - [ ] For each document, record **visual added**, **existing visual verified**, or **no visual needed (with reason)**.
-- [ ] Validate all local image/asset links and alt text.
+- [x] Validate local inline image/asset link targets. Alt-text quality and rendering/accessibility still require document-by-document review.
 - [ ] Confirm no visual implies an unimplemented feature or contradicts source/tests.
 - [ ] Keep this checklist updated in the same documentation pass as visual changes.
 
