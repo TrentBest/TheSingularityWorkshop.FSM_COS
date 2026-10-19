@@ -225,6 +225,51 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_propagates_catalog_failure_while_resolving_a_requested_root()
+    {
+        var expected = new InvalidOperationException("catalog root lookup failed");
+        var catalog = new ThrowingCatalog(
+            new TestCatalog(new TestBundle(1)),
+            failingBundleId: 1,
+            expected);
+
+        var actual = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(catalog).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Same(expected, actual);
+    }
+
+    [Fact]
+    public void Execute_propagates_catalog_failure_while_validating_a_scheduled_dependency_before_loading()
+    {
+        var expected = new InvalidOperationException("catalog dependency lookup failed");
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var rootEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+        var dependencyEntry = new RuntimeManifestEntry(
+            new MicroBundleReference(2, "0.1.0-test", "sha256:dependency"));
+        var schedule = new RuntimeManifestSchedule(
+            new[] { rootEntry, dependencyEntry },
+            new[] { new RuntimeManifestDependency(1, 2) });
+        var catalog = new ThrowingCatalog(
+            new TestCatalog(root),
+            failingBundleId: 2,
+            expected);
+
+        var actual = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(catalog).Execute(
+                new RuntimeManifest(
+                    42,
+                    new[] { Entry(1) },
+                    LoadPlan: new[] { rootEntry, dependencyEntry },
+                    Schedule: schedule)));
+
+        Assert.Same(expected, actual);
+        Assert.Equal(0, root.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_throws_when_dependencies_form_a_cycle()
     {
         var first = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
@@ -745,6 +790,39 @@ public sealed class FsmCosTests
 
     private static MicroBundleManifestEntry Entry(ulong bundleId) =>
         new(bundleId, "0.1.0-test");
+
+    private sealed class ThrowingCatalog : IMicroBundleCatalog
+    {
+        private readonly IMicroBundleCatalog _inner;
+        private readonly ulong _failingBundleId;
+        private readonly Exception _exception;
+
+        public ThrowingCatalog(
+            IMicroBundleCatalog inner,
+            ulong failingBundleId,
+            Exception exception)
+        {
+            _inner = inner;
+            _failingBundleId = failingBundleId;
+            _exception = exception;
+        }
+
+        public bool TryResolve(ulong bundleId, string version, out IMicroBundle? bundle)
+        {
+            if (bundleId == _failingBundleId)
+                throw _exception;
+
+            return _inner.TryResolve(bundleId, version, out bundle);
+        }
+
+        public bool TryResolve(ulong bundleId, out IMicroBundle? bundle)
+        {
+            if (bundleId == _failingBundleId)
+                throw _exception;
+
+            return _inner.TryResolve(bundleId, out bundle);
+        }
+    }
 
     private sealed class TestConfigurationSource : IMicroBundleConfigurationSource
     {
