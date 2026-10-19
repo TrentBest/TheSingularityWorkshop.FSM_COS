@@ -8,7 +8,7 @@ var output = args.Length > 0
 var scene = GuiBuilder.Create("svg-scene", "fsm-cos-preflight")
     .Text("FSM_COS validation and composition path")
     .Property("description",
-        "Generated with GUI.SVG from a controlled scene. Shows root resolution, identity and dependency contract validation, optional schedule validation, dependency-first loading, bounded arbitration, host handoff, and distinct failure boundaries. It is a contract map, not a live execution trace.");
+        "Generated with GUI.SVG from a controlled scene. Shows full dependency-closure preflight, identity and dependency contract validation, optional schedule validation, iterative dependency-first loading, bounded arbitration, host handoff, and distinct failure boundaries. It is a contract map, not a live execution trace.");
 
 scene.Child("svg-rect", "background", node => node
     .Property("width", "100").Property("height", "56.25")
@@ -135,7 +135,7 @@ scene.Child("svg-text", "preflight-failure-label", text => text
     .Text("Preflight rejection").Property("x", "25").Property("y", "40")
     .Property("text-anchor", "middle").Property("font-family", "sans-serif").Property("font-size", "1.5").Property("font-weight", "700").Property("fill", "#fff1f3"));
 scene.Child("svg-text", "preflight-failure-sub-label", text => text
-    .Text("Bad root identity or scheduled graph: reject before Load()").Property("x", "25").Property("y", "42.5")
+    .Text("Bad identity, missing dependency, cycle, or schedule mismatch: reject before Load()").Property("x", "25").Property("y", "42.5")
     .Property("text-anchor", "middle").Property("font-family", "sans-serif").Property("font-size", "1.15").Property("fill", "#ffd5dc"));
 
 scene.Child("svg-rect", "runtime-failure-box", node => node
