@@ -32,6 +32,38 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_copies_configuration_provider_memory_before_dependency_load_callbacks()
+    {
+        var configuration = new byte[] { 7, 11, 13 };
+        var dependency = new TestBundle(2)
+        {
+            LoadAction = () => configuration[0] = 99
+        };
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+
+        new FsmCos(new TestCatalog(dependency, root)).Execute(
+            new RuntimeManifest(42, new[] { Entry(1) }),
+            new TestConfigurationSource((1, "0.1.0-test", configuration)));
+
+        Assert.Equal(99, configuration[0]);
+        Assert.Equal(new byte[] { 7, 11, 13 }, root.Configuration.ToArray());
+    }
+
+    [Fact]
+    public void Execute_copies_dependency_configuration_before_catalog_callbacks_can_mutate_it()
+    {
+        var configuration = new byte[] { 7, 11, 13 };
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(1, new MicroBundleDependencyRequest(2, configuration));
+        var catalog = new MutatingDependencyCatalog(root, dependency, configuration);
+
+        new FsmCos(catalog).Execute(new RuntimeManifest(42, new[] { Entry(1) }));
+
+        Assert.Equal(99, configuration[0]);
+        Assert.Equal(new byte[] { 7, 11, 13 }, dependency.Configuration.ToArray());
+    }
+
+    [Fact]
     public void Execute_propagates_configuration_source_failure_before_loading_bundle()
     {
         var bundle = new TestBundle(7);
@@ -1211,6 +1243,41 @@ public sealed class FsmCosTests
 
             bundle = null;
             return false;
+        }
+    }
+
+    private sealed class MutatingDependencyCatalog : IMicroBundleCatalog
+    {
+        private readonly IMicroBundle _root;
+        private readonly IMicroBundle _dependency;
+        private readonly byte[] _configuration;
+
+        public MutatingDependencyCatalog(IMicroBundle root, IMicroBundle dependency, byte[] configuration)
+        {
+            _root = root;
+            _dependency = dependency;
+            _configuration = configuration;
+        }
+
+        public bool TryResolve(ulong bundleId, string version, out IMicroBundle? bundle)
+        {
+            bundle = bundleId == _root.Id ? _root :
+                bundleId == _dependency.Id ? _dependency : null;
+            return bundle is not null &&
+                string.Equals(bundle.Descriptor.Version, version, StringComparison.Ordinal);
+        }
+
+        public bool TryResolve(ulong bundleId, out IMicroBundle? bundle)
+        {
+            if (bundleId == _dependency.Id)
+            {
+                _configuration[0] = 99;
+                bundle = _dependency;
+                return true;
+            }
+
+            bundle = bundleId == _root.Id ? _root : null;
+            return bundle is not null;
         }
     }
 
