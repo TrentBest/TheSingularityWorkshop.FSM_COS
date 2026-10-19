@@ -87,7 +87,7 @@ public sealed class RuntimeManifestSchedule
         IndependentEntries = Array.AsReadOnly(Entries.Where(entry => !entriesWithPrerequisites.Contains(entry.Reference.BundleId)).ToArray());
         DependencyEntries = Array.AsReadOnly(Entries.Where(entry => entriesWithPrerequisites.Contains(entry.Reference.BundleId)).ToArray());
 
-        ValidateAcyclic(ids);
+        ValidateAcyclic(ids, nameof(dependencies));
     }
 
     public IReadOnlyList<RuntimeManifestEntry> Entries { get; }
@@ -125,7 +125,7 @@ public sealed class RuntimeManifestSchedule
         return snapshot.ToArray();
     }
 
-    private void ValidateAcyclic(HashSet<ulong> ids)
+    private void ValidateAcyclic(HashSet<ulong> ids, string parameterName)
     {
         // Use adjacency lists and an explicit stack so untrusted/deep plans cannot exhaust the process stack.
         var outgoing = Dependencies
@@ -158,7 +158,7 @@ public sealed class RuntimeManifestSchedule
                         if (state == 1)
                             throw new ArgumentException(
                                 $"Manifest dependency cycle detected at MicroBundle {dependencyId}.",
-                                nameof(Dependencies));
+                                parameterName);
                         continue;
                     }
 
