@@ -58,7 +58,7 @@ Each part has a clear owner:
 - **FSM_COS** resolves dependencies, loads the composition, and runs bounded arbitration.
 - **The host** owns application lifecycle, execution, user interface, and presentation.
 
-FSM_COS is not a GUI, engine, artifact repository, transport layer, or application loop. For the exact contracts and responsibility boundaries, see [Architecture](docs/ARCHITECTURE.md) and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md).
+FSM_COS is not a GUI, engine, artifact repository, transport layer, or application loop. For the exact contracts and responsibility boundaries, see [Architecture](docs/ARCHITECTURE.md) and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md). Security scope, explicit trust assumptions, and the adversarial verification matrix are documented in [Security](SECURITY.md).
 
 Alpha.7 exposes read-only snapshots for assembly and plan collections: callers cannot mutate the collection structure through those public views. This does **not** make the `MicroBundle` objects inside those collections immutable; their behavior remains owned by their domain contracts.
 
