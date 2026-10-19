@@ -8,19 +8,11 @@ FSM_COS is a small composition kernel. This document describes how its pieces co
 
 ![FSM_COS runtime flow](assets/fsm-cos-overview.svg)
 
-    RuntimeManifest
-          │
-          ▼
-       FsmCos.Execute
-          │
-          ├── resolve roots + exact versions
-          ├── preflight complete dependency closure
-          ├── validate identities, requests, and cycles
-          ├── check optional schedule against that graph
-          ├── iterative depth-first Load()
-          ├── Arbitrate() until stable
-          ▼
-    RuntimeAssembly
+![FSM_COS validation and composition path: root resolution, identity and dependency checks, optional schedule validation, dependency-first loading, bounded arbitration, host handoff, and failure boundaries](assets/fsm-cos-preflight.svg)
+
+*Generated from `samples/DocumentationVisuals/Program.cs` using GUI.SVG. The development workflow regenerates and checks the committed SVG against a pinned GUI.SVG source revision. This is a contract map, not a live execution trace; the schedule check applies only when a schedule is supplied.*
+
+
 
 ## Core contracts
 
