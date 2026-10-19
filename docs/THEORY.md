@@ -1,8 +1,10 @@
 # FSM_COS Theory
 
 <p align="center">
-  <img src="assets/fsm-cos-system.svg" alt="FSM_COS composition kernel between authoring and host manifestation">
+  <img src="assets/fsm-cos-system.svg" alt="Conceptual upstream authoring context supplies a runtime manifest to FSM_COS, which resolves dependencies, accepts external configuration, loads and arbitrates bundles, then hands a RuntimeAssembly to the host.">
 </p>
+
+*The left panel represents conceptual authoring context, not an implemented authoring or publishing pipeline inside FSM_COS. At runtime, the kernel consumes the defined `RuntimeManifest`; host-supplied catalog and configuration contracts provide external inputs.*
 
 FSM_COS is the **platform-neutral computation and composition kernel** of The Singularity Workshop ecosystem.
 
