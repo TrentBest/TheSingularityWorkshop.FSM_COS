@@ -6,19 +6,42 @@ namespace TheSingularityWorkshop.FSM_COS;
 public sealed class FsmCos : IFsmCos
 {
     public const int DefaultMaximumArbitrationRounds = 10;
+    public const int DefaultMaximumBundleCount = 10_000;
+    public const int DefaultMaximumDependencyRequestCount = 100_000;
 
     private readonly IMicroBundleCatalog _catalog;
     private readonly int _maximumArbitrationRounds;
+    private readonly int _maximumBundleCount;
+    private readonly int _maximumDependencyRequestCount;
 
     public FsmCos(
         IMicroBundleCatalog catalog,
         int maximumArbitrationRounds = DefaultMaximumArbitrationRounds)
+        : this(
+            catalog,
+            maximumArbitrationRounds,
+            DefaultMaximumBundleCount,
+            DefaultMaximumDependencyRequestCount)
+    {
+    }
+
+    public FsmCos(
+        IMicroBundleCatalog catalog,
+        int maximumArbitrationRounds,
+        int maximumBundleCount,
+        int maximumDependencyRequestCount)
     {
         if (maximumArbitrationRounds < 1)
             throw new ArgumentOutOfRangeException(nameof(maximumArbitrationRounds));
+        if (maximumBundleCount < 1)
+            throw new ArgumentOutOfRangeException(nameof(maximumBundleCount));
+        if (maximumDependencyRequestCount < 1)
+            throw new ArgumentOutOfRangeException(nameof(maximumDependencyRequestCount));
 
         _catalog = catalog ?? throw new ArgumentNullException(nameof(catalog));
         _maximumArbitrationRounds = maximumArbitrationRounds;
+        _maximumBundleCount = maximumBundleCount;
+        _maximumDependencyRequestCount = maximumDependencyRequestCount;
     }
 
     public RuntimeAssembly Execute(
@@ -27,6 +50,23 @@ public sealed class FsmCos : IFsmCos
     {
         ArgumentNullException.ThrowIfNull(manifest);
         ArgumentNullException.ThrowIfNull(manifest.Bundles);
+
+        // Reject oversized caller input before copying it into kernel-owned snapshots.
+        if (manifest.Bundles.Count > _maximumBundleCount)
+            throw new InvalidOperationException(
+                $"Runtime manifest requests {manifest.Bundles.Count} root bundles; the configured maximum is {_maximumBundleCount}.");
+        if (manifest.LoadPlan is { Count: var loadPlanCount } && loadPlanCount > _maximumBundleCount)
+            throw new InvalidOperationException(
+                $"Runtime manifest load plan contains {loadPlanCount} entries; the configured maximum is {_maximumBundleCount}.");
+        if (manifest.Schedule is { } requestedSchedule)
+        {
+            if (requestedSchedule.Entries.Count > _maximumBundleCount)
+                throw new InvalidOperationException(
+                    $"Runtime manifest schedule contains {requestedSchedule.Entries.Count} entries; the configured maximum is {_maximumBundleCount}.");
+            if (requestedSchedule.Dependencies.Count > _maximumDependencyRequestCount)
+                throw new InvalidOperationException(
+                    $"Runtime manifest schedule contains {requestedSchedule.Dependencies.Count} dependency edges; the configured maximum is {_maximumDependencyRequestCount}.");
+        }
 
         // Snapshot caller-owned collections once so concurrent or callback-driven mutation
         // cannot change the request between validation, resolution, loading, and handoff.
@@ -175,6 +215,10 @@ public sealed class FsmCos : IFsmCos
         var resolvedBundles = new Dictionary<ulong, IMicroBundle>();
         dependencyRequestsById = new Dictionary<ulong, MicroBundleDependencyRequest[]>();
         var discovered = requestedRoots.ToDictionary(pair => pair.Key, pair => pair.Value);
+        if (discovered.Count > _maximumBundleCount)
+            throw new InvalidOperationException(
+                $"Dependency graph starts with {discovered.Count} roots; the configured maximum is {_maximumBundleCount}.");
+        var dependencyRequestCount = 0;
         var pending = new Stack<ulong>();
 
         foreach (var id in requestedRoots.Keys.Reverse())
@@ -194,11 +238,19 @@ public sealed class FsmCos : IFsmCos
 
             // Copy the configuration bytes as well as the request structs. ReadOnlyMemory
             // prevents writes through this view; it does not make the backing array immutable.
-            var dependencySnapshot = declaredDependencies
-                .Select(request => new MicroBundleDependencyRequest(
+            if (declaredDependencies.Count > _maximumDependencyRequestCount - dependencyRequestCount)
+                throw new InvalidOperationException(
+                    $"Dependency graph exceeds the configured maximum of {_maximumDependencyRequestCount} dependency requests.");
+
+            var dependencySnapshot = new MicroBundleDependencyRequest[declaredDependencies.Count];
+            for (var index = 0; index < declaredDependencies.Count; index++)
+            {
+                var request = declaredDependencies[index];
+                dependencySnapshot[index] = new MicroBundleDependencyRequest(
                     request.BundleId,
-                    request.Configuration.ToArray()))
-                .ToArray();
+                    request.Configuration.ToArray());
+            }
+            dependencyRequestCount += dependencySnapshot.Length;
             ValidateResolvedIdentity(id, bundle, dependencySnapshot);
             resolvedBundles.Add(id, bundle);
             dependencyRequestsById.Add(id, dependencySnapshot);
@@ -208,6 +260,10 @@ public sealed class FsmCos : IFsmCos
                 var dependencyId = dependencySnapshot[index].BundleId;
                 if (discovered.ContainsKey(dependencyId))
                     continue;
+
+                if (discovered.Count >= _maximumBundleCount)
+                    throw new InvalidOperationException(
+                        $"Dependency graph exceeds the configured maximum of {_maximumBundleCount} bundles.");
 
                 if (!_catalog.TryResolve(dependencyId, out var dependencyBundle) || dependencyBundle is null)
                 {
