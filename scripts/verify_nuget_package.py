@@ -115,7 +115,7 @@ def verify(package_dir: Path, project_path: Path) -> None:
         if missing:
             fail("Package is missing required files: " + ", ".join(missing))
 
-        markdown_link = re.compile(r"!?\\[[^\\]]*\\]\\(([^)]+)\\)|^\\[[^\\]]+\\]:\\s*<?([^>\\s]+)>?", re.MULTILINE)
+        markdown_link = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)|^\[[^\]]+\]:\s*<?([^>\s]+)>?", re.MULTILINE)
         for markdown_name in sorted(name for name in names if name.lower().endswith(".md")):
             markdown = archive.read(markdown_name).decode("utf-8-sig")
             for match in markdown_link.finditer(markdown):
