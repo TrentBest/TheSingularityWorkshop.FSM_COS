@@ -4,7 +4,9 @@
 
 See [FSM_COS Theory](THEORY.md#8-arbitration-is-composition-negotiation) for the compact model. This document is the deeper treatment.
 
-![Arbitration convergence](assets/arbitration-convergence.svg)
+![Arbitration convergence: loaded bundles participate in complete rounds until a round reports no changes or the configured maximum is exhausted](assets/arbitration-convergence.svg)
+
+*Implementation note: the successful round is recorded as a zero-based index in `RuntimeAssembly.ArbitrationRounds` (`0` means the first round converged). If every allowed round reports changes, `FsmCos.Execute` throws instead of returning an unstable assembly.*
 
 ## The question arbitration actually answers
 
