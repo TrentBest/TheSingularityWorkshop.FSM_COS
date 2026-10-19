@@ -62,7 +62,7 @@ Use the status labels consistently:
 | `docs/RUNTIME_MANIFEST.md` | Caller request and manifest contents | Existing manifest-pipeline SVG is embedded; verify its labels against current manifest fields and optional schedule behavior | Embedded / verify |
 | `docs/MANIFEST_THEORY.md` | Semantic request versus serialized representation | Existing manifest-pipeline SVG is embedded; verify that the editor-time/published-request distinction is clear | Embedded / verify |
 | `docs/STAGED_MANIFEST_LOADING.md` | Preflight, planning, validation, loading, failure boundaries | Added dependency-resolution SVG with an explicit caveat that it does not claim end-to-end deferred loading | Embedded / verify |
-| `docs/CONSUMING_MICROBUNDLES.md` | Consumer flow, catalog responsibility, dependency ordering | Added dependency-resolution SVG and caption; consumer example coverage still needs review | Embedded / verify |
+| `docs/CONSUMING_MICROBUNDLES.md` | Consumer flow, catalog responsibility, dependency ordering | Verified dependency graph and depth-first dependency-before-dependent load order against `FsmCos.LoadRoot`; alt text distinguishes illustrative graph from runtime contract | Existing visual verified |
 | `docs/ARBITRATION.md` | Iterations, convergence, limit, non-convergence | Verified against `FsmCos.Execute`; added alt text and a caption documenting the zero-based converging-round index and failure at the limit | Existing visual verified |
 | `docs/RUNTIME_ASSEMBLY.md` | Result shape and handoff | Existing assembly-handoff SVG is embedded; verify that host responsibilities remain clearly outside the kernel | Embedded / verify |
 | `docs/RUNTIME_BOUNDARY.md` | Explicitly excluded responsibilities | Two boundary SVGs are embedded; check for duplication and ensure exclusions match source | Embedded / verify |
@@ -101,10 +101,11 @@ This is an initial prioritized pass, not a claim that the remaining documents ha
 
 ### Pass 1 — canonical visuals in high-value contract docs
 - [x] Verified `arbitration-convergence.svg` against `FsmCos.Execute`; documented the zero-based `RuntimeAssembly.ArbitrationRounds` value and no-assembly-on-nonconvergence behavior.
+- [x] Verified `dependency-resolution.svg` against `FsmCos.LoadRoot`; documented dependency-first loading, duplicate-ID skipping, cycle detection, and that the pictured graph is illustrative.
 - [ ] Continue verifying remaining SVGs against current source and each document's exact topic.
 - [ ] Embed the existing relevant SVG in the best canonical home instead of creating near-duplicates.
 - [ ] Add concise alt text and a caption that explains the visual's point.
-- [ ] Ensure relative asset links resolve on `development`.
+- [ ] Ensure relative asset links resolve on `development` (full-repository validation still pending).
 
 ### Pass 2 — living behavior, not just static architecture
 - [ ] Identify the best candidate for an animated, semantic SVG or a small working GUI.
