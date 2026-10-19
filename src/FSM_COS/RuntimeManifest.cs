@@ -41,6 +41,9 @@ public sealed record RuntimeManifest(
         if (plan.Any(entry => entry is null || !entry.IsValid))
             throw new InvalidOperationException("Runtime manifest contains an invalid staged-plan entry.");
 
+        if (plan.Select(entry => entry.Reference.BundleId).Distinct().Count() != plan.Count)
+            throw new InvalidOperationException("Runtime manifest load plan must contain unique MicroBundle IDs.");
+
         var byId = plan.ToDictionary(entry => entry.Reference.BundleId);
         foreach (var requested in Bundles)
         {
