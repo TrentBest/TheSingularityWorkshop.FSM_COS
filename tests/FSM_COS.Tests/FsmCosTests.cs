@@ -361,6 +361,25 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_resolves_the_entire_dependency_closure_before_loading_any_bundle()
+    {
+        var resolvedSibling = new TestBundle(2);
+        var root = new TestBundle(
+            1,
+            MicroBundleDependencyRequest.Unconfigured(2),
+            MicroBundleDependencyRequest.Unconfigured(3));
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, resolvedSibling))
+                .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("3", exception.Message);
+        Assert.Contains("could not be resolved", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(0, resolvedSibling.LoadCalls);
+        Assert.Equal(0, root.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_throws_when_dependencies_form_a_cycle()
     {
         var first = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
