@@ -43,14 +43,9 @@ Use one primary document for each question. Related pages should explain context
 - **Repository process:** [Development](docs/DEVELOPMENT.md), [Documentation Standard](DOCUMENTATION_STANDARD.md), and [AI agent instructions](AGENTS.md).
 - **Working and historical records:** branch reconciliation, dependency alignment, ecosystem integration, continuation, and pause-point documents are planning records. They are not API specifications or release evidence; verify any current-state statement against source, tests, and current CI before acting on it. These records are intentionally excluded from the consumer package.
 
-## Source and status rules
+## Accuracy and release evidence
 
-1. Source code and tests define current implemented behavior. If documentation disagrees, fix the disagreement; do not infer that the code implements a design statement.
-2. A design, roadmap item, type name, or metadata field is not proof of an end-to-end capability.
-3. A successful CI run proves only the commit and jobs it actually tested. Package inspection is valid only for the exact artifact inspected.
-4. A development-branch change is not part of the published package until a release is deliberately published.
-5. Historical notes preserve context, not current status. Every present-tense status claim must be rechecked before reuse.
-6. The repository-wide writing and visual conventions live in [Documentation Standard](DOCUMENTATION_STANDARD.md); this index owns navigation and document roles, not those conventions.
+The shared [Documentation Standard](DOCUMENTATION_STANDARD.md) governs writing quality, source accuracy, and link hygiene. The [alpha.7 readiness gate](docs/0.1.0-alpha.7-READINESS.md) governs exact-candidate release evidence. Historical planning notes are context, not current specifications; verify present-tense claims against source, tests, and current CI.
 
 ## Living documentation
 
