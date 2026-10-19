@@ -190,6 +190,8 @@ The resulting installation order is an implementation consequence of those relat
 C → B → D → A
 ```
 
+Before installation begins, FSM_COS resolves the entire reachable closure, checks the domain's dependency declarations and identities, detects cycles, and snapshots the resolved graph. That preflight means a missing dependency or malformed graph is rejected before a bundle's `Load` code can create side effects. Once `Load` begins, however, the kernel cannot promise transactional rollback of arbitrary bundle behavior; see [Architecture — Failure and partial side effects](ARCHITECTURE.md#failure-and-partial-side-effects).
+
 This gives the composition system a crucial property:
 
 > **The request describes what is wanted; the composition kernel derives how it must be assembled.**
