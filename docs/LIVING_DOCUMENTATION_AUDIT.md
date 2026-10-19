@@ -61,8 +61,8 @@ Use the status labels consistently:
 | Document | Visual intent | Initial action | Status |
 |---|---|---|---|
 | `AGENTS.md` | Repository-specific operating guardrails | Plain-language constraints are the point; a diagram risks obscuring authoritative instructions | No visual needed — operational rules are best kept explicit |
-| `README.md` | One-screen composition overview | Overview SVG compared with the README and architecture boundary; host ownership after handoff is explicit | Source reviewed; hosted checks pending |
-| `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Overview SVG and alt text reviewed against the plain-language contract and host handoff | Source reviewed; hosted checks pending |
+| `README.md` | One-screen composition overview | Re-audit found a direct RuntimeAssembly-to-Experience path that bypassed the Host; corrected on `docs/fsm-cos-visual-contract-audit`. Verify rendered arrow routing and compare the remaining overview claims before closing this row. | Source correction in review branch; hosted checks pending |
+| `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Shares the overview SVG; its host-to-experience routing correction is in `docs/fsm-cos-visual-contract-audit` and remains pending review/render verification. | Source correction in review branch; hosted checks pending |
 | `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Overview and dependency-resolution diagrams remain; the generated preflight visual shows identity/dependency validation, optional schedule checks, dependency-first loading, bounded arbitration, and separate failure semantics. Generator output is pinned and checked in CI. | Source reviewed; hosted checks pending |
 | `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | System SVG marks upstream authoring context as conceptual and identifies `RuntimeManifest` as the implemented input | Source reviewed; hosted checks pending |
 | `docs/DOMAIN.md` | What FSM_COS owns versus adjacent domains | Domain map reviewed against kernel ownership, host responsibilities, and deferred-capability caveats | Source reviewed; hosted checks pending |
@@ -102,9 +102,14 @@ The following findings are verified at the source-markup level:
 
 These findings do **not** establish complete semantic accuracy for every visual, hosted SVG rendering, browser accessibility-tree exposure, keyboard behavior, screen-reader output, or external-link reachability. Those require their own evidence and must not be inferred from source markup or a green build.
 
+## Findings from the current source-to-diagram re-audit
+
+- The overview SVG previously drew a second path from `RuntimeAssembly` directly to `Experience`, bypassing the Host. This contradicted the documented handoff boundary. The branch `docs/fsm-cos-visual-contract-audit` removes that bypass and routes the arrow from Host to Experience. This is a review-branch correction, not yet a merged fix; hosted rendering and the rest of the diagram audit remain open.
+- This finding shows that earlier source-level review status was too broad. The checklist below now leaves the complete source-to-diagram audit open until each substantive diagram has been checked against the current implementation and the diagram's explanatory text.
+
 ## Remaining work
 
-- [x] Source-review diagram claims against linked implementation/tests and clarify conceptual versus implemented behavior in adjacent text and alt descriptions.
+- [ ] Complete a fresh source-to-diagram audit against linked implementation/tests; an audit pass found an overview arrow that bypassed the Host and required correction. Continue checking every substantive diagram before marking this complete.
 - [ ] Check hosted rendering in GitHub and relevant light/dark and narrow-width views.
 - [ ] Verify accessibility-tree exposure and screen-reader behavior for substantive and animated visuals.
 - [ ] Check reference-style Markdown link definitions and external-link reachability.
