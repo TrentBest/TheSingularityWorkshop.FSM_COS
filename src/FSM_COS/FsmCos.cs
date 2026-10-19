@@ -64,10 +64,12 @@ public sealed class FsmCos : IFsmCos
             requestedRoots.Add(bundleId, bundle);
         }
 
-        // Validate the schedule against the same explicitly selected root versions that
-        // composition will use, still before any MicroBundle Load method can have side effects.
+        // Resolve and validate the complete graph before any bundle Load method can have side effects.
+        // Keep the exact resolved objects and dependency snapshots for both validation and loading.
+        var resolvedBundles = ResolveDependencyGraph(requestedRoots, out var dependencyRequestsById);
+
         if (manifest.Schedule is not null)
-            ValidateScheduleAgainstResolvedGraph(manifest, requestedRoots);
+            ValidateScheduleAgainstResolvedGraph(manifest, resolvedBundles, dependencyRequestsById);
 
         var loaded = new List<IMicroBundle>();
         var loadedIds = new HashSet<ulong>();
@@ -78,7 +80,8 @@ public sealed class FsmCos : IFsmCos
         {
             LoadRoot(
                 entry,
-                requestedRoots,
+                resolvedBundles,
+                dependencyRequestsById,
                 loaded,
                 loadedIds,
                 loading,
@@ -112,63 +115,13 @@ public sealed class FsmCos : IFsmCos
 
     private void ValidateScheduleAgainstResolvedGraph(
         RuntimeManifest manifest,
-        IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots)
+        IReadOnlyDictionary<ulong, IMicroBundle> resolvedBundles,
+        IReadOnlyDictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById)
     {
         var schedule = manifest.Schedule!;
         var plannedById = schedule.Entries.ToDictionary(entry => entry.Reference.BundleId);
-        var resolvedById = new Dictionary<ulong, IMicroBundle>();
-        var actualEdges = new HashSet<(ulong BundleId, ulong DependencyId)>();
-        var visiting = new HashSet<ulong>();
-        var visited = new HashSet<ulong>();
+        var resolvedIds = resolvedBundles.Keys.ToHashSet();
 
-        IMicroBundle Resolve(ulong id)
-        {
-            IMicroBundle? resolved;
-            if (requestedRoots.TryGetValue(id, out var requestedRoot))
-            {
-                resolved = requestedRoot;
-            }
-            else if (!_catalog.TryResolve(id, out resolved))
-            {
-                throw new InvalidOperationException(
-                    $"Scheduled MicroBundle {id} could not be resolved.");
-            }
-
-            if (resolved is null)
-                throw new InvalidOperationException(
-                    $"Scheduled MicroBundle {id} could not be resolved.");
-
-            ValidateResolvedIdentity(id, resolved);
-            return resolved;
-        }
-
-        void Visit(IMicroBundle bundle)
-        {
-            if (visited.Contains(bundle.Id))
-                return;
-            if (!visiting.Add(bundle.Id))
-                throw new InvalidOperationException(
-                    $"MicroBundle dependency cycle detected at {bundle.Id}.");
-
-            resolvedById[bundle.Id] = bundle;
-            foreach (var dependency in bundle.Dependencies)
-            {
-                actualEdges.Add((bundle.Id, dependency.BundleId));
-                if (visited.Contains(dependency.BundleId))
-                    continue;
-
-                var dependencyBundle = Resolve(dependency.BundleId);
-                Visit(dependencyBundle);
-            }
-
-            visiting.Remove(bundle.Id);
-            visited.Add(bundle.Id);
-        }
-
-        foreach (var root in manifest.Bundles)
-            Visit(Resolve(root.BundleId));
-
-        var resolvedIds = resolvedById.Keys.ToHashSet();
         if (!resolvedIds.SetEquals(plannedById.Keys))
         {
             var missing = resolvedIds.Except(plannedById.Keys).OrderBy(id => id).ToArray();
@@ -179,7 +132,7 @@ public sealed class FsmCos : IFsmCos
                 $"unexpected scheduled IDs: [{string.Join(", ", extra)}].");
         }
 
-        foreach (var (id, bundle) in resolvedById)
+        foreach (var (id, bundle) in resolvedBundles)
         {
             var planned = plannedById[id];
             if (!string.Equals(planned.Reference.Version, bundle.Descriptor.Version, StringComparison.Ordinal))
@@ -188,8 +141,10 @@ public sealed class FsmCos : IFsmCos
                     $"'{planned.Reference.Version}', but the catalog resolved '{bundle.Descriptor.Version}'.");
         }
 
+        var actualEdges = dependencyRequestsById.SelectMany(pair =>
+            pair.Value.Select(dependency => (BundleId: pair.Key, DependencyId: dependency.BundleId))).ToHashSet();
         var plannedEdges = schedule.Dependencies
-            .Select(edge => (edge.BundleId, edge.DependencyId))
+            .Select(edge => (BundleId: edge.BundleId, DependencyId: edge.DependencyId))
             .ToHashSet();
         if (!actualEdges.SetEquals(plannedEdges))
         {
@@ -202,9 +157,113 @@ public sealed class FsmCos : IFsmCos
         }
     }
 
+    private Dictionary<ulong, IMicroBundle> ResolveDependencyGraph(
+        IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots,
+        out Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById)
+    {
+        var resolvedBundles = new Dictionary<ulong, IMicroBundle>();
+        dependencyRequestsById = new Dictionary<ulong, MicroBundleDependencyRequest[]>();
+        var discovered = new Dictionary<ulong, IMicroBundle>(requestedRoots);
+        var pending = new Stack<ulong>();
+
+        foreach (var id in requestedRoots.Keys.Reverse())
+            pending.Push(id);
+
+        while (pending.Count > 0)
+        {
+            var id = pending.Pop();
+            if (resolvedBundles.ContainsKey(id))
+                continue;
+
+            var bundle = discovered[id];
+            var declaredDependencies = bundle.Dependencies;
+            if (declaredDependencies is null)
+                throw new InvalidOperationException($"MicroBundle {id} returned no dependency request list.");
+
+            var dependencySnapshot = declaredDependencies.ToArray();
+            ValidateResolvedIdentity(id, bundle, dependencySnapshot);
+            resolvedBundles.Add(id, bundle);
+            dependencyRequestsById.Add(id, dependencySnapshot);
+
+            for (var index = dependencySnapshot.Length - 1; index >= 0; index--)
+            {
+                var dependencyId = dependencySnapshot[index].BundleId;
+                if (discovered.ContainsKey(dependencyId))
+                    continue;
+
+                if (!_catalog.TryResolve(dependencyId, out var dependencyBundle) || dependencyBundle is null)
+                    throw new InvalidOperationException($"MicroBundle {dependencyId} could not be resolved.");
+
+                discovered.Add(dependencyId, dependencyBundle);
+                pending.Push(dependencyId);
+            }
+        }
+
+        ValidateDependencyGraphAcyclic(requestedRoots.Keys, dependencyRequestsById);
+        return resolvedBundles;
+    }
+
+    private static void ValidateDependencyGraphAcyclic(
+        IEnumerable<ulong> rootIds,
+        IReadOnlyDictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById)
+    {
+        // Iterative depth-first traversal avoids exhausting the process stack on a deep or hostile graph.
+        var states = new Dictionary<ulong, byte>();
+        foreach (var rootId in rootIds)
+        {
+            if (states.ContainsKey(rootId))
+                continue;
+
+            states[rootId] = 1;
+            var stack = new List<(ulong BundleId, int NextDependencyIndex)> { (rootId, 0) };
+
+            while (stack.Count > 0)
+            {
+                var (bundleId, nextDependencyIndex) = stack[^1];
+                var dependencies = dependencyRequestsById[bundleId];
+
+                if (nextDependencyIndex < dependencies.Length)
+                {
+                    stack[^1] = (bundleId, nextDependencyIndex + 1);
+                    var dependencyId = dependencies[nextDependencyIndex].BundleId;
+
+                    if (states.TryGetValue(dependencyId, out var state))
+                    {
+                        if (state == 1)
+                            throw new InvalidOperationException(
+                                $"MicroBundle dependency cycle detected at {dependencyId}.");
+                        continue;
+                    }
+
+                    states[dependencyId] = 1;
+                    stack.Add((dependencyId, 0));
+                    continue;
+                }
+
+                stack.RemoveAt(stack.Count - 1);
+                states[bundleId] = 2;
+            }
+        }
+    }
+
+    private sealed class LoadFrame
+    {
+        public LoadFrame(IMicroBundle bundle, ReadOnlyMemory<byte> dependencyConfiguration)
+        {
+            Bundle = bundle;
+            DependencyConfiguration = dependencyConfiguration;
+        }
+
+        public IMicroBundle Bundle { get; }
+        public ReadOnlyMemory<byte> DependencyConfiguration { get; }
+        public int NextDependencyIndex { get; set; }
+        public bool Entered { get; set; }
+    }
+
     private void LoadRoot(
         MicroBundleManifestEntry entry,
-        IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots,
+        IReadOnlyDictionary<ulong, IMicroBundle> resolvedBundles,
+        IReadOnlyDictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById,
         List<IMicroBundle> loaded,
         HashSet<ulong> loadedIds,
         HashSet<ulong> loading,
@@ -213,108 +272,79 @@ public sealed class FsmCos : IFsmCos
         ulong runtimeId)
     {
         if (loadedIds.Contains(entry.BundleId))
-        {
-            var alreadyLoaded = loaded.First(bundle => bundle.Id == entry.BundleId);
-            ValidateResolvedBundle(entry.BundleId, entry.Version, alreadyLoaded);
             return;
-        }
 
-        if (!loading.Add(entry.BundleId))
-            throw new InvalidOperationException(
-                $"MicroBundle dependency cycle detected at {entry.BundleId}.");
+        var stack = new Stack<LoadFrame>();
+        stack.Push(new LoadFrame(resolvedBundles[entry.BundleId], ReadOnlyMemory<byte>.Empty));
 
-        try
+        // Preserve the original depth-first semantics without using recursive calls:
+        // configuration is requested on entry; Load runs only after all dependencies finish.
+        while (stack.Count > 0)
         {
-            var bundle = requestedRoots[entry.BundleId];
-            ValidateResolvedBundle(entry.BundleId, entry.Version, bundle);
+            var frame = stack.Peek();
+            var bundle = frame.Bundle;
 
-            LoadBundle(
-                bundle,
-                ReadOnlyMemory<byte>.Empty,
-                loaded,
-                loadedIds,
-                loading,
-                loadContext,
-                configurationSource,
-                requestedRoots,
-                runtimeId);
-        }
-        finally
-        {
-            loading.Remove(entry.BundleId);
-        }
-    }
-
-    private void LoadBundle(
-        IMicroBundle bundle,
-        ReadOnlyMemory<byte> dependencyConfiguration,
-        List<IMicroBundle> loaded,
-        HashSet<ulong> loadedIds,
-        HashSet<ulong> loading,
-        MicroBundleLoadContext loadContext,
-        IMicroBundleConfigurationSource? configurationSource,
-        IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots,
-        ulong runtimeId)
-    {
-        var version = bundle.Descriptor.Version;
-        var configuration = dependencyConfiguration;
-
-        if (configurationSource is not null &&
-            configurationSource.TryGetConfiguration(runtimeId, bundle.Id, version, out var externalConfiguration))
-        {
-            configuration = externalConfiguration;
-        }
-
-        loadContext.SetConfiguration(bundle.Id, configuration);
-
-        foreach (var dependency in bundle.Dependencies)
-        {
-            if (loadedIds.Contains(dependency.BundleId))
-                continue;
-
-            if (!loading.Add(dependency.BundleId))
-                throw new InvalidOperationException(
-                    $"MicroBundle dependency cycle detected at {dependency.BundleId}.");
-
-            try
+            if (!frame.Entered)
             {
-                IMicroBundle? dependencyBundle;
-                if (requestedRoots.TryGetValue(dependency.BundleId, out var requestedRoot))
+                if (loadedIds.Contains(bundle.Id))
                 {
-                    dependencyBundle = requestedRoot;
+                    stack.Pop();
+                    continue;
                 }
-                else if (!_catalog.TryResolve(dependency.BundleId, out dependencyBundle) ||
-                         dependencyBundle is null)
-                {
+
+                if (!loading.Add(bundle.Id))
                     throw new InvalidOperationException(
-                        $"MicroBundle {dependency.BundleId} could not be resolved.");
+                        $"MicroBundle dependency cycle detected at {bundle.Id}.");
+
+                var configuration = frame.DependencyConfiguration;
+                var version = bundle.Descriptor.Version;
+                if (configurationSource is not null &&
+                    configurationSource.TryGetConfiguration(runtimeId, bundle.Id, version, out var externalConfiguration))
+                {
+                    configuration = externalConfiguration;
                 }
 
-                ValidateResolvedIdentity(dependency.BundleId, dependencyBundle);
-
-                LoadBundle(
-                    dependencyBundle,
-                    dependency.Configuration,
-                    loaded,
-                    loadedIds,
-                    loading,
-                    loadContext,
-                    configurationSource,
-                    requestedRoots,
-                    runtimeId);
+                loadContext.SetConfiguration(bundle.Id, configuration);
+                frame.Entered = true;
             }
-            finally
+
+            var dependencies = dependencyRequestsById[bundle.Id];
+            if (frame.NextDependencyIndex < dependencies.Length)
             {
-                loading.Remove(dependency.BundleId);
-            }
-        }
+                var dependency = dependencies[frame.NextDependencyIndex++];
+                if (loadedIds.Contains(dependency.BundleId))
+                    continue;
 
-        bundle.Load(loadContext);
-        loaded.Add(bundle);
-        loadedIds.Add(bundle.Id);
+                if (loading.Contains(dependency.BundleId))
+                    throw new InvalidOperationException(
+                        $"MicroBundle dependency cycle detected at {dependency.BundleId}.");
+
+                stack.Push(new LoadFrame(resolvedBundles[dependency.BundleId], dependency.Configuration));
+                continue;
+            }
+
+            bundle.Load(loadContext);
+            loaded.Add(bundle);
+            loadedIds.Add(bundle.Id);
+            loading.Remove(bundle.Id);
+            stack.Pop();
+        }
     }
 
     private static void ValidateResolvedIdentity(ulong requestedId, IMicroBundle bundle)
+    {
+        var requests = bundle.Dependencies;
+        if (requests is null)
+            throw new InvalidOperationException(
+                $"MicroBundle {requestedId} returned no dependency request list.");
+
+        ValidateResolvedIdentity(requestedId, bundle, requests);
+    }
+
+    private static void ValidateResolvedIdentity(
+        ulong requestedId,
+        IMicroBundle bundle,
+        IReadOnlyList<MicroBundleDependencyRequest> requests)
     {
         var descriptor = bundle.Descriptor;
         if (descriptor is null)
@@ -328,11 +358,6 @@ public sealed class FsmCos : IFsmCos
         if (descriptor.Id != requestedId)
             throw new InvalidOperationException(
                 $"MicroBundle {requestedId} has a descriptor for bundle {descriptor.Id}.");
-
-        var requests = bundle.Dependencies;
-        if (requests is null)
-            throw new InvalidOperationException(
-                $"MicroBundle {requestedId} returned no dependency request list.");
 
         var requestIds = new HashSet<ulong>();
         foreach (var request in requests)
