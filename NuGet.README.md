@@ -31,6 +31,8 @@ RuntimeManifest → FSM_COS → RuntimeAssembly → Host
 - **FSM_COS** composes the requested capabilities.
 - **The host** owns execution, lifecycle, UI, and presentation.
 
+Alpha.7 exposes read-only snapshots for assembly and plan collections: callers cannot mutate the collection structure through those public views. This does **not** make the `MicroBundle` objects inside those collections immutable; their behavior remains owned by their domain contracts.
+
 ## 🟢 04 — See it in a minute
 
 To install FSM_COS, choose an available version from the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS). If you intend to use a prerelease, request prerelease versions explicitly:
