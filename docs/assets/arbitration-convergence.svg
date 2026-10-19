@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 700">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 700" role="img" aria-labelledby="asset-title asset-desc">
+<title id="asset-title">FSM_COS arbitration and convergence</title>
+<desc id="asset-desc">Diagram illustrating repeated arbitration rounds and the convergence condition, bounded by a configured maximum round count.</desc>
 <defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#070b12"/><stop offset="1" stop-color="#111827"/></linearGradient></defs>
 <rect width="1400" height="700" rx="26" fill="url(#bg)"/>
 <g font-family="Arial,Helvetica,sans-serif">
