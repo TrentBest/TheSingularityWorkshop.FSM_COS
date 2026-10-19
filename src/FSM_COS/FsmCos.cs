@@ -8,11 +8,13 @@ public sealed class FsmCos : IFsmCos
     public const int DefaultMaximumArbitrationRounds = 10;
     public const int DefaultMaximumBundleCount = 10_000;
     public const int DefaultMaximumDependencyRequestCount = 100_000;
+    public const long DefaultMaximumConfigurationBytes = 64L * 1024 * 1024;
 
     private readonly IMicroBundleCatalog _catalog;
     private readonly int _maximumArbitrationRounds;
     private readonly int _maximumBundleCount;
     private readonly int _maximumDependencyRequestCount;
+    private readonly long _maximumConfigurationBytes;
 
     public FsmCos(
         IMicroBundleCatalog catalog,
@@ -21,7 +23,8 @@ public sealed class FsmCos : IFsmCos
             catalog,
             maximumArbitrationRounds,
             DefaultMaximumBundleCount,
-            DefaultMaximumDependencyRequestCount)
+            DefaultMaximumDependencyRequestCount,
+            DefaultMaximumConfigurationBytes)
     {
     }
 
@@ -30,6 +33,21 @@ public sealed class FsmCos : IFsmCos
         int maximumArbitrationRounds,
         int maximumBundleCount,
         int maximumDependencyRequestCount)
+        : this(
+            catalog,
+            maximumArbitrationRounds,
+            maximumBundleCount,
+            maximumDependencyRequestCount,
+            DefaultMaximumConfigurationBytes)
+    {
+    }
+
+    public FsmCos(
+        IMicroBundleCatalog catalog,
+        int maximumArbitrationRounds,
+        int maximumBundleCount,
+        int maximumDependencyRequestCount,
+        long maximumConfigurationBytes)
     {
         if (maximumArbitrationRounds < 1)
             throw new ArgumentOutOfRangeException(nameof(maximumArbitrationRounds));
@@ -37,11 +55,14 @@ public sealed class FsmCos : IFsmCos
             throw new ArgumentOutOfRangeException(nameof(maximumBundleCount));
         if (maximumDependencyRequestCount < 1)
             throw new ArgumentOutOfRangeException(nameof(maximumDependencyRequestCount));
+        if (maximumConfigurationBytes < 0)
+            throw new ArgumentOutOfRangeException(nameof(maximumConfigurationBytes));
 
         _catalog = catalog ?? throw new ArgumentNullException(nameof(catalog));
         _maximumArbitrationRounds = maximumArbitrationRounds;
         _maximumBundleCount = maximumBundleCount;
         _maximumDependencyRequestCount = maximumDependencyRequestCount;
+        _maximumConfigurationBytes = maximumConfigurationBytes;
     }
 
     public RuntimeAssembly Execute(
@@ -72,7 +93,10 @@ public sealed class FsmCos : IFsmCos
         // cannot change the request between validation, resolution, loading, and handoff.
         manifest = manifest with
         {
-            Bundles = Array.AsReadOnly(manifest.Bundles.ToArray()),
+            Bundles = Array.AsReadOnly(SnapshotBounded(
+                manifest.Bundles,
+                _maximumBundleCount,
+                "Runtime manifest root bundles")),
             LoadPlan = manifest.LoadPlan is null
                 ? null
                 : Array.AsReadOnly(manifest.LoadPlan.ToArray())
@@ -116,7 +140,11 @@ public sealed class FsmCos : IFsmCos
 
         // Resolve and validate the complete graph before any bundle Load method can have side effects.
         // Keep the exact resolved objects and dependency snapshots for both validation and loading.
-        var resolvedBundles = ResolveDependencyGraph(requestedRoots, manifest.Schedule is not null, out var dependencyRequestsById);
+        var resolvedBundles = ResolveDependencyGraph(
+            requestedRoots,
+            manifest.Schedule is not null,
+            out var dependencyRequestsById,
+            out var totalConfigurationBytes);
 
         if (manifest.Schedule is not null)
             ValidateScheduleAgainstResolvedGraph(manifest, resolvedBundles, dependencyRequestsById);
@@ -137,7 +165,8 @@ public sealed class FsmCos : IFsmCos
                 loading,
                 loadContext,
                 configurationSource,
-                manifest.RuntimeId);
+                manifest.RuntimeId,
+                ref totalConfigurationBytes);
         }
 
         var arbitrationContext = new ArbitrationContext(
@@ -210,10 +239,12 @@ public sealed class FsmCos : IFsmCos
     private Dictionary<ulong, IMicroBundle> ResolveDependencyGraph(
         IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots,
         bool validatingPublishedSchedule,
-        out Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById)
+        out Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById,
+        out long totalConfigurationBytes)
     {
         var resolvedBundles = new Dictionary<ulong, IMicroBundle>();
         dependencyRequestsById = new Dictionary<ulong, MicroBundleDependencyRequest[]>();
+        totalConfigurationBytes = 0;
         var discovered = requestedRoots.ToDictionary(pair => pair.Key, pair => pair.Value);
         if (discovered.Count > _maximumBundleCount)
             throw new InvalidOperationException(
@@ -236,21 +267,13 @@ public sealed class FsmCos : IFsmCos
             if (declaredDependencies is null)
                 throw new InvalidOperationException($"MicroBundle {id} returned no dependency request list.");
 
-            // Copy the configuration bytes as well as the request structs. ReadOnlyMemory
-            // prevents writes through this view; it does not make the backing array immutable.
-            if (declaredDependencies.Count > _maximumDependencyRequestCount - dependencyRequestCount)
-                throw new InvalidOperationException(
-                    $"Dependency graph exceeds the configured maximum of {_maximumDependencyRequestCount} dependency requests.");
-
-            var dependencySnapshot = new MicroBundleDependencyRequest[declaredDependencies.Count];
-            for (var index = 0; index < declaredDependencies.Count; index++)
-            {
-                var request = declaredDependencies[index];
-                dependencySnapshot[index] = new MicroBundleDependencyRequest(
-                    request.BundleId,
-                    request.Configuration.ToArray());
-            }
-            dependencyRequestCount += dependencySnapshot.Length;
+            // Enumerate with a hard bound rather than trusting a custom IReadOnlyList.Count.
+            // Copy each payload because ReadOnlyMemory does not make its backing array immutable.
+            var dependencySnapshot = SnapshotDependencyRequests(
+                id,
+                declaredDependencies,
+                ref dependencyRequestCount,
+                ref totalConfigurationBytes);
             ValidateResolvedIdentity(id, bundle, dependencySnapshot);
             resolvedBundles.Add(id, bundle);
             dependencyRequestsById.Add(id, dependencySnapshot);
@@ -346,7 +369,8 @@ public sealed class FsmCos : IFsmCos
         HashSet<ulong> loading,
         MicroBundleLoadContext loadContext,
         IMicroBundleConfigurationSource? configurationSource,
-        ulong runtimeId)
+        ulong runtimeId,
+        ref long totalConfigurationBytes)
     {
         if (loadedIds.Contains(entry.BundleId))
             return;
@@ -380,7 +404,10 @@ public sealed class FsmCos : IFsmCos
                 {
                     // A configuration provider may return memory over a mutable buffer.
                     // Copy it before storing it in the shared load context.
-                    configuration = externalConfiguration.ToArray();
+                    configuration = SnapshotConfiguration(
+                        externalConfiguration,
+                        ref totalConfigurationBytes,
+                        $"configuration provider for MicroBundle {bundle.Id}");
                 }
 
                 loadContext.SetConfiguration(bundle.Id, configuration);
@@ -410,6 +437,62 @@ public sealed class FsmCos : IFsmCos
         }
     }
 
+    private MicroBundleDependencyRequest[] SnapshotDependencyRequests(
+        ulong bundleId,
+        IReadOnlyList<MicroBundleDependencyRequest> declaredDependencies,
+        ref int dependencyRequestCount,
+        ref long totalConfigurationBytes)
+    {
+        var remaining = _maximumDependencyRequestCount - dependencyRequestCount;
+        var snapshot = new List<MicroBundleDependencyRequest>(Math.Min(remaining, 256));
+        foreach (var request in declaredDependencies)
+        {
+            if (snapshot.Count >= remaining)
+                throw new InvalidOperationException(
+                    $"Dependency graph exceeds the configured maximum of {_maximumDependencyRequestCount} dependency requests.");
+
+            var configuration = SnapshotConfiguration(
+                request.Configuration,
+                ref totalConfigurationBytes,
+                $"dependency request for MicroBundle {bundleId}");
+            snapshot.Add(new MicroBundleDependencyRequest(request.BundleId, configuration));
+        }
+
+        dependencyRequestCount += snapshot.Count;
+        return snapshot.ToArray();
+    }
+
+    private ReadOnlyMemory<byte> SnapshotConfiguration(
+        ReadOnlyMemory<byte> configuration,
+        ref long totalConfigurationBytes,
+        string source)
+    {
+        if (configuration.Length > _maximumConfigurationBytes - totalConfigurationBytes)
+            throw new InvalidOperationException(
+                $"Configuration data from {source} exceeds the configured maximum of {_maximumConfigurationBytes} bytes.");
+
+        var snapshot = configuration.ToArray();
+        totalConfigurationBytes += snapshot.Length;
+        return snapshot;
+    }
+
+    private static T[] SnapshotBounded<T>(
+        IEnumerable<T> source,
+        int maximumCount,
+        string description)
+    {
+        var snapshot = new List<T>(Math.Min(maximumCount, 256));
+        foreach (var item in source)
+        {
+            if (snapshot.Count >= maximumCount)
+                throw new InvalidOperationException(
+                    $"{description} exceeds the configured maximum of {maximumCount} entries.");
+            snapshot.Add(item);
+        }
+
+        return snapshot.ToArray();
+    }
+
     private static void ValidateResolvedDescriptorIdentity(ulong requestedId, IMicroBundle bundle)
     {
         var descriptor = bundle.Descriptor;
@@ -424,17 +507,6 @@ public sealed class FsmCos : IFsmCos
         if (descriptor.Id != requestedId)
             throw new InvalidOperationException(
                 $"MicroBundle {requestedId} has a descriptor for bundle {descriptor.Id}.");
-    }
-
-    private static void ValidateResolvedIdentity(ulong requestedId, IMicroBundle bundle)
-    {
-        ValidateResolvedDescriptorIdentity(requestedId, bundle);
-        var requests = bundle.Dependencies;
-        if (requests is null)
-            throw new InvalidOperationException(
-                $"MicroBundle {requestedId} returned no dependency request list.");
-
-        ValidateResolvedIdentity(requestedId, bundle, requests);
     }
 
     private static void ValidateResolvedIdentity(
@@ -473,7 +545,7 @@ public sealed class FsmCos : IFsmCos
         string requestedVersion,
         IMicroBundle bundle)
     {
-        ValidateResolvedIdentity(requestedId, bundle);
+        ValidateResolvedDescriptorIdentity(requestedId, bundle);
 
         if (!string.Equals(bundle.Descriptor.Version, requestedVersion, StringComparison.Ordinal))
             throw new InvalidOperationException(
