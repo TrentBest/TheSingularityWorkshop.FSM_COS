@@ -21,8 +21,9 @@ public sealed class RuntimeManifestLoadPlan
     {
         ArgumentNullException.ThrowIfNull(entries);
 
-        // Validate a stable snapshot rather than caller-owned mutable collections.
-        entries = entries.ToArray();
+        // Bound enumeration before allocating a snapshot; caller-supplied list
+        // implementations can misreport Count or enumerate pathologically.
+        entries = SnapshotBounded(entries, RuntimeManifestSchedule.DefaultMaximumEntryCount);
 
         for (var index = 0; index < entries.Count; index++)
         {
@@ -160,6 +161,21 @@ public sealed class RuntimeManifestLoadPlan
                 evaluator.ShouldLoad(entry, experienceContext))
                 yield return entry;
         }
+    }
+
+    private static T[] SnapshotBounded<T>(IEnumerable<T> source, int maximumCount)
+    {
+        var snapshot = new List<T>(Math.Min(maximumCount, 256));
+        foreach (var item in source)
+        {
+            if (snapshot.Count >= maximumCount)
+                throw new ArgumentException(
+                    $"Load-plan entries exceed the maximum of {maximumCount} entries.",
+                    nameof(source));
+            snapshot.Add(item);
+        }
+
+        return snapshot.ToArray();
     }
 
     private void EnsureKnown(ulong bundleId)
