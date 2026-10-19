@@ -304,7 +304,7 @@ public sealed class FsmCos : IFsmCos
 
     private static void ValidateDependencyGraphAcyclic(
         IEnumerable<ulong> rootIds,
-        IReadOnlyDictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById)
+        Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById)
     {
         // Iterative depth-first traversal avoids exhausting the process stack on a deep or hostile graph.
         var states = new Dictionary<ulong, byte>();
