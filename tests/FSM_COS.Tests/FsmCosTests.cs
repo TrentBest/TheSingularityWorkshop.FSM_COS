@@ -108,6 +108,28 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_rejects_dependency_request_collection_that_underreports_its_enumerated_size()
+    {
+        var root = new DependencyContractBundle(
+            id: 1,
+            descriptorDependencyIds: new[] { 2UL, 3UL },
+            runtimeDependencies: new MisreportedDependencyList(
+                MicroBundleDependencyRequest.Unconfigured(2),
+                MicroBundleDependencyRequest.Unconfigured(3)));
+        var first = new TestBundle(2);
+        var second = new TestBundle(3);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, first, second), 10, 10, 1)
+                .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("configured maximum of 1 dependency requests", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, first.LoadCalls);
+        Assert.Equal(0, second.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_rejects_total_dependency_configuration_bytes_over_limit_before_loading()
     {
         var leaf = new TestBundle(3);
@@ -1282,6 +1304,21 @@ public sealed class FsmCosTests
 
             return _inner.TryResolve(bundleId, out bundle);
         }
+    }
+
+    private sealed class MisreportedDependencyList : IReadOnlyList<MicroBundleDependencyRequest>
+    {
+        private readonly MicroBundleDependencyRequest[] _entries;
+
+        public MisreportedDependencyList(params MicroBundleDependencyRequest[] entries) => _entries = entries;
+
+        public int Count => Math.Min(1, _entries.Length);
+        public MicroBundleDependencyRequest this[int index] => _entries[index];
+
+        public IEnumerator<MicroBundleDependencyRequest> GetEnumerator() =>
+            ((IEnumerable<MicroBundleDependencyRequest>)_entries).GetEnumerator();
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
     private sealed class MisreportedRootList : IReadOnlyList<MicroBundleManifestEntry>
