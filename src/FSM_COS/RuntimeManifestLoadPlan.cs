@@ -33,8 +33,13 @@ public sealed class RuntimeManifestLoadPlan
             }
         }
 
-        if (entries.Select(entry => entry.Reference.BundleId).Distinct().Count() != entries.Count)
-            throw new ArgumentException("Load-plan entries must have unique MicroBundle IDs.", nameof(entries));
+        var duplicateId = entries
+            .GroupBy(entry => entry.Reference.BundleId)
+            .FirstOrDefault(group => group.Count() > 1)?.Key;
+        if (duplicateId.HasValue)
+            throw new ArgumentException(
+                $"Load-plan entries contain duplicate MicroBundle ID {duplicateId.Value}.",
+                nameof(entries));
 
         Entries = Array.AsReadOnly(entries.ToArray());
         _schedule = schedule;
