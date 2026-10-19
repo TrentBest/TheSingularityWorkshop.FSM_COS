@@ -15,6 +15,7 @@ public sealed class FsmCosTests
 
         Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 0, 1));
         Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 1, 0));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 1, 1, -1));
     }
 
     [Fact]
@@ -65,6 +66,70 @@ public sealed class FsmCosTests
         Assert.Equal(0, root.LoadCalls);
         Assert.Equal(0, firstDependency.LoadCalls);
         Assert.Equal(0, secondDependency.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_a_root_collection_that_underreports_its_enumerated_size()
+    {
+        var first = new TestBundle(1);
+        var second = new TestBundle(2);
+        var catalog = new ThrowingCatalog(
+            new TestCatalog(first, second),
+            failingBundleId: 1,
+            new InvalidOperationException("catalog must not be queried"));
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(catalog, 10, 1, 10).Execute(
+                new RuntimeManifest(42, new MisreportedRootList(Entry(1), Entry(2)))));
+
+        Assert.Contains("root bundles", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("configured maximum of 1", exception.Message);
+        Assert.Equal(0, first.LoadCalls);
+        Assert.Equal(0, second.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_total_dependency_configuration_bytes_over_limit_before_loading()
+    {
+        var leaf = new TestBundle(3);
+        var middle = new TestBundle(2, new MicroBundleDependencyRequest(3, new byte[] { 3, 4 }));
+        var root = new TestBundle(1, new MicroBundleDependencyRequest(2, new byte[] { 1, 2 }));
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, middle, leaf), 10, 10, 10, 3)
+                .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("configured maximum of 3 bytes", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, middle.LoadCalls);
+        Assert.Equal(0, leaf.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_accepts_dependency_configuration_at_exact_byte_limit()
+    {
+        var dependency = new TestBundle(2);
+        var root = new TestBundle(1, new MicroBundleDependencyRequest(2, new byte[] { 1, 2, 3 }));
+
+        var assembly = new FsmCos(new TestCatalog(root, dependency), 10, 10, 10, 3)
+            .Execute(new RuntimeManifest(42, new[] { Entry(1) }));
+
+        Assert.Equal(new ulong[] { 2, 1 }, assembly.Bundles.Select(bundle => bundle.Id));
+    }
+
+    [Fact]
+    public void Execute_rejects_external_configuration_over_limit_before_loading_bundle()
+    {
+        var root = new TestBundle(1);
+        var source = new TestConfigurationSource((1, "0.1.0-test", new byte[] { 1, 2, 3 }));
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root), 10, 10, 10, 2)
+                .Execute(new RuntimeManifest(42, new[] { Entry(1) }), source));
+
+        Assert.Contains("configuration provider", exception.Message);
+        Assert.Contains("configured maximum of 2 bytes", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
     }
 
     [Fact]
@@ -1198,6 +1263,21 @@ public sealed class FsmCosTests
 
             return _inner.TryResolve(bundleId, out bundle);
         }
+    }
+
+    private sealed class MisreportedRootList : IReadOnlyList<MicroBundleManifestEntry>
+    {
+        private readonly MicroBundleManifestEntry[] _entries;
+
+        public MisreportedRootList(params MicroBundleManifestEntry[] entries) => _entries = entries;
+
+        public int Count => Math.Min(1, _entries.Length);
+        public MicroBundleManifestEntry this[int index] => _entries[index];
+
+        public IEnumerator<MicroBundleManifestEntry> GetEnumerator() =>
+            ((IEnumerable<MicroBundleManifestEntry>)_entries).GetEnumerator();
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
     private sealed class TestConfigurationSource : IMicroBundleConfigurationSource
