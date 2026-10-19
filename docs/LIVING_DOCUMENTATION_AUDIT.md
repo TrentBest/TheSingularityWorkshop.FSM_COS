@@ -64,7 +64,7 @@ Use the status labels consistently:
 | `docs/STAGED_MANIFEST_LOADING.md` | Preflight, planning, validation, loading, failure boundaries | Added dependency-resolution SVG with an explicit caveat that it does not claim end-to-end deferred loading | Embedded / verify |
 | `docs/CONSUMING_MICROBUNDLES.md` | Consumer flow, catalog responsibility, dependency ordering | Verified dependency graph and depth-first dependency-before-dependent load order against `FsmCos.LoadRoot`; alt text distinguishes illustrative graph from runtime contract | Existing visual verified |
 | `docs/ARBITRATION.md` | Iterations, convergence, limit, non-convergence | Verified against `FsmCos.Execute`; added alt text and a caption documenting the zero-based converging-round index and failure at the limit | Existing visual verified |
-| `docs/RUNTIME_ASSEMBLY.md` | Result shape and handoff | Existing assembly-handoff SVG is embedded; verify that host responsibilities remain clearly outside the kernel | Embedded / verify |
+| `docs/RUNTIME_ASSEMBLY.md` | Result shape and handoff | Verified `runtime-assembly-handoff.svg` against `RuntimeAssembly` and `FsmCos.Execute`; added descriptive alt text and a caption separating the implemented composition boundary from host-owned execution | Existing visual verified |
 | `docs/RUNTIME_BOUNDARY.md` | Explicitly excluded responsibilities | Two boundary SVGs are embedded; check for duplication and ensure exclusions match source | Embedded / verify |
 | `docs/AI_COMPOSITION.md` | AI-oriented composition contracts and current limits | Added AI-composition SVG and explicit conceptual/status caveat; verify diagram labels against current domains | Embedded / verify |
 | `docs/ECOSYSTEM_INTEGRATION_MAP.md` | Package roles and dependency direction | Added system SVG to the conceptual target section with a caveat separating target architecture from verified package facts | Embedded / verify |
@@ -103,6 +103,7 @@ This is an initial prioritized pass, not a claim that the remaining documents ha
 - [x] Verified `arbitration-convergence.svg` against `FsmCos.Execute`; documented the zero-based `RuntimeAssembly.ArbitrationRounds` value and no-assembly-on-nonconvergence behavior.
 - [x] Verified `dependency-resolution.svg` against `FsmCos.LoadRoot`; documented dependency-first loading, duplicate-ID skipping, cycle detection, and that the pictured graph is illustrative.
 - [x] Verified the `RUNTIME_MANIFEST.md` pipeline graphic against `RuntimeManifest` and `FsmCos.Execute`; clarified that editor authoring, closure baking, and publication are conceptual upstream stages, not shipped FSM_COS behavior.
+- [x] Verified `runtime-assembly-handoff.svg` against `RuntimeAssembly` and `FsmCos.Execute`; added alt text and a caption that distinguishes the implemented assembly contract from host-owned execution.
 - [ ] Continue verifying remaining SVGs against current source and each document's exact topic.
 - [ ] Embed the existing relevant SVG in the best canonical home instead of creating near-duplicates.
 - [ ] Add concise alt text and a caption that explains the visual's point.
