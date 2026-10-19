@@ -10,9 +10,9 @@ This document is intentionally narrow. It explains what an FSM_COS consumer supp
 
 ## The boundary
 
-![Dependency resolution: requested roots expand into their required dependencies before the composition is handed off](assets/dependency-resolution.svg)
+![Dependency closure: root A depends on B and D, B depends on C, and depth-first composition loads C, B, D, then A](assets/dependency-resolution.svg)
 
-*This diagram focuses on the consumer-visible dependency relationship. The catalog supplies resolution; FSM_COS owns the composition algorithm.*
+*Verified against `FsmCos.LoadRoot`: dependencies are resolved and loaded before their dependent bundle; already-loaded IDs are skipped and active IDs detect cycles. The catalog supplies resolution; FSM_COS owns traversal and load order. The A → B,D → C graph is illustrative, not a fixed runtime.*
 
 
 ```text
