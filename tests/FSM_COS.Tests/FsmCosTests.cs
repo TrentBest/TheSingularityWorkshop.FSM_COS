@@ -16,6 +16,25 @@ public sealed class FsmCosTests
         Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 0, 1));
         Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 1, 0));
         Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 1, 1, -1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 1, 1, -1));
+    }
+
+    [Fact]
+    public void Execute_bounds_actual_root_enumeration_when_a_custom_list_underreports_count()
+    {
+        var first = new TestBundle(1);
+        var second = new TestBundle(2);
+        var roots = new MisreportingReadOnlyList<MicroBundleManifestEntry>(
+            new[] { Entry(1), Entry(2) },
+            reportedCount: 1);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(first, second), 10, 1, 10)
+                .Execute(new RuntimeManifest(42, roots)));
+
+        Assert.Contains("Runtime manifest root bundles exceeds the configured maximum of 1", exception.Message);
+        Assert.Equal(0, first.LoadCalls);
+        Assert.Equal(0, second.LoadCalls);
     }
 
     [Fact]
@@ -1654,6 +1673,23 @@ public sealed class FsmCosTests
 
             return false;
         }
+    }
+
+    private sealed class MisreportingReadOnlyList<T> : IReadOnlyList<T>
+    {
+        private readonly T[] _items;
+        private readonly int _reportedCount;
+
+        public MisreportingReadOnlyList(IEnumerable<T> items, int reportedCount)
+        {
+            _items = items.ToArray();
+            _reportedCount = reportedCount;
+        }
+
+        public int Count => _reportedCount;
+        public T this[int index] => _items[index];
+        public IEnumerator<T> GetEnumerator() => ((IEnumerable<T>)_items).GetEnumerator();
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
     private sealed class TestBundle : TheSingularityWorkshop.MicroBundleDomain.IMicroBundle
