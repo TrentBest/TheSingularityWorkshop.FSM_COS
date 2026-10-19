@@ -8,6 +8,48 @@
 
 *The graphic shows the implemented boundary, not an execution pipeline: `FsmCos.Execute` validates the manifest, resolves and loads the requested dependency closure, arbitrates to convergence, and returns `RuntimeAssembly`. The host-specific examples on the right are responsibilities outside this package.*
 
+
+## UML class diagram: assembly handoff
+
+~~~mermaid
+classDiagram
+    class FsmCos {
+        +Execute(manifest, configurationSource) RuntimeAssembly
+    }
+    class RuntimeManifest {
+        +RuntimeId: ulong
+        +Bundles: IReadOnlyList
+        +Intent: SemanticIntent
+    }
+    class RuntimeAssembly {
+        +RuntimeId: ulong
+        +Bundles: IReadOnlyList~IMicroBundle~
+        +LoadedBundles: IReadOnlyList~IMicroBundle~
+        +ArbitrationRounds: int
+        +Intent: SemanticIntent
+        +TryGetBundle(bundleId, bundle) bool
+        +TryGetBundle~TBundle~(bundleId, bundle) bool
+        +TryGetBundle~TBundle~(bundle) bool
+    }
+    class IMicroBundle {
+        <<MicroBundleDomain contract>>
+        +Id: ulong
+        +Descriptor
+        +Load(context)
+        +Arbitrate(context, roundIndex) bool
+    }
+    class Host {
+        <<outside FSM_COS>>
+    }
+
+    FsmCos ..> RuntimeManifest : consumes
+    FsmCos ..> RuntimeAssembly : returns after convergence
+    RuntimeAssembly o-- "0..*" IMicroBundle : exposes loaded capabilities
+    Host --> RuntimeAssembly : receives handoff
+~~~
+
+RuntimeAssembly is a snapshot of the loaded MicroBundle references and the converged round index. It does not start an Experience, tick FSM_API process groups, render UI, or roll back side effects from failed bundle code.
+
 It is the point where composition ends and host-specific execution can begin.
 
 ## The alpha contract
