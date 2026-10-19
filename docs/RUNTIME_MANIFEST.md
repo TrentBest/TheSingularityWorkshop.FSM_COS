@@ -20,6 +20,74 @@ It deliberately does **not** answer:
 
 *Scope note: this is the intended authoring/publication pipeline, not a claim that FSM_COS currently ships those editor, validation, closure-baking, or manifest-publication stages. The implemented contract begins with `RuntimeManifest`; `FsmCos.Execute` validates and composes that request.*
 
+## UML class diagram: manifest and published plan
+
+The manifest's root requests are distinct from optional published identity/stage metadata and dependency edges. The content hash is recorded in MicroBundleReference; this type does not itself fetch or verify artifact bytes.
+
+~~~mermaid
+classDiagram
+    class RuntimeManifest {
+        +RuntimeId: ulong
+        +Bundles: IReadOnlyList~MicroBundleManifestEntry~
+        +ExperienceContext: IStateContext
+        +LoadPlan: IReadOnlyList~RuntimeManifestEntry~
+        +Schedule: RuntimeManifestSchedule
+        +Intent: SemanticIntent
+        +Empty(runtimeId, context, intent)$ RuntimeManifest
+        +ValidateStagedPlan() void
+    }
+    class MicroBundleManifestEntry {
+        <<record struct>>
+        +BundleId: ulong
+        +Version: string
+    }
+    class RuntimeManifestEntry {
+        <<record>>
+        +Reference: MicroBundleReference
+        +Stage: ManifestLoadStage
+        +IsValid: bool
+    }
+    class MicroBundleReference {
+        <<record struct>>
+        +BundleId: ulong
+        +Version: string
+        +ContentHash: string
+        +IsValid: bool
+        +Matches(entry) bool
+    }
+    class ManifestLoadStage {
+        <<enumeration>>
+        Bootstrap
+        Resident
+        Deferred
+    }
+    class RuntimeManifestDependency {
+        <<record struct>>
+        +BundleId: ulong
+        +DependencyId: ulong
+        +IsValid: bool
+    }
+    class RuntimeManifestSchedule {
+        +Entries: IReadOnlyList~RuntimeManifestEntry~
+        +Dependencies: IReadOnlyList~RuntimeManifestDependency~
+        +IndependentEntries: IReadOnlyList~RuntimeManifestEntry~
+        +DependencyEntries: IReadOnlyList~RuntimeManifestEntry~
+        +DependenciesOf(bundleId) IReadOnlyList
+        +IsDependencyReady(bundleId, isLoaded) bool
+    }
+
+    RuntimeManifest *-- "0..*" MicroBundleManifestEntry : root requests
+    RuntimeManifest o-- "0..*" RuntimeManifestEntry : optional load plan
+    RuntimeManifest o-- "0..1" RuntimeManifestSchedule : optional dependency plan
+    RuntimeManifestEntry --> MicroBundleReference : identity
+    RuntimeManifestEntry --> ManifestLoadStage : intended stage
+    RuntimeManifestSchedule o-- "0..*" RuntimeManifestEntry : entries
+    RuntimeManifestSchedule o-- "0..*" RuntimeManifestDependency : edges
+    RuntimeManifestDependency ..> RuntimeManifestEntry : links by BundleId
+~~~
+
+The schedule is a validated dependency plan. It does not localize artifacts, execute a process schedule, or by itself enable deferred loading. The diagram reflects the current source model, including that the root manifest requests a version while published references also carry ContentHash.
+
 ## The contract
 
 The current development contract is intentionally small:
