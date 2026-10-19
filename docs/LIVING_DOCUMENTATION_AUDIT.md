@@ -53,19 +53,19 @@ Use the status labels consistently:
 | Document | Visual intent | Initial action | Status |
 |---|---|---|---|
 | `README.md` | One-screen composition overview | Preserve overview SVG; verify it is accurate and not merely decorative | Embedded / verify |
-| `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Add a visual version of the core boundary; retain the plain-language explanation | Add / improve |
+| `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Added the overview SVG with an explanatory caption; validate visual semantics and accessibility | Embedded / verify |
 | `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Verify existing system SVG and reuse focused diagrams only where they add clarity | Embedded / verify |
 | `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | Add or embed the canonical composition-boundary visual and a compact lifecycle visual | Add / improve |
-| `docs/DOMAIN.md` | What FSM_COS owns versus adjacent domains | Embed domain map; show explicit ownership edges | Add / improve |
+| `docs/DOMAIN.md` | What FSM_COS owns versus adjacent domains | Added domain map with caption; verify every edge against current ownership | Embedded / verify |
 | `docs/DOMAIN_COMPLETION_ROADMAP.md` | Implemented, partial, deferred, and gated capabilities | Add a visual capability/status map grounded in the checklist | Add / improve |
 | `docs/RUNTIME_MANIFEST.md` | Caller request and manifest contents | Embed manifest-pipeline visual with labeled input/output | Add / improve |
 | `docs/MANIFEST_THEORY.md` | Semantic request versus serialized representation | Add request/representation distinction visual | Add / improve |
-| `docs/STAGED_MANIFEST_LOADING.md` | Preflight, planning, validation, loading, failure boundaries | Embed pipeline diagram; make pre-load versus post-load failure behavior explicit | Add / improve |
-| `docs/CONSUMING_MICROBUNDLES.md` | Consumer flow, catalog responsibility, dependency ordering | Embed dependency-resolution visual and a small end-to-end example | Add / improve |
+| `docs/STAGED_MANIFEST_LOADING.md` | Preflight, planning, validation, loading, failure boundaries | Added dependency-resolution SVG with an explicit caveat that it does not claim end-to-end deferred loading | Embedded / verify |
+| `docs/CONSUMING_MICROBUNDLES.md` | Consumer flow, catalog responsibility, dependency ordering | Added dependency-resolution SVG and caption; consumer example coverage still needs review | Embedded / verify |
 | `docs/ARBITRATION.md` | Iterations, convergence, limit, non-convergence | Embed arbitration-convergence visual; verify round limit and meaning | Add / improve |
 | `docs/RUNTIME_ASSEMBLY.md` | Result shape and handoff | Embed assembly-handoff visual | Add / improve |
 | `docs/RUNTIME_BOUNDARY.md` | Explicitly excluded responsibilities | Embed boundary diagram and responsibility comparison | Add / improve |
-| `docs/AI_COMPOSITION.md` | AI-oriented composition contracts and current limits | Embed AI-composition visual; label concepts versus shipped behavior | Add / improve |
+| `docs/AI_COMPOSITION.md` | AI-oriented composition contracts and current limits | Added AI-composition SVG and explicit conceptual/status caveat; verify diagram labels against current domains | Embedded / verify |
 | `docs/ECOSYSTEM_INTEGRATION_MAP.md` | Package roles and dependency direction | Verify domain map; visually distinguish confirmed integrations from candidates | Embedded / verify |
 | `docs/WEBPAGE_INTEGRATION.md` | Kernel/host separation and WebPage handoff | Add a host-handoff diagram grounded in current integration status | Add / improve |
 | `docs/DEVELOPMENT.md` | Build/test/release verification path | Consider a small verification flow; avoid ornamental graphics | Review |
@@ -75,6 +75,16 @@ Use the status labels consistently:
 | `DOCUMENTATION_STANDARD.md` | Shared rules for visual, living documentation | Extend standard with explicit coverage and maintenance requirements | Add / improve |
 
 This is an initial prioritized pass, not a claim that the remaining documents have been exhaustively inspected. Add rows for any further document where a visual would genuinely improve comprehension.
+
+## Progress recorded on 2026-10-19
+
+- [x] Created and indexed this coverage audit; standardized the living-visual requirements in `DOCUMENTATION_STANDARD.md`.
+- [x] Embedded explanatory SVGs in `WHAT_IS_FSM_COS.md`, `CONSUMING_MICROBUNDLES.md`, `STAGED_MANIFEST_LOADING.md`, `DOMAIN.md`, and `AI_COMPOSITION.md`.
+- [ ] Verify the latest documentation CI runs for those changes.
+- [ ] Audit all remaining Markdown files and verify existing diagrams against implementation.
+- [ ] Establish which visuals can be made genuinely living (semantic animation or source-backed GUI) and verify rendering/accessibility rather than assuming a static SVG is animated.
+
+**Important distinction:** the current SVGs inspected in this pass are static diagrams. They improve visual coverage but do not, by themselves, satisfy the stronger goal of animated or interactive living documentation. That remains an explicit follow-up, not a completed claim.
 
 ## Execution order
 
