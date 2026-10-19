@@ -6,7 +6,7 @@
 
 ![Dependency resolution and prerequisite relationships used during composition](assets/dependency-resolution.svg)
 
-*The animated outline illustrates one valid dependency-first order for the example graph (`C → B → D → A`); it is not a live trace of a running process. The graph is illustrative, while actual dependencies come from each MicroBundle's declarations. This visual does not claim host localization or end-to-end deferred loading is implemented. See [`FsmCos.LoadBundle`](../src/FSM_COS/FsmCos.cs) and the [dependency-order test](../tests/FSM_COS.Tests/FsmCosTests.cs). The ownership table below remains authoritative for the current boundary.*
+*The animated outline illustrates one valid dependency-first order for the example graph (`C → B → D → A`); it is not a live trace of a running process. The graph is illustrative, while actual dependencies come from each MicroBundle's declarations. This visual does not claim host localization or end-to-end deferred loading is implemented. See [`FsmCos.LoadBundle`](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/src/FSM_COS/FsmCos.cs) and the [dependency-order test](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/tests/FSM_COS.Tests/FsmCosTests.cs). The ownership table below remains authoritative for the current boundary.*
 
 
 The staged-loading work must keep these concerns distinct:
