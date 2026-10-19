@@ -1173,6 +1173,51 @@ public sealed class FsmCosTests
         }
     }
 
+    private sealed class ChangingDependencyCatalog : IMicroBundleCatalog
+    {
+        private readonly IMicroBundle _root;
+        private readonly IMicroBundle _firstResolution;
+        private readonly IMicroBundle _laterResolution;
+
+        public ChangingDependencyCatalog(
+            IMicroBundle root,
+            IMicroBundle firstResolution,
+            IMicroBundle laterResolution)
+        {
+            _root = root;
+            _firstResolution = firstResolution;
+            _laterResolution = laterResolution;
+        }
+
+        public int DependencyLookupCalls { get; private set; }
+
+        public bool TryResolve(ulong bundleId, string version, out IMicroBundle? bundle)
+        {
+            bundle = bundleId == _root.Id ? _root : null;
+            return bundle is not null &&
+                string.Equals(bundle.Descriptor.Version, version, StringComparison.Ordinal);
+        }
+
+        public bool TryResolve(ulong bundleId, out IMicroBundle? bundle)
+        {
+            if (bundleId == _root.Id)
+            {
+                bundle = _root;
+                return true;
+            }
+
+            if (bundleId == _firstResolution.Id)
+            {
+                DependencyLookupCalls++;
+                bundle = DependencyLookupCalls == 1 ? _firstResolution : _laterResolution;
+                return true;
+            }
+
+            bundle = null;
+            return false;
+        }
+    }
+
     private sealed class TestCatalog : IMicroBundleCatalog
     {
         private readonly Dictionary<ulong, TheSingularityWorkshop.MicroBundleDomain.IMicroBundle> _bundles;
