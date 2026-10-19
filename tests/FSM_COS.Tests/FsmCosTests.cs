@@ -251,6 +251,22 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_propagates_arbitration_failure_without_returning_an_assembly()
+    {
+        var expected = new InvalidOperationException("arbitration failed");
+        var failing = new TestBundle(1) { ArbitrationException = expected };
+        var later = new TestBundle(2);
+
+        var actual = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(failing, later))
+                .Execute(new RuntimeManifest(42, new[] { Entry(1), Entry(2) })));
+
+        Assert.Same(expected, actual);
+        Assert.Equal(1, failing.ArbitrationCalls);
+        Assert.Equal(0, later.ArbitrationCalls);
+    }
+
+    [Fact]
     public void Execute_rejects_zero_bundle_ids()
     {
         Assert.Throws<ArgumentOutOfRangeException>(() =>
@@ -901,6 +917,7 @@ public sealed class FsmCosTests
         public ReadOnlyMemory<byte> Configuration { get; private set; }
         public int LoadCalls { get; private set; }
         public Exception? LoadException { get; set; }
+        public Exception? ArbitrationException { get; set; }
         public int ChangesRemaining { get; set; }
         public int ArbitrationCalls { get; private set; }
         public ulong SeenRuntimeId { get; private set; }
@@ -920,6 +937,9 @@ public sealed class FsmCosTests
         public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex)
         {
             ArbitrationCalls++;
+            if (ArbitrationException is not null)
+                throw ArbitrationException;
+
             SeenRuntimeId = context.RuntimeId;
             SeenExperienceContext = context.ExperienceContext;
 
