@@ -16,6 +16,11 @@ The workshop analogy has a limit: FSM_COS is software with specific contracts an
 
 ## The idea in one picture
 
+![FSM_COS overview: a runtime manifest enters the composition kernel and a RuntimeAssembly is handed to a host](assets/fsm-cos-overview.svg)
+
+*The picture is the whole promise: a request enters, composition happens at a defined boundary, and the host receives the result. FSM_COS does not become the host application.*
+
+
 ```text
 A request for capabilities
           |
