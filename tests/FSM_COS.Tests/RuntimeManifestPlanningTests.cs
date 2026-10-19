@@ -7,6 +7,22 @@ namespace FSM_COS.Tests;
 public sealed class RuntimeManifestPlanningTests
 {
     [Fact]
+    public void Public_staged_plan_validation_bounds_enumeration_when_a_list_underreports_count()
+    {
+        var entries = Enumerable.Range(1, RuntimeManifestSchedule.DefaultMaximumEntryCount + 1)
+            .Select(id => new RuntimeManifestEntry(Reference((ulong)id, "1.0.0")))
+            .ToArray();
+        var manifest = new RuntimeManifest(
+            42,
+            new[] { new MicroBundleManifestEntry(1, "1.0.0") },
+            LoadPlan: new MisreportingReadOnlyList<RuntimeManifestEntry>(entries, reportedCount: 1));
+
+        var exception = Assert.Throws<InvalidOperationException>(manifest.ValidateStagedPlan);
+
+        Assert.Contains("Runtime manifest load plan exceeds the configured maximum of 10000 entries", exception.Message);
+    }
+
+    [Fact]
     public void Staged_plan_preserves_current_versioned_manifest_contract()
     {
         var reference = Reference(7, "1.2.0");
@@ -546,6 +562,23 @@ public sealed class RuntimeManifestPlanningTests
 
     private static MicroBundleReference Reference(ulong id, string version) =>
         new(id, version, $"sha256:{id}-{version}");
+
+    private sealed class MisreportingReadOnlyList<T> : IReadOnlyList<T>
+    {
+        private readonly T[] _items;
+        private readonly int _reportedCount;
+
+        public MisreportingReadOnlyList(IEnumerable<T> items, int reportedCount)
+        {
+            _items = items.ToArray();
+            _reportedCount = reportedCount;
+        }
+
+        public int Count => _reportedCount;
+        public T this[int index] => _items[index];
+        public IEnumerator<T> GetEnumerator() => ((IEnumerable<T>)_items).GetEnumerator();
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+    }
 
     private sealed class AcceptAllEvaluator : IManifestLoadEvaluator
     {
