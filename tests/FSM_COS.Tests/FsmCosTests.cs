@@ -346,10 +346,14 @@ public sealed class FsmCosTests
 
         var exception = Assert.Throws<InvalidOperationException>(() =>
             new FsmCos(new TestCatalog(root, resolvedSibling))
-                .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+                .Execute(
+                    new RuntimeManifest(42, new[] { Entry(1) }),
+                    new ThrowingConfigurationSource(
+                        new InvalidOperationException("configuration source must not be reached"))));
 
         Assert.Contains("3", exception.Message);
         Assert.Contains("could not be resolved", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("configuration source must not be reached", exception.Message);
         Assert.Equal(0, resolvedSibling.LoadCalls);
         Assert.Equal(0, root.LoadCalls);
     }
