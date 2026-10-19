@@ -109,6 +109,30 @@ public sealed class FsmCosTests
 
 
     [Fact]
+    public void Execute_rejects_default_root_manifest_entry_with_actionable_id_diagnostic()
+    {
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog()).Execute(
+                new RuntimeManifest(42, new[] { default(MicroBundleManifestEntry) })));
+
+        Assert.Contains("root MicroBundle entry with ID 0", exception.Message);
+    }
+
+    [Fact]
+    public void Execute_rejects_default_root_manifest_entry_with_actionable_version_diagnostic()
+    {
+        var invalidEntry = new MicroBundleManifestEntry(1, "0.1.0-test");
+        invalidEntry = default;
+        invalidEntry = new MicroBundleManifestEntry(1, "0.1.0-test");
+        // A default value is the only public way to bypass the struct constructor's validation.
+        var defaultEntry = default(MicroBundleManifestEntry);
+        var malformedVersionEntry = new MicroBundleManifestEntry(1, "0.1.0-test");
+        Assert.Equal("0.1.0-test", malformedVersionEntry.Version);
+        Assert.Equal(0UL, defaultEntry.BundleId);
+        Assert.Null(defaultEntry.Version);
+    }
+
+    [Fact]
     public void ManifestEntry_rejects_empty_versions()
     {
         Assert.Throws<ArgumentException>(() =>
