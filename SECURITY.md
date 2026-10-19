@@ -32,8 +32,8 @@ Composition is not transactional. If a bundle mutates external state and then th
 Before treating a candidate as security-reviewed:
 
 - [ ] Run the exact candidate's full test suite and retain its TRX and coverage artifacts.
-- [ ] Run dependency vulnerability auditing, including transitive dependencies, against current advisory data; record findings rather than silently ignoring them.
-- [ ] Run .NET security analyzers/static analysis and review every new warning or suppression.
+- [ ] Confirm the current CI dependency audit reports no vulnerable direct or transitive NuGet packages; investigate any advisory rather than silently ignoring it.
+- [ ] Confirm the `latest-all` .NET analyzer job passes the selected security rules, and review broader analyzer warnings or suppressions.
 - [ ] Verify package identity, version, dependencies, file inventory, and that GUI.SVG is not a runtime dependency.
 - [ ] Inspect the exact packed assembly and XML API documentation, not just the source tree.
 - [ ] Confirm the workflow's publish gate is disabled unless explicitly authorized.
