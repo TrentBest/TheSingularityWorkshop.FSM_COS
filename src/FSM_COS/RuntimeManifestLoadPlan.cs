@@ -21,8 +21,17 @@ public sealed class RuntimeManifestLoadPlan
     {
         ArgumentNullException.ThrowIfNull(entries);
 
-        if (entries.Any(entry => entry is null || !entry.IsValid))
-            throw new ArgumentException("Every load-plan entry must have a valid published identity.", nameof(entries));
+        for (var index = 0; index < entries.Count; index++)
+        {
+            var entry = entries[index];
+            if (entry is null || !entry.IsValid)
+            {
+                var identity = entry is null ? "null entry" : $"MicroBundle {entry.Reference.BundleId}";
+                throw new ArgumentException(
+                    $"Load-plan entry at index {index} must have a valid published identity ({identity}).",
+                    nameof(entries));
+            }
+        }
 
         if (entries.Select(entry => entry.Reference.BundleId).Distinct().Count() != entries.Count)
             throw new ArgumentException("Load-plan entries must have unique MicroBundle IDs.", nameof(entries));
