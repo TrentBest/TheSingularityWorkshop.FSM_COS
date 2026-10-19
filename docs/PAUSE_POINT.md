@@ -1,126 +1,27 @@
-# FSM_COS Pause Point — Kernel First, WebPage Next
+# Archived Pause Point — FSM_COS
 
-> **Status:** proposed engineering pause gate, 2026-10-09. This is not a release approval and does not authorize publishing to NuGet.
+> **Archive status:** This note preserves an earlier engineering pause decision and its rationale. It is not a live release checklist or a current CI report.
+>
+> The detailed status below was captured on October 18, 2026 or earlier. Run IDs, candidate SHAs, package versions, and WebPage integration statements are historical. Do not treat them as evidence for the current candidate.
 
-**Continuation checklist:** [WebPage Working Task List](https://github.com/TrentBest/WebPage/blob/development/docs/WORKING_TASKS.md) is the durable cross-session handoff. On resumption, read it, verify current branch heads and workflow runs, then continue the highest-priority unfinished task.
+## Current authorities
 
+- [Alpha.7 release-readiness gate](0.1.0-alpha.7-READINESS.md) — exact-candidate source, CI, package, and documentation gates.
+- [Domain completion roadmap](DOMAIN_COMPLETION_ROADMAP.md) — implemented kernel behavior, explicit boundaries, and deferred work.
+- [Development and CI modes](DEVELOPMENT.md) — current branch policy and manual publish workflow.
+- [Documentation index](../DOCUMENTATION_INDEX.md) — primary document for each topic.
+- [WebPage integration guide](WEBPAGE_INTEGRATION.md) — intended host boundary; it is not proof of current end-to-end runtime behavior.
 
-## Current continuation status — 2026-10-18
+## Durable decision
 
-This status supersedes older operational instructions in the dated notes below where they conflict.
+Keep FSM_COS narrow. It composes requested MicroBundles into a `RuntimeAssembly`; the host owns execution, lifecycle, UI, and presentation after handoff. Continue broader host integration only when it is separately scoped and supported by the host's current source and tests.
 
-- FSM_COS `0.1.0-alpha.7` is the current source candidate; source version and generated artifacts do not by themselves establish publication.
-- The current package workflow uses a manual `workflow_dispatch` input named `publish`, defaulting to `false`. Publishing is eligible only from `development` when that input is deliberately set to `true`, and only after build/test, public-package compatibility, and development-source integration jobs succeed. Ordinary pushes and pull requests do not publish.
-- Older statements below that describe publication as disabled by `&& false` record the historical gate at the time they were written. They are not instructions for the current workflow.
-- The alpha.7 candidate passed build/test, public-package compatibility, and development-source integration in [run 39104094243](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39104094243). Both packed candidates also passed the new archive-content/metadata verifier. The publish job was skipped; no NuGet publication has occurred.
-- The release-worthy runtime fix makes `RuntimeAssembly` and staged-plan collection surfaces read-only snapshots, preventing consumers from mutating the underlying collections after composition/validation. Regression tests cover attempted mutation. Keep the kernel boundary narrow: artifact localization/hash verification, Bootstrap-only composition, background localization, and live Deferred promotion remain unimplemented end-to-end.
-- Do not merge divergent `master` and `development` histories mechanically. Preserve the requested-version manifest and external-configuration contract on `development`; reconcile API differences selectively with tests.
-- The owner has delegated preparation through the next release. Publication has not occurred: this GitHub connection can inspect runs and artifacts but cannot dispatch the required `workflow_dispatch` action. Do not bypass the repository's manual publish gate; the final release action still requires a deliberate run from `development` with `publish=true`. No branch deletion is authorized by this status.
+The kernel does not own repository localization, content-hash verification, Bootstrap-only composition, background localization, live Deferred promotion, browser lifecycle, or GUI/rendering. Do not describe these as implemented unless the current code and end-to-end tests establish that claim.
 
+## Historical notes
 
-## Decision
+This file previously combined alpha.6 release checkpoints, old `&& false` publication-gate instructions, branch-reconciliation notes, and a WebPage pause decision. Those operational details are intentionally not repeated here because they became stale and duplicated the maintained readiness checklist. Consult repository history if the dated rationale is needed.
 
-FSM_COS should stop broadening its scope once the current correctness patch passes CI. The next major block of work belongs in WebPage: prove that the host consumes the composed `RuntimeAssembly` for actual Experience behavior, then prepare the public site for launch.
+## Resume rule
 
-The purpose of this pause is not to declare the Workshop ecosystem complete. It is to keep the composition kernel small and dependable while we prove its value in the browser.
-
-## The kernel's dependency boundary
-
-The current `development` candidate targets .NET 8 and directly references:
-
-- `TheSingularityWorkshop.FSM_API 1.0.13` — foundational state/context contract.
-- `TheSingularityWorkshop.MicroBundleDomain 1.0.1` — the authoritative MicroBundle contract.
-- `TheSingularityWorkshop.FSM_UserIO 0.1.0-alpha.1` — supplies `SemanticIntent`, an optional value exposed by `RuntimeManifest` and carried through to `RuntimeAssembly`.
-
-The first two are the composition kernel's foundational dependencies. The third is a real package dependency even when callers leave `Intent` null, because its type appears in the public API. That is a deliberate alpha.6 candidate capability, but it is also a dependency-minimization decision to revisit: do not describe FSM_UserIO as a purely optional package dependency while the public API references its type.
-
-ProtocolAi, GrammarAi, GUI, rendering, storage, REST, identity, and other unrelated capabilities remain outside the kernel unless the kernel demonstrably needs their contracts. The test project can reference AI and GUI packages to prove those capabilities can be composed without adding those packages to the kernel's assembly references.
-
-The alpha.6 candidate has now passed its package CI and WebPage's source-candidate build, browser journey, and experience test suites. Those checks establish compatibility with WebPage's current integration path; they do not prove the host has completed the RuntimeAssembly-to-active-Experience handoff.
-
-## What the current kernel already owns
-
-The current implementation provides the core composition sequence:
-
-1. Accept a `RuntimeManifest` describing requested root bundle IDs and versions.
-2. Resolve root bundles through the host-supplied catalog.
-3. Resolve dependency closure before loading each dependent bundle.
-4. Apply dependency-provided configuration and allow an external configuration source to override it.
-5. Detect dependency cycles and reject unresolved or identity/version-mismatched roots.
-6. Load each bundle once and arbitrate until stable, with a configurable maximum round count.
-7. Return a `RuntimeAssembly` for the host to consume.
-
-Existing tests cover these contracts, including dependency ordering, configuration, cycle detection, deduplication, arbitration convergence, empty manifests, host lookup, and optional AI/GUI capability composition.
-
-## Final FSM_COS gate before pausing
-
-- [x] CI passed for development head `e721e0b52fecbbd0aaafc84a8c8e5e1e2bd4f440` in [run 37979475866](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/37979475866); the `build-and-test` job succeeded.
-- [x] Repeated requests for the same root ID and same version load once (covered by the passing regression suite).
-- [x] A manifest requesting the same root ID at conflicting versions fails before any bundle is loaded (covered by the passing regression suite).
-- [x] The package workflow still has NuGet publishing disabled by default and explicitly gated by `&& false`; the publish job was skipped in run 37979475866.
-- [x] No package version was changed and no NuGet release was made.
-
-**Pause gate passed for the verified commit above.** Pause broad FSM_COS feature work here. Reopen it only for a correctness blocker or a narrowly scoped change required to unblock WebPage; do not hold WebPage hostage to unrelated future capabilities.
-
-## What remains outside this pause
-
-FSM_COS is not a repository service, marketplace, browser host, rendering engine, GUI framework, or general application loop. It does not need to absorb those concerns to be useful.
-
-The broader package/MicroBundle integration map remains a living audit. Candidates must be evaluated by responsibility and runtime need—not by the number of packages already published. Optional capabilities should be represented as MicroBundles where that provides real discovery/configuration/composition value without forcing domain contracts upward into FSM_COS.
-
-## WebPage is the next proving ground
-
-The current WebPage development project references FSM_COS and composes the manifest-declared primary root with its Moniker dependency. However, WebPage's own status documents still identify an important gap: browser execution of the Living GUI passes through transitional WebPage-local `PageFSM` / `LivingGuiFsm` code after composition.
-
-That makes WebPage the next priority. The next phase should:
-
-1. Verify the host manifest and composition against the current package contract.
-2. Ensure the host uses the resulting `RuntimeAssembly` as the source of the active Experience, not merely as a startup check before a parallel local runtime takes over.
-3. Preserve existing Living GUI behavior with tests before migrating ownership.
-4. Keep browser-only presentation and input in WebPage; keep reusable behavior in its owning package/domain or MicroBundle.
-5. Run the WebPage build/tests and inspect the public experience at multiple viewport sizes.
-6. Publish/deploy the WebPage only after the public launch checks pass; do not publish NuGet packages as part of that step.
-
-The public launch is not blocked on integrating every Workshop package. It is blocked only by issues that prevent a truthful, usable, safe public experience or make the demonstrated architecture materially misleading.
-
-## Status language
-
-- **Current:** implemented in the branch and supported by source/tests.
-- **Verified:** the relevant build/test or runtime proof actually passed.
-- **Direction:** intended architecture that still needs integration proof.
-- **Future:** not part of the present contract.
-
-Do not describe a package or MicroBundle as integrated merely because it exists, is listed in a dependency table, or compiles in a separate repository.
-
-
-## Updated continuation priority — FSM_COS alpha.6 and Forge boundary (2026-10-09)
-
-This addendum supersedes the older sequencing above until the alpha.6 source reconciliation is complete. Do not resume broad WebPage work yet.
-
-1. Treat `0.1.0-alpha.6` as the intended next FSM_COS package candidate; the development project metadata now declares it. This is not publication authorization.
-2. Reconcile `master` and `development` deliberately. Preserve development's requested-version manifest roots and external configuration-source contract; evaluate master-only `FSM_UserIO.SemanticIntent` as an additive capability with tests rather than replacing the newer manifest contract wholesale.
-3. Continue reconciling the Forge staged-manifest work. Forge owns authoring and publish-time compilation; FSM_COS consumes the compact published result. The Forge must not become a runtime dependency of FSM_COS, and FSM_COS must not absorb Forge UI, serialization, storage, or repository transport.
-4. The current staged metadata can describe immutable identity, dependency edges, and Bootstrap/Resident/Deferred intent, but does not yet implement artifact localization/hash verification, Bootstrap-only initial composition, or live deferred promotion. Do not claim those behaviors until a repository/host adapter and end-to-end tests prove them.
-5. Verify dependency-graph agreement between the published manifest and the resolved MicroBundleDomain contract; then prove clean restore/build/test against public package versions without the CI-only local MicroBundleDomain feed.
-6. Keep NuGet publication disabled with `&& false`. No publish, branch deletion, or merge of the draft integration PR is authorized by this checklist.
-
-Return to WebPage once the source contract is reconciled, the alpha.6 package candidate passes its release-readiness checks, and the RuntimeAssembly host handoff can be evaluated against that stable candidate. A package publish still requires separate explicit owner approval.
-
-
-## Alpha.6 release-candidate progress — 2026-10-09
-
-Latest candidate work on `development`:
-- Preserved the newer versioned-root and external-configuration API while restoring optional `FSM_UserIO.SemanticIntent` pass-through from `RuntimeManifest` to `RuntimeAssembly`.
-- Added schedule preflight validation: when a schedule is present, the catalog-resolved dependency closure, versions, and dependency edges must agree before any MicroBundle `Load` side effects. Tests cover a matching graph and a mismatch rejected before loading.
-- Added `docs/releases/0.1.0-alpha.6.md`; it explicitly says localization, content-hash verification, Bootstrap-only initial composition, and live Deferred promotion are not implemented.
-- Added a separate public-NuGet restore/build/test/pack workflow job that deliberately does not use the CI-only local MicroBundleDomain package. The publish job now requires both verification jobs and still includes `&& false`.
-
-Verified: [Actions run 37988552679](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/37988552679) passed on candidate HEAD `77c05d68d70159e6f4ffb53bd2209a5ed6ed0abc`: restore, build, tests/coverage, pack, and the separate public-NuGet restore/build/test/pack job all succeeded; publish was skipped. I inspected the public-feed package artifact: it is `TheSingularityWorkshop.FSM_COS.0.1.0-alpha.6.nupkg`, includes README/license/release notes, excludes internal continuation/branch-planning docs, and declares the intended three dependencies. Build/test/pack logs contain zero warnings and zero errors. This establishes a publish-ready candidate, not authorization to publish.
-
-Next:
-1. Verify latest code commit and workflow runs, then fix any build/test/public-feed failures.
-2. Inspect the uploaded package artifacts and confirm package metadata/dependencies/README/license.
-3. Audit the full alpha.6 diff and the `&& false` publish safeguard.
-4. Run the downstream consumer compatibility review for Forge and AnyApp; do not update their package pins before alpha.6 is actually published.
-5. Once those checks pass, present the exact candidate and caveats for owner review. Publication still requires explicit approval.
-6. Then pivot to WebPage and prove its manifest-driven hub invokes real MicroBundle-backed behavior rather than merely rendering tabs.
+Check the current `development` HEAD, read the alpha.7 readiness gate, and verify current workflow results for that exact SHA. A green run on an earlier commit is not proof for a later candidate. Package readiness is distinct from permission to publish; no publication without explicit owner authorization.
