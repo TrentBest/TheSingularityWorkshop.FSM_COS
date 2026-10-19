@@ -17,6 +17,10 @@ public sealed class RuntimeManifestSchedule
         ArgumentNullException.ThrowIfNull(entries);
         ArgumentNullException.ThrowIfNull(dependencies);
 
+        // Validate a stable snapshot rather than caller-owned mutable collections.
+        entries = entries.ToArray();
+        dependencies = dependencies.ToArray();
+
         for (var index = 0; index < entries.Count; index++)
         {
             var entry = entries[index];
