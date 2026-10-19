@@ -4,7 +4,9 @@
 
 **RuntimeAssembly is the handoff object produced by FSM_COS.**
 
-![RuntimeAssembly handoff](assets/runtime-assembly-handoff.svg)
+![RuntimeAssembly handoff: a manifest request enters FSM_COS, which returns a stable RuntimeAssembly to a host responsible for GUI, browser, Unity, and Experience behavior.](assets/runtime-assembly-handoff.svg)
+
+*The graphic shows the implemented boundary, not an execution pipeline: `FsmCos.Execute` validates the manifest, resolves and loads the requested dependency closure, arbitrates to convergence, and returns `RuntimeAssembly`. The host-specific examples on the right are responsibilities outside this package.*
 
 It is the point where composition ends and host-specific execution can begin.
 
