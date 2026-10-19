@@ -4,13 +4,13 @@
 
 ## Purpose
 
-![FSM_COS runtime boundary](assets/runtime-boundary.svg)
+![FSM_COS runtime boundary: FSM_COS resolves and loads MicroBundles, carries configuration, arbitrates, and returns RuntimeAssembly; the host executes, renders, communicates, and integrates platform resources.](assets/runtime-boundary.svg)
 
-*This overview separates composition responsibilities from the execution, presentation, and platform responsibilities that remain with the host.*
+*Verified against `FsmCos.Execute` and `RuntimeAssembly`: the kernel owns composition; execution and manifestation remain host responsibilities.*
 
-![FSM_COS composition boundary](assets/composition-boundary.svg)
+![FSM_COS composition boundary: RuntimeManifest and host-supplied catalog/configuration boundaries feed the composition kernel, which returns RuntimeAssembly to host-owned execution.](assets/composition-boundary.svg)
 
-*This closer view identifies the inputs crossing into the kernel, the composition work it owns, and the `RuntimeAssembly` handoff. The catalog and configuration source remain outside FSM_COS.*
+*The catalog and configuration source are external contracts supplied to `FsmCos.Execute`; FSM_COS calls those contracts during composition but does not own their storage or implementation. Serialization remains the separate byte boundary.*
 
 FSM_COS exists to assemble a requested computation. It is not the application or runtime host.
 
