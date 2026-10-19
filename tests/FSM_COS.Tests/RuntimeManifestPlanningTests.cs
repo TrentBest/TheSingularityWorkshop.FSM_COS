@@ -209,7 +209,7 @@ public sealed class RuntimeManifestPlanningTests
         Assert.Contains("MicroBundle 0", invalidEntry.Message);
         var duplicateEntries = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestLoadPlan(new[] { valid, valid }));
-        Assert.Contains("unique MicroBundle IDs", duplicateEntries.Message);
+        Assert.Contains("duplicate MicroBundle ID 1", duplicateEntries.Message);
         var scheduleMismatch = Assert.Throws<ArgumentException>(() =>
             new RuntimeManifestLoadPlan(new[] { valid }, schedule));
         Assert.Contains("schedule", scheduleMismatch.Message, StringComparison.OrdinalIgnoreCase);
