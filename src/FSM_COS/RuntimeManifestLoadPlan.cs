@@ -41,14 +41,23 @@ public sealed class RuntimeManifestLoadPlan
         if (_schedule is not null)
         {
             var scheduled = _schedule.Entries.ToDictionary(entry => entry.Reference.BundleId);
-            if (scheduled.Count != Entries.Count ||
-                Entries.Any(entry =>
-                    !scheduled.TryGetValue(entry.Reference.BundleId, out var scheduledEntry) ||
-                    scheduledEntry.Reference != entry.Reference ||
-                    scheduledEntry.Stage != entry.Stage))
+            var mismatch = Entries.FirstOrDefault(entry =>
+                !scheduled.TryGetValue(entry.Reference.BundleId, out var scheduledEntry) ||
+                scheduledEntry.Reference != entry.Reference ||
+                scheduledEntry.Stage != entry.Stage);
+            if (mismatch is not null)
             {
                 throw new ArgumentException(
-                    "The load plan and dependency schedule must contain the same identities and stages.",
+                    $"The load plan and dependency schedule disagree for MicroBundle {mismatch.Reference.BundleId} identity or stage.",
+                    nameof(schedule));
+            }
+
+            if (scheduled.Count != Entries.Count)
+            {
+                var planIds = Entries.Select(entry => entry.Reference.BundleId).ToHashSet();
+                var unexpected = scheduled.Keys.Except(planIds).OrderBy(id => id);
+                throw new ArgumentException(
+                    $"The dependency schedule contains MicroBundle IDs absent from the load plan: [{string.Join(", ", unexpected)}].",
                     nameof(schedule));
             }
         }
