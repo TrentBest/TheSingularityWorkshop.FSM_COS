@@ -7,5 +7,5 @@ public sealed record RuntimeManifestEntry(
     MicroBundleReference Reference,
     ManifestLoadStage Stage = ManifestLoadStage.Resident)
 {
-    public bool IsValid => Reference.IsValid;
+    public bool IsValid => Reference.IsValid && Enum.IsDefined(Stage);
 }
