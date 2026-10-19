@@ -34,6 +34,14 @@ public sealed class FsmCos : IFsmCos
         var requestedVersions = new Dictionary<ulong, string>();
         foreach (var entry in manifest.Bundles)
         {
+            // A record struct's default value bypasses its validating constructor.
+            // Reject malformed root entries here so they never reach catalog lookup.
+            if (entry.BundleId == 0)
+                throw new InvalidOperationException("Runtime manifest contains a root MicroBundle entry with ID 0.");
+            if (string.IsNullOrWhiteSpace(entry.Version))
+                throw new InvalidOperationException(
+                    $"Runtime manifest root MicroBundle {entry.BundleId} has no requested version.");
+
             if (requestedVersions.TryGetValue(entry.BundleId, out var requestedVersion) &&
                 !string.Equals(requestedVersion, entry.Version, StringComparison.Ordinal))
             {
