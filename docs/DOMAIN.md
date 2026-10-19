@@ -6,6 +6,11 @@ This is the domain map for this package. Concepts owned by neighboring packages 
 
 ## What FSM_COS owns
 
+![FSM_COS domain map showing composition responsibilities and neighboring system boundaries](assets/fsm-cos-domain-map.svg)
+
+*Use this map to orient the domain; the explicit ownership and non-ownership lists below define the contract in words.*
+
+
 FSM_COS owns the operational problem of taking a computation request and producing a stable assembled computation.
 
 - runtime composition requests;
