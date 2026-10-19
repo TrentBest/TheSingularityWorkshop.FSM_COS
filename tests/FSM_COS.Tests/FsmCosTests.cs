@@ -928,7 +928,7 @@ public sealed class FsmCosTests
                     LoadPlan: entries,
                     Schedule: schedule)));
 
-        Assert.Contains("invalid or mismatched bundle", exception.Message);
+        Assert.Contains("returned no descriptor", exception.Message);
         Assert.Equal(0, root.LoadCalls);
         Assert.Equal(0, dependency.LoadCalls);
     }
