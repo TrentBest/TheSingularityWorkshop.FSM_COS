@@ -43,3 +43,13 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:csharp"
+          output: codeql-results
+
+      - name: Retain SARIF for release security review
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: codeql-sarif-results
+          path: codeql-results/*.sarif
+          if-no-files-found: error
+          retention-days: 14
