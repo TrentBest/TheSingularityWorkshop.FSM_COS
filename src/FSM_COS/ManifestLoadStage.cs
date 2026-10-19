@@ -9,12 +9,21 @@ namespace TheSingularityWorkshop.FSM_COS;
 /// </remarks>
 public enum ManifestLoadStage
 {
-    /// <summary>Required to establish the initial visible/runnable Experience.</summary>
+    /// <summary>
+    /// Labels an entry intended to be part of an Experience's bootstrap set.
+    /// The current composition pass does not implement bootstrap-only loading.
+    /// </summary>
     Bootstrap = 0,
 
-    /// <summary>Participates in initial preparation but is not a bootstrap prerequisite.</summary>
+    /// <summary>
+    /// Labels an entry intended for initial preparation outside the bootstrap set.
+    /// The current composition pass does not schedule loading by stage.
+    /// </summary>
     Resident = 1,
 
-    /// <summary>Eligible for later Experience-owned promotion.</summary>
+    /// <summary>
+    /// Labels an entry intended for later Experience-owned promotion.
+    /// The current composition pass does not automatically defer or promote it.
+    /// </summary>
     Deferred = 2
 }
