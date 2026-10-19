@@ -711,6 +711,34 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_rejects_a_root_whose_descriptor_identity_disagrees_with_its_bundle_identity()
+    {
+        var bundle = new MismatchedDescriptorBundle(id: 1, descriptorId: 99);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new FixedCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("descriptor for bundle 99", exception.Message);
+        Assert.Equal(0, bundle.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_a_dependency_whose_descriptor_identity_disagrees_before_loading_root()
+    {
+        var dependency = new MismatchedDescriptorBundle(id: 2, descriptorId: 99);
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, dependency))
+                .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("descriptor for bundle 99", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, dependency.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_rejects_a_root_without_a_descriptor_before_loading()
     {
         var bundle = new MalformedBundle(1);
@@ -1024,6 +1052,30 @@ public sealed class FsmCosTests
             bundle = _bundle;
             return true;
         }
+    }
+
+    private sealed class MismatchedDescriptorBundle : IMicroBundle
+    {
+        public MismatchedDescriptorBundle(
+            ulong id,
+            ulong descriptorId,
+            params MicroBundleDependencyRequest[] dependencies)
+        {
+            Id = id;
+            Dependencies = dependencies;
+            Descriptor = new MicroBundleDescriptor(
+                descriptorId,
+                "0.1.0-test",
+                dependencies.Select(dependency => new MicroBundleDependency(dependency.BundleId)));
+        }
+
+        public ulong Id { get; }
+        public MicroBundleDescriptor Descriptor { get; }
+        public IReadOnlyList<MicroBundleDependencyRequest> Dependencies { get; }
+        public int LoadCalls { get; private set; }
+
+        public void Load(IMicroBundleLoadContext context) => LoadCalls++;
+        public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex) => false;
     }
 
     private sealed class MalformedBundle : IMicroBundle
