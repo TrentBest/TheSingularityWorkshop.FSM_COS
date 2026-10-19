@@ -24,7 +24,7 @@ Use this page to find the right level of explanation. The README is the orientat
 | See implemented domain capabilities, explicit deferrals, dependency order, and release gates | [Domain Completion and Release Roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) |
 | Integrate with WebPage | [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) |
 | Review alpha.7 scope and explicit limitations | [Release notes](docs/releases/0.1.0-alpha.7.md) |
-| Check alpha.7 release gates and outstanding evidence | [Alpha.7 Release Readiness](docs/0.1.0-alpha.7-READINESS.md) |
+| Check alpha.7 release gates and outstanding evidence | [Alpha.7 Release Readiness](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) |
 | Contribute, build, and verify changes | [Development](docs/DEVELOPMENT.md) |
 
 ## Recommended reading order
