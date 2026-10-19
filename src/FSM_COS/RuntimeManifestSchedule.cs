@@ -42,10 +42,24 @@ public sealed class RuntimeManifestSchedule
 
         var ids = entries.Select(entry => entry.Reference.BundleId).ToHashSet();
         if (ids.Count != entries.Count)
-            throw new ArgumentException("Manifest entries must have unique MicroBundle IDs.", nameof(entries));
+        {
+            var duplicateId = entries
+                .GroupBy(entry => entry.Reference.BundleId)
+                .First(group => group.Count() > 1)
+                .Key;
+            throw new ArgumentException(
+                $"Manifest entries contain duplicate MicroBundle ID {duplicateId}.",
+                nameof(entries));
+        }
 
+        var missingEntryEdge = dependencies.FirstOrDefault(edge =>
+            !ids.Contains(edge.BundleId) || !ids.Contains(edge.DependencyId));
         if (dependencies.Any(edge => !ids.Contains(edge.BundleId) || !ids.Contains(edge.DependencyId)))
-            throw new ArgumentException("Every dependency edge must reference an entry in the manifest.", nameof(dependencies));
+        {
+            throw new ArgumentException(
+                $"Dependency edge MicroBundle {missingEntryEdge.BundleId} -> {missingEntryEdge.DependencyId} references an ID absent from the manifest entries.",
+                nameof(dependencies));
+        }
 
         if (dependencies.Distinct().Count() != dependencies.Count)
         {
