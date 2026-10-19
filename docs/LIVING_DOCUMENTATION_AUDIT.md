@@ -63,7 +63,7 @@ Use the status labels consistently:
 | `docs/MANIFEST_THEORY.md` | Semantic request versus serialized representation | Existing manifest-pipeline SVG is embedded; verify that the editor-time/published-request distinction is clear | Embedded / verify |
 | `docs/STAGED_MANIFEST_LOADING.md` | Preflight, planning, validation, loading, failure boundaries | Added dependency-resolution SVG with an explicit caveat that it does not claim end-to-end deferred loading | Embedded / verify |
 | `docs/CONSUMING_MICROBUNDLES.md` | Consumer flow, catalog responsibility, dependency ordering | Added dependency-resolution SVG and caption; consumer example coverage still needs review | Embedded / verify |
-| `docs/ARBITRATION.md` | Iterations, convergence, limit, non-convergence | Existing convergence SVG is embedded; verify round counting, success, and non-convergence against implementation | Embedded / verify |
+| `docs/ARBITRATION.md` | Iterations, convergence, limit, non-convergence | Verified against `FsmCos.Execute`; added alt text and a caption documenting the zero-based converging-round index and failure at the limit | Existing visual verified |
 | `docs/RUNTIME_ASSEMBLY.md` | Result shape and handoff | Existing assembly-handoff SVG is embedded; verify that host responsibilities remain clearly outside the kernel | Embedded / verify |
 | `docs/RUNTIME_BOUNDARY.md` | Explicitly excluded responsibilities | Two boundary SVGs are embedded; check for duplication and ensure exclusions match source | Embedded / verify |
 | `docs/AI_COMPOSITION.md` | AI-oriented composition contracts and current limits | Added AI-composition SVG and explicit conceptual/status caveat; verify diagram labels against current domains | Embedded / verify |
@@ -100,7 +100,8 @@ This is an initial prioritized pass, not a claim that the remaining documents ha
 ## Execution order
 
 ### Pass 1 — canonical visuals in high-value contract docs
-- [ ] Verify existing SVGs against current source and each document's exact topic.
+- [x] Verified `arbitration-convergence.svg` against `FsmCos.Execute`; documented the zero-based `RuntimeAssembly.ArbitrationRounds` value and no-assembly-on-nonconvergence behavior.
+- [ ] Continue verifying remaining SVGs against current source and each document's exact topic.
 - [ ] Embed the existing relevant SVG in the best canonical home instead of creating near-duplicates.
 - [ ] Add concise alt text and a caption that explains the visual's point.
 - [ ] Ensure relative asset links resolve on `development`.
