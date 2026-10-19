@@ -311,6 +311,31 @@ public sealed class FsmCosTests
 
         Assert.Contains("cycle", exception.Message, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("1", exception.Message);
+        // Dependency cycles are detected before any bundle can perform load side effects.
+        Assert.Equal(0, first.LoadCalls);
+        Assert.Equal(0, second.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_null_root_collection_before_catalog_lookup()
+    {
+        var expected = new InvalidOperationException("catalog must not be queried");
+        var catalog = new ThrowingCatalog(new TestCatalog(), failingBundleId: 1, expected);
+
+        Assert.Throws<ArgumentNullException>(() =>
+            new FsmCos(catalog).Execute(new RuntimeManifest(42, null!)));
+    }
+
+    [Fact]
+    public void Execute_rejects_catalog_success_with_a_null_root_before_loading()
+    {
+        var catalog = new NullRootCatalog();
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(catalog).Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("1", exception.Message);
+        Assert.Contains("could not be resolved", exception.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -933,6 +958,21 @@ public sealed class FsmCosTests
             bundle = bundleId == _root.Id ? _root :
                 bundleId == _requestedDependencyId ? _dependency : null;
             return bundle is not null;
+        }
+    }
+
+    private sealed class NullRootCatalog : IMicroBundleCatalog
+    {
+        public bool TryResolve(ulong bundleId, string version, out IMicroBundle? bundle)
+        {
+            bundle = null;
+            return bundleId == 1;
+        }
+
+        public bool TryResolve(ulong bundleId, out IMicroBundle? bundle)
+        {
+            bundle = null;
+            return bundleId == 1;
         }
     }
 
