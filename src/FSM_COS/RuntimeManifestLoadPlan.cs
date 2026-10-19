@@ -21,6 +21,9 @@ public sealed class RuntimeManifestLoadPlan
     {
         ArgumentNullException.ThrowIfNull(entries);
 
+        // Validate a stable snapshot rather than caller-owned mutable collections.
+        entries = entries.ToArray();
+
         for (var index = 0; index < entries.Count; index++)
         {
             var entry = entries[index];
