@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 700">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 700" role="img" aria-labelledby="dependency-title dependency-description">
+<title id="dependency-title">Dependency closure and dependency-first installation order</title>
+<desc id="dependency-description">An illustrative graph where A depends on B and D, and B depends on C. The installation order is C, B, D, A. An animated outline highlights that order. This is not a live runtime trace.</desc>
 <defs>
 <linearGradient id="bg" x1="0" x2="1"><stop stop-color="#070b12"/><stop offset="1" stop-color="#111827"/></linearGradient>
 <style>
