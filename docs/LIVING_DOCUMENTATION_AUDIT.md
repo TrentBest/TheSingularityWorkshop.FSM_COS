@@ -78,8 +78,8 @@ Use the status labels consistently:
 | `DOCUMENTATION_STANDARD.md` | Shared rules for visual, living documentation | Text-first normative standard; examples and requirements are clearer than a decorative summary image | No visual needed — rules and checklists are the authoritative form |
 | `docs/BRANCH_RECONCILIATION.md` | Branch inventory and disposition decisions | Existing comparison tables are the useful visual structure; a diagram would add little to the branch-by-branch evidence | No additional visual needed — inventory tables already serve the task |
 | `docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md` | Package/version drift and ordered remediation | Existing tables and ordered checklist make state and action explicit | No additional visual needed — tables/checklist are more precise |
-| `docs/CONTINUATION_BRIEF_ALPHA6_FORGE_ANYAPP_WEBPAGE.md` | Historical handoff and integration constraints | Dated continuation brief; prioritize correcting stale instructions rather than adding a diagram | Review — historical operational claims may be stale |
-| `docs/PAUSE_POINT.md` | Current pause gate and historical operational notes | Current status bullets and guardrails are the proof; inspect stale dated notes before adding visuals | Review — historical operational claims may be stale |
+| `docs/CONTINUATION_BRIEF_ALPHA6_FORGE_ANYAPP_WEBPAGE.md` | Historical handoff and integration constraints | Archived alpha.6 notes now direct readers to current release and architecture authorities | No visual needed — archived handoff is a navigation note, not a current specification |
+| `docs/PAUSE_POINT.md` | Historical engineering pause decision | Archived pause note now directs readers to the maintained alpha.7 readiness gate and domain roadmap | No visual needed — archive notice and authority links are sufficient |
 | `docs/LIVING_DOCUMENTATION_AUDIT.md` | Coverage, validation, and completion criteria | This document is the coverage record; a separate picture would duplicate the status table | No visual needed — checklist is the source of truth |
 
 ## Current verification boundary
