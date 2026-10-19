@@ -55,19 +55,19 @@ Use the status labels consistently:
 | `README.md` | One-screen composition overview | Preserve overview SVG; verify it is accurate and not merely decorative | Embedded / verify |
 | `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Added the overview SVG with an explanatory caption; validate visual semantics and accessibility | Embedded / verify |
 | `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Verify existing system SVG and reuse focused diagrams only where they add clarity | Embedded / verify |
-| `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | Add or embed the canonical composition-boundary visual and a compact lifecycle visual | Add / improve |
+| `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | Existing system SVG is embedded; verify it against current theory and assess whether a separate lifecycle visual adds value | Embedded / verify |
 | `docs/DOMAIN.md` | What FSM_COS owns versus adjacent domains | Added domain map with caption; verify every edge against current ownership | Embedded / verify |
 | `docs/DOMAIN_COMPLETION_ROADMAP.md` | Implemented, partial, deferred, and gated capabilities | Add a visual capability/status map grounded in the checklist | Add / improve |
-| `docs/RUNTIME_MANIFEST.md` | Caller request and manifest contents | Embed manifest-pipeline visual with labeled input/output | Add / improve |
-| `docs/MANIFEST_THEORY.md` | Semantic request versus serialized representation | Add request/representation distinction visual | Add / improve |
+| `docs/RUNTIME_MANIFEST.md` | Caller request and manifest contents | Existing manifest-pipeline SVG is embedded; verify its labels against current manifest fields and optional schedule behavior | Embedded / verify |
+| `docs/MANIFEST_THEORY.md` | Semantic request versus serialized representation | Existing manifest-pipeline SVG is embedded; verify that the editor-time/published-request distinction is clear | Embedded / verify |
 | `docs/STAGED_MANIFEST_LOADING.md` | Preflight, planning, validation, loading, failure boundaries | Added dependency-resolution SVG with an explicit caveat that it does not claim end-to-end deferred loading | Embedded / verify |
 | `docs/CONSUMING_MICROBUNDLES.md` | Consumer flow, catalog responsibility, dependency ordering | Added dependency-resolution SVG and caption; consumer example coverage still needs review | Embedded / verify |
-| `docs/ARBITRATION.md` | Iterations, convergence, limit, non-convergence | Embed arbitration-convergence visual; verify round limit and meaning | Add / improve |
-| `docs/RUNTIME_ASSEMBLY.md` | Result shape and handoff | Embed assembly-handoff visual | Add / improve |
-| `docs/RUNTIME_BOUNDARY.md` | Explicitly excluded responsibilities | Embed boundary diagram and responsibility comparison | Add / improve |
+| `docs/ARBITRATION.md` | Iterations, convergence, limit, non-convergence | Existing convergence SVG is embedded; verify round counting, success, and non-convergence against implementation | Embedded / verify |
+| `docs/RUNTIME_ASSEMBLY.md` | Result shape and handoff | Existing assembly-handoff SVG is embedded; verify that host responsibilities remain clearly outside the kernel | Embedded / verify |
+| `docs/RUNTIME_BOUNDARY.md` | Explicitly excluded responsibilities | Two boundary SVGs are embedded; check for duplication and ensure exclusions match source | Embedded / verify |
 | `docs/AI_COMPOSITION.md` | AI-oriented composition contracts and current limits | Added AI-composition SVG and explicit conceptual/status caveat; verify diagram labels against current domains | Embedded / verify |
-| `docs/ECOSYSTEM_INTEGRATION_MAP.md` | Package roles and dependency direction | Verify domain map; visually distinguish confirmed integrations from candidates | Embedded / verify |
-| `docs/WEBPAGE_INTEGRATION.md` | Kernel/host separation and WebPage handoff | Add a host-handoff diagram grounded in current integration status | Add / improve |
+| `docs/ECOSYSTEM_INTEGRATION_MAP.md` | Package roles and dependency direction | Added system SVG to the conceptual target section with a caveat separating target architecture from verified package facts | Embedded / verify |
+| `docs/WEBPAGE_INTEGRATION.md` | Kernel/host separation and WebPage handoff | Existing overview SVG is embedded; verify it explains the host asymmetry without implying full runtime integration | Embedded / verify |
 | `docs/DEVELOPMENT.md` | Build/test/release verification path | Consider a small verification flow; avoid ornamental graphics | Review |
 | `docs/0.1.0-alpha.7-READINESS.md` | Release gates, evidence, exact candidate/package identity | Keep checklist authoritative; consider a compact gate flow only if it improves scanability | Review |
 | `docs/releases/0.1.0-alpha.7.md` | Scope and behavioral change | Link to the relevant contract visuals; avoid duplicating the README hero | Review |
@@ -79,7 +79,8 @@ This is an initial prioritized pass, not a claim that the remaining documents ha
 ## Progress recorded on 2026-10-19
 
 - [x] Created and indexed this coverage audit; standardized the living-visual requirements in `DOCUMENTATION_STANDARD.md`.
-- [x] Embedded explanatory SVGs in `WHAT_IS_FSM_COS.md`, `CONSUMING_MICROBUNDLES.md`, `STAGED_MANIFEST_LOADING.md`, `DOMAIN.md`, and `AI_COMPOSITION.md`.
+- [x] Embedded explanatory SVGs in `WHAT_IS_FSM_COS.md`, `CONSUMING_MICROBUNDLES.md`, `STAGED_MANIFEST_LOADING.md`, `DOMAIN.md`, `AI_COMPOSITION.md`, and `ECOSYSTEM_INTEGRATION_MAP.md`.
+- [x] Reconciled the audit with existing visuals in `THEORY.md`, `RUNTIME_MANIFEST.md`, `MANIFEST_THEORY.md`, `ARBITRATION.md`, `RUNTIME_ASSEMBLY.md`, `RUNTIME_BOUNDARY.md`, and `WEBPAGE_INTEGRATION.md`; these are recorded as **embedded / verify**, not as fully validated.
 - [ ] Verify the latest documentation CI runs for those changes.
 - [ ] Audit all remaining Markdown files and verify existing diagrams against implementation.
 - [ ] Establish which visuals can be made genuinely living (semantic animation or source-backed GUI) and verify rendering/accessibility rather than assuming a static SVG is animated.
