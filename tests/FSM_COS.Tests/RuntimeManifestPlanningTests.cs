@@ -315,6 +315,70 @@ public sealed class RuntimeManifestPlanningTests
     }
 
     [Fact]
+    public void Manifest_plan_rejects_schedule_entries_absent_from_the_load_plan()
+    {
+        var root = new RuntimeManifestEntry(Reference(1, "1.0.0"));
+        var extra = new RuntimeManifestEntry(Reference(2, "1.0.0"));
+        var manifest = new RuntimeManifest(
+            42,
+            new[] { new MicroBundleManifestEntry(1, "1.0.0") },
+            LoadPlan: new[] { root },
+            Schedule: new RuntimeManifestSchedule(new[] { root, extra }, Array.Empty<RuntimeManifestDependency>()));
+
+        var exception = Assert.Throws<InvalidOperationException>(manifest.ValidateStagedPlan);
+
+        Assert.Contains("absent from the load plan", exception.Message);
+        Assert.Contains("2", exception.Message);
+    }
+
+    [Fact]
+    public void Load_plan_rejects_schedule_entries_not_represented_in_the_plan()
+    {
+        var root = new RuntimeManifestEntry(Reference(1, "1.0.0"));
+        var extra = new RuntimeManifestEntry(Reference(2, "1.0.0"));
+        var schedule = new RuntimeManifestSchedule(new[] { root, extra }, Array.Empty<RuntimeManifestDependency>());
+
+        var exception = Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestLoadPlan(new[] { root }, schedule));
+
+        Assert.Contains("schedule", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("2", exception.Message);
+    }
+
+    [Fact]
+    public void Promotion_evaluation_rejects_schedule_entries_not_represented_in_the_plan()
+    {
+        var root = new RuntimeManifestEntry(Reference(1, "1.0.0"));
+        var deferred = new RuntimeManifestEntry(Reference(2, "1.0.0"), ManifestLoadStage.Deferred);
+        var plan = new RuntimeManifestLoadPlan(new[] { root, deferred });
+        var extra = new RuntimeManifestEntry(Reference(3, "1.0.0"));
+        var schedule = new RuntimeManifestSchedule(new[] { root, deferred, extra }, Array.Empty<RuntimeManifestDependency>());
+
+        plan.MarkLocalized(1);
+        plan.MarkLocalized(2);
+
+        var exception = Assert.Throws<ArgumentException>(() =>
+            plan.EvaluatePromotions(new AcceptAllEvaluator(), null, schedule).ToArray());
+
+        Assert.Contains("schedule", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("3", exception.Message);
+    }
+
+    [Fact]
+    public void Load_plan_localization_is_idempotent_for_an_already_localized_entry()
+    {
+        var plan = new RuntimeManifestLoadPlan(new[]
+        {
+            new RuntimeManifestEntry(Reference(1, "1.0.0"))
+        });
+
+        plan.MarkLocalized(1);
+        plan.MarkLocalized(1);
+
+        Assert.Equal(MicroBundleRuntimeState.Localized, plan.GetState(1));
+    }
+
+    [Fact]
     public void Promotion_schedule_cannot_replace_validated_dependency_edges()
     {
         var root = new RuntimeManifestEntry(Reference(1, "1.0.0"));
