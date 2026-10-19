@@ -2,6 +2,11 @@
 
 ## Purpose
 
+![AI composition responsibility stack for domain concepts, ProtocolAi, GrammarAi, exchange context, and provider adaptation](assets/ai-composition.svg)
+
+*This is an architectural map, not a chronological pipeline or proof that every depicted layer is implemented. The status qualifications below and in the diagram must remain explicit.*
+
+
 Hosts may compose ProtocolAi and GrammarAi MicroBundles through FSM_COS. The kernel should not absorb their responsibilities or take a hard dependency on their concrete packages.
 
 The following is a conceptual responsibility stack, **not a chronological execution sequence**. The future-facing layers are architectural proposals, not a claim that every capability is implemented today:
