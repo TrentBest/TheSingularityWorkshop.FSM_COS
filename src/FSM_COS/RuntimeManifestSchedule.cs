@@ -48,7 +48,15 @@ public sealed class RuntimeManifestSchedule
             throw new ArgumentException("Every dependency edge must reference an entry in the manifest.", nameof(dependencies));
 
         if (dependencies.Distinct().Count() != dependencies.Count)
-            throw new ArgumentException("Duplicate dependency edges are not allowed.", nameof(dependencies));
+        {
+            var duplicate = dependencies
+                .GroupBy(edge => edge)
+                .First(group => group.Count() > 1)
+                .Key;
+            throw new ArgumentException(
+                $"Duplicate dependency edge MicroBundle {duplicate.BundleId} -> {duplicate.DependencyId} is not allowed.",
+                nameof(dependencies));
+        }
 
         Entries = Array.AsReadOnly(entries.ToArray());
         Dependencies = Array.AsReadOnly(dependencies.ToArray());
