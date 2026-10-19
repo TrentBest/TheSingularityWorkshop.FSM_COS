@@ -37,10 +37,10 @@ Runtime Manifest
       │ requested MicroBundles and versions
       ▼
    FSM_COS
-      ├── resolve requested bundles
-      ├── discover dependencies
-      ├── apply available configuration
-      ├── load the composition
+      ├── resolve roots and exact versions
+      ├── preflight the full dependency closure
+      ├── validate identities, requests, and cycles
+      ├── load dependencies first (iterative DFS)
       └── arbitrate toward convergence
       ▼
 RuntimeAssembly
