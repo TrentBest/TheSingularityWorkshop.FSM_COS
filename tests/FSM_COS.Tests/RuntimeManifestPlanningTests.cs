@@ -66,6 +66,50 @@ public sealed class RuntimeManifestPlanningTests
     }
 
     [Fact]
+    public void Schedule_rejects_entry_count_over_limit_before_snapshotting()
+    {
+        var entries = Enumerable.Range(1, RuntimeManifestSchedule.DefaultMaximumEntryCount + 1)
+            .Select(id => new RuntimeManifestEntry(Reference((ulong)id, "1.0.0")))
+            .ToArray();
+
+        var exception = Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestSchedule(entries, Array.Empty<RuntimeManifestDependency>()));
+
+        Assert.Contains("maximum of 10000 entries", exception.Message);
+    }
+
+    [Fact]
+    public void Schedule_rejects_dependency_count_over_limit_before_snapshotting()
+    {
+        var entries = new[]
+        {
+            new RuntimeManifestEntry(Reference(1, "1.0.0")),
+            new RuntimeManifestEntry(Reference(2, "1.0.0"))
+        };
+        var dependencies = Enumerable.Repeat(
+                new RuntimeManifestDependency(1, 2),
+                RuntimeManifestSchedule.DefaultMaximumDependencyCount + 1)
+            .ToArray();
+
+        var exception = Assert.Throws<ArgumentException>(() =>
+            new RuntimeManifestSchedule(entries, dependencies));
+
+        Assert.Contains("maximum of 100000 entries", exception.Message);
+    }
+
+    [Fact]
+    public void Load_plan_rejects_entry_count_over_limit_before_snapshotting()
+    {
+        var entries = Enumerable.Range(1, RuntimeManifestSchedule.DefaultMaximumEntryCount + 1)
+            .Select(id => new RuntimeManifestEntry(Reference((ulong)id, "1.0.0")))
+            .ToArray();
+
+        var exception = Assert.Throws<ArgumentException>(() => new RuntimeManifestLoadPlan(entries));
+
+        Assert.Contains("maximum of 10000 entries", exception.Message);
+    }
+
+    [Fact]
     public void Schedule_validates_a_deep_acyclic_graph_without_recursive_stack_growth()
     {
         const int bundleCount = 5000;
