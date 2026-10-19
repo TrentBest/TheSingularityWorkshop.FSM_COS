@@ -291,7 +291,7 @@ public sealed class RuntimeManifestPlanningTests
 
         var exception = Assert.Throws<InvalidOperationException>(manifest.ValidateStagedPlan);
 
-        Assert.Contains("unique MicroBundle IDs", exception.Message);
+        Assert.Contains("duplicate MicroBundle ID 1", exception.Message);
     }
 
     [Fact]
