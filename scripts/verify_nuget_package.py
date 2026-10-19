@@ -161,6 +161,9 @@ def verify(package_dir: Path, project_path: Path) -> None:
                 if local_name(group.tag) == "dependency":
                     package_dependencies[group.attrib.get("id", "")] = group.attrib.get("version", "")
 
+        if any(dependency_id.casefold() == "thesingularityworkshop.gui.svg" for dependency_id in package_dependencies):
+            fail("GUI.SVG is build-time documentation tooling and must not be a runtime NuGet dependency.")
+
         if set(package_dependencies) != set(project_dependencies):
             fail(
                 "Package dependency IDs differ from the project contract: "
