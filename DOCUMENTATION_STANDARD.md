@@ -198,6 +198,21 @@ Include prerequisites, required packages/references, commands, and expected outc
 - Keep related-project lists relevant to the repository's role.
 - Avoid duplicate tables of contents or multiple competing documents claiming to be the canonical guide.
 
+## 8A. Living visuals and visual coverage
+
+Use a living visual wherever it materially improves comprehension: architecture and ownership maps, request/response flows, dependency ordering, state transitions, arbitration/convergence, failure paths, and real examples of user-visible behavior. Prefer an accurate working GUI or implementation-backed demonstration when it adds real evidence; use animated SVG when semantic motion teaches something; use a clear static SVG when motion adds no value. Keep text diagrams and tables where they are the clearest form.
+
+A visual is not “living” merely because it is colorful or animated. It should express the real concept, behavior, or relationship. Animate the concept, not the decoration. Preserve a static and accessible explanation; never make motion essential to understanding. Add descriptive alt text and a caption when the visual's purpose would otherwise be unclear. Check ordinary GitHub width, mobile layout, light/dark contrast, and reduced-motion implications.
+
+Maintain a repository-specific visual coverage checklist. Every Markdown document must be considered and classified as one of:
+- a useful visual is embedded and source-verified;
+- a useful visual is still needed and tracked;
+- no visual is needed, with a brief reason.
+
+An SVG's existence in an assets folder is not evidence that the relevant document uses it. Reuse canonical assets rather than cloning near-identical diagrams, and validate local links. Every visual claim must match source, tests, and release status; distinguish implemented behavior from design intent. The checklist is complete only after every document has been considered and outstanding visual gaps are either closed or explicitly justified.
+
+For FSM_COS, the working checklist is [Living Documentation Visual Audit](docs/LIVING_DOCUMENTATION_AUDIT.md). Update it alongside the documentation changes it tracks.
+
 ## 8. Shared visual and editorial identity
 
 Use consistent Workshop identity, badges, terminology, diagrams, and closing footer where appropriate, while preserving each repository's own domain voice.
