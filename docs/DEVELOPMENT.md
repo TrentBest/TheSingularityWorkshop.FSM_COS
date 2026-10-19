@@ -132,7 +132,7 @@ This workflow is verification, not release authorization. Publication remains be
 
 ## Documentation visual tooling
 
-The preflight illustration is generated with **GUI.SVG** as a build-time authoring tool. The `samples/DocumentationVisuals/DocumentationVisuals.csproj` project references the GUI.SVG source project under `_dependencies/GUI`; the package workflow checks out that source at a pinned commit and runs the generator before packing. The generated result is an SVG asset, not a runtime service or library used by FSM_COS.
+The preflight illustration is generated with **GUI.SVG** as a build-time authoring tool. The `samples/DocumentationVisuals/DocumentationVisuals.csproj` project references the GUI.SVG source project under `_dependencies/GUI`. On `development` pushes and pull requests targeting `development`, the package workflow checks out that source at a pinned commit and runs the generator before packing. The generated result is an SVG asset, not a runtime service or library used by FSM_COS. The generated SVG is also committed under `docs/assets`, so public-feed and `master` builds can package the same illustration without restoring GUI.SVG tooling.
 
 The shipping project, `src/FSM_COS/FSM_COS.csproj`, must not reference GUI.SVG as either a package or project dependency. That keeps the NuGet package focused on its actual runtime contracts (`FSM_API`, `FSM_UserIO`, and `MicroBundleDomain`) while still allowing the documentation pipeline to use richer visual tooling. `scripts/verify_nuget_package.py` enforces that `TheSingularityWorkshop.GUI.SVG` does not appear in the package's direct dependency list.
 
