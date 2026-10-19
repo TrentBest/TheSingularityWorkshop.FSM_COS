@@ -63,6 +63,27 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_does_not_rollback_already_loaded_dependencies_when_a_dependent_load_fails()
+    {
+        var dependency = new TestBundle(2);
+        var expected = new InvalidOperationException("dependent load failed");
+        var root = new TestBundle(1, new MicroBundleDependencyRequest(2, Array.Empty<byte>()))
+        {
+            LoadException = expected
+        };
+
+        var actual = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(dependency, root)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Same(expected, actual);
+        Assert.Equal(1, dependency.LoadCalls);
+        Assert.Equal(1, root.LoadCalls);
+        Assert.Equal(0, dependency.ArbitrationCalls);
+        Assert.Equal(0, root.ArbitrationCalls);
+    }
+
+    [Fact]
     public void Execute_uses_defaults_when_configuration_is_absent()
     {
         var bundle = new TestBundle(9);
