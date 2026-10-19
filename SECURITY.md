@@ -6,6 +6,8 @@ FSM_COS is a composition kernel that invokes host-supplied catalog, configuratio
 
 FSM_COS validates identity, dependency declarations, graph consistency, and optional published schedule metadata before invoking any bundle's `Load` method. It snapshots the root/load-plan collections, resolved bundle instances, dependency request structures, and configuration bytes used during loading. Graph traversal is iterative and rejects manifests above the configured bundle and dependency-request limits (defaults: 10,000 bundles, 100,000 dependency requests, and 64 MiB of copied configuration data per composition); arbitration is bounded by the configured round limit.
 
+The `latest-all` .NET analyzer gate treats all unsuppressed runtime-assembly warnings as errors. `CA1707` is intentionally suppressed because the published `FSM_COS` assembly and namespace names are compatibility contracts; do not rename them solely to satisfy a style rule. Other analyzer warnings are fixed or reviewed explicitly, not blanket-suppressed.
+
 **FSM_COS is not a sandbox.** A catalog, configuration provider, `Load`, or `Arbitrate` implementation executes in-process with the process's permissions. Malicious code can access files, network, environment variables, other process memory available to it, or mutate shared state if the host grants those capabilities. Use process/OS isolation, least-privilege identities, containers, or virtualization when executing code that is not trusted. Do not treat a MicroBundle descriptor, hash string, or manifest as proof that executable code is trustworthy.
 
 Composition is not transactional. If a bundle mutates external state and then throws, or an earlier dependency succeeds before a later bundle fails, FSM_COS cannot generically roll back those side effects. Hosts should own lifecycle cleanup, authorization, and audit logging.
@@ -33,7 +35,7 @@ Before treating a candidate as security-reviewed:
 
 - [ ] Run the exact candidate's full test suite and retain its TRX and coverage artifacts.
 - [ ] Confirm the current CI dependency audit reports no vulnerable direct or transitive NuGet packages; investigate any advisory rather than silently ignoring it.
-- [ ] Confirm the `latest-all` .NET analyzer job passes the selected security rules, and review broader analyzer warnings or suppressions.
+- [ ] Confirm the `latest-all` .NET analyzer job passes with warnings treated as errors, and review the documented `CA1707` naming suppression.
 - [ ] Review the CodeQL C# scan for new high/critical findings; its scheduled run also refreshes analysis when code has not changed.
 - [ ] Verify package identity, version, dependencies, file inventory, and that GUI.SVG is not a runtime dependency.
 - [ ] Inspect the exact packed assembly and XML API documentation, not just the source tree.
