@@ -66,7 +66,7 @@ public sealed class FsmCos : IFsmCos
 
         // Resolve and validate the complete graph before any bundle Load method can have side effects.
         // Keep the exact resolved objects and dependency snapshots for both validation and loading.
-        var resolvedBundles = ResolveDependencyGraph(requestedRoots, out var dependencyRequestsById);
+        var resolvedBundles = ResolveDependencyGraph(requestedRoots, manifest.Schedule is not null, out var dependencyRequestsById);
 
         if (manifest.Schedule is not null)
             ValidateScheduleAgainstResolvedGraph(manifest, resolvedBundles, dependencyRequestsById);
@@ -159,6 +159,7 @@ public sealed class FsmCos : IFsmCos
 
     private Dictionary<ulong, IMicroBundle> ResolveDependencyGraph(
         IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots,
+        bool validatingPublishedSchedule,
         out Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById)
     {
         var resolvedBundles = new Dictionary<ulong, IMicroBundle>();
@@ -193,7 +194,10 @@ public sealed class FsmCos : IFsmCos
                     continue;
 
                 if (!_catalog.TryResolve(dependencyId, out var dependencyBundle) || dependencyBundle is null)
-                    throw new InvalidOperationException($"MicroBundle {dependencyId} could not be resolved.");
+                {
+                    var kind = validatingPublishedSchedule ? "Scheduled MicroBundle" : "MicroBundle";
+                    throw new InvalidOperationException($"{kind} {dependencyId} could not be resolved.");
+                }
 
                 discovered.Add(dependencyId, dependencyBundle);
                 pending.Push(dependencyId);
