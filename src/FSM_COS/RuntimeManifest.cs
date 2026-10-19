@@ -49,7 +49,7 @@ public sealed record RuntimeManifest(
             LoadPlan ?? Schedule!.Entries,
             RuntimeManifestSchedule.DefaultMaximumEntryCount,
             "Runtime manifest load plan");
-        for (var index = 0; index < plan.Count; index++)
+        for (var index = 0; index < plan.Length; index++)
         {
             var entry = plan[index];
             if (entry is null || !entry.IsValid)
