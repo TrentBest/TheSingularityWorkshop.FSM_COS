@@ -13,10 +13,11 @@ FSM_COS is a small composition kernel. This document describes how its pieces co
           ▼
        FsmCos.Execute
           │
-          ├── resolve requested bundle
-          ├── recursively resolve dependencies
-          ├── pass configuration
-          ├── Load()
+          ├── resolve roots + exact versions
+          ├── preflight complete dependency closure
+          ├── validate identities, requests, and cycles
+          ├── check optional schedule against that graph
+          ├── iterative depth-first Load()
           ├── Arbitrate() until stable
           ▼
     RuntimeAssembly
