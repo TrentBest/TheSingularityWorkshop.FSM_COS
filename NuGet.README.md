@@ -28,6 +28,10 @@ RuntimeManifest → FSM_COS → RuntimeAssembly → Host
                     └─ arbitrate toward convergence
 ```
 
+![FSM_COS validation and composition path, generated with GUI.SVG](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.FSM_COS/development/docs/assets/fsm-cos-preflight.svg)
+
+*This is a source-backed contract map, not a live execution trace.*
+
 - **MicroBundleDomain** owns the MicroBundle contract.
 - **The host or repository** supplies the catalog used to resolve bundles.
 - **FSM_COS** composes the requested capabilities.
