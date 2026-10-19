@@ -59,7 +59,7 @@ Use the status labels consistently:
 | `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | Existing system SVG is embedded; verify it against current theory and assess whether a separate lifecycle visual adds value | Embedded / verify |
 | `docs/DOMAIN.md` | What FSM_COS owns versus adjacent domains | Added domain map with caption; verify every edge against current ownership | Embedded / verify |
 | `docs/DOMAIN_COMPLETION_ROADMAP.md` | Implemented, partial, deferred, and gated capabilities | Add a visual capability/status map grounded in the checklist | Add / improve |
-| `docs/RUNTIME_MANIFEST.md` | Caller request and manifest contents | Existing manifest-pipeline SVG is embedded; verify its labels against current manifest fields and optional schedule behavior | Embedded / verify |
+| `docs/RUNTIME_MANIFEST.md` | Caller request and manifest contents | Added alt text and explicit scope note: the authoring/validation/closure/bake SVG is conceptual; implemented contract begins at `RuntimeManifest` and `FsmCos.Execute` | Existing visual verified with scope caveat |
 | `docs/MANIFEST_THEORY.md` | Semantic request versus serialized representation | Existing manifest-pipeline SVG is embedded; verify that the editor-time/published-request distinction is clear | Embedded / verify |
 | `docs/STAGED_MANIFEST_LOADING.md` | Preflight, planning, validation, loading, failure boundaries | Added dependency-resolution SVG with an explicit caveat that it does not claim end-to-end deferred loading | Embedded / verify |
 | `docs/CONSUMING_MICROBUNDLES.md` | Consumer flow, catalog responsibility, dependency ordering | Verified dependency graph and depth-first dependency-before-dependent load order against `FsmCos.LoadRoot`; alt text distinguishes illustrative graph from runtime contract | Existing visual verified |
@@ -102,6 +102,7 @@ This is an initial prioritized pass, not a claim that the remaining documents ha
 ### Pass 1 — canonical visuals in high-value contract docs
 - [x] Verified `arbitration-convergence.svg` against `FsmCos.Execute`; documented the zero-based `RuntimeAssembly.ArbitrationRounds` value and no-assembly-on-nonconvergence behavior.
 - [x] Verified `dependency-resolution.svg` against `FsmCos.LoadRoot`; documented dependency-first loading, duplicate-ID skipping, cycle detection, and that the pictured graph is illustrative.
+- [x] Verified the `RUNTIME_MANIFEST.md` pipeline graphic against `RuntimeManifest` and `FsmCos.Execute`; clarified that editor authoring, closure baking, and publication are conceptual upstream stages, not shipped FSM_COS behavior.
 - [ ] Continue verifying remaining SVGs against current source and each document's exact topic.
 - [ ] Embed the existing relevant SVG in the best canonical home instead of creating near-duplicates.
 - [ ] Add concise alt text and a caption that explains the visual's point.
