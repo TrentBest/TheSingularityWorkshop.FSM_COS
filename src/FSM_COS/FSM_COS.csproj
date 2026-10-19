@@ -16,7 +16,8 @@
     <PackageReadmeFile>NuGet.README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <!-- CA1707 is intentionally suppressed because the published FSM_COS assembly and namespace names are compatibility contracts. -->
+    <NoWarn>$(NoWarn);CS1591;CA1707</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
