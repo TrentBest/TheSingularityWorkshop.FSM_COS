@@ -380,6 +380,25 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_handles_a_deep_dependency_chain_without_recursive_stack_growth()
+    {
+        const int bundleCount = 2048;
+        var bundles = Enumerable.Range(1, bundleCount)
+            .Select(id => id == bundleCount
+                ? new TestBundle((ulong)id)
+                : new TestBundle((ulong)id, MicroBundleDependencyRequest.Unconfigured((ulong)id + 1)))
+            .ToArray();
+
+        var assembly = new FsmCos(new TestCatalog(bundles)).Execute(
+            new RuntimeManifest(42, new[] { Entry(1) }));
+
+        Assert.Equal(bundleCount, assembly.Bundles.Count);
+        Assert.Equal((ulong)bundleCount, assembly.Bundles[0].Id);
+        Assert.Equal(1UL, assembly.Bundles[^1].Id);
+        Assert.All(bundles, bundle => Assert.Equal(1, bundle.LoadCalls));
+    }
+
+    [Fact]
     public void Execute_throws_when_dependencies_form_a_cycle()
     {
         var first = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
