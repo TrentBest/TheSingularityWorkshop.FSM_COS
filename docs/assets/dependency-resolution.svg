@@ -1,9 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 700">
-<defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#070b12"/><stop offset="1" stop-color="#111827"/></linearGradient></defs>
+<defs>
+<linearGradient id="bg" x1="0" x2="1"><stop stop-color="#070b12"/><stop offset="1" stop-color="#111827"/></linearGradient>
+<style>
+.load-step{animation:load-pulse 8s linear infinite;stroke:#ffb84d;stroke-width:3}
+#load-c{animation-delay:0s} #load-b{animation-delay:2s} #load-d{animation-delay:4s} #load-a{animation-delay:6s}
+@keyframes load-pulse{0%,22%,100%{stroke:#ffb84d;stroke-width:3;fill:#111d29}8%,16%{stroke:#76cfff;stroke-width:6;fill:#183244}}
+@media(prefers-reduced-motion:reduce){.load-step{animation:none}}
+</style>
+
 <rect width="1400" height="700" rx="26" fill="url(#bg)"/>
 <g font-family="Arial,Helvetica,sans-serif">
 <text x="70" y="70" fill="#fff" font-size="34" font-weight="700" letter-spacing="3">DEPENDENCY CLOSURE</text>
-<text x="72" y="101" fill="#76cfff" font-size="15" letter-spacing="2">DECLARATIVE REQUEST → ORDERED INSTALLATION</text>
+<text x="72" y="101" fill="#76cfff" font-size="15" letter-spacing="2">SOURCE-BACKED LOAD ORDER • ILLUSTRATIVE GRAPH</text>
 <g stroke="#31465b" stroke-width="2">
 <rect x="80" y="170" width="520" height="390" rx="24" fill="#0e1622"/>
 <rect x="800" y="170" width="520" height="390" rx="24" fill="#0e1622"/>
@@ -18,12 +26,12 @@
 </g>
 <g fill="#fff" font-size="22" text-anchor="middle" font-weight="700"><text x="340" y="293">A</text><text x="220" y="403">B</text><text x="460" y="403">D</text><text x="220" y="508">C</text></g>
 <g stroke="#ffb84d" stroke-width="3" fill="#111d29">
-<rect x="855" y="250" width="410" height="58" rx="14"/><rect x="855" y="335" width="410" height="58" rx="14"/><rect x="855" y="420" width="410" height="58" rx="14"/><rect x="855" y="505" width="410" height="58" rx="14"/>
+<rect id="load-c" class="load-step" x="855" y="250" width="410" height="58" rx="14"/><rect id="load-b" class="load-step" x="855" y="335" width="410" height="58" rx="14"/><rect id="load-d" class="load-step" x="855" y="420" width="410" height="58" rx="14"/><rect id="load-a" class="load-step" x="855" y="505" width="410" height="58" rx="14"/>
 </g>
 <g fill="#fff" font-size="18" text-anchor="middle"><text x="1060" y="287">01 · C — dependency</text><text x="1060" y="372">02 · B — dependency</text><text x="1060" y="457">03 · D — dependency</text><text x="1060" y="542">04 · A — root request</text></g>
 <g fill="#8fa7bc" font-size="15">
-<text x="105" y="610">Depth-first resolution • duplicate IDs skipped • active IDs detect cycles</text>
-<text x="815" y="610">Dependencies load before the bundle that requested them.</text>
+<text x="105" y="610">FsmCos.LoadBundle: dependencies before dependent • duplicate IDs skipped</text>
+<text x="815" y="610">Animated outline traces the illustrated valid order: C → B → D → A.</text>
 </g>
-<text x="70" y="660" fill="#6e8499" font-size="14" letter-spacing="2">CYCLE = COMPOSITION ERROR • MISSING BUNDLE = COMPOSITION ERROR • NO GUESSING</text>
+<text x="70" y="660" fill="#6e8499" font-size="14" letter-spacing="2">ACTUAL GRAPH COMES FROM MICRO BUNDLE DECLARATIONS • CYCLE / MISSING BUNDLE FAILS</text>
 </g></svg>
