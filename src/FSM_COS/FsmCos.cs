@@ -163,7 +163,7 @@ public sealed class FsmCos : IFsmCos
     {
         var resolvedBundles = new Dictionary<ulong, IMicroBundle>();
         dependencyRequestsById = new Dictionary<ulong, MicroBundleDependencyRequest[]>();
-        var discovered = new Dictionary<ulong, IMicroBundle>(requestedRoots);
+        var discovered = requestedRoots.ToDictionary(pair => pair.Key, pair => pair.Value);
         var pending = new Stack<ulong>();
 
         foreach (var id in requestedRoots.Keys.Reverse())
