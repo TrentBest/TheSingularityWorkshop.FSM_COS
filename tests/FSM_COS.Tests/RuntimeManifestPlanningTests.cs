@@ -66,6 +66,24 @@ public sealed class RuntimeManifestPlanningTests
     }
 
     [Fact]
+    public void Schedule_validates_a_deep_acyclic_graph_without_recursive_stack_growth()
+    {
+        const int bundleCount = 5000;
+        var entries = Enumerable.Range(1, bundleCount)
+            .Select(id => new RuntimeManifestEntry(Reference((ulong)id, "1.0.0")))
+            .ToArray();
+        var dependencies = Enumerable.Range(1, bundleCount - 1)
+            .Select(id => new RuntimeManifestDependency((ulong)id, (ulong)id + 1))
+            .ToArray();
+
+        var schedule = new RuntimeManifestSchedule(entries, dependencies);
+
+        Assert.Equal(bundleCount, schedule.Entries.Count);
+        Assert.Equal(bundleCount - 1, schedule.Dependencies.Count);
+        Assert.True(schedule.IsDependencyReady(1, _ => true));
+    }
+
+    [Fact]
     public void Schedule_rejects_dependency_cycles()
     {
         var first = new RuntimeManifestEntry(Reference(1, "1.0.0"));
