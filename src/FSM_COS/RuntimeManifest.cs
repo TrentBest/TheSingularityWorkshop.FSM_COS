@@ -38,8 +38,16 @@ public sealed record RuntimeManifest(
             return;
 
         var plan = LoadPlan ?? Schedule!.Entries;
-        if (plan.Any(entry => entry is null || !entry.IsValid))
-            throw new InvalidOperationException("Runtime manifest contains an invalid staged-plan entry.");
+        for (var index = 0; index < plan.Count; index++)
+        {
+            var entry = plan[index];
+            if (entry is null || !entry.IsValid)
+            {
+                var identity = entry is null ? "null entry" : $"MicroBundle {entry.Reference.BundleId}";
+                throw new InvalidOperationException(
+                    $"Runtime manifest staged-plan entry at index {index} has an invalid published identity ({identity}).");
+            }
+        }
 
         if (plan.Select(entry => entry.Reference.BundleId).Distinct().Count() != plan.Count)
             throw new InvalidOperationException("Runtime manifest load plan must contain unique MicroBundle IDs.");
