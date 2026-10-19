@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760" role="img" aria-labelledby="asset-title asset-desc">
+<title id="asset-title">FSM_COS architecture overview</title>
+<desc id="asset-desc">Overview of FSM_COS as a composition layer between MicroBundleDomain and consuming applications, with external responsibilities kept outside the kernel.</desc>
 <defs>
 <linearGradient id="bg" x1="0" x2="1"><stop stop-color="#070b12"/><stop offset="1" stop-color="#101827"/></linearGradient>
 <linearGradient id="cos" x1="0" x2="1"><stop stop-color="#0b2430"/><stop offset="1" stop-color="#142d45"/></linearGradient>
