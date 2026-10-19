@@ -56,7 +56,7 @@ Use the status labels consistently:
 | `README.md` | One-screen composition overview | Verified the overview SVG against the README and architecture boundary; clarified that the host decides what happens after handoff | Existing visual verified |
 | `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Added the overview SVG with an explanatory caption; validate visual semantics and accessibility | Embedded / verify |
 | `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Verify existing system SVG and reuse focused diagrams only where they add clarity | Embedded / verify |
-| `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | Existing system SVG is embedded; verify it against current theory and assess whether a separate lifecycle visual adds value | Embedded / verify |
+| `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | Verified the system SVG against the runtime contract; labels the left side as conceptual upstream context and explains that the implemented input is `RuntimeManifest` | Existing visual verified |
 | `docs/DOMAIN.md` | What FSM_COS owns versus adjacent domains | Added domain map with caption; verify every edge against current ownership | Embedded / verify |
 | `docs/DOMAIN_COMPLETION_ROADMAP.md` | Implemented, partial, deferred, and gated capabilities | Add a visual capability/status map grounded in the checklist | Add / improve |
 | `docs/RUNTIME_MANIFEST.md` | Caller request and manifest contents | Added alt text and explicit scope note: the authoring/validation/closure/bake SVG is conceptual; implemented contract begins at `RuntimeManifest` and `FsmCos.Execute` | Existing visual verified with scope caveat |
