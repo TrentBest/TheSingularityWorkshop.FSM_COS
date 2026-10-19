@@ -711,6 +711,93 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_rejects_descriptor_dependencies_missing_from_runtime_requests_before_loading()
+    {
+        var bundle = new DependencyContractBundle(
+            id: 1,
+            descriptorDependencyIds: new[] { 2UL },
+            runtimeDependencies: Array.Empty<MicroBundleDependencyRequest>());
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new FixedCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("dependency declarations do not match", exception.Message);
+        Assert.Contains("2", exception.Message);
+        Assert.Equal(0, bundle.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_runtime_dependencies_missing_from_descriptor_before_loading()
+    {
+        var bundle = new DependencyContractBundle(
+            id: 1,
+            descriptorDependencyIds: Array.Empty<ulong>(),
+            runtimeDependencies: new[] { MicroBundleDependencyRequest.Unconfigured(2) });
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new FixedCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("dependency declarations do not match", exception.Message);
+        Assert.Contains("2", exception.Message);
+        Assert.Equal(0, bundle.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_zero_dependency_ids_before_loading()
+    {
+        var bundle = new DependencyContractBundle(
+            id: 1,
+            descriptorDependencyIds: Array.Empty<ulong>(),
+            runtimeDependencies: new[] { default(MicroBundleDependencyRequest) });
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new FixedCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("dependency ID 0", exception.Message);
+        Assert.Equal(0, bundle.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_duplicate_runtime_dependency_requests_before_loading()
+    {
+        var bundle = new DependencyContractBundle(
+            id: 1,
+            descriptorDependencyIds: new[] { 2UL },
+            runtimeDependencies: new[]
+            {
+                MicroBundleDependencyRequest.Unconfigured(2),
+                MicroBundleDependencyRequest.Unconfigured(2)
+            });
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new FixedCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("more than once", exception.Message);
+        Assert.Contains("2", exception.Message);
+        Assert.Equal(0, bundle.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_a_null_runtime_dependency_list_before_loading()
+    {
+        var bundle = new DependencyContractBundle(
+            id: 1,
+            descriptorDependencyIds: Array.Empty<ulong>(),
+            runtimeDependencies: null);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new FixedCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("no dependency request list", exception.Message);
+        Assert.Equal(0, bundle.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_rejects_a_root_whose_descriptor_identity_disagrees_with_its_bundle_identity()
     {
         var bundle = new MismatchedDescriptorBundle(id: 1, descriptorId: 99);
@@ -1052,6 +1139,32 @@ public sealed class FsmCosTests
             bundle = _bundle;
             return true;
         }
+    }
+
+    private sealed class DependencyContractBundle : IMicroBundle
+    {
+        private readonly IReadOnlyList<MicroBundleDependencyRequest>? _runtimeDependencies;
+
+        public DependencyContractBundle(
+            ulong id,
+            IEnumerable<ulong> descriptorDependencyIds,
+            IReadOnlyList<MicroBundleDependencyRequest>? runtimeDependencies)
+        {
+            Id = id;
+            _runtimeDependencies = runtimeDependencies;
+            Descriptor = new MicroBundleDescriptor(
+                id,
+                "0.1.0-test",
+                descriptorDependencyIds.Select(dependencyId => new MicroBundleDependency(dependencyId)));
+        }
+
+        public ulong Id { get; }
+        public MicroBundleDescriptor Descriptor { get; }
+        public IReadOnlyList<MicroBundleDependencyRequest> Dependencies => _runtimeDependencies!;
+        public int LoadCalls { get; private set; }
+
+        public void Load(IMicroBundleLoadContext context) => LoadCalls++;
+        public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex) => false;
     }
 
     private sealed class MismatchedDescriptorBundle : IMicroBundle
