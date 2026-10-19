@@ -49,14 +49,10 @@ public sealed class FsmCos : IFsmCos
         int maximumDependencyRequestCount,
         long maximumConfigurationBytes)
     {
-        if (maximumArbitrationRounds < 1)
-            throw new ArgumentOutOfRangeException(nameof(maximumArbitrationRounds));
-        if (maximumBundleCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(maximumBundleCount));
-        if (maximumDependencyRequestCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(maximumDependencyRequestCount));
-        if (maximumConfigurationBytes < 0)
-            throw new ArgumentOutOfRangeException(nameof(maximumConfigurationBytes));
+        ArgumentOutOfRangeException.ThrowIfLessThan(maximumArbitrationRounds, 1);
+        ArgumentOutOfRangeException.ThrowIfLessThan(maximumBundleCount, 1);
+        ArgumentOutOfRangeException.ThrowIfLessThan(maximumDependencyRequestCount, 1);
+        ArgumentOutOfRangeException.ThrowIfNegative(maximumConfigurationBytes);
 
         _catalog = catalog ?? throw new ArgumentNullException(nameof(catalog));
         _maximumArbitrationRounds = maximumArbitrationRounds;
@@ -195,10 +191,10 @@ public sealed class FsmCos : IFsmCos
         return new RuntimeAssembly(manifest.RuntimeId, loaded, rounds, manifest.Intent);
     }
 
-    private void ValidateScheduleAgainstResolvedGraph(
+    private static void ValidateScheduleAgainstResolvedGraph(
         RuntimeManifest manifest,
-        IReadOnlyDictionary<ulong, IMicroBundle> resolvedBundles,
-        IReadOnlyDictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById)
+        Dictionary<ulong, IMicroBundle> resolvedBundles,
+        Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById)
     {
         var schedule = manifest.Schedule!;
         var plannedById = schedule.Entries.ToDictionary(entry => entry.Reference.BundleId);
@@ -365,8 +361,8 @@ public sealed class FsmCos : IFsmCos
 
     private void LoadRoot(
         MicroBundleManifestEntry entry,
-        IReadOnlyDictionary<ulong, IMicroBundle> resolvedBundles,
-        IReadOnlyDictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById,
+        Dictionary<ulong, IMicroBundle> resolvedBundles,
+        Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById,
         List<IMicroBundle> loaded,
         HashSet<ulong> loadedIds,
         HashSet<ulong> loading,
