@@ -221,6 +221,20 @@ public sealed class RuntimeManifestPlanningTests
     }
 
     [Fact]
+    public void Manifest_plan_reports_duplicate_bundle_ids_as_a_staged_plan_error()
+    {
+        var entry = new RuntimeManifestEntry(Reference(1, "1.0.0"));
+        var manifest = new RuntimeManifest(
+            42,
+            new[] { new MicroBundleManifestEntry(1, "1.0.0") },
+            LoadPlan: new[] { entry, entry });
+
+        var exception = Assert.Throws<InvalidOperationException>(manifest.ValidateStagedPlan);
+
+        Assert.Contains("unique MicroBundle IDs", exception.Message);
+    }
+
+    [Fact]
     public void Promotion_schedule_must_cover_the_entire_load_plan()
     {
         var root = new RuntimeManifestEntry(Reference(1, "1.0.0"));
