@@ -244,6 +244,23 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_uses_the_same_dependency_instance_validated_during_preflight()
+    {
+        var firstResolution = new TestBundle(2);
+        var laterResolution = new TestBundle(2);
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var catalog = new ChangingDependencyCatalog(root, firstResolution, laterResolution);
+
+        var assembly = new FsmCos(catalog).Execute(
+            new RuntimeManifest(42, new[] { Entry(1) }));
+
+        Assert.Same(firstResolution, assembly.Bundles.Single(bundle => bundle.Id == 2));
+        Assert.Equal(1, catalog.DependencyLookupCalls);
+        Assert.Equal(1, firstResolution.LoadCalls);
+        Assert.Equal(0, laterResolution.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_deduplicates_shared_dependencies()
     {
         var shared = new TestBundle(3);
