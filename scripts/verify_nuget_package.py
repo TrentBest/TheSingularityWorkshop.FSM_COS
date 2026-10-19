@@ -109,6 +109,7 @@ def verify(package_dir: Path, project_path: Path) -> None:
             "DOCUMENTATION_INDEX.md",
             f"docs/releases/{version}.md",
             "docs/assets/fsm-cos-overview.svg",
+            "docs/assets/fsm-cos-preflight.svg",
             "docs/assets/fsm-cos-crane.svg",
         }
         missing = sorted(required_files - names)
