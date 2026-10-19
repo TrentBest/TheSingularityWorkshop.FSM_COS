@@ -385,12 +385,51 @@ public sealed class RuntimeManifestPlanningTests
         Assert.Contains("MicroBundle 7", exception.Message);
     }
 
+    [Fact]
+    public void Dependency_readiness_propagates_predicate_failures()
+    {
+        var schedule = new RuntimeManifestSchedule(
+            new[]
+            {
+                new RuntimeManifestEntry(Reference(1, "1.0.0")),
+                new RuntimeManifestEntry(Reference(2, "1.0.0"))
+            },
+            new[] { new RuntimeManifestDependency(2, 1) });
+        var expected = new InvalidOperationException("load-state lookup failed");
+
+        var actual = Assert.Throws<InvalidOperationException>(() =>
+            schedule.IsDependencyReady(2, _ => throw expected));
+
+        Assert.Same(expected, actual);
+    }
+
+    [Fact]
+    public void Promotion_evaluation_propagates_evaluator_failures()
+    {
+        var deferred = new RuntimeManifestEntry(Reference(2, "1.0.0"), ManifestLoadStage.Deferred);
+        var plan = new RuntimeManifestLoadPlan(new[] { deferred });
+        plan.MarkLocalized(2);
+        var expected = new InvalidOperationException("experience evaluation failed");
+
+        var actual = Assert.Throws<InvalidOperationException>(() =>
+            plan.EvaluatePromotions(new ThrowingEvaluator(expected), null).ToArray());
+
+        Assert.Same(expected, actual);
+        Assert.Equal(MicroBundleRuntimeState.Localized, plan.GetState(2));
+    }
+
     private static MicroBundleReference Reference(ulong id, string version) =>
         new(id, version, $"sha256:{id}-{version}");
 
     private sealed class AcceptAllEvaluator : IManifestLoadEvaluator
     {
         public bool ShouldLoad(RuntimeManifestEntry entry, IStateContext? experienceContext) => true;
+    }
+
+    private sealed class ThrowingEvaluator(Exception exception) : IManifestLoadEvaluator
+    {
+        public bool ShouldLoad(RuntimeManifestEntry entry, IStateContext? experienceContext) =>
+            throw exception;
     }
 
     private sealed class DeclineDeferredEvaluator : IManifestLoadEvaluator
