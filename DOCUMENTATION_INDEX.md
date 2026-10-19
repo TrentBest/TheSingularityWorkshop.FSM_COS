@@ -45,7 +45,7 @@ Use one primary document for each question. Related pages should explain context
 
 ## Accuracy and release evidence
 
-The shared [Documentation Standard](DOCUMENTATION_STANDARD.md) governs writing quality, source accuracy, and link hygiene. The [alpha.7 readiness gate](docs/0.1.0-alpha.7-READINESS.md) governs exact-candidate release evidence. Historical planning notes are context, not current specifications; verify present-tense claims against source, tests, and current CI.
+The shared [Documentation Standard](DOCUMENTATION_STANDARD.md) governs writing quality, source accuracy, and link hygiene. The [alpha.7 readiness gate](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) governs exact-candidate release evidence. Historical planning notes are context, not current specifications; verify present-tense claims against source, tests, and current CI.
 
 ## Living documentation
 
