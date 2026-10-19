@@ -48,6 +48,41 @@ def verify(package_dir: Path, project_path: Path) -> None:
     package = packages[0]
     with zipfile.ZipFile(package) as archive:
         names = set(archive.namelist())
+        svg_names = sorted(name for name in names if name.lower().endswith(".svg"))
+        for svg_name in svg_names:
+            try:
+                svg_root = ET.fromstring(archive.read(svg_name))
+            except ET.ParseError as error:
+                fail(f"SVG is not well-formed XML: {svg_name}: {error}")
+
+            role = svg_root.attrib.get("role")
+            if "/section-dividers/" in svg_name:
+                if role != "presentation" or svg_root.attrib.get("aria-hidden") != "true":
+                    fail(f"Decorative section divider must be hidden from assistive technology: {svg_name}.")
+            elif "/section-markers/" in svg_name:
+                if role != "img" or not svg_root.attrib.get("aria-label", "").strip():
+                    fail(f"Section marker must expose an accessible image label: {svg_name}.")
+            else:
+                children = {local_name(item.tag): item for item in svg_root}
+                title = children.get("title")
+                description = children.get("desc")
+                labelled_ids = set(svg_root.attrib.get("aria-labelledby", "").split())
+                required_ids = {
+                    item.attrib.get("id")
+                    for item in (title, description)
+                    if item is not None and item.attrib.get("id")
+                }
+                if (
+                    role != "img"
+                    or title is None
+                    or description is None
+                    or not required_ids
+                    or not required_ids.issubset(labelled_ids)
+                ):
+                    fail(
+                        "Substantive SVG must have a title, description, role='img', "
+                        f"and matching aria-labelledby references: {svg_name}."
+                    )
         nuspecs = [name for name in names if name.lower().endswith(".nuspec")]
         if len(nuspecs) != 1:
             fail(f"Expected exactly one .nuspec in {package.name}; found {len(nuspecs)}.")
