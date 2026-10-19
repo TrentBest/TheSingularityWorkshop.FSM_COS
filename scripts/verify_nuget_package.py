@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import posixpath
+import re
 import sys
 import zipfile
 from pathlib import Path
@@ -112,6 +114,25 @@ def verify(package_dir: Path, project_path: Path) -> None:
         missing = sorted(required_files - names)
         if missing:
             fail("Package is missing required files: " + ", ".join(missing))
+
+        markdown_link = re.compile(r"!?\\[[^\\]]*\\]\\(([^)]+)\\)|^\\[[^\\]]+\\]:\\s*<?([^>\\s]+)>?", re.MULTILINE)
+        for markdown_name in sorted(name for name in names if name.lower().endswith(".md")):
+            markdown = archive.read(markdown_name).decode("utf-8-sig")
+            for match in markdown_link.finditer(markdown):
+                target = (match.group(1) or match.group(2) or "").strip().split()[0].strip("<>")
+                if not target or target.startswith(("#", "http://", "https://", "mailto:", "data:")):
+                    continue
+                target_path = target.split("#", 1)[0].split("?", 1)[0]
+                if not target_path:
+                    continue
+                resolved = posixpath.normpath(posixpath.join(posixpath.dirname(markdown_name), target_path))
+                if resolved not in names and not any(
+                    name.startswith(resolved.rstrip("/") + "/") for name in names
+                ):
+                    fail(
+                        f"Markdown link in {markdown_name} points outside the package or to a missing file: "
+                        f"{target!r} (resolved to {resolved!r})."
+                    )
 
         assembly_path = f"lib/net8.0/{assembly_name}.dll"
         if assembly_path not in names:
