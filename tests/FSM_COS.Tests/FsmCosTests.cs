@@ -907,6 +907,66 @@ public sealed class FsmCosTests
             _bundles.TryGetValue(bundleId, out bundle);
     }
 
+    private sealed class DependencyOverrideCatalog : IMicroBundleCatalog
+    {
+        private readonly IMicroBundle _root;
+        private readonly ulong _requestedDependencyId;
+        private readonly IMicroBundle _dependency;
+
+        public DependencyOverrideCatalog(IMicroBundle root, ulong requestedDependencyId, IMicroBundle dependency)
+        {
+            _root = root;
+            _requestedDependencyId = requestedDependencyId;
+            _dependency = dependency;
+        }
+
+        public bool TryResolve(ulong bundleId, string version, out IMicroBundle? bundle)
+        {
+            bundle = bundleId == _root.Id ? _root :
+                bundleId == _requestedDependencyId ? _dependency : null;
+            return bundle is not null &&
+                string.Equals(bundle.Descriptor.Version, version, StringComparison.Ordinal);
+        }
+
+        public bool TryResolve(ulong bundleId, out IMicroBundle? bundle)
+        {
+            bundle = bundleId == _root.Id ? _root :
+                bundleId == _requestedDependencyId ? _dependency : null;
+            return bundle is not null;
+        }
+    }
+
+    private sealed class NullDependencyCatalog : IMicroBundleCatalog
+    {
+        private readonly IMicroBundle _root;
+        private readonly ulong _requestedDependencyId;
+
+        public NullDependencyCatalog(IMicroBundle root, ulong requestedDependencyId)
+        {
+            _root = root;
+            _requestedDependencyId = requestedDependencyId;
+        }
+
+        public bool TryResolve(ulong bundleId, string version, out IMicroBundle? bundle)
+        {
+            bundle = bundleId == _root.Id ? _root : null;
+            return bundle is not null &&
+                string.Equals(bundle.Descriptor.Version, version, StringComparison.Ordinal);
+        }
+
+        public bool TryResolve(ulong bundleId, out IMicroBundle? bundle)
+        {
+            if (bundleId == _requestedDependencyId)
+            {
+                bundle = null;
+                return true;
+            }
+
+            bundle = bundleId == _root.Id ? _root : null;
+            return bundle is not null;
+        }
+    }
+
     private sealed class FixedCatalog : IMicroBundleCatalog
     {
         private readonly IMicroBundle _bundle;
@@ -1064,6 +1124,52 @@ public sealed class FsmCosTests
     {
         public string Name { get; set; } = "test";
         public bool IsValid { get; set; } = true;
+    }
+
+    [Fact]
+    public void Execute_rejects_a_dependency_catalog_entry_without_a_descriptor_before_loading_root()
+    {
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var malformedDependency = new MalformedBundle(2);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, malformedDependency))
+                .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("2", exception.Message);
+        Assert.Contains("no descriptor", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, malformedDependency.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_a_dependency_catalog_identity_mismatch_before_loading_root()
+    {
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var wrongDependency = new TestBundle(3);
+        var catalog = new DependencyOverrideCatalog(root, requestedDependencyId: 2, wrongDependency);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(catalog).Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("request 2", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("bundle 3", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, wrongDependency.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_a_catalog_that_reports_success_with_a_null_dependency()
+    {
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
+        var catalog = new NullDependencyCatalog(root, requestedDependencyId: 2);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(catalog).Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("2", exception.Message);
+        Assert.Contains("could not be resolved", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(0, root.LoadCalls);
     }
 
     [Fact]
