@@ -32,10 +32,31 @@ jobs:
           ref: development
           path: _dependencies/MicroBundleDomain
 
+      # Pin the SVG authoring implementation so generated documentation stays reproducible.
+      # This source/tooling dependency is confined to the visual generator, not the FSM_COS package.
+      - name: Checkout GUI.SVG source for documentation visual generation
+        if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
+        uses: actions/checkout@v7
+        with:
+          repository: TrentBest/TheSingularityWorkshop.GUI
+          ref: 435a2898be8aed8c44da3a97716fad54f3a339ee
+          path: _dependencies/GUI
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 8.0.x
+
+      - name: Generate FSM_COS validation visual with GUI.SVG
+        if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
+        run: dotnet run --project samples/DocumentationVisuals/DocumentationVisuals.csproj --configuration Release -- docs/assets/fsm-cos-preflight.svg
+
+      - name: Upload generated FSM_COS validation visual
+        if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: fsm-cos-generated-visuals
+          path: docs/assets/fsm-cos-preflight.svg
 
       - name: Pack MicroBundleDomain development dependency
         if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
