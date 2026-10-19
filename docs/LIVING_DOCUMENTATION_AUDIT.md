@@ -53,7 +53,7 @@ Use the status labels consistently:
 | Document | Visual intent | Initial action | Status |
 |---|---|---|---|
 | `AGENTS.md` | Repository-specific operating guardrails | Plain-language constraints are the point; a diagram risks obscuring authoritative instructions | No visual needed — operational rules are best kept explicit |
-| `README.md` | One-screen composition overview | Preserve overview SVG; verify it is accurate and not merely decorative | Embedded / verify |
+| `README.md` | One-screen composition overview | Verified the overview SVG against the README and architecture boundary; clarified that the host decides what happens after handoff | Existing visual verified |
 | `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Added the overview SVG with an explanatory caption; validate visual semantics and accessibility | Embedded / verify |
 | `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Verify existing system SVG and reuse focused diagrams only where they add clarity | Embedded / verify |
 | `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | Existing system SVG is embedded; verify it against current theory and assess whether a separate lifecycle visual adds value | Embedded / verify |
