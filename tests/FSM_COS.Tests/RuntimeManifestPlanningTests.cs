@@ -25,6 +25,17 @@ public sealed class RuntimeManifestPlanningTests
     }
 
     [Fact]
+    public void Staged_plan_validation_rejects_a_null_root_collection()
+    {
+        var manifest = new RuntimeManifest(
+            42,
+            null!,
+            LoadPlan: new[] { new RuntimeManifestEntry(Reference(7, "1.2.0")) });
+
+        Assert.Throws<ArgumentNullException>(manifest.ValidateStagedPlan);
+    }
+
+    [Fact]
     public void Staged_plan_rejects_version_drift_before_composition()
     {
         var entry = new RuntimeManifestEntry(Reference(7, "1.2.0"));
