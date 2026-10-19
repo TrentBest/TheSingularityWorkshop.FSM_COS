@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="asset-title asset-desc">
+<title id="asset-title">FSM_COS AI capability composition</title>
+<desc id="asset-desc">Diagram showing how AI-related capabilities can be represented as composed bundles around FSM_COS rather than built into the composition kernel.</desc>
 <rect width="1200" height="650" rx="32" fill="#0b0f16"/>
 <g font-family="Arial, sans-serif" text-anchor="middle">
 <text x="600" y="55" fill="white" font-size="30" font-weight="700">FSM_COS — AI Capabilities as Composition</text>
