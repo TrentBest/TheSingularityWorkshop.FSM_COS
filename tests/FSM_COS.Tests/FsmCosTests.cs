@@ -18,7 +18,7 @@ public sealed class FsmCosTests
     }
 
     [Fact]
-    public void Execute_rejects_root_count_over_limit_before_catalog_resolution()
+    public void Execute_rejects_root_count_over_limit_before_loading()
     {
         var first = new TestBundle(1);
         var second = new TestBundle(2);
