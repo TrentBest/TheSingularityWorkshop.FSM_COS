@@ -221,6 +221,42 @@ public sealed class RuntimeManifestPlanningTests
     }
 
     [Fact]
+    public void Promotion_schedule_must_cover_the_entire_load_plan()
+    {
+        var root = new RuntimeManifestEntry(Reference(1, "1.0.0"));
+        var dependent = new RuntimeManifestEntry(Reference(2, "1.0.0"), ManifestLoadStage.Deferred);
+        var plan = new RuntimeManifestLoadPlan(new[] { root, dependent });
+        var incompleteSchedule = new RuntimeManifestSchedule(
+            new[] { dependent },
+            Array.Empty<RuntimeManifestDependency>());
+
+        plan.MarkLocalized(1);
+        plan.MarkLocalized(2);
+
+        Assert.Throws<ArgumentException>(() =>
+            plan.EvaluatePromotions(new AcceptAllEvaluator(), null, incompleteSchedule).ToArray());
+    }
+
+    [Fact]
+    public void Promotion_schedule_cannot_replace_validated_dependency_edges()
+    {
+        var root = new RuntimeManifestEntry(Reference(1, "1.0.0"));
+        var dependent = new RuntimeManifestEntry(Reference(2, "1.0.0"), ManifestLoadStage.Deferred);
+        var entries = new[] { root, dependent };
+        var validatedSchedule = new RuntimeManifestSchedule(
+            entries,
+            new[] { new RuntimeManifestDependency(2, 1) });
+        var plan = new RuntimeManifestLoadPlan(entries, validatedSchedule);
+        var weakenedSchedule = new RuntimeManifestSchedule(entries, Array.Empty<RuntimeManifestDependency>());
+
+        plan.MarkLocalized(1);
+        plan.MarkLocalized(2);
+
+        Assert.Throws<ArgumentException>(() =>
+            plan.EvaluatePromotions(new AcceptAllEvaluator(), null, weakenedSchedule).ToArray());
+    }
+
+    [Fact]
     public void Deferred_evaluator_can_decline_a_localized_bundle()
     {
         var deferred = new RuntimeManifestEntry(Reference(2, "1.0.0"), ManifestLoadStage.Deferred);
