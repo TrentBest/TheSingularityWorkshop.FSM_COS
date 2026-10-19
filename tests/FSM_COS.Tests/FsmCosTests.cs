@@ -494,6 +494,7 @@ public sealed class FsmCosTests
 
         Assert.Contains(typeof(IStateContext).Assembly.GetName().Name!, references);
         Assert.Contains(typeof(MicroBundleDescriptor).Assembly.GetName().Name!, references);
+        Assert.DoesNotContain("TheSingularityWorkshop.GUI.SVG", references);
     }
 
     [Fact]
