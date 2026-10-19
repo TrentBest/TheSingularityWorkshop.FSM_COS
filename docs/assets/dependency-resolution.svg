@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 700" role="img" aria-labelledby="dependency-title dependency-description">
-<title id="dependency-title">Dependency closure and dependency-first installation order</title>
-<desc id="dependency-description">An illustrative graph where A depends on B and D, and B depends on C. The installation order is C, B, D, A. An animated outline highlights that order. This is not a live runtime trace.</desc>
+<title id="dependency-title">Preflight validation and dependency-first installation order</title>
+<desc id="dependency-description">The complete reachable dependency graph is resolved and validated before any bundle Load call. An illustrative graph shows A depending on B and D, and B depending on C. The dependency-first installation order is C, B, D, A, highlighted by an animated outline. This is not a live runtime trace.</desc>
 <defs>
 <linearGradient id="bg" x1="0" x2="1"><stop stop-color="#070b12"/><stop offset="1" stop-color="#111827"/></linearGradient>
 <style>
@@ -13,8 +13,8 @@
 
 <rect width="1400" height="700" rx="26" fill="url(#bg)"/>
 <g font-family="Arial,Helvetica,sans-serif">
-<text x="70" y="70" fill="#fff" font-size="34" font-weight="700" letter-spacing="3">DEPENDENCY CLOSURE</text>
-<text x="72" y="101" fill="#76cfff" font-size="15" letter-spacing="2">SOURCE-BACKED LOAD ORDER • ILLUSTRATIVE GRAPH</text>
+<text x="70" y="70" fill="#fff" font-size="34" font-weight="700" letter-spacing="3">PREFLIGHT + DEPENDENCY ORDER</text>
+<text x="72" y="101" fill="#76cfff" font-size="15" letter-spacing="2">VALIDATE FULL GRAPH BEFORE LOAD • ILLUSTRATIVE GRAPH</text>
 <g stroke="#31465b" stroke-width="2">
 <rect x="80" y="170" width="520" height="390" rx="24" fill="#0e1622"/>
 <rect x="800" y="170" width="520" height="390" rx="24" fill="#0e1622"/>
@@ -36,5 +36,5 @@
 <text x="105" y="610">FsmCos.Execute: preflight first • iterative dependency-first loading</text>
 <text x="815" y="610">Animated outline traces the illustrated valid order: C → B → D → A.</text>
 </g>
-<text x="70" y="660" fill="#6e8499" font-size="14" letter-spacing="2">ACTUAL GRAPH COMES FROM MICRO BUNDLE DECLARATIONS • CYCLE / MISSING BUNDLE FAILS</text>
+<text x="70" y="660" fill="#6e8499" font-size="14" letter-spacing="2">FULL CLOSURE VALIDATED BEFORE LOAD • MISSING / CYCLE / IDENTITY MISMATCH FAILS</text>
 </g></svg>
