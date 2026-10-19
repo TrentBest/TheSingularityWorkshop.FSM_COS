@@ -39,7 +39,7 @@ A failed resolution, invalid plan, loading failure, or non-converged arbitration
 
 ## 4. Dependency gate: update roots before consumers
 
-The candidate currently declares these direct NuGet dependencies:
+The current project file declares these direct NuGet dependencies:
 
 | Package | Declared version | Release gate |
 |---|---:|---|
@@ -47,7 +47,7 @@ The candidate currently declares these direct NuGet dependencies:
 | FSM_UserIO | `0.1.0-alpha.1` | Pre-release contract; retain alpha status while this dependency is pre-release |
 | MicroBundleDomain | `1.0.1` | Domain contract package; update first if the composition contract must change |
 
-The current pipeline has a **public NuGet compatibility** job and a **development source integration** job. The latest recorded candidate run passed both. That is evidence that the current declared dependency set is consumable; it is not proof that every dependency's latest source should be published or that a newer dependency is needed.
+These are source declarations, not proof of restore success, package availability, or compatibility for a particular candidate. **Current CI status and package evidence belong only in the [alpha.7 readiness gate](0.1.0-alpha.7-READINESS.md)** and must be tied to the exact candidate commit and artifact. Historical runs must not be described as evidence for a newer candidate.
 
 Dependency order when a contract change is required:
 
@@ -55,23 +55,25 @@ Dependency order when a contract change is required:
 2. Fix and test that package on its development branch.
 3. Verify its package contents, documentation, and release workflow; publish that dependency before a consumer references a new public version.
 4. Update the FSM_COS package reference and source-integration graph together.
-5. Run public-feed compatibility and full source integration again.
+5. Re-run public-feed compatibility and full source integration for the exact consumer candidate.
 6. Only then prepare the FSM_COS package.
 
 Do not bump dependency versions merely because newer source commits exist. Conversely, do not release a consumer that requires an unpublished dependency version.
 
-## 5. Implemented and verified in alpha.7 candidate
+## 5. Implemented behavior described by the alpha.7 source candidate
+
+The source candidate includes:
 
 - Runtime manifest planning and dependency-aware ordering.
 - Bundle loading and bounded arbitration/convergence handoff.
 - `RuntimeAssembly` output.
 - Read-only snapshots for `RuntimeAssembly.Bundles`, `RuntimeManifestSchedule` collections, and `RuntimeManifestLoadPlan.Entries`.
 - Regression tests that verify exposed collections cannot be mutated through casts to mutable collection interfaces.
-- Minimal consumer sample proving the dependency order `2 -> 1`.
-- Package verifier checks package ID/version, dependency metadata, target assembly and XML docs, README/license, release notes, and required living SVG assets.
-- CI exercises build/test, public package compatibility, development source integration, package-content verification, and artifact creation.
+- A minimal consumer sample intended to demonstrate dependency order `2 -> 1`.
+- A package verifier for package identity/version, dependency metadata, target assembly and XML docs, README/license, release notes, and required living SVG assets.
+- CI jobs for build/test, public-package compatibility, development-source integration, package-content verification, and artifact creation.
 
-Evidence is tied to a specific commit and run. A passing run is not interchangeable with a later commit's result.
+This is an inventory of source and workflow intent, **not a claim that the current candidate has passed verification**. Evidence is tied to a specific commit and run; a passing run is not interchangeable with a later commit's result. See the readiness gate for the live verification state.
 
 ## 6. Explicitly deferred — not alpha.7 functionality
 
@@ -80,10 +82,10 @@ These are known omissions, not hidden promises:
 | Deferred capability | What must be designed/implemented before claiming support | Minimum proof |
 |---|---|---|
 | Repository localization | Define how a requested bundle is mapped to a repository/location without moving repository ownership into FSM_COS | Resolver contract tests and a consumer integration test using distinct locations |
-| Content-hash verification | Define the trusted hash source, canonical bytes, and mismatch failure behavior | Matching, missing, and mismatched-hash tests |
+| Content-hash verification of localized bytes | Define the trusted hash source, canonical bytes, and mismatch failure behavior; carrying a hash as metadata alone does not verify bytes | Matching, missing, and mismatched-hash tests |
 | Bootstrap-only initial composition | Define the bootstrap boundary and how it differs from ordinary requested composition | Tests showing bootstrap inclusion/exclusion and deterministic ordering |
-| Background localization | Define asynchronous discovery/cancellation/error semantics without silently changing the synchronous contract | deterministic async tests, cancellation and failure tests |
-| Live promotion of Deferred bundles | Define when a deferred bundle becomes eligible and how a running assembly changes safely | state-transition tests proving no partial/invalid assembly is exposed |
+| Background localization | Define asynchronous discovery/cancellation/error semantics without silently changing the synchronous contract | Deterministic async tests, cancellation and failure tests |
+| Live promotion of Deferred bundles | Define when a deferred bundle becomes eligible and how a running assembly changes safely | State-transition tests proving no partial/invalid assembly is exposed |
 
 The read-only snapshot fix protects collection structure; it does **not** make each MicroBundle immutable, guarantee safe live mutation of an assembly, or implement any of the deferred capabilities above.
 
@@ -100,20 +102,11 @@ These are follow-on engineering tracks, not requirements to inflate alpha.7:
 
 A track is complete only when its contract is written, implementation is present, tests demonstrate it, and packaged documentation accurately states the result.
 
-## 8. Release checklist
+## 8. Release readiness authority
 
-- [ ] Confirm whether any dependency contract change is actually required; if yes, publish the owning dependency first.
-- [ ] Ensure README, documentation index, package README, project version, release notes, and workflow badges agree on alpha.7.
-- [ ] Review public API changes and ensure XML documentation describes behavior rather than aspiration.
-- [ ] Run all tests, including regression and failure-path tests.
-- [ ] Verify the minimal consumer's expected output.
-- [ ] Pass public-package compatibility and development-source integration.
-- [ ] Pass both NuGet package-content verifiers.
-- [ ] Inspect the actual package contents and the living SVG assets.
-- [ ] Confirm the exact commit intended for publication.
-- [ ] Deliberately dispatch the package workflow with `publish=true` only after the gates above pass.
-- [ ] Verify the workflow's publish job succeeded and the exact version is visible on NuGet.
-- [ ] Record the published version and commit; do not equate uploaded CI artifacts with a release.
+The candidate-specific release checklist is maintained in one place: the [alpha.7 readiness gate](0.1.0-alpha.7-READINESS.md). Use that file for source/contract gates, CI evidence, exact-package inspection, documentation/accessibility closure, and the definition of pre-publication readiness.
+
+This roadmap intentionally does not duplicate the release checklist or track workflow run IDs, artifact names, package hashes, or publication authorization. Those facts are candidate-specific and must be verified from current Actions results and the exact package artifact. Publication approval and post-publication checks remain separate from pre-publication readiness.
 
 ## 9. Source authority
 
