@@ -51,8 +51,12 @@ public sealed record RuntimeManifest(
             }
         }
 
-        if (plan.Select(entry => entry.Reference.BundleId).Distinct().Count() != plan.Count)
-            throw new InvalidOperationException("Runtime manifest load plan must contain unique MicroBundle IDs.");
+        var duplicateId = plan
+            .GroupBy(entry => entry.Reference.BundleId)
+            .FirstOrDefault(group => group.Count() > 1)?.Key;
+        if (duplicateId.HasValue)
+            throw new InvalidOperationException(
+                $"Runtime manifest load plan contains duplicate MicroBundle ID {duplicateId.Value}.");
 
         var byId = plan.ToDictionary(entry => entry.Reference.BundleId);
         foreach (var requested in Bundles)
@@ -71,9 +75,6 @@ public sealed record RuntimeManifest(
             return;
 
         var scheduleById = Schedule.Entries.ToDictionary(entry => entry.Reference.BundleId);
-        if (scheduleById.Count != byId.Count)
-            throw new InvalidOperationException("Runtime manifest schedule and load plan contain different MicroBundle sets.");
-
         foreach (var entry in LoadPlan)
         {
             if (!scheduleById.TryGetValue(entry.Reference.BundleId, out var scheduled) ||
@@ -81,8 +82,15 @@ public sealed record RuntimeManifest(
                 scheduled.Stage != entry.Stage)
             {
                 throw new InvalidOperationException(
-                    $"Runtime manifest schedule and load plan disagree for MicroBundle {entry.Reference.BundleId}.");
+                    $"Runtime manifest schedule and load plan disagree for MicroBundle {entry.Reference.BundleId} identity or stage.");
             }
+        }
+
+        if (scheduleById.Count != byId.Count)
+        {
+            var unexpected = scheduleById.Keys.Except(byId.Keys).OrderBy(id => id);
+            throw new InvalidOperationException(
+                $"Runtime manifest schedule contains MicroBundle IDs absent from the load plan: [{string.Join(", ", unexpected)}].");
         }
     }
 }
