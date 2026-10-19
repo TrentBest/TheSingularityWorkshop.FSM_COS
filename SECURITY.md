@@ -26,6 +26,7 @@ Composition is not transactional. If a bundle mutates external state and then th
 | Partial side effects from `Load`/`Arbitrate` failure | Explicitly no rollback guarantee | Failure tests and host cleanup contract |
 | Malformed package or accidental GUI dependency | Package metadata/content verifier and runtime assembly boundary test | Verify exact candidate package, dependency list, and assembly references |
 | Vulnerable transitive dependencies / unsafe code patterns | Must be checked by dependency audit and static analysis in CI | Record the tool, database date, findings, and disposition; a clean unit-test run is not evidence of a clean security scan |
+| Mutable third-party GitHub Action tags | Pin each action to a verified full commit SHA; update pins deliberately and rerun workflows | Workflow source review plus successful exact-candidate CI |
 | Untrusted bundle code / privilege abuse | Outside the in-process kernel's security boundary | Host isolation and least privilege; do not claim sandboxing |
 | Resource exhaustion from extremely large manifests/graphs/configuration or pathological callbacks | Bounded enumeration for roots, schedules, and load plans; configurable bundle, dependency-request, and configuration-byte limits; iterative traversal. Arbitrary callbacks still need host execution policy | Tests for configured limits and deep graphs; host-level timeout/cancellation remains necessary |
 
@@ -39,6 +40,7 @@ Before treating a candidate as security-reviewed:
 - [x] Review the CodeQL C# scan for new high/critical findings; the retained SARIF artifact for the candidate contains zero results.
 - [x] Verify package identity, version, dependencies, file inventory, and that GUI.SVG is not a runtime dependency.
 - [x] Inspect the exact packed assembly and XML API documentation, not just the source tree.
+- [x] Pin third-party GitHub Actions to verified full commit SHAs; record the upstream major version beside each pin.
 - [x] Confirm the workflow's publish gate is disabled unless explicitly authorized.
 - [x] Verify generated SVG assets against the pinned GUI.SVG generator and inspect that they describe current implementation behavior.
 - [x] Review the remaining limitations above, especially in-process trust and non-transactional side effects.
