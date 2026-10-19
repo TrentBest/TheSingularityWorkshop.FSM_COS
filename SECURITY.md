@@ -33,15 +33,17 @@ Composition is not transactional. If a bundle mutates external state and then th
 
 Before treating a candidate as security-reviewed:
 
-- [ ] Run the exact candidate's full test suite and retain its TRX and coverage artifacts.
-- [ ] Confirm the current CI dependency audit reports no vulnerable direct or transitive NuGet packages; investigate any advisory rather than silently ignoring it.
-- [ ] Confirm the `latest-all` .NET analyzer job passes with warnings treated as errors, and review the documented `CA1707` naming suppression.
+- [x] Run the exact candidate's full test suite and retain its TRX and coverage artifacts.
+- [x] Confirm the current CI dependency audit reports no vulnerable direct or transitive NuGet packages; investigate any advisory rather than silently ignoring it.
+- [x] Confirm the `latest-all` .NET analyzer job passes with warnings treated as errors, and review the documented `CA1707` naming suppression.
 - [ ] Review the CodeQL C# scan for new high/critical findings; its scheduled run also refreshes analysis when code has not changed.
-- [ ] Verify package identity, version, dependencies, file inventory, and that GUI.SVG is not a runtime dependency.
-- [ ] Inspect the exact packed assembly and XML API documentation, not just the source tree.
-- [ ] Confirm the workflow's publish gate is disabled unless explicitly authorized.
-- [ ] Verify generated SVG assets against the pinned GUI.SVG generator and inspect that they describe current implementation behavior.
-- [ ] Review the remaining limitations above, especially in-process trust and non-transactional side effects.
+- [x] Verify package identity, version, dependencies, file inventory, and that GUI.SVG is not a runtime dependency.
+- [x] Inspect the exact packed assembly and XML API documentation, not just the source tree.
+- [x] Confirm the workflow's publish gate is disabled unless explicitly authorized.
+- [x] Verify generated SVG assets against the pinned GUI.SVG generator and inspect that they describe current implementation behavior.
+- [x] Review the remaining limitations above, especially in-process trust and non-transactional side effects.
+
+The CodeQL analysis workflow completed successfully for the candidate and uploaded SARIF results. Review of the resulting alert list remains open until the repository's GitHub Security/code-scanning view has been checked; a successful analysis run is not evidence of zero findings.
 
 ## External baselines
 
