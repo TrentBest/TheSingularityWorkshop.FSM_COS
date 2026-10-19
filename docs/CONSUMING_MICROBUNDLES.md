@@ -278,6 +278,12 @@ If the composition still reports changes after the maximum, FSM_COS fails rather
 
 See [Arbitration and Convergence](ARBITRATION.md).
 
+## Failure behavior and cleanup
+
+A failed `Execute` propagates the failure and does not return a `RuntimeAssembly`. FSM_COS completes all reachable bundle loads before it begins arbitration, so a load failure prevents arbitration from starting.
+
+This is not transactional loading: if a dependency's `Load` succeeds and a later dependent bundle's `Load` throws, FSM_COS cannot undo the dependency's arbitrary in-memory or external side effects. Exceptions during arbitration likewise do not produce an assembly, but FSM_COS cannot roll back mutations made by bundle code. Put cleanup and lifecycle recovery at the layer that owns those effects; do not assume a failed composition attempt automatically restores every bundle to its previous state. See [Architecture — Failure and partial side effects](ARCHITECTURE.md#failure-and-partial-side-effects).
+
 ## Troubleshooting
 
 | Symptom | What to check |
