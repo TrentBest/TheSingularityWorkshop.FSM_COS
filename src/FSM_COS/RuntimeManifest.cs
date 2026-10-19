@@ -34,6 +34,8 @@ public sealed record RuntimeManifest(
     /// </remarks>
     public void ValidateStagedPlan()
     {
+        ArgumentNullException.ThrowIfNull(Bundles);
+
         if (LoadPlan is null && Schedule is null)
             return;
 
