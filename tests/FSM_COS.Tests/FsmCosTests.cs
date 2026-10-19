@@ -32,6 +32,37 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_propagates_configuration_source_failure_before_loading_bundle()
+    {
+        var bundle = new TestBundle(7);
+        var expected = new InvalidOperationException("configuration source failed");
+
+        var actual = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[] { Entry(7) }),
+                new ThrowingConfigurationSource(expected)));
+
+        Assert.Same(expected, actual);
+        Assert.Equal(0, bundle.LoadCalls);
+        Assert.Equal(0, bundle.ArbitrationCalls);
+    }
+
+    [Fact]
+    public void Execute_propagates_bundle_load_failure_without_arbitrating_or_returning_assembly()
+    {
+        var expected = new InvalidOperationException("bundle load failed");
+        var bundle = new TestBundle(7) { LoadException = expected };
+
+        var actual = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(bundle)).Execute(
+                new RuntimeManifest(42, new[] { Entry(7) })));
+
+        Assert.Same(expected, actual);
+        Assert.Equal(1, bundle.LoadCalls);
+        Assert.Equal(0, bundle.ArbitrationCalls);
+    }
+
+    [Fact]
     public void Execute_uses_defaults_when_configuration_is_absent()
     {
         var bundle = new TestBundle(9);
@@ -695,6 +726,24 @@ public sealed class FsmCosTests
             _configuration.TryGetValue((bundleId, version), out configuration);
     }
 
+    private sealed class ThrowingConfigurationSource : IMicroBundleConfigurationSource
+    {
+        private readonly Exception _exception;
+
+        public ThrowingConfigurationSource(Exception exception) =>
+            _exception = exception ?? throw new ArgumentNullException(nameof(exception));
+
+        public bool TryGetConfiguration(
+            ulong runtimeId,
+            ulong bundleId,
+            string version,
+            out ReadOnlyMemory<byte> configuration)
+        {
+            configuration = ReadOnlyMemory<byte>.Empty;
+            throw _exception;
+        }
+    }
+
     private sealed class TestCatalog : IMicroBundleCatalog
     {
         private readonly Dictionary<ulong, TheSingularityWorkshop.MicroBundleDomain.IMicroBundle> _bundles;
@@ -830,6 +879,7 @@ public sealed class FsmCosTests
         public IReadOnlyList<MicroBundleDependencyRequest> Dependencies => _dependencies;
         public ReadOnlyMemory<byte> Configuration { get; private set; }
         public int LoadCalls { get; private set; }
+        public Exception? LoadException { get; set; }
         public int ChangesRemaining { get; set; }
         public int ArbitrationCalls { get; private set; }
         public ulong SeenRuntimeId { get; private set; }
@@ -838,6 +888,9 @@ public sealed class FsmCosTests
         public void Load(IMicroBundleLoadContext context)
         {
             LoadCalls++;
+            if (LoadException is not null)
+                throw LoadException;
+
             Configuration = context.TryGetConfiguration(Id, out var value)
                 ? value
                 : ReadOnlyMemory<byte>.Empty;
