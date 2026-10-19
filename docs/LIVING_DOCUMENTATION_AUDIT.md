@@ -112,7 +112,7 @@ This is an initial prioritized pass, not a claim that the remaining documents ha
 - [ ] Where feasible, link diagrams to the exact source, sample, or test that substantiates them.
 
 ### Pass 3 — coverage verification
-- [ ] Inspect every Markdown document in the repository, including release notes and working/continuation documents.
+- [x] Inventory every Markdown document in the repository, including release notes and working/continuation documents (29 files; all 29 have a unique audit row). Source-accuracy and link validation remain open.
 - [ ] For each document, record **visual added**, **existing visual verified**, or **no visual needed (with reason)**.
 - [ ] Validate all local image/asset links and alt text.
 - [ ] Confirm no visual implies an unimplemented feature or contradicts source/tests.
