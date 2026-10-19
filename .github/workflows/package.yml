@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: TrentBest/TheSingularityWorkshop.GUI
-          ref: 51fa7e890bddaeeb01a02ebf5399a303219f8f43
+          ref: 6fd9632547421034212f9a64a2e429b86d4bab4a
           path: _dependencies/GUI
 
       - name: Setup .NET
@@ -50,6 +50,10 @@ jobs:
       - name: Generate FSM_COS validation visual with GUI.SVG
         if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
         run: dotnet run --project samples/DocumentationVisuals/DocumentationVisuals.csproj --configuration Release -- docs/assets/fsm-cos-preflight.svg
+
+      - name: Verify committed GUI.SVG visual is current
+        if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
+        run: git diff --exit-code -- docs/assets/fsm-cos-preflight.svg
 
       - name: Upload generated FSM_COS validation visual
         if: ${{ (github.event_name == 'pull_request' && github.base_ref == 'development') || github.ref == 'refs/heads/development' }}
