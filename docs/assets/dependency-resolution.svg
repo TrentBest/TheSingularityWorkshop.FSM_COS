@@ -33,7 +33,7 @@
 </g>
 <g fill="#fff" font-size="18" text-anchor="middle"><text x="1060" y="287">01 · C — dependency</text><text x="1060" y="372">02 · B — dependency</text><text x="1060" y="457">03 · D — dependency</text><text x="1060" y="542">04 · A — root request</text></g>
 <g fill="#8fa7bc" font-size="15">
-<text x="105" y="610">FsmCos.LoadBundle: dependencies before dependent • duplicate IDs skipped</text>
+<text x="105" y="610">FsmCos.Execute: preflight first • iterative dependency-first loading</text>
 <text x="815" y="610">Animated outline traces the illustrated valid order: C → B → D → A.</text>
 </g>
 <text x="70" y="660" fill="#6e8499" font-size="14" letter-spacing="2">ACTUAL GRAPH COMES FROM MICRO BUNDLE DECLARATIONS • CYCLE / MISSING BUNDLE FAILS</text>
