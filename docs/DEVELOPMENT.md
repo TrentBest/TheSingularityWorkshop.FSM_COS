@@ -132,6 +132,26 @@ This workflow is verification, not release authorization. Publication remains be
 
 ## Verification
 
+The package workflow has three independent verification gates. Publication is a separate, explicitly requested action and is not implied by a green verification run.
+
+```mermaid
+flowchart TD
+    A[Source on development] --> B[Build and test]
+    A --> C[Public NuGet compatibility]
+    A --> D[Development-source integration]
+    B --> E{All three gates pass?}
+    C --> E
+    D --> E
+    E -- No --> F[Fix candidate; rerun verification]
+    E -- Yes --> G[Verified package candidate]
+    G --> H{Owner explicitly authorizes publish?}
+    H -- No --> I[Stop: do not publish]
+    H -- Yes --> J[Manual workflow dispatch with publish=true]
+```
+
+*This diagram summarizes the current `.github/workflows/package.yml` job dependencies and manual publication gate. A successful verification run alone does not publish a package.*
+
+
 Run the minimal consumer sample as part of validating the public composition path:
 
 ```bash
