@@ -35,6 +35,7 @@ The repository already contains a useful SVG library, including:
 - `docs/assets/composition-boundary.svg`
 - `docs/assets/runtime-boundary.svg`
 - `docs/assets/runtime-manifest-pipeline.svg`
+- `docs/assets/fsm-cos-preflight.svg` (generated from `samples/DocumentationVisuals/Program.cs` with GUI.SVG)
 - `docs/assets/dependency-resolution.svg`
 - `docs/assets/ai-composition.svg`
 - `docs/assets/arbitration-convergence.svg`
@@ -42,6 +43,14 @@ The repository already contains a useful SVG library, including:
 - `docs/assets/microbundle-cartridge.svg`
 
 There are also section divider/marker assets. These are a starting library, not proof that every useful document already has its own appropriate visual.
+
+## GUI.SVG-generated source and package boundary
+
+The canonical scene source for `docs/assets/fsm-cos-preflight.svg` is `samples/DocumentationVisuals/Program.cs`. On `development`, the package workflow checks out a pinned GUI source revision, regenerates the SVG, compares it with the committed asset, and then packages the static file.
+
+This is a **build-time documentation-tooling dependency only**. `FSM_COS.csproj` does not reference GUI.SVG, and the generated SVG does not introduce a GUI package into the FSM_COS NuGet dependency graph. The NuGet package contains the SVG file itself. Update the pinned GUI revision and committed asset together when the generator implementation changes.
+
+The generated image is a contract map, not a live runtime trace. It must continue to distinguish complete dependency-closure preflight from runtime load or arbitration failures, and must not imply that staged metadata triggers deferred execution or that failed composition rolls back arbitrary bundle side effects.
 
 ## Coverage checklist
 
@@ -54,7 +63,7 @@ Use the status labels consistently:
 | `AGENTS.md` | Repository-specific operating guardrails | Plain-language constraints are the point; a diagram risks obscuring authoritative instructions | No visual needed — operational rules are best kept explicit |
 | `README.md` | One-screen composition overview | Overview SVG compared with the README and architecture boundary; host ownership after handoff is explicit | Source reviewed; hosted checks pending |
 | `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Overview SVG and alt text reviewed against the plain-language contract and host handoff | Source reviewed; hosted checks pending |
-| `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Embedded overview and dependency-resolution SVGs compared with `FsmCos.Execute`, dependency traversal, and dependency-order tests; the document does not embed the system SVG | Source reviewed; hosted checks pending |
+| `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Overview and dependency-resolution diagrams remain; the generated preflight visual shows identity/dependency validation, optional schedule checks, dependency-first loading, bounded arbitration, and separate failure semantics. Generator output is pinned and checked in CI. | Source reviewed; hosted checks pending |
 | `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | System SVG marks upstream authoring context as conceptual and identifies `RuntimeManifest` as the implemented input | Source reviewed; hosted checks pending |
 | `docs/DOMAIN.md` | What FSM_COS owns versus adjacent domains | Domain map reviewed against kernel ownership, host responsibilities, and deferred-capability caveats | Source reviewed; hosted checks pending |
 | `docs/DOMAIN_COMPLETION_ROADMAP.md` | Implemented behavior versus deferred capabilities and follow-on work | Existing domain map explains the composition boundary; the capability table distinguishes implemented behavior from deferred work without duplicating the release gate | No additional visual needed — the map plus status table is clearer than a second capability/status diagram |
