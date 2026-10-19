@@ -189,6 +189,17 @@ jobs:
       - name: Restore from public NuGet
         run: dotnet restore TheSingularityWorkshop.FSM_COS.sln --source https://api.nuget.org/v3/index.json
 
+      - name: Audit direct and transitive NuGet dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          audit_output="$(dotnet list TheSingularityWorkshop.FSM_COS.sln package --vulnerable --include-transitive)"
+          printf '%s\\n' "$audit_output"
+          if grep -Eiq 'has the following vulnerable packages|vulnerable package(s)? found' <<< "$audit_output"; then
+            echo "Dependency audit reported vulnerable packages; review advisories before release."
+            exit 1
+          fi
+
       - name: Build against published dependencies
         run: dotnet build TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore
 
