@@ -10,11 +10,7 @@ FSM_COS is a small composition kernel. This document describes how its pieces co
 
 ![FSM_COS validation and composition path, generated with GUI.SVG](assets/fsm-cos-preflight.svg)
 
-*This generated contract map shows the preflight gate, optional schedule validation, dependency-first loading, arbitration, and failure boundaries. It is not a live execution trace.*
-
-![FSM_COS validation and composition path: root resolution, identity and dependency checks, optional schedule validation, dependency-first loading, bounded arbitration, host handoff, and failure boundaries](assets/fsm-cos-preflight.svg)
-
-*Generated from `samples/DocumentationVisuals/Program.cs` using GUI.SVG. The development workflow regenerates and checks the committed SVG against a pinned GUI.SVG source revision. This is a contract map, not a live execution trace; the schedule check applies only when a schedule is supplied.*
+*Generated from `samples/DocumentationVisuals/Program.cs` using a pinned GUI.SVG source revision. This contract map shows the preflight gate, optional schedule validation, dependency-first loading, arbitration, and failure boundaries; it is not a live execution trace.*
 
 
 
