@@ -30,7 +30,7 @@ Inventory snapshot from the integrated `work/alpha7-living-docs-integration` can
 
 | Metric | Count | Interpretation |
 |---|---:|---|
-| Tracked Markdown documents | 31 | Every document needs an explicit visual decision, not necessarily an image |
+| Tracked Markdown documents | 36 | Every document needs an explicit visual decision, not necessarily an image |
 | SVG assets outside the divider/marker directories | 13 | Candidate semantic diagrams/illustrations; asset existence alone does not prove document coverage |
 | Section-divider SVGs | 13 | Navigation/branding assets, not technical subject diagrams |
 | Section-marker SVGs | 4 | Navigation/branding assets, not technical subject diagrams |
