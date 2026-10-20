@@ -1,57 +1,64 @@
 # Live Branch Reconciliation Ledger
 
-> **Snapshot:** 2026-10-20 UTC. This is a point-in-time inventory, not a deletion authorization. Refresh refs and candidate CI before acting on it.
+> **Snapshot:** 2026-10-20 16:30 UTC. Point-in-time inventory only; refresh refs and candidate CI before acting. This is not deletion authorization.
 
 ## Sith policy: two durable branches
 
 The durable branch set is exactly `master` and `development`.
 
-- **`master`** is the stable/release line. Do not update it as part of routine preparation; move a verified `development` state into `master` only as an explicit release decision.
+- **`master`** is the stable/release line. Leave it untouched during routine preparation. Move a verified development state to master only through an explicit, reviewable release decision.
 - **`development`** is the integration line and current source of truth for ordinary work.
-- **Temporary branches** are allowed to isolate a substantial or risky change, but they are staging areas, not additional sources of truth. Reconcile useful changes into `development`; after verification and integration, close their PRs and delete them.
-- Do not merge divergent branch histories wholesale simply to reduce the branch count. Compare unique file content and commit ancestry; preserve useful work and identify genuinely obsolete branches.
-- Never delete branches, close useful PRs, merge to `master`, publish a package, or deploy without the applicable authorization.
+- **Temporary branches** may isolate substantial or risky work, but are staging areas, not additional sources of truth. Reconcile useful changes into `development`; after verification and integration, classify them as incorporated or discardable.
+- Never merge divergent histories wholesale merely to reduce branch count. Compare ancestry and unique content first.
+- Do not delete branches, close useful PRs, update `master`, publish a package, or deploy without the applicable authorization.
 
-## Current authoritative refs
+## Current refs and verified comparison
 
-| Ref | Observed head | Role / status |
+| Ref | Observed head | Current disposition |
 |---|---|---|
-| `master` | `2b8619eca6ae8800a02462a4377123fa20603e2f` | Stable line; untouched by this preparation |
+| `master` | `2b8619eca6ae8800a02462a4377123fa20603e2f` | Stable line; untouched |
 | `development` | `577b39ca286ac2bed401f01eb6c71949f922f6af` | Integration line |
-| `work/alpha7-living-docs-integration` | `80c447a81e14e2f15a87c526b582927c33bd1890` | Draft PR [#34](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/34), base `development`; exact-head CI still pending |
+| `work/alpha7-living-docs-integration` | `bacb5235f077ad7919ba1678e0f22106fe280be6` | Draft PR [#34](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/34); CI green for PR merge candidate; not integrated |
 
-## Temporary-branch inventory
+Live branch comparison against `development` (GitHub compare API, 2026-10-20):
 
-These dispositions are preliminary. The current alpha.7 candidate must pass exact-head verification and be reconciled with `development` before branches are declared safe to delete.
+| Branch | Commits unique to branch | Commits behind development | Preliminary disposition |
+|---|---:|---:|---|
+| `docs/alpha7-release-readiness` | 4 | 277 | Readiness doc is superseded in candidate, but compare unique wording/claims before marking discardable |
+| `docs/fsm-cos-visual-contract-audit` | 5 | 4 | Audit and overview SVG evolved in candidate; final content reconciliation required |
+| `work/ci-development-dependencies` | 2 | 307 | Older workflow/docs changes; verify no unique behavior remains |
+| `work/fsm-cos-living-svg-flow` | 8 | 4 | Living SVG guide appears integrated; verify generator/output delta before final classification |
+| `work/fsm-cos-uml-class-diagrams` | 11 | 4 | Five Mermaid diagrams integrated into PR #34; GUI.SVG UML-generator requirement is not satisfied by these diagrams |
+| `work/alpha7-living-docs-integration` | 56 | 0 | Active staging branch for draft PR #34; retain until integration and verification |
 
-| Temporary branch | Observed head | Initial reconciliation finding | Disposition |
-|---|---|---|---|
-| `docs/alpha7-release-readiness` | `308d5e6afeb7515ce94be91e6f768eaa9008c273` | Contains a readiness document plus README/index edits. The candidate has a different, integrated readiness-document version; audit the unique wording and claims before closing this branch out. | **Review unique content; likely superseded** |
-| `docs/fsm-cos-visual-contract-audit` | `2a0245a21b7f3e88d2c74f18171b16581b75a5b8` | Holds the visual-contract audit and overview-SVG correction. Both areas have evolved on the alpha.7 candidate, so compare the final candidate against this source rather than merging its old tree wholesale. | **Review unique content; likely superseded by PR #34** |
-| `work/ci-development-dependencies` | `3efe0cc1a58544df0340368ed7dd671f72258ca1` | Contains the development-source dependency workflow and a `docs/DEVELOPMENT.md` revision. Current development already documents the two-branch policy and the candidate workflow has advanced immutable action pins and additional verification; check for any unique documentation or CI behavior before disposal. | **Older implementation; verify no unique behavior remains** |
-| `work/fsm-cos-living-svg-flow` | `1595e1b769b80b381e8881bed0acaf3187bdaaff` | Its `docs/LIVING_SVG.md` content is identical to the candidate; the preflight SVG and generator have since changed on the candidate. | **Superseded content appears integrated; final diff check required** |
-| `work/fsm-cos-uml-class-diagrams` | `192c8912fa99560b16a47bc4f0c628b84fa089e3` | The candidate's `docs/ARCHITECTURE.md` matches this branch exactly; the five class-diagram guides are integrated into PR #34. | **Superseded content appears integrated; final diff check required** |
+The commit counts are ancestry counts, not proof that every unique change is useful or missing. No temporary branch is yet declared safe to delete.
 
 ## Release-line ancestry warning
 
-At the time of this audit, `master` and `development` are **diverged**, not fast-forward-related: the GitHub compare endpoint reports 44 commits unique to `master` and 628 unique to `development` from their merge base. The differing histories include release-era files and the newer alpha.7 implementation/documentation. Do not assume that “swap development into master” is a fast-forward, and do not force-update `master` to make the graph look simple. Before the release transition, inspect the full master-only commit/file delta, determine which changes remain relevant, and choose an explicit, reviewable merge/reconciliation strategy. `master` remains untouched during this preparation.
+`master` and `development` are diverged, not fast-forward-related. Current compare reports **44 commits unique to master and 628 unique to development** from merge base `e9c9968b9cdbec0478e77d9f89b4e74a0e404d3d`. The master-only delta includes release-era code, workflow, and documentation changes (including changes to `FsmCos.cs`, the package workflow, README, dependency guidance, and release docs). It is not safe to replace master with development or force-update the ref just to simplify the graph. Before the release transition, inventory all master-only commits and file deltas, decide which content remains relevant, and prepare an explicit, reviewable reconciliation strategy. `master` remains untouched.
 
-## GUI.SVG UML dependency note
+## GUI.SVG UML requirement
 
-The current alpha.7 candidate's five class diagrams and Execute sequence are explicitly **manually authored Mermaid**, not GUI.SVG-generated UML. GUI development now documents renderer-neutral data cards and a static SVG data-card renderer, but its own UML guide still identifies a source-grounded class/sequence diagram generator as follow-up work. Do not describe the current Mermaid diagrams as GUI-generated or claim source-to-UML automation. Decide whether replacing them with a verified GUI.SVG/model-driven diagram pipeline is a release gate or a tracked follow-up before closing the living-documentation audit.
+The alpha.7 candidate's five class diagrams and Execute sequence are manually authored Mermaid. They are not GUI.SVG-generated UML.
 
-## Release-preparation gate
+GUI's `development` branch has renderer-neutral `DataCard` semantics and a static SVG data-card renderer, but the GUI guide explicitly calls for a **source-grounded, tested SVG class-diagram generator and fixture whose documentation image is generated and verified in CI** as its immediate milestone. The renderer currently consumes an already-built card model; it does not parse source code. Therefore the current diagrams do not meet the source/model-generated UML requirement. Do not close the living-documentation gate by relabeling Mermaid as GUI-generated. The next useful step is to implement or complete the GUI source-to-model-to-SVG generator and its deterministic verification, then adopt it in FSM_COS; otherwise record this as a deliberate release deferral rather than silently treating it as done.
 
-At this snapshot, PR #34 remains **open and draft**. The previous workflow run on the older candidate failed package verification because the packaged gallery linked to a maintainer-only audit file excluded from the NuGet package. The current candidate changes that gallery link to a repository URL and its 21 local Markdown links were checked against the package layout.
+## Current alpha.7 evidence
 
-No pull-request-triggered workflow run or commit status is currently reported for exact head `80c447a81e14e2f15a87c526b582927c33bd1890`. Therefore the fix is **locally/repository-tree checked, not yet CI-verified**. Do not merge or publish based on the older run.
+- PR #34 remains open and draft. Current head: `bacb5235f077ad7919ba1678e0f22106fe280be6`; base `development` head at last inspection: `577b39ca286ac2bed401f01eb6c71949f922f6af`.
+- Pack workflow run [#768](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39454926450) succeeded for the PR merge candidate: source integration, build/test, public-package compatibility and package verification passed; publish job skipped.
+- CodeQL run [#72](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39454926544) succeeded; inspected SARIF contained zero findings.
+- The generated package artifact was independently inspected. It contains consumer docs/assets and excludes maintainer-only readiness/audit and historical planning files. Exact package hash and artifact evidence are retained in the release-preparation conversation; do not reuse that evidence as if it came from a later integrated `development` SHA.
+- Gallery package-link verification now passes on this PR merge candidate. Hosted GitHub Markdown/Mermaid/SVG rendering, light/dark and narrow-width behavior, accessibility-tree exposure, keyboard behavior, and screen-reader behavior remain unverified.
+- After any integration into `development`, rerun required CI, CodeQL/SARIF review, SVG regeneration/parity, package verification, and exact-package inspection against that exact final `development` SHA. Do not publish unless explicitly authorized.
 
-Next steps:
+## Next steps
 
-1. Obtain successful exact-head CI for PR #34, including package verification, GUI.SVG regeneration/parity, source and public-NuGet integration, tests, coverage, and security checks.
-2. Inspect hosted Markdown/Mermaid/SVG rendering and accessibility at light/dark themes and narrow widths; source inspection alone does not prove hosted behavior.
-3. Reconcile the verified candidate into `development`, then run the integration line's checks.
-4. Review every temporary branch's unique commits/files against the integrated `development` state. Label each **incorporated** or **discardable** only when supported by that comparison.
-5. Report the exact branch list as ready for owner deletion only after those checks. Keep `master` unchanged until an explicit release decision.
+1. Resolve the GUI.SVG source-grounded UML generator requirement (implement it or explicitly defer it with owner approval).
+2. Complete hosted rendering and accessibility checks.
+3. Reconcile PR #34 into `development` only after its release gates are resolved; verify the exact integrated SHA.
+4. Compare each temporary branch's unique files/commits against the integrated `development` tree and classify it as **incorporated** or **discardable** only with evidence.
+5. Separately review master-only history and select a release-transition strategy. Do not force-push or replace `master`.
+6. Report the exact temporary branch list as ready for owner deletion only after those steps.
 
-NuGet publication remains a separate, explicitly authorized action. A green verification run is not permission to publish.
+NuGet publication is a separate, explicitly authorized action. A green verification run is not permission to publish.
