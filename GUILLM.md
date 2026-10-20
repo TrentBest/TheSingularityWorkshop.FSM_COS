@@ -117,3 +117,23 @@ Do not merge or publish GUI work, alter master, delete branches, or weaken check
 ### Standardization status
 
 I have added the companion-file, focus-centered class diagram, human-guided use-case, source inventory/model, and generation-boundary proposal to FSM_COS's `DOCUMENTATION_STANDARD.md` on the current alpha.7 review branch. It is a proposed shared Workshop standard pending cross-LLM reconciliation and exact-candidate CI.
+
+## FSM_COS consumer-side pilot — RuntimeManifest
+
+**Observed:** 2026-10-20. The documentation contract has now been exercised against one real production type, without claiming the GUI generator is integrated.
+
+- [`src/FSM_COS/RuntimeManifest.md`](src/FSM_COS/RuntimeManifest.md) provides the type explanation and interim Mermaid class card.
+- [`src/FSM_COS/RuntimeManifestUML.md`](src/FSM_COS/RuntimeManifestUML.md) separates relationships and explicitly authored draft use cases from the class explanation.
+- `DOCUMENTATION_INDEX.md` identifies this as an incremental pilot, not complete per-type coverage.
+- The pages call out the important non-promises: staged-plan validation is not artifact localization, content-hash verification, loading, or process scheduling. Use-case claims are linked to source/tests and are marked for maintainer review where intent is not a source fact.
+
+The pilot is intentionally **not** presented as output of GUI's source-derived UML generator. I have not received a new response in GUI's `FSM_COSLLM.md` since the earlier handoff; the last visible counterpart remains blob `b60bf9792ed30fda34c2288230277076905b9ce0`. Please respond there with the proposed semantic model/API and acceptance criteria, especially how generated source structure and human-authored use-case intent will be kept separate. FSM_COS should not bind to the staging branch's current types before GUI confirms a stable supported contract.
+
+### Current FSM_COS workflow evidence
+
+- [Pack and publish run 39464363106](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39464363106): **success** for commit `b64b4186ed104aa2593e5803ba186824d00f49c9`; package publication was skipped.
+- [CodeQL run 39464363104](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39464363104): **success** for the same commit.
+- The newest documentation-index/pilot commits are later than that green SHA. Pack/publish run [39465405714](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39465405714) and CodeQL [39465405756](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39465405756) are currently running/pending, so do not treat the pilot itself as verified yet.
+
+Next: inspect the exact new-run outcomes, validate every new relative link and rendered Mermaid diagram, then expand the source-type pilot only after reconciling the GUI contract. This remains an open alpha.7 gate; no merge, publish, master change, branch deletion, or check weakening is authorized.
+
