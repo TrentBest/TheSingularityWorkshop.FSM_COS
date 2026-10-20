@@ -86,6 +86,7 @@ These are known omissions, not hidden promises:
 | Bootstrap-only initial composition | Define the bootstrap boundary and how it differs from ordinary requested composition | Tests showing bootstrap inclusion/exclusion and deterministic ordering |
 | Background localization | Define asynchronous discovery/cancellation/error semantics without silently changing the synchronous contract | Deterministic async tests, cancellation and failure tests |
 | Live promotion of Deferred bundles | Define when a deferred bundle becomes eligible and how a running assembly changes safely | State-transition tests proving no partial/invalid assembly is exposed |
+| Manifest refresh and side-by-side bundle replacement | Define trusted manifest refresh, immutable version selection, staged replacement, atomic host remapping, reference/lease tracking, rollback, and graceful retirement without adding host lifecycle or storage to FSM_COS | Integration tests prove old generation remains active until the replacement converges; failed replacements do not switch routing; retired bundles are cleaned only after the last lease is released |
 
 The read-only snapshot fix protects collection structure; it does **not** make each MicroBundle immutable, guarantee safe live mutation of an assembly, or implement any of the deferred capabilities above.
 
@@ -93,12 +94,59 @@ The read-only snapshot fix protects collection structure; it does **not** make e
 
 These are follow-on engineering tracks, not requirements to inflate alpha.7:
 
+- **Manifest refresh and graceful bundle replacement:** a runtime update coordinator first obtains and validates the current manifest, then notifies the developer that a newer version is available. Updating is opt-in; an updated manifest does not immediately mutate a running Experience. Resolve and compose the selected new generation side-by-side with the active generation, using the existing FSM_COS composition contract. Keep the old generation active if resolution, loading, configuration, or arbitration fails. Switch host-owned routing/references only after the replacement reaches a verified stable handoff; do not mutate an already-returned `RuntimeAssembly` in place.
+- **Generation lifetime and retirement:** define what counts as an active user/reference (prefer explicit leases or equivalent tracked ownership over an ambiguous global counter), how shared dependencies are retained, and how concurrent acquire/release races are handled. After the host switches new work to the replacement, retain the old generation while any consumer still holds a lease. When the final lease is released, mark that generation eligible for cleanup; cleanup must be idempotent, respect dependency ordering, and never unload resources still reachable by another active generation.
+- **Serialize and relinquish on exit:** when the host/user declares the Experience finished, persist the required state through FSM_Serialization and the host-owned persistence boundary, flush/confirm successful persistence according to policy, then release leases and relinquish runtime resources. Define recovery behavior when serialization or cleanup fails; do not pretend a failed save is a successful shutdown.
+- **Keep the frozen-core boundary:** manifests, immutable bundle artifacts, configuration, and host lifecycle may evolve without recompiling the core FSM_COS package. Recompilation remains necessary when the core contract/implementation changes or when a new platform/device requires a platform-specific build. Prove this by consuming the same packaged core binary across manifest/bundle version changes; do not describe this as a current hot-update capability.
 - **Contract traceability:** every public runtime type and failure mode links to source, focused documentation, and at least one relevant test.
 - **Failure-path coverage:** resolution miss, missing dependency, dependency cycle, load failure, arbitration non-convergence, and configuration absence/failure must have explicit tests where those cases are part of the implemented contract.
 - **Manifest compatibility:** define and test behavior for duplicate requests, version conflicts, dependency/version conflicts, and deterministic ordering.
 - **Composition observability:** document what diagnostics are available to a host without making FSM_COS a logging framework or execution loop.
 - **Living documentation:** SVGs should explain actual boundaries and behavior, not imply unimplemented capabilities. Where GUI.SVG is used to generate/manifest diagrams, keep the authored SVG or source scene in the repository and make the resulting artifact inspectable.
 - **Release parity:** package verification must run on both the development candidate and the public-feed package; release notes, README, documentation index, and project version must agree.
+
+### Planned update lifecycle and ownership boundaries
+
+The target lifecycle is:
+
+```text
+active Experience + manifest Mₙ
+          │
+          ├─ refresh manifest from its authoritative source
+          ▼
+manifest Mₙ₊₁ validated; developer is notified
+          │
+          ├─ decline → keep Mₙ and the active generation
+          └─ accept
+                ▼
+       resolve immutable bundle versions
+                ▼
+       compose new generation side-by-side
+                ▼
+       load + arbitrate + verify
+          ├─ failure → retain old generation
+          └─ success
+                ▼
+       atomically route new work to new generation
+                ▼
+       old generation retained while leases remain
+                ▼
+       final lease released → eligible for cleanup
+                ▼
+       on Experience exit: serialize, confirm, release, relinquish
+```
+
+Ownership is intentionally split:
+
+- **Manifest publisher / Warehouse / repository adapter:** publish and deliver versioned manifests and immutable artifacts; establish trusted content identities and verify downloaded bytes.
+- **Host / Experience update coordinator:** refresh manifests, notify the developer, obtain consent, stage a replacement, switch routing atomically, issue/track leases, and coordinate shutdown.
+- **FSM_COS:** compose a requested manifest into a new `RuntimeAssembly` and report success/failure through its current contract. It must not silently become the update service, reference-count manager, serializer, or application lifecycle.
+- **MicroBundleDomain / each bundle:** define bundle identity and any bundle-specific migration or cleanup contract that may be needed.
+- **FSM_Serialization and host persistence:** serialize required state at the defined boundary and report persistence outcomes before relinquishment.
+
+Required design decisions before implementation include manifest authenticity and freshness, content-hash canonicalization, compatibility/schema migration, shared dependencies across generations, concurrency and lease ownership, rollback boundaries for side effects, cancellation, process interruption, failed serialization, cleanup order, and developer-consent policy. These are actionable design questions, not evidence that the existing composition kernel is broken.
+
+Minimum acceptance evidence must include: manifest refresh with no update; accepted update with old and new generations coexisting; new-generation load/arbitration failure leaving the old generation active; atomic routing change only after successful composition; an old generation retained while one lease remains; cleanup exactly once after the final lease release; shared dependencies not prematurely cleaned; serialization failure preventing a false “clean shutdown” result; successful serialize-then-relinquish; and proof that the same FSM_COS package binary works across a manifest/bundle update without rebuilding the core.
 
 A track is complete only when its contract is written, implementation is present, tests demonstrate it, and packaged documentation accurately states the result.
 
