@@ -20,11 +20,11 @@ All normal FSM_COS evolution should happen here unless a short-lived branch is g
 
 > **If you need to ask which branch is current, the answer should be `development`.**
 
-### Short-lived branches
+### Temporary branches and review artifacts
 
-The durable branch set should remain exactly `master` and `development`. Prefer working directly on `development`; use a temporary branch only when a substantial architecture experiment or risky change genuinely needs isolation.
+Do not create new temporary branches; work directly on `development`. The durable branch set is exactly `master` and `development`.
 
-When a temporary branch is used, consolidate it into `development`, close its PR, and delete the branch. Do not retain feature, release, or experiment branches as additional sources of truth.
+An existing temporary branch or pull request may remain as an owner-managed review artifact. It is not integrated until its changes are present on `development`. Do not close or delete owner-managed refs without explicit authorization; branch cleanup remains the owner's responsibility.
 
 ## Consolidation record
 
