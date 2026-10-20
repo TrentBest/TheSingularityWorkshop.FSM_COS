@@ -11,6 +11,8 @@
 
 ## UML class diagram: assembly handoff
 
+This is a simplified, source-derived overview of the handoff relationships, not a complete per-type API inventory. Method signatures are abbreviated for legibility; consult the source and contract sections below for exact generic overloads, parameter types, and nullability.
+
 ~~~mermaid
 classDiagram
     class FsmCos {
