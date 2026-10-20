@@ -14,10 +14,10 @@
 </g>
 <g stroke="#31465b" stroke-width="2" fill="none">
 <path d="M300 320H430"/><path d="M700 320H830"/>
-<path d="M1050 320H1180"/><path d="M1050 320V520H1180"/>
+<path d="M1050 320H1180"/><path d="M1265 390V520"/>
 </g>
 <g fill="#76cfff" filter="url(#glow)">
-<path d="M416 311l18 9-18 9z"/><path d="M816 311l18 9-18 9z"/><path d="M1166 311l18 9-18 9z"/><path d="M1166 511l18 9-18 9z"/>
+<path d="M416 311l18 9-18 9z"/><path d="M816 311l18 9-18 9z"/><path d="M1166 311l18 9-18 9z"/><path d="M1256 502l9 18 9-18z"/>
 </g>
 <g stroke="#26384b" stroke-width="2">
 <rect x="70" y="260" width="230" height="120" rx="18" fill="#0e1622"/>
