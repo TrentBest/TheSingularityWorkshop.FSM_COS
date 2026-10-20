@@ -302,6 +302,8 @@ That does not require every host to render or execute the result identically.
 
 It means the composition request remains meaningful when moved between hosts.
 
+A newer manifest is a new versioned request, not an in-place update to an active `RuntimeAssembly`. Manifest retrieval/refresh, developer notification and consent, side-by-side replacement, and retirement of an older generation are not implemented by the current kernel; see the [Domain Completion Roadmap](DOMAIN_COMPLETION_ROADMAP.md) for the planned lifecycle and ownership boundaries.
+
 ## Related documents
 
 - [FSM_COS Architecture](ARCHITECTURE.md)

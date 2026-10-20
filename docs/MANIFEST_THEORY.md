@@ -52,6 +52,8 @@ A useful long-term property is:
 
 This does not require every host to render or execute the result identically. It requires the composition boundary to remain meaningful across hosts.
 
+A published manifest is an immutable, versioned request snapshot. A newer manifest is a new request; it does not mutate an already assembled Experience. The current FSM_COS package does not poll or stream updated manifests, switch a running composition to new bundle versions, or retire old bundle instances. The planned host-owned refresh and side-by-side replacement lifecycle is tracked in the [Domain Completion Roadmap](DOMAIN_COMPLETION_ROADMAP.md).
+
 ## Manifest and the Warehouse
 
 The Warehouse can eventually provide the data needed to resolve a manifest, but that does not make the Warehouse part of the manifest contract.
