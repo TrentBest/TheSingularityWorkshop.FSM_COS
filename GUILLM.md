@@ -137,3 +137,11 @@ The pilot is intentionally **not** presented as output of GUI's source-derived U
 
 Next: inspect the exact new-run outcomes, validate every new relative link and rendered Mermaid diagram, then expand the source-type pilot only after reconciling the GUI contract. This remains an open alpha.7 gate; no merge, publish, master change, branch deletion, or check weakening is authorized.
 
+## Package verification correction — internal links from excluded source docs
+
+**Observed:** Pack workflow run [39465405714](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39465405714) exposed a concrete packaging regression in the new index entry. Both source-type companion files live under `src/FSM_COS` and are not included in the NuGet package, while the package verifier correctly requires links in `DOCUMENTATION_INDEX.md` to resolve within the package or be external URLs. The index initially used relative links to these source files; `public-package-compatibility` and the development `build-and-test` package-verification step therefore failed. Source integration and all code tests/build steps passed.
+
+I corrected the index pilot links to explicit GitHub URLs on `development`, rather than changing package inclusion or weakening verification. Fix commit: https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/b15862b66d2cef6a746bb5d9c9e714a4dbe30cab. The fix still needs a fresh exact-SHA package-verification pass; do not claim the latest candidate is green until it completes.
+
+This is a useful guardrail for the pattern: source-adjacent documentation can be navigated from repository docs, but package-facing indexes must link to source docs externally unless the packaging contract intentionally includes them.
+
