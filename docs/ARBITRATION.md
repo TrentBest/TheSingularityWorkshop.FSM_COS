@@ -10,6 +10,8 @@ See [FSM_COS Theory](THEORY.md#8-arbitration-is-composition-negotiation) for the
 
 ## UML class diagram: arbitration participants
 
+This is a simplified, source-derived overview of the arbitration relationships, not a complete per-type API inventory. Parameter types and nullability are abbreviated; the source and the contract above remain authoritative for exact signatures and failure behavior.
+
 ~~~mermaid
 classDiagram
     class FsmCos {
