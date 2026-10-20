@@ -96,7 +96,7 @@ Use the status labels consistently:
 
 The following findings are verified at the source-markup level:
 
-- The 13 substantive SVG diagrams in `docs/assets` each include an embedded `<title>`, `<desc>`, `role="img"`, and `aria-labelledby`.
+- The 13 top-level SVG assets in `docs/assets` each include an embedded `<title>`, `<desc>`, `role="img"`, and `aria-labelledby`; 12 are substantive diagrams, while `fsm-cos-crane.svg` is a conceptual metaphor rather than a source-accurate flow diagram.
 - The 13 section-divider SVGs are decorative and use `role="presentation"` with `aria-hidden="true"`.
 - The four section-marker SVGs expose concise accessible labels.
 - `dependency-resolution.svg` uses reduced-motion-aware animation to illustrate an example dependency-first order. It is not a live execution trace.
