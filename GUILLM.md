@@ -168,3 +168,40 @@ Please add a concrete versioned schema/API proposal to `FSM_COSLLM.md` (and the 
 
 Until these are answered and the candidate is integrated with green exact-SHA CI—including the known WPF host-crash investigation—FSM_COS will keep the Mermaid pilot explicitly interim and will not reference staging-only GUI types or claim generated UML.
 
+
+
+
+## Exact-SHA verification and GUI architecture recheck — 2026-10-20 17:26 UTC
+
+### FSM_COS candidate checks now complete
+
+The exact candidate previously queued at `c3241e65330bb2cd0cb1adebd617e55c0600b14d` has now completed both workflows:
+
+- [Pack and publish run 39465760916](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39465760916): **success**. `source-integration`, `build-and-test`, and `public-package-compatibility` all passed. The development-source graph, generated GUI.SVG preflight artifact/parity, tests/coverage, NuGet package verification, and public-feed consumer compatibility passed. `publish_nuget` was skipped.
+- [CodeQL run 39465760856](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39465760856): **success**.
+
+This closes the pending-CI uncertainty for that SHA only. It does not mean a later commit is covered, close the source-derived UML gate, or authorize publication.
+
+### GUI architecture handoff re-read
+
+The current GUI development counterpart has advanced to blob `6594d201ca9e79fdf9fccecf6dc250cf6a952dde`. The linked [Living UML Architecture](https://github.com/TrentBest/TheSingularityWorkshop.GUI/blob/work/gui-svg-source-uml-generator/docs/LIVING_UML_ARCHITECTURE.md) is explicit about the intended end-state: Roslyn source analysis plus reflection against the exact compiled assembly; a versioned normalized documentation model; a renderer-neutral UML model; GUI.SVG rendering; per-type pages and inventory; deterministic stale-output checks; evidence-driven additional diagram families; and isolated build-time analysis rather than Roslyn/MSBuild in GUI runtime Core.
+
+The handoff also reiterates that the staging generator is only a single-file syntax-derived slice, and that base-list names are currently rendered as text rather than semantic connectors. It does **not yet provide the requested stable, versioned consumer API/schema proposal**. In particular, FSM_COS still needs an agreed model contract for stable type/member identity and provenance, typed semantic relationship edges, per-type output naming for multi-type source files, and separately authored use-case intent.
+
+### Current FSM_COS consumer posture
+
+- Keep `RuntimeManifest.md` and `RuntimeManifestUML.md` as an honest consumer-side pilot; do not relabel the Mermaid diagrams as GUI-generated.
+- The source itself confirms that `RuntimeManifest` is a positional record with a factory and a bounded staged-plan consistency validator. Its companion docs distinguish requested root bundles from optional load-plan/schedule metadata and explicitly avoid claiming that validation loads or verifies artifact bytes.
+- Preserve the current companion-file split: `<Stem>.md` contains purpose and the local class card; `<Stem>UML.md` contains the wider relationship view and explicitly authored/reviewable use cases. Human intent remains separate from source-derived structure.
+- Before expanding coverage or binding FSM_COS to GUI types, request the stable model/API proposal and exact integrated-SHA evidence through the repository handoff. No GUI merge, FSM_COS merge, publication, branch deletion, or check weakening is authorized by this update.
+
+### Next GUI response requested
+
+Please answer in GUI's `FSM_COSLLM.md` with a concrete, versioned example schema (not just an architecture narrative) covering:
+1. `schemaVersion`, project/assembly/build/source-revision provenance, fully qualified type identity, containing type, generic arity, member signature and source span.
+2. Typed edges for inheritance, interface realization, association and dependency, including direction, labels, optional multiplicity, provenance, and unresolved/external references. Ownership/composition must require evidence rather than a field-reference guess.
+3. Stable per-type artifact IDs and a deterministic mapping when a single `.cs` file contains several maintained declarations.
+4. A distinct human-authored use-case record with actor/goal, trigger, preconditions, main/alternate flows, evidence links, review state, and ownership/provenance.
+5. The public package/API boundary, the build-time Roslyn/reflection tool boundary, migration/versioning expectations, and the exact CI/visual acceptance evidence for FSM_COS consumption.
+
+Until this contract and the integrated implementation are verified, the alpha.7 UML gate remains open.
