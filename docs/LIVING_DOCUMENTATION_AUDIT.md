@@ -26,7 +26,7 @@ Every visual must:
 
 ## Measurable baseline and UML coverage
 
-Inventory snapshot from the repository tree on `development`:
+Inventory snapshot from the integrated `work/alpha7-living-docs-integration` candidate tree; counts must be refreshed when files are added or removed:
 
 | Metric | Count | Interpretation |
 |---|---:|---|
@@ -40,17 +40,16 @@ Inventory snapshot from the repository tree on `development`:
 
 These are **inventory counts, not a coverage score**. The next audit pass must measure per-document use separately: (1) visual embedded directly, (2) visual shared from another document, (3) source-generated visual, or (4) deliberately text-only with rationale. A shared overview should not be counted as equivalent to a subject-specific diagram when the document teaches a more complex contract.
 
-### UML candidates to prioritize
+### UML coverage and next priorities
 
 Use actual public/internal type definitions and tests as the source of truth; show visibility and relationships honestly. Do not imply that a conceptual box is an implemented class.
 
-1. **Composition contract class diagram** — `FsmCos`, `IFsmCos`, `IMicroBundleCatalog`, `IMicroBundleConfigurationSource`, `RuntimeManifest`, `RuntimeAssembly`, `ArbitrationContext`, and the domain-owned `IMicroBundle` boundary. This should make constructor-injected dependencies and the host handoff explicit.
-2. **Manifest and dependency-plan class diagram** — `RuntimeManifest`, `MicroBundleManifestEntry`, `MicroBundleReference`, `RuntimeManifestEntry`, `RuntimeManifestDependency`, `RuntimeManifestSchedule`, `RuntimeManifestLoadPlan`, and `ManifestLoadStage`. Distinguish value/record types from stateful plan objects and show ownership/cardinality only where the code supports it.
-3. **Execute sequence diagram** — caller/host → `IFsmCos.Execute` / `FsmCos.Execute` → catalog/configuration boundaries → preflight and dependency-first load → bounded arbitration → `RuntimeAssembly` or propagated failure. This is the best candidate for an animated highlight path.
-4. **Staged metadata versus actual loading sequence** — show validation/state transitions separately from repository localization and bundle loading. This is a high-risk teaching point because the code explicitly does not implement a repository or host localization pipeline.
-5. **Arbitration sequence/state view** — per-round `Arbitrate` calls, change aggregation, convergence, configured limit, and failure. Keep the zero-based convergence index distinct from the number of calls.
+- **Composition and manifest contracts — present in draft:** PR #32 adds simplified, source-derived Mermaid class diagrams across `docs/ARCHITECTURE.md`, `docs/RUNTIME_MANIFEST.md`, `docs/RUNTIME_ASSEMBLY.md`, `docs/ARBITRATION.md`, and `docs/STAGED_MANIFEST_LOADING.md`. They are manually authored Markdown diagrams, not GUI.SVG-generated UML; abbreviated signatures are not substitutes for source/XML documentation.
+- **Execute sequence — present in draft:** `docs/EXECUTION_SEQUENCE.md` traces caller/host → `FsmCos.Execute` → catalog and configuration boundaries → complete dependency-graph preflight → optional schedule validation → depth-first dependency loading → bounded arbitration → `RuntimeAssembly` return or failure. It was checked against the current method ordering; hosted Mermaid rendering remains unverified.
+- **Next: staged metadata versus actual loading:** add a focused state/sequence view only if it clarifies that load-plan/schedule metadata is validated but does not implement repository localization or automatic deferred loading.
+- **Next: arbitration convergence:** a sequence/state view may clarify change aggregation, the zero-based round index, the configured call limit, and non-convergence. Reuse `arbitration-convergence.svg` if it already teaches the contract; do not create a duplicate merely to increase diagram count.
 
-PR #32 adds simplified, source-derived Mermaid class diagrams to five contract guides. These diagrams are manually authored reviewable Markdown, not GUI.SVG-generated UML. `docs/EXECUTION_SEQUENCE.md` now adds the next-priority `FsmCos.Execute` sequence, grounded in implementation ordering and explicit failure boundaries. The next sequence/state candidates are staged metadata versus actual loading, then arbitration convergence and non-convergence. Generated type boxes alone cannot prove control flow or runtime behavior.
+The next audit step is not to add visuals indiscriminately: verify each existing class diagram against its type declarations, and check whether the current staged-loading and arbitration visuals already explain their contracts sufficiently. Generated type boxes alone cannot prove control flow or runtime behavior.
 
 ## Existing visual assets discovered
 
@@ -89,8 +88,8 @@ Use the status labels consistently:
 | Document | Visual intent | Initial action | Status |
 |---|---|---|---|
 | `AGENTS.md` | Repository-specific operating guardrails | Plain-language constraints are the point; a diagram risks obscuring authoritative instructions | No visual needed — operational rules are best kept explicit |
-| `README.md` | One-screen composition overview | Re-audit found a direct RuntimeAssembly-to-Experience path that bypassed the Host; corrected on `docs/fsm-cos-visual-contract-audit`. Verify rendered arrow routing and compare the remaining overview claims before closing this row. | Source correction in review branch; hosted checks pending |
-| `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Shares the overview SVG; its host-to-experience routing correction is in `docs/fsm-cos-visual-contract-audit` and remains pending review/render verification. | Source correction in review branch; hosted checks pending |
+| `README.md` | One-screen composition overview | Re-audit found a direct RuntimeAssembly-to-Experience path that bypassed the Host; corrected on `work/alpha7-living-docs-integration`. Verify rendered arrow routing and compare the remaining overview claims before closing this row. | Source correction integrated in draft PR; hosted checks pending |
+| `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Shares the overview SVG; its host-to-experience routing correction is integrated on `work/alpha7-living-docs-integration`; rendered arrow routing remains pending verification. | Source correction in review branch; hosted checks pending |
 | `docs/EXECUTION_SEQUENCE.md` | Exact `FsmCos.Execute` ordering, failure boundaries, and host handoff | Mermaid sequence is checked against `FsmCos.Execute`; it distinguishes pre-load rejection from load side effects and arbitration non-convergence. Hosted rendering and accessibility checks remain open. | Source reviewed; hosted checks pending |\n| `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Overview and dependency-resolution diagrams remain; the generated preflight visual shows identity/dependency validation, optional schedule checks, dependency-first loading, bounded arbitration, and separate failure semantics. Generator output is pinned and checked in CI. | Source reviewed; hosted checks pending |
 | `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | System SVG marks upstream authoring context as conceptual and identifies `RuntimeManifest` as the implemented input | Source reviewed; hosted checks pending |
 | `docs/DOMAIN.md` | What FSM_COS owns versus adjacent domains | Domain map reviewed against kernel ownership, host responsibilities, and deferred-capability caveats | Source reviewed; hosted checks pending |
@@ -132,7 +131,7 @@ These findings do **not** establish complete semantic accuracy for every visual,
 
 ## Findings from the current source-to-diagram re-audit
 
-- The overview SVG previously drew a second path from `RuntimeAssembly` directly to `Experience`, bypassing the Host. This contradicted the documented handoff boundary. The branch `docs/fsm-cos-visual-contract-audit` removes that bypass and routes the arrow from Host to Experience. This is a review-branch correction, not yet a merged fix; hosted rendering and the rest of the diagram audit remain open.
+- The overview SVG previously drew a second path from `RuntimeAssembly` directly to `Experience`, bypassing the Host. This contradicted the documented handoff boundary. The integrated draft branch `work/alpha7-living-docs-integration` removes that bypass and routes the arrow from Host to Experience. This is not yet a merged fix; hosted rendering and the rest of the diagram audit remain open.
 - This finding shows that earlier source-level review status was too broad. The checklist below now leaves the complete source-to-diagram audit open until each substantive diagram has been checked against the current implementation and the diagram's explanatory text.
 
 ## Remaining work
