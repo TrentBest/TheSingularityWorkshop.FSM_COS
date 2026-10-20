@@ -247,3 +247,34 @@ Before considering a documentation pass complete:
 - [ ] No NuGet publication, release, or other operational action is implied by a documentation-only change.
 
 The standard should raise consistency and truthfulness across the ecosystem without making every repository read like the same package.
+
+
+## Gallery standard — one index per repository
+
+Every repository should have a concise `docs/GALLERY.md`, linked from its README. The Gallery is a visual index, not another giant manual.
+
+Each entry should contain:
+
+1. **A visual or proof object.** Prefer an SVG, screenshot, generated report, or direct artifact link that helps a reader understand this package. If no truthful visual exists yet, describe the proposed proof explicitly instead of inventing an implementation.
+2. **A brief explanation.** What is the reader seeing, and why does this matter?
+3. **An evidence boundary.** Say whether the item is implemented output, a test-derived trace, an explanatory architecture illustration, a browser-only experiment, or a proposed future proof.
+4. **One focused deep-dive link.** Each entry links to its own document/recipe that explains how to reproduce it, what code produces it, what to inspect, and what it proves. The Gallery stays short; the deep dive owns the detail.
+
+### Pick a visual form that matches the package
+
+- **Visual/rendering packages:** generated SVGs, geometry/lighting studies, frames, scene outputs, and clearly labeled backend captures.
+- **Stateful/functional packages:** state-transition diagrams, input/output traces, before/after snapshots, contract tables, and test-generated timelines. A functionality package does not need to pretend it is a GUI.
+- **Composition/runtime packages:** responsibility maps, dependency direction, lifecycle diagrams, invalidation paths, and a real composed fixture.
+- **Web experiences:** screenshots or captures from the actual running Experience, with links into the architecture and simulation documents. Concept art must be labeled as concept art.
+- **Protocol/serialization packages:** example payloads, identity maps, round-trip traces, and compatibility matrices derived from executable fixtures.
+
+### Living evidence rules
+
+- Prefer a visual driven by the same source data, test fixture, or runtime output that the deep-dive describes.
+- Do not call an SVG animation “live” unless a real runtime input/control loop drives the state being animated.
+- Keep CPU-side projections, SVG manifestation, GPU execution, and hardware verification distinct.
+- For performance claims, include reproducible measurements and the workload/environment; visual complexity alone is not a benchmark.
+- Keep the Gallery skimmable. Move full recipes, API detail, and theory into linked focused documents.
+- Link `docs/GALLERY.md` from the README so the visual index is discoverable in every repository.
+
+The Gallery is the Workshop's common answer to “show me”: each package chooses the visual form appropriate to its responsibility, and the linked recipe teaches the reader how to reproduce and verify it.
