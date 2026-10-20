@@ -117,6 +117,21 @@ def verify(package_dir: Path, project_path: Path) -> None:
         if missing:
             fail("Package is missing required files: " + ", ".join(missing))
 
+        # Maintainer-only readiness/audit and historical planning records must
+        # remain in the repository, not leak into the consumer-facing package.
+        forbidden_files = {
+            "docs/0.1.0-alpha.7-READINESS.md",
+            "docs/LIVING_DOCUMENTATION_AUDIT.md",
+            "docs/BRANCH_RECONCILIATION.md",
+            "docs/CONTINUATION_BRIEF_ALPHA6_FORGE_ANYAPP_WEBPAGE.md",
+            "docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md",
+            "docs/ECOSYSTEM_INTEGRATION_MAP.md",
+            "docs/PAUSE_POINT.md",
+        }
+        unexpected = sorted(forbidden_files & names)
+        if unexpected:
+            fail("Package contains maintainer-only or historical documents: " + ", ".join(unexpected))
+
         markdown_link = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)|^\[[^\]]+\]:\s*<?([^>\s]+)>?", re.MULTILINE)
         for markdown_name in sorted(name for name in names if name.lower().endswith(".md")):
             markdown = archive.read(markdown_name).decode("utf-8-sig")
