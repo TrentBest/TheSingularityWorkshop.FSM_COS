@@ -149,6 +149,20 @@ scene.Child("svg-text", "runtime-failure-sub-label", text => text
     .Text("Load / arbitration / non-convergence: no assembly").Property("x", "75").Property("y", "42.5")
     .Property("text-anchor", "middle").Property("font-family", "sans-serif").Property("font-size", "1.1").Property("fill", "#ffd5dc"));
 
+// Static red connectors make the two failure classes explicit branches of the flow.
+scene.Child("svg-line", "identity-to-preflight-failure-diagonal", line => line
+    .Property("x1", "60").Property("y1", "14").Property("x2", "46").Property("y2", "17")
+    .Property("stroke", "#ff8c9d").Property("stroke-width", "0.35").Property("stroke-dasharray", "0.7 0.5"));
+scene.Child("svg-line", "identity-to-preflight-failure-vertical", line => line
+    .Property("x1", "46").Property("y1", "17").Property("x2", "46").Property("y2", "35")
+    .Property("stroke", "#ff8c9d").Property("stroke-width", "0.35").Property("stroke-dasharray", "0.7 0.5"));
+scene.Child("svg-line", "identity-to-preflight-failure-entry", line => line
+    .Property("x1", "46").Property("y1", "35").Property("x2", "44").Property("y2", "36")
+    .Property("stroke", "#ff8c9d").Property("stroke-width", "0.35").Property("stroke-dasharray", "0.7 0.5"));
+scene.Child("svg-line", "arbitration-to-runtime-failure", line => line
+    .Property("x1", "60").Property("y1", "29").Property("x2", "60").Property("y2", "36")
+    .Property("stroke", "#ff8c9d").Property("stroke-width", "0.35").Property("stroke-dasharray", "0.7 0.5"));
+
 scene.Child("svg-text", "stage-note", text => text
     .Text("LoadPlan stages are metadata; they do not automatically defer loading. Load failures do not roll back prior side effects.")
     .Property("x", "3").Property("y", "51.5")
