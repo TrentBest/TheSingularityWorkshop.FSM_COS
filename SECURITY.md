@@ -37,15 +37,15 @@ This is a reusable procedure, not a current-candidate status report. Keep candid
 Before treating a candidate as security-reviewed:
 
 - [ ] Run the exact candidate's full test suite and retain its TRX and coverage artifacts.
-- [x] Confirm the current CI dependency audit reports no vulnerable direct or transitive NuGet packages; investigate any advisory rather than silently ignoring it.
-- [x] Confirm the `latest-all` .NET analyzer job passes with warnings treated as errors, and review the documented `CA1707` naming suppression.
-- [x] Review the CodeQL C# scan for new high/critical findings; the retained SARIF artifact for the candidate contains zero results.
-- [x] Verify package identity, version, dependencies, file inventory, and that GUI.SVG is not a runtime dependency.
-- [x] Inspect the exact packed assembly and XML API documentation, not just the source tree.
-- [x] Pin third-party GitHub Actions to verified full commit SHAs; record the upstream major version beside each pin.
-- [x] Confirm the workflow's publish gate is disabled unless explicitly authorized.
-- [x] Verify generated SVG assets against the pinned GUI.SVG generator and inspect that they describe current implementation behavior.
-- [x] Review the remaining limitations above, especially in-process trust and non-transactional side effects.
+- [ ] Confirm the current CI dependency audit reports no vulnerable direct or transitive NuGet packages; investigate any advisory rather than silently ignoring it.
+- [ ] Confirm the `latest-all` .NET analyzer job passes with warnings treated as errors, and review the documented `CA1707` naming suppression.
+- [ ] Review the CodeQL C# scan for new high/critical findings; the retained SARIF artifact for the candidate contains zero results.
+- [ ] Verify package identity, version, dependencies, file inventory, and that GUI.SVG is not a runtime dependency.
+- [ ] Inspect the exact packed assembly and XML API documentation, not just the source tree.
+- [ ] Pin third-party GitHub Actions to verified full commit SHAs; record the upstream major version beside each pin.
+- [ ] Confirm the workflow's publish gate is disabled unless explicitly authorized.
+- [ ] Verify generated SVG assets against the pinned GUI.SVG generator and inspect that they describe current implementation behavior.
+- [ ] Review the remaining limitations above, especially in-process trust and non-transactional side effects.
 
 For each candidate, inspect the CodeQL result and retained SARIF artifact for that exact SHA. A successful analysis run alone does not establish that the findings are clean. Record the actual run and SARIF disposition in the release-readiness evidence, not as a mutable status claim in this reusable security guide.
 
