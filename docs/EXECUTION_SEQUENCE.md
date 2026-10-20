@@ -23,7 +23,7 @@ sequenceDiagram
         COS->>COS: Validate descriptor identity/version
     end
     COS->>COS: Resolve complete dependency graph
-    Note over COS,Bundle: Dependency requests and configuration bounds are checked before Load
+    Note over COS,Bundle: Dependency requests and embedded configuration are bounded before Load; provider overrides are bounded when retrieved
     opt Manifest includes a published schedule
         COS->>COS: Compare scheduled IDs, versions, and edges with resolved graph
     end
@@ -49,8 +49,8 @@ sequenceDiagram
 
 ## Failure boundaries
 
-- **Before loading:** invalid input bounds, malformed/conflicting root requests, catalog misses, descriptor mismatches, invalid dependency requests, graph cycles, dependency/resource limits, or a supplied schedule that does not match the resolved graph reject composition before any bundle `Load` method is called.
-- **During loading:** configuration and bundle-load failures propagate. Earlier bundle side effects are not transactionally rolled back.
+- **Before loading:** invalid input bounds, malformed/conflicting root requests, catalog misses, descriptor mismatches, invalid dependency requests, graph cycles, dependency-request/embedded-configuration limits, or a supplied schedule that does not match the resolved graph reject composition before any bundle `Load` method is called.
+- **During loading:** configuration-provider calls and provider-returned configuration byte limits are evaluated as each bundle is entered. Those failures, and bundle-load failures, propagate; if one occurs after an earlier dependency loaded, its side effects are not transactionally rolled back.
 - **During arbitration:** exceptions propagate; continued changes through the configured round limit produce a non-convergence exception. A `RuntimeAssembly` is returned only after a stable round.
 - **After return:** FSM_COS hands the assembly to its caller. The host owns execution, presentation, scheduling, and application lifecycle; this sequence does not place those responsibilities inside the kernel.
 
