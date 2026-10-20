@@ -69,4 +69,4 @@ This Gallery is the short visual index. Each exhibit links to its own deep dive 
 
 ---
 
-[Shared Gallery standard](DOCUMENTATION_STANDARD.md#gallery-standard--one-index-per-repository) · [Documentation index](DOCUMENTATION_INDEX.md)
+[Shared Gallery standard](../DOCUMENTATION_STANDARD.md) · [Documentation index](../DOCUMENTATION_INDEX.md)
