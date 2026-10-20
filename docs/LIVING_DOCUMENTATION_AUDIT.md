@@ -179,13 +179,14 @@ The following source comparisons were performed against the integrated alpha.7 c
 - **Manifest/schedule semantics:** a manifest requests root IDs and versions. Published references add identity metadata; schedule edges are compared against the resolved graph. Neither a content hash field nor a stage label by itself fetches, verifies, localizes, or defers artifacts.
 - **Arbitration context:** `ArbitrationContext` implements the external MicroBundleDomain arbitration-context contract. Its `ExperienceContext` is nullable in the implementation; the class diagram deliberately abbreviates nullability and points readers back to source/XML documentation.
 
-### Newly recorded visual corrections to make
+### Visual corrections applied; regeneration verification pending
 
-- [ ] **Overview SVG:** two amber horizontal strokes around the lower-right area are disconnected from the main RuntimeAssembly → Host → Experience flow and have no legend or caption. They appear decorative but can read as an unexplained second path. Remove them or give them an explicit meaning in both the SVG and its description.
-- [ ] **GUI.SVG preflight SVG:** the preflight-rejection and runtime-failure panels are not connected to the stage(s) that can produce those failures. The panel text explains the distinction, but the spatial layout does not show where each branch leaves the main path. Improve the diagram in the canonical GUI.SVG scene source first, regenerate the SVG through the documented workflow, and verify byte-for-byte generator parity; do not hand-edit only the generated asset.
+- [x] **Overview SVG:** removed the two disconnected amber strokes that looked like an unexplained secondary path. The primary RuntimeAssembly → Host → Experience handoff remains unchanged.
+- [x] **GUI.SVG preflight scene:** added static red branches from identity validation to preflight rejection and from arbitration to runtime failure. The runtime-failure panel now explicitly includes configuration-provider failures. The canonical source is `samples/DocumentationVisuals/Program.cs`; the committed SVG was aligned with the renderer's observed attribute ordering after the first parity check caught a mismatch.
+- [ ] **Generator parity:** the first CI attempt correctly failed `Verify committed GUI.SVG visual is current` because the manually edited SVG did not exactly match renderer output. Attribute ordering and the failure label have since been aligned with the canonical scene, but the latest candidate still needs a fresh successful CI run to close this gate.
 - [ ] **Hosted verification:** these source comparisons do not close GitHub-rendered SVG/Mermaid, light/dark, narrow viewport, accessibility-tree, keyboard, screen-reader, or external-link checks.
 
-This pass narrows the source review; it does **not** close the full source-to-diagram audit or the release gate. Keep the draft PR unmerged until the visual corrections and exact-candidate verification are complete.
+This pass narrows the source review; it does **not** close the full source-to-diagram audit or the release gate. Keep the draft PR unmerged until generator parity and exact-candidate verification pass.
 
 
 ### Additional execution-sequence correction
