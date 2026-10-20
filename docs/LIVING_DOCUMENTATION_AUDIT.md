@@ -84,6 +84,8 @@ Use the status labels consistently:
 | `docs/releases/0.1.0-alpha.6.md` | Historical release scope and contract | Historical release record; current contract is documented in alpha.7 notes | No visual needed — historical release notes do not need a duplicate diagram |
 | `DOCUMENTATION_INDEX.md` | Navigation by reader goal | Text links and grouped navigation are appropriate; no diagram currently needed | No visual needed — navigation is the purpose |
 | `DOCUMENTATION_STANDARD.md` | Shared rules for visual, living documentation | Text-first normative standard; examples and requirements are clearer than a decorative summary image | No visual needed — rules and checklists are the authoritative form |
+| `SECURITY.md` | Trust boundary and adversarial verification matrix | The threat model and control/evidence matrix are clearest as explicit text; a diagram would not add a stronger security guarantee | No visual needed — security controls and residual risks are stated directly |
+| `docs/GALLERY.md` | Visual navigation across the package's concepts | The gallery is itself the visual index and links to the detailed contract guides | No additional visual needed — another overview would duplicate the gallery's purpose |
 | `docs/BRANCH_RECONCILIATION.md` | Historical branch inventory and disposition decisions | Archive note points to current authorities; the dated inventory remains in Git history | No visual needed — archived decision record is navigation only |
 | `docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md` | Historical cross-repository dependency pins and migration sequence | Archive note points to current FSM_COS authorities; the dated matrix remains in Git history | No visual needed — archived pin inventory is not current evidence |
 | `docs/CONTINUATION_BRIEF_ALPHA6_FORGE_ANYAPP_WEBPAGE.md` | Historical handoff and integration constraints | Archived alpha.6 notes now direct readers to current release and architecture authorities | No visual needed — archived handoff is a navigation note, not a current specification |
@@ -98,7 +100,7 @@ The following findings are verified at the source-markup level:
 - The 13 section-divider SVGs are decorative and use `role="presentation"` with `aria-hidden="true"`.
 - The four section-marker SVGs expose concise accessible labels.
 - `dependency-resolution.svg` uses reduced-motion-aware animation to illustrate an example dependency-first order. It is not a live execution trace.
-- The inventory covered all 29 tracked Markdown documents and found no unresolved inline relative Markdown or image/asset targets after the release-runbook link was corrected.
+- The inventory covered all 31 tracked Markdown documents on the reviewed `development` snapshot and found no unresolved inline relative Markdown or image/asset targets after the release-runbook link was corrected. Recount the inventory when documents are added or removed.
 
 These findings do **not** establish complete semantic accuracy for every visual, hosted SVG rendering, browser accessibility-tree exposure, keyboard behavior, screen-reader output, or external-link reachability. Those require their own evidence and must not be inferred from source markup or a green build.
 
