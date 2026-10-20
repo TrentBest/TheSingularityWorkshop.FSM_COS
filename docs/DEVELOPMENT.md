@@ -128,7 +128,7 @@ For development restores, NuGet package-source mapping routes **only** `TheSingu
 
 The public-package compatibility job remains separate from the development integration build. A green development build is not evidence that a new package version is published, and a green public-feed build is not evidence that the latest dependency development code has been integrated.
 
-This workflow is verification, not release authorization. Publication remains behind the required `workflow_dispatch` boolean input (`publish`, default `false`) and is allowed only when the workflow is deliberately dispatched from `development` with that input set to `true`. Pushes and pull requests never publish. Do not weaken this safeguard or publish as part of routine development.
+This workflow is verification, not release authorization. Publication remains behind the required `workflow_dispatch` boolean input (`publish`, default `false`) and is allowed only when the workflow is deliberately dispatched from `master` with that input set to `true`, after verifying the intended master commit against public dependencies. Pushes and pull requests never publish. Do not dispatch publication from `development`, weaken this safeguard, or publish as part of routine development.
 
 ## Documentation visual tooling
 
@@ -152,7 +152,7 @@ flowchart TD
     E -- Yes --> G[Verified package candidate]
     G --> H{Owner explicitly authorizes publish?}
     H -- No --> I[Stop: do not publish]
-    H -- Yes --> J[Manual workflow dispatch with publish=true]
+    H -- Yes --> J[Manual workflow dispatch from master with publish=true]
 ```
 
 *This diagram summarizes the current `.github/workflows/package.yml` job dependencies and manual publication gate. A successful verification run alone does not publish a package.*
