@@ -40,7 +40,7 @@ classDiagram
 ## Failure and non-promises
 
 - A null `Bundles` value is rejected.
-- Invalid, duplicate, missing, or version-mismatched staged entries produce `InvalidOperationException`.
+- Invalid plan entries, duplicate IDs in the selected plan, missing requested roots, version mismatches, and plan/schedule identity or stage disagreements are rejected. The exact exception type for malformed schedule collections is defined by the implementation path (for example, duplicate keys passed to `ToDictionary` can surface as `ArgumentException`); callers should not rely on every malformed collection producing the same exception type.
 - The method validates metadata consistency only. It does not prove that content hashes were checked, artifact bytes were localized, bundles were loaded, or staged execution is active.
 - The record's public API and nullability are defined by the C# source; this page is explanatory and must be kept in sync with it.
 
