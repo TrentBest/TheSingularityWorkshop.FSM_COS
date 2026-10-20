@@ -231,3 +231,16 @@ This pass narrows the source review and records successful generator parity and 
 ### Additional execution-sequence correction
 
 The source review caught a meaningful failure-boundary distinction: dependency-request configuration payloads are bounded while resolving the complete graph, but configuration-provider overrides are fetched and byte-bounded as each bundle is entered by `LoadRoot`. A provider override can therefore exceed the remaining configuration budget after a prior dependency has already loaded. The execution sequence now records this separately from pre-load graph/resource rejection and preserves the no-transactional-rollback caveat. The GUI.SVG preflight's runtime-failure panel is updated to name provider-configuration failures too.
+
+
+## UML coverage goals retained from the visual-contract audit
+
+These remain coverage targets even where current simplified diagrams exist. Mermaid diagrams in contract guides are manually authored review aids, not evidence that GUI.SVG source-derived UML generation is complete.
+
+1. **Composition contract class diagram:** `FsmCos`, `IFsmCos`, `IMicroBundleCatalog`, `IMicroBundleConfigurationSource`, `RuntimeManifest`, `RuntimeAssembly`, `ArbitrationContext`, and the domain-owned `IMicroBundle` boundary. Show constructor-injected dependencies and host handoff only where source supports them.
+2. **Manifest/dependency-plan class diagram:** `RuntimeManifest`, `MicroBundleManifestEntry`, `MicroBundleReference`, `RuntimeManifestEntry`, `RuntimeManifestDependency`, `RuntimeManifestSchedule`, `RuntimeManifestLoadPlan`, and `ManifestLoadStage`. Distinguish records/value types from stateful plans and do not invent ownership/cardinality.
+3. **Execute sequence diagram:** host/caller → `IFsmCos.Execute` / `FsmCos.Execute` → catalog/configuration boundaries → preflight and dependency-first load → bounded arbitration → `RuntimeAssembly` or propagated failure. The diagram must be checked against implementation and tests.
+4. **Staged metadata versus loading:** depict validation and schedule metadata separately from actual repository localization and bundle loading; FSM_COS must not be shown as owning an unimplemented repository/host localization pipeline.
+5. **Arbitration sequence/state view:** show per-round arbitration, change aggregation, convergence, configured limit, and failure. Distinguish the zero-based convergence index from the number of calls.
+
+Each visual decision must distinguish a source-grounded claim from an illustrative model. An asset's existence does not prove it is embedded in the relevant document, and embedding alone does not prove the visual is accurate or accessible. Hosted rendering and accessibility remain separate verification gates.
