@@ -51,7 +51,7 @@ The shared [Documentation Standard](DOCUMENTATION_STANDARD.md) governs writing q
 
 ## Living documentation
 
-The diagrams are explanatory assets, not independent specifications. Each diagram must agree with its adjacent contract and current implementation. The [Living Documentation Visual Audit](docs/LIVING_DOCUMENTATION_AUDIT.md) tracks visual coverage and accessibility-source checks; it does not claim browser or screen-reader verification unless that evidence is explicitly recorded.
+The diagrams are explanatory assets, not independent specifications. Each diagram must agree with its adjacent contract and current implementation. The [Living Documentation Visual Audit](docs/LIVING_DOCUMENTATION_AUDIT.md) tracks visual coverage and accessibility-source checks; [Living SVG](docs/LIVING_SVG.md) explains the generated preflight picture, reduced-motion behavior, and the boundary between explanatory motion and a future host-bound live view. Neither document claims browser or screen-reader verification unless that evidence is explicitly recorded.
 
 ---
 
