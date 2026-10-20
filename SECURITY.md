@@ -32,7 +32,7 @@ Composition is not transactional. If a bundle mutates external state and then th
 
 ## Release security checklist
 
-This is a reusable procedure, not a current-candidate status report. Keep candidate-specific completion in the [alpha.7 readiness gate](docs/0.1.0-alpha.7-READINESS.md), tied to the exact source SHA and artifacts. These boxes are intentionally unchecked as a template; do not carry checkmarks forward after a candidate changes.
+This is a reusable procedure, not a current-candidate status report. Keep candidate-specific completion in the [alpha.7 readiness gate](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md), tied to the exact source SHA and artifacts. These boxes are intentionally unchecked as a template; do not carry checkmarks forward after a candidate changes.
 
 Before treating a candidate as security-reviewed:
 
