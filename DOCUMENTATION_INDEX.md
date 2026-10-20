@@ -57,3 +57,7 @@ The diagrams are explanatory assets, not independent specifications. Each diagra
 ---
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong></p>
+
+## Source-type documentation pilots
+
+The source-adjacent documentation pattern is being introduced incrementally. The first pilot is the `RuntimeManifest` type: [class explanation and UML class card](src/FSM_COS/RuntimeManifest.md), plus [relationship diagram and explicitly authored use cases](src/FSM_COS/RuntimeManifestUML.md). These pages are a human-maintained interim example; they are not yet proof that every source type has generated documentation or that the GUI UML generator is integrated.
