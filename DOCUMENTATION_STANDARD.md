@@ -211,7 +211,7 @@ Maintain a repository-specific visual coverage checklist. Every Markdown documen
 
 An SVG's existence in an assets folder is not evidence that the relevant document uses it. Reuse canonical assets rather than cloning near-identical diagrams, and validate local links. Every visual claim must match source, tests, and release status; distinguish implemented behavior from design intent. The checklist is complete only after every document has been considered and outstanding visual gaps are either closed or explicitly justified.
 
-For FSM_COS, the working checklist is [Living Documentation Visual Audit](docs/LIVING_DOCUMENTATION_AUDIT.md). Update it alongside the documentation changes it tracks.
+For FSM_COS, the working checklist is [FSM_COS maintainer-only Living Documentation Visual Audit](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/LIVING_DOCUMENTATION_AUDIT.md). Update it alongside the documentation changes it tracks.
 
 ## 8. Shared visual and editorial identity
 
