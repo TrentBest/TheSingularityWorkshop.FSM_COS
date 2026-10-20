@@ -24,6 +24,34 @@ Every visual must:
 - have a canonical source asset and a clear place to update it when the contract changes;
 - avoid requiring JavaScript or remote runtime services just to display ordinary documentation.
 
+## Measurable baseline and UML coverage
+
+Inventory snapshot from the repository tree on `development`:
+
+| Metric | Count | Interpretation |
+|---|---:|---|
+| Tracked Markdown documents | 30 | Every document needs an explicit visual decision, not necessarily an image |
+| SVG assets outside the divider/marker directories | 13 | Candidate semantic diagrams/illustrations; asset existence alone does not prove document coverage |
+| Section-divider SVGs | 13 | Navigation/branding assets, not technical subject diagrams |
+| Section-marker SVGs | 4 | Navigation/branding assets, not technical subject diagrams |
+| C# source files in `src/FSM_COS` | 16 | Current implementation surface to map against the diagrams |
+| C# test files in `tests/FSM_COS.Tests` | 5 | Behavioral evidence for diagram claims |
+| Dedicated UML class/sequence diagram assets | 0 identified | No committed UML-specific diagram format or class/sequence visual was found in the repository tree |
+
+These are **inventory counts, not a coverage score**. The next audit pass must measure per-document use separately: (1) visual embedded directly, (2) visual shared from another document, (3) source-generated visual, or (4) deliberately text-only with rationale. A shared overview should not be counted as equivalent to a subject-specific diagram when the document teaches a more complex contract.
+
+### UML candidates to prioritize
+
+Use actual public/internal type definitions and tests as the source of truth; show visibility and relationships honestly. Do not imply that a conceptual box is an implemented class.
+
+1. **Composition contract class diagram** — `FsmCos`, `IFsmCos`, `IMicroBundleCatalog`, `IMicroBundleConfigurationSource`, `RuntimeManifest`, `RuntimeAssembly`, `ArbitrationContext`, and the domain-owned `IMicroBundle` boundary. This should make constructor-injected dependencies and the host handoff explicit.
+2. **Manifest and dependency-plan class diagram** — `RuntimeManifest`, `MicroBundleManifestEntry`, `MicroBundleReference`, `RuntimeManifestEntry`, `RuntimeManifestDependency`, `RuntimeManifestSchedule`, `RuntimeManifestLoadPlan`, and `ManifestLoadStage`. Distinguish value/record types from stateful plan objects and show ownership/cardinality only where the code supports it.
+3. **Execute sequence diagram** — caller/host → `IFsmCos.Execute` / `FsmCos.Execute` → catalog/configuration boundaries → preflight and dependency-first load → bounded arbitration → `RuntimeAssembly` or propagated failure. This is the best candidate for an animated highlight path.
+4. **Staged metadata versus actual loading sequence** — show validation/state transitions separately from repository localization and bundle loading. This is a high-risk teaching point because the code explicitly does not implement a repository or host localization pipeline.
+5. **Arbitration sequence/state view** — per-round `Arbitrate` calls, change aggregation, convergence, configured limit, and failure. Keep the zero-based convergence index distinct from the number of calls.
+
+PR #32 adds simplified, source-derived Mermaid class diagrams to five contract guides. These diagrams are manually authored reviewable Markdown, not GUI.SVG-generated UML. Keep the remaining diagram requirements above as coverage goals: the next useful addition is an `FsmCos.Execute` sequence diagram grounded in implementation and tests. Generated type boxes alone cannot prove control flow or runtime behavior.
+
 ## Existing visual assets discovered
 
 The repository already contains a useful SVG library, including:
@@ -61,8 +89,8 @@ Use the status labels consistently:
 | Document | Visual intent | Initial action | Status |
 |---|---|---|---|
 | `AGENTS.md` | Repository-specific operating guardrails | Plain-language constraints are the point; a diagram risks obscuring authoritative instructions | No visual needed — operational rules are best kept explicit |
-| `README.md` | One-screen composition overview | Overview SVG compared with the README and architecture boundary; host ownership after handoff is explicit | Source reviewed; hosted checks pending |
-| `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Overview SVG and alt text reviewed against the plain-language contract and host handoff | Source reviewed; hosted checks pending |
+| `README.md` | One-screen composition overview | Re-audit found a direct RuntimeAssembly-to-Experience path that bypassed the Host; corrected on `docs/fsm-cos-visual-contract-audit`. Verify rendered arrow routing and compare the remaining overview claims before closing this row. | Source correction in review branch; hosted checks pending |
+| `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Shares the overview SVG; its host-to-experience routing correction is in `docs/fsm-cos-visual-contract-audit` and remains pending review/render verification. | Source correction in review branch; hosted checks pending |
 | `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Overview and dependency-resolution diagrams remain; the generated preflight visual shows identity/dependency validation, optional schedule checks, dependency-first loading, bounded arbitration, and separate failure semantics. Generator output is pinned and checked in CI. | Source reviewed; hosted checks pending |
 | `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | System SVG marks upstream authoring context as conceptual and identifies `RuntimeManifest` as the implemented input | Source reviewed; hosted checks pending |
 | `docs/DOMAIN.md` | What FSM_COS owns versus adjacent domains | Domain map reviewed against kernel ownership, host responsibilities, and deferred-capability caveats | Source reviewed; hosted checks pending |
@@ -94,7 +122,7 @@ Use the status labels consistently:
 
 The following findings are verified at the source-markup level:
 
-- The 12 substantive SVG diagrams in `docs/assets` each include an embedded `<title>`, `<desc>`, `role="img"`, and `aria-labelledby`.
+- The previous markup audit recorded 12 substantive SVG diagrams with embedded `<title>`, `<desc>`, `role="img"`, and `aria-labelledby`. The repository tree now shows 13 SVG assets outside the divider/marker directories; reconcile the classification and verify the thirteenth asset before treating the count as closed.
 - The 13 section-divider SVGs are decorative and use `role="presentation"` with `aria-hidden="true"`.
 - The four section-marker SVGs expose concise accessible labels.
 - `dependency-resolution.svg` uses reduced-motion-aware animation to illustrate an example dependency-first order. It is not a live execution trace.
@@ -102,9 +130,14 @@ The following findings are verified at the source-markup level:
 
 These findings do **not** establish complete semantic accuracy for every visual, hosted SVG rendering, browser accessibility-tree exposure, keyboard behavior, screen-reader output, or external-link reachability. Those require their own evidence and must not be inferred from source markup or a green build.
 
+## Findings from the current source-to-diagram re-audit
+
+- The overview SVG previously drew a second path from `RuntimeAssembly` directly to `Experience`, bypassing the Host. This contradicted the documented handoff boundary. The branch `docs/fsm-cos-visual-contract-audit` removes that bypass and routes the arrow from Host to Experience. This is a review-branch correction, not yet a merged fix; hosted rendering and the rest of the diagram audit remain open.
+- This finding shows that earlier source-level review status was too broad. The checklist below now leaves the complete source-to-diagram audit open until each substantive diagram has been checked against the current implementation and the diagram's explanatory text.
+
 ## Remaining work
 
-- [x] Source-review diagram claims against linked implementation/tests and clarify conceptual versus implemented behavior in adjacent text and alt descriptions.
+- [ ] Complete a fresh source-to-diagram audit against linked implementation/tests; an audit pass found an overview arrow that bypassed the Host and required correction. Continue checking every substantive diagram before marking this complete.
 - [ ] Check hosted rendering in GitHub and relevant light/dark and narrow-width views.
 - [ ] Verify accessibility-tree exposure and screen-reader behavior for substantive and animated visuals.
 - [ ] Check reference-style Markdown link definitions and external-link reachability.
@@ -114,3 +147,23 @@ These findings do **not** establish complete semantic accuracy for every visual,
 ## Definition of done
 
 This audit is complete only when every documentation file has been considered, each visual that materially helps is present and source-aligned, every local asset reference is valid, remaining text-only documents have a recorded reason, and the open verification boundaries above are closed or explicitly accepted with a documented rationale. Visual quantity is not a completion criterion.
+
+## Asset classification and behavior-to-evidence mapping
+
+The inventory above deliberately separates **semantic diagrams** from **conceptual illustrations**. In particular, `docs/assets/fsm-cos-crane.svg` is a conceptual metaphor, not a source-accurate flow diagram: its title and description explicitly frame the crane as a visual metaphor. Count it as a conceptual illustration, not as evidence that a sequence or class contract is diagrammed. Keep the inventory's raw asset count at 13, but report semantic-diagram coverage separately after reviewing each asset's claims and its use in the relevant document.
+
+| Behavior / contract | Primary evidence inspected | Visual implication / remaining check |
+|---|---|---|
+| Composition inputs, dependency resolution, and host handoff | `FsmCosTests.cs`, `FsmCos.cs`, `RuntimeAssembly.cs`, `fsm-cos-overview.svg`, `runtime-assembly-handoff.svg` | Overview correction is in PR #31; the class diagram should show injected catalog/configuration boundaries and return of `RuntimeAssembly` to the host, not imply host execution is inside FSM_COS. |
+| Dependency-first ordering, cycles, and complete preflight before loading | `FsmCosTests.cs`, `dependency-resolution.svg`, `fsm-cos-preflight.svg` generated from `samples/DocumentationVisuals/Program.cs` | Existing visuals cover the high-level flow; verify edge labels, failure branches, and source-generated asset parity. The diagram is not a live runtime trace. |
+| Arbitration convergence, bounded rounds, and failure | `FsmCosTests.cs`, `arbitration-convergence.svg` | Sequence/state view should distinguish a zero-based convergence index from call count, stable round from failed non-convergence, and exceptions from ordinary change aggregation. |
+| Staged manifest, schedule, promotion, and load-plan transitions | `RuntimeManifestPlanningTests.cs`, `SnapshotIsolationTests.cs`, `STAGED_MANIFEST_LOADING.md` | Dedicated state/sequence visual is justified because metadata validation, readiness, localization, and actual loading are distinct. The plan itself does not localize or load bundles. |
+| Snapshot isolation and collection immutability | `SnapshotIsolationTests.cs`, `FsmCosTests.cs` | Prefer concise source-linked proof/tests and a compact ownership note over a standalone decorative diagram. Keep the distinction between read-only collection structure and mutable domain-owned bundle instances. |
+| Public GUI capability handoff | `AiGuiCapabilityHandoffTests.cs` | Keep the clipboard/GUI capability contract tied to its tests; add a diagram only if the guide explains a multi-step handoff that prose and tests do not make clear. |
+
+### Coverage claims and limits
+
+- The current test source has dedicated coverage for pre-load rejection, dependency ordering and graph failures, configuration bounds/copying, catalog/configuration/load/arbitration failures, convergence/non-convergence, staged-plan and schedule consistency, promotion/readiness transitions, and collection snapshot behavior. These are source-level observations, not a substitute for the exact candidate's CI results.
+- The count of methods marked `[Fact]` or `[Theory]` is not the same as the number of executed test cases: theories can expand into multiple cases, and a method count does not establish a passing run. Use the workflow for the exact candidate as the pass/fail authority.
+- The Mermaid class diagrams in PR #32 are simplified, source-derived overviews, manually authored in Markdown; they are not generated by GUI.SVG. The next useful diagram is an execution sequence grounded in `FsmCos.Execute` and the corresponding tests. Hosted rendering, accessibility-tree exposure, keyboard navigation, and screen-reader behavior remain unverified.
+
