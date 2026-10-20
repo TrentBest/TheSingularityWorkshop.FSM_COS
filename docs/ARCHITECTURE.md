@@ -6,7 +6,7 @@ FSM_COS is a small composition kernel. This document describes how its pieces co
 
 ## UML class diagram: composition kernel
 
-This source-derived view shows the principal types and their current relationships. External MicroBundle contracts are consumed from MicroBundleDomain; the schedule is dependency metadata, not the FSM_API process scheduler.
+This is a simplified, source-derived UML overview of the principal types and their relationships, not a complete per-type member inventory. Method signatures are abbreviated for legibility; use the XML-documented source and focused contract sections for exact parameter types, nullability, and full public members. External MicroBundle contracts are consumed from MicroBundleDomain; the schedule is dependency metadata, not the FSM_API process scheduler.
 
 ~~~mermaid
 classDiagram
