@@ -52,14 +52,6 @@ This is a **build-time documentation-tooling dependency only**. `FSM_COS.csproj`
 
 The generated image is a contract map, not a live runtime trace. It must continue to distinguish complete dependency-closure preflight from runtime load or arbitration failures, and must not imply that staged metadata triggers deferred execution or that failed composition rolls back arbitrary bundle side effects.
 
-## Pinned GUI.SVG renderer contract and motion
-
-The package workflow pins GUI source commit `6fd9632547421034212f9a64a2e429b86d4bab4a` for the documentation generator. Audit generated assets against that exact revision, not against an unpinned description of the GUI repository's current branch: the pinned renderer's namespace and API differ from the current `master` renderer.
-
-At the pinned revision, `SvgGuiRenderer` explicitly maps SVG primitives, groups, links, gradients, filters, and SMIL animation nodes. The FSM_COS preflight scene uses those primitive mappings; it does not use the newer canonical-GUI-kind renderer described by the current GUI.SVG guide. The generated asset is therefore evidence of the pinned renderer's actual capability, not proof that every GUI.SVG revision has the same API.
-
-The preflight connectors now have subtle CSS dash motion to guide the eye through the implemented sequence. The generator adds this stylesheet after GUI.SVG serialization because the pinned renderer does not expose an SVG stylesheet node in its scene mapping. The artifact includes a `prefers-reduced-motion: reduce` rule that disables the motion and restores solid connectors. Motion remains explanatory: it does not read FSM_COS runtime state and must not be described as a live execution trace.
-
 ## Coverage checklist
 
 Use the status labels consistently:
