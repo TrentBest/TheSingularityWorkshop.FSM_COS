@@ -2,7 +2,7 @@
 
 **Purpose:** make FSM_COS documentation easier to understand through accurate diagrams, animated SVGs, interactive examples, and other living visuals where they materially teach the subject.
 
-**Current status:** the Markdown inventory and inline local-link pass are complete, and explicit visual decisions are now recorded for the original 36 tracked Markdown documents. The new per-file UML companion set adds 24 Markdown pages (one index plus one page per each of 23 C# files); the inventory now contains 60 Markdown documents, and a fresh full local-link audit is still required. Source-to-diagram accuracy and hosted/accessibility verification remain open. An SVG existing in `docs/assets` does not mean it is embedded in the relevant document, and an embedded picture does not automatically qualify as a useful living visual.
+**Current status:** the Markdown inventory and inline local-link pass are complete, and explicit visual decisions are now recorded for the original 36 tracked Markdown documents. The new per-file UML companion set adds 24 Markdown pages (one index plus one page per each of 23 C# files); the inventory now contains 60 Markdown documents. A tree-based pass at candidate SHA `324483ae66ea6a91cad6ab192042d0d40c7369b5` checked relative file/asset targets in all 60 Markdown documents and found zero missing targets; fragment-heading validity and external-link reachability remain separate checks. Source-to-diagram accuracy and hosted/accessibility verification remain open. An SVG existing in `docs/assets` does not mean it is embedded in the relevant document, and an embedded picture does not automatically qualify as a useful living visual.
 
 ## Standard
 
@@ -167,7 +167,7 @@ The following findings are verified at the source-markup level:
 - `dependency-resolution.svg` uses reduced-motion-aware animation to illustrate an example dependency-first order. It is not a live execution trace.
 - The earlier inline-link pass covered 29 tracked Markdown documents. This integration adds `docs/LIVING_SVG.md` and `docs/EXECUTION_SEQUENCE.md`; validate the complete 31-document candidate and package-relative links in CI before closing the link-audit gate.
 
-The prior inline-link pass covered the then-current 31-document set; it predates the new 24-page UML addition. A fresh link audit of all 60 Markdown documents is required. These findings do **not** establish complete semantic accuracy for every visual, hosted SVG/Mermaid rendering, browser accessibility-tree exposure, keyboard behavior, screen-reader output, or external-link reachability. Those require their own evidence and must not be inferred from source markup or a green build.
+The prior inline-link pass covered the then-current 31-document set; it predates the new 24-page UML addition. A tree-based pass over all 60 Markdown documents found no missing relative file/asset targets at candidate SHA `324483ae66ea6a91cad6ab192042d0d40c7369b5`; this pass did not validate heading fragments or external-link reachability. These findings do **not** establish complete semantic accuracy for every visual, hosted SVG/Mermaid rendering, browser accessibility-tree exposure, keyboard behavior, or screen-reader output. Those require their own evidence and must not be inferred from source markup or a green build.
 
 ## Findings from the current source-to-diagram re-audit
 
