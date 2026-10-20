@@ -320,3 +320,24 @@ Each entry should contain:
 - Link `docs/GALLERY.md` from the README so the visual index is discoverable in every repository.
 
 The Gallery is the Workshop's common answer to “show me”: each package chooses the visual form appropriate to its responsibility, and the linked recipe teaches the reader how to reproduce and verify it.
+
+## Branch policy — the Sith policy
+
+**There are exactly two long-lived branches in every Workshop repository: `master` and `development`. No third branch is a permanent home.** This is the Workshop's Sith policy: two branches, no branch sprawl.
+
+- **`master` is the release line.** It contains the reviewed, release-ready state. Published packages and release artifacts must be built from the intended `master` state, and consumer-facing release claims must match what is actually published.
+- **`development` is the integration line.** Ongoing changes converge here through pull requests and required verification. It may contain unreleased work and must not be represented as the published package state.
+- **Feature, fix, experiment, and automation branches are temporary work branches, not additional long-lived branches.** Use them only to isolate a specific change and submit it for review. After the work is merged, abandoned, or superseded, delete the temporary branch. Do not retain permanent feature, staging, release-candidate, backup, or agent-specific branches.
+- **Do not bypass review by pushing ordinary work directly to `master`.** Use a pull request to bring changes into the appropriate integration/release path, with CI and review evidence appropriate to the change. Do not merge or publish merely because a workflow started; verify its result and the intended commit.
+- **Keep development dependencies and release dependencies distinct.** Development CI should consume the dependent repository's `development` build/artifact when testing unreleased integration. Release/publish CI should consume the intended published package or release artifact corresponding to `master`, not silently substitute a development build.
+- **A green workflow is not permission to publish.** Publishing must be explicitly enabled by the repository's documented release control and must target the intended release commit. Documentation-only work must not accidentally publish a package.
+- **Do not make a repository policy exception by habit.** If a repository genuinely cannot follow this model, document the concrete technical reason, scope, owner, and exit condition in a reviewed decision record. Convenience, an old branch left behind, or a tool's default behavior is not sufficient justification.
+
+### Branch-policy review checklist
+
+- [ ] The only long-lived branches are `master` and `development`.
+- [ ] Any other branch is tied to a specific, active change and is intended to be deleted.
+- [ ] Pull requests target the intended integration branch and are reviewed before merge.
+- [ ] Development CI resolves dependent source/artifacts from `development`; release CI uses the intended `master`/published dependency contract.
+- [ ] Release workflows are gated and the publish step's outcome is checked separately from build/test success.
+- [ ] Documentation, badges, and release notes distinguish current development state from the published release.
