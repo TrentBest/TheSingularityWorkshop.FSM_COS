@@ -146,7 +146,7 @@ scene.Child("svg-text", "runtime-failure-label", text => text
     .Text("Runtime failure").Property("x", "75").Property("y", "40")
     .Property("text-anchor", "middle").Property("font-family", "sans-serif").Property("font-size", "1.5").Property("font-weight", "700").Property("fill", "#fff1f3"));
 scene.Child("svg-text", "runtime-failure-sub-label", text => text
-    .Text("Load / arbitration / non-convergence: no assembly").Property("x", "75").Property("y", "42.5")
+    .Text("Provider configuration / Load / arbitration / non-convergence: no assembly").Property("x", "75").Property("y", "42.5")
     .Property("text-anchor", "middle").Property("font-family", "sans-serif").Property("font-size", "1.1").Property("fill", "#ffd5dc"));
 
 // Static red connectors make the two failure classes explicit branches of the flow.
