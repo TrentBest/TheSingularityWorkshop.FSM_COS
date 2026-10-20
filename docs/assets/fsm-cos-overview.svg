@@ -39,9 +39,6 @@
 <text x="1265" y="566" fill="#fff" font-size="20" font-weight="700">Experience</text>
 <text x="1265" y="596" fill="#8fa7bc" font-size="13">what is encountered</text>
 </g>
-<g stroke="#ffb84d" stroke-width="2" opacity=".8">
-<path d="M1090 460H1370"/><path d="M1110 480H1350"/>
-</g>
 <text x="70" y="690" fill="#6e8499" font-family="Arial,Helvetica,sans-serif" font-size="15">COMPOSITION IS NOT MANIFESTATION</text>
 <text x="1330" y="690" text-anchor="end" fill="#6e8499" font-family="Arial,Helvetica,sans-serif" font-size="15">THE SINGULARITY WORKSHOP</text>
 </svg>
