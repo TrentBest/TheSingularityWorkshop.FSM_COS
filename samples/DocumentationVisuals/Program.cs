@@ -1,5 +1,6 @@
 using TheSingularityWorkshop.Workshop.Gui;
 using TheSingularityWorkshop.Workshop.Gui.Svg;
+using System.Xml.Linq;
 
 var output = args.Length > 0
     ? Path.GetFullPath(args[0])
@@ -8,7 +9,7 @@ var output = args.Length > 0
 var scene = GuiBuilder.Create("svg-scene", "fsm-cos-preflight")
     .Text("FSM_COS validation and composition path")
     .Property("description",
-        "Generated with GUI.SVG from a controlled scene. Shows full dependency-closure preflight, identity and dependency contract validation, optional schedule validation, iterative dependency-first loading, bounded arbitration, host handoff, and distinct failure boundaries. It is a contract map, not a live execution trace.");
+        "Generated with GUI.SVG from a controlled scene. Shows full dependency-closure preflight, identity and dependency contract validation, optional schedule validation, iterative dependency-first loading, bounded arbitration, host handoff, and distinct failure boundaries. Connector motion is explanatory and honors reduced-motion preferences. It is a contract map, not a live execution trace.");
 
 scene.Child("svg-rect", "background", node => node
     .Property("width", "100").Property("height", "56.25")
@@ -67,13 +68,13 @@ scene.Child("svg-text", "schedule-sub-label", text => text
 
 scene.Child("svg-line", "manifest-to-roots", line => line
     .Property("x1", "21").Property("y1", "10").Property("x2", "24").Property("y2", "10")
-    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("marker-end", "url(#arrowhead)"));
+    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("class", "flow-line").Property("marker-end", "url(#arrowhead)"));
 scene.Child("svg-line", "roots-to-identity", line => line
     .Property("x1", "45").Property("y1", "10").Property("x2", "48").Property("y2", "10")
-    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("marker-end", "url(#arrowhead)"));
+    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("class", "flow-line").Property("marker-end", "url(#arrowhead)"));
 scene.Child("svg-line", "identity-to-schedule", line => line
     .Property("x1", "71").Property("y1", "10").Property("x2", "74").Property("y2", "10")
-    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("marker-end", "url(#arrowhead)"));
+    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("class", "flow-line").Property("marker-end", "url(#arrowhead)"));
 
 scene.Child("svg-rect", "load-box", node => node
     .Property("x", "75").Property("y", "21").Property("width", "22").Property("height", "8")
@@ -87,7 +88,7 @@ scene.Child("svg-text", "load-sub-label", text => text
 
 scene.Child("svg-line", "schedule-to-load", line => line
     .Property("x1", "86").Property("y1", "14").Property("x2", "86").Property("y2", "20")
-    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("marker-end", "url(#arrowhead)"));
+    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("class", "flow-line").Property("marker-end", "url(#arrowhead)"));
 
 scene.Child("svg-rect", "arbitration-box", node => node
     .Property("x", "49").Property("y", "21").Property("width", "22").Property("height", "8")
@@ -100,7 +101,7 @@ scene.Child("svg-text", "arbitration-sub-label", text => text
     .Property("text-anchor", "middle").Property("font-family", "sans-serif").Property("font-size", "1.15").Property("fill", "#d6e7f4"));
 scene.Child("svg-line", "load-to-arbitration", line => line
     .Property("x1", "75").Property("y1", "25").Property("x2", "72").Property("y2", "25")
-    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("marker-end", "url(#arrowhead)"));
+    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("class", "flow-line").Property("marker-end", "url(#arrowhead)"));
 
 scene.Child("svg-rect", "assembly-box", node => node
     .Property("x", "25").Property("y", "21").Property("width", "20").Property("height", "8")
@@ -113,7 +114,7 @@ scene.Child("svg-text", "assembly-sub-label", text => text
     .Property("text-anchor", "middle").Property("font-family", "sans-serif").Property("font-size", "1.25").Property("fill", "#d6e7f4"));
 scene.Child("svg-line", "arbitration-to-assembly", line => line
     .Property("x1", "49").Property("y1", "25").Property("x2", "46").Property("y2", "25")
-    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("marker-end", "url(#arrowhead)"));
+    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("class", "flow-line").Property("marker-end", "url(#arrowhead)"));
 
 scene.Child("svg-rect", "host-box", node => node
     .Property("x", "3").Property("y", "21").Property("width", "18").Property("height", "8")
@@ -126,7 +127,7 @@ scene.Child("svg-text", "host-sub-label", text => text
     .Property("text-anchor", "middle").Property("font-family", "sans-serif").Property("font-size", "1.15").Property("fill", "#d6e7f4"));
 scene.Child("svg-line", "assembly-to-host", line => line
     .Property("x1", "25").Property("y1", "25").Property("x2", "22").Property("y2", "25")
-    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("marker-end", "url(#arrowhead)"));
+    .Property("stroke", "#7ee0bd").Property("stroke-width", "0.45").Property("class", "flow-line").Property("marker-end", "url(#arrowhead)"));
 
 scene.Child("svg-rect", "preflight-failure-box", node => node
     .Property("x", "3").Property("y", "36").Property("width", "44").Property("height", "10")
@@ -154,6 +155,19 @@ scene.Child("svg-text", "stage-note", text => text
     .Property("font-family", "sans-serif").Property("font-size", "1.25").Property("fill", "#d6e7f4"));
 
 var svg = new SvgGuiRenderer().Render(scene.Build(), width: 1600, height: 900);
+
+// The pinned GUI.SVG renderer emits the SVG scene; this small, controlled post-pass
+// adds CSS motion plus a reduced-motion fallback without changing the scene contract.
+XNamespace svgNamespace = "http://www.w3.org/2000/svg";
+var document = XDocument.Parse(svg);
+document.Root!.Add(new XElement(svgNamespace + "style", """
+@keyframes fsm-cos-flow { to { stroke-dashoffset: -2.2; } }
+.flow-line { stroke-dasharray: 0.75 0.45; animation: fsm-cos-flow 2.8s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .flow-line { animation: none !important; stroke-dasharray: none !important; }
+}
+"""));
+var livingSvg = document.ToString(SaveOptions.DisableFormatting);
 Directory.CreateDirectory(Path.GetDirectoryName(output)!);
-File.WriteAllText(output, svg + Environment.NewLine);
-Console.WriteLine($"Generated FSM_COS preflight visual with GUI.SVG: {output}");
+File.WriteAllText(output, livingSvg + Environment.NewLine);
+Console.WriteLine($"Generated FSM_COS living preflight visual with GUI.SVG: {output}");
