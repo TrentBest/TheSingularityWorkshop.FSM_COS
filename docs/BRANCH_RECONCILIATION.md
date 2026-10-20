@@ -32,6 +32,14 @@ These dispositions are preliminary. The current alpha.7 candidate must pass exac
 | `work/fsm-cos-living-svg-flow` | `1595e1b769b80b381e8881bed0acaf3187bdaaff` | Its `docs/LIVING_SVG.md` content is identical to the candidate; the preflight SVG and generator have since changed on the candidate. | **Superseded content appears integrated; final diff check required** |
 | `work/fsm-cos-uml-class-diagrams` | `192c8912fa99560b16a47bc4f0c628b84fa089e3` | The candidate's `docs/ARCHITECTURE.md` matches this branch exactly; the five class-diagram guides are integrated into PR #34. | **Superseded content appears integrated; final diff check required** |
 
+## Release-line ancestry warning
+
+At the time of this audit, `master` and `development` are **diverged**, not fast-forward-related: the GitHub compare endpoint reports 44 commits unique to `master` and 628 unique to `development` from their merge base. The differing histories include release-era files and the newer alpha.7 implementation/documentation. Do not assume that “swap development into master” is a fast-forward, and do not force-update `master` to make the graph look simple. Before the release transition, inspect the full master-only commit/file delta, determine which changes remain relevant, and choose an explicit, reviewable merge/reconciliation strategy. `master` remains untouched during this preparation.
+
+## GUI.SVG UML dependency note
+
+The current alpha.7 candidate's five class diagrams and Execute sequence are explicitly **manually authored Mermaid**, not GUI.SVG-generated UML. GUI development now documents renderer-neutral data cards and a static SVG data-card renderer, but its own UML guide still identifies a source-grounded class/sequence diagram generator as follow-up work. Do not describe the current Mermaid diagrams as GUI-generated or claim source-to-UML automation. Decide whether replacing them with a verified GUI.SVG/model-driven diagram pipeline is a release gate or a tracked follow-up before closing the living-documentation audit.
+
 ## Release-preparation gate
 
 At this snapshot, PR #34 remains **open and draft**. The previous workflow run on the older candidate failed package verification because the packaged gallery linked to a maintainer-only audit file excluded from the NuGet package. The current candidate changes that gallery link to a repository URL and its 21 local Markdown links were checked against the package layout.
