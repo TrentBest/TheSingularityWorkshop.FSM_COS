@@ -16,7 +16,7 @@ It should represent code that has been deliberately consolidated and is suitable
 
 `development` is the current integration and architecture branch.
 
-All normal FSM_COS evolution should happen here unless a short-lived branch is genuinely useful for isolating a risky experiment.
+All normal FSM_COS evolution should happen directly on `development` under the current two-branch policy; do not create a separate feature or experiment branch.
 
 > **If you need to ask which branch is current, the answer should be `development`.**
 
