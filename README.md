@@ -14,6 +14,8 @@
 
 *If a picture is worth a thousand words, then what is a living picture worth?* FSM_COS uses source-backed diagrams to explain dependency closure, preflight validation, failure boundaries, and the host handoff. They illustrate the real contract; they are not presented as live execution traces.
 
+**[Gallery](docs/GALLERY.md)** — a visual index of composition, validation, arbitration, and host handoff.
+
 FSM_COS is The Singularity Workshop's **runtime composition kernel**. It takes a request for capabilities, resolves the MicroBundles and dependencies needed to satisfy it, and hands the assembled result to a host.
 
 ## 🟦 01 — What is FSM_COS?
