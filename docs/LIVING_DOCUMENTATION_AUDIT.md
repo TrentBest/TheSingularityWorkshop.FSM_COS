@@ -30,13 +30,13 @@ Inventory snapshot from the repository tree on `development`:
 
 | Metric | Count | Interpretation |
 |---|---:|---|
-| Tracked Markdown documents | 30 | Every document needs an explicit visual decision, not necessarily an image |
+| Tracked Markdown documents | 31 | Every document needs an explicit visual decision, not necessarily an image |
 | SVG assets outside the divider/marker directories | 13 | Candidate semantic diagrams/illustrations; asset existence alone does not prove document coverage |
 | Section-divider SVGs | 13 | Navigation/branding assets, not technical subject diagrams |
 | Section-marker SVGs | 4 | Navigation/branding assets, not technical subject diagrams |
 | C# source files in `src/FSM_COS` | 16 | Current implementation surface to map against the diagrams |
 | C# test files in `tests/FSM_COS.Tests` | 5 | Behavioral evidence for diagram claims |
-| Dedicated UML class/sequence diagram assets | 0 identified | No committed UML-specific diagram format or class/sequence visual was found in the repository tree |
+| Mermaid UML-bearing guides | 6 | Five contract guides contain simplified class diagrams; `docs/EXECUTION_SEQUENCE.md` adds the source-derived `FsmCos.Execute` sequence. These are reviewable Markdown diagrams, not GUI.SVG-generated UML. |
 
 These are **inventory counts, not a coverage score**. The next audit pass must measure per-document use separately: (1) visual embedded directly, (2) visual shared from another document, (3) source-generated visual, or (4) deliberately text-only with rationale. A shared overview should not be counted as equivalent to a subject-specific diagram when the document teaches a more complex contract.
 
@@ -50,7 +50,7 @@ Use actual public/internal type definitions and tests as the source of truth; sh
 4. **Staged metadata versus actual loading sequence** — show validation/state transitions separately from repository localization and bundle loading. This is a high-risk teaching point because the code explicitly does not implement a repository or host localization pipeline.
 5. **Arbitration sequence/state view** — per-round `Arbitrate` calls, change aggregation, convergence, configured limit, and failure. Keep the zero-based convergence index distinct from the number of calls.
 
-PR #32 adds simplified, source-derived Mermaid class diagrams to five contract guides. These diagrams are manually authored reviewable Markdown, not GUI.SVG-generated UML. Keep the remaining diagram requirements above as coverage goals: the next useful addition is an `FsmCos.Execute` sequence diagram grounded in implementation and tests. Generated type boxes alone cannot prove control flow or runtime behavior.
+PR #32 adds simplified, source-derived Mermaid class diagrams to five contract guides. These diagrams are manually authored reviewable Markdown, not GUI.SVG-generated UML. `docs/EXECUTION_SEQUENCE.md` now adds the next-priority `FsmCos.Execute` sequence, grounded in implementation ordering and explicit failure boundaries. The next sequence/state candidates are staged metadata versus actual loading, then arbitration convergence and non-convergence. Generated type boxes alone cannot prove control flow or runtime behavior.
 
 ## Existing visual assets discovered
 
@@ -91,7 +91,7 @@ Use the status labels consistently:
 | `AGENTS.md` | Repository-specific operating guardrails | Plain-language constraints are the point; a diagram risks obscuring authoritative instructions | No visual needed — operational rules are best kept explicit |
 | `README.md` | One-screen composition overview | Re-audit found a direct RuntimeAssembly-to-Experience path that bypassed the Host; corrected on `docs/fsm-cos-visual-contract-audit`. Verify rendered arrow routing and compare the remaining overview claims before closing this row. | Source correction in review branch; hosted checks pending |
 | `docs/WHAT_IS_FSM_COS.md` | Request → composition → host; newcomer mental model | Shares the overview SVG; its host-to-experience routing correction is in `docs/fsm-cos-visual-contract-audit` and remains pending review/render verification. | Source correction in review branch; hosted checks pending |
-| `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Overview and dependency-resolution diagrams remain; the generated preflight visual shows identity/dependency validation, optional schedule checks, dependency-first loading, bounded arbitration, and separate failure semantics. Generator output is pinned and checked in CI. | Source reviewed; hosted checks pending |
+| `docs/EXECUTION_SEQUENCE.md` | Exact `FsmCos.Execute` ordering, failure boundaries, and host handoff | Mermaid sequence is checked against `FsmCos.Execute`; it distinguishes pre-load rejection from load side effects and arbitration non-convergence. Hosted rendering and accessibility checks remain open. | Source reviewed; hosted checks pending |\n| `docs/ARCHITECTURE.md` | Kernel boundary, catalog, dependency and host relationships | Overview and dependency-resolution diagrams remain; the generated preflight visual shows identity/dependency validation, optional schedule checks, dependency-first loading, bounded arbitration, and separate failure semantics. Generator output is pinned and checked in CI. | Source reviewed; hosted checks pending |
 | `docs/THEORY.md` | Why composition is distinct; invariants and non-goals | System SVG marks upstream authoring context as conceptual and identifies `RuntimeManifest` as the implemented input | Source reviewed; hosted checks pending |
 | `docs/DOMAIN.md` | What FSM_COS owns versus adjacent domains | Domain map reviewed against kernel ownership, host responsibilities, and deferred-capability caveats | Source reviewed; hosted checks pending |
 | `docs/DOMAIN_COMPLETION_ROADMAP.md` | Implemented behavior versus deferred capabilities and follow-on work | Existing domain map explains the composition boundary; the capability table distinguishes implemented behavior from deferred work without duplicating the release gate | No additional visual needed — the map plus status table is clearer than a second capability/status diagram |
