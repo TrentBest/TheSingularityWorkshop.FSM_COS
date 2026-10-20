@@ -4,6 +4,100 @@
 
 FSM_COS is a small composition kernel. This document describes how its pieces cooperate rather than redefining concepts owned by neighboring systems.
 
+## UML class diagram: composition kernel
+
+This is a simplified, source-derived UML overview of the principal types and their relationships, not a complete per-type member inventory. Method signatures are abbreviated for legibility; use the XML-documented source and focused contract sections for exact parameter types, nullability, and full public members. External MicroBundle contracts are consumed from MicroBundleDomain; the schedule is dependency metadata, not the FSM_API process scheduler.
+
+~~~mermaid
+classDiagram
+    class IFsmCos {
+        <<interface>>
+        +Execute(manifest, configurationSource) RuntimeAssembly
+    }
+    class FsmCos {
+        +Execute(manifest, configurationSource) RuntimeAssembly
+    }
+    class IMicroBundleCatalog {
+        <<interface>>
+        +TryResolve(bundleId, version, bundle) bool
+        +TryResolve(bundleId, bundle) bool
+    }
+    class IMicroBundleConfigurationSource {
+        <<interface>>
+        +TryGetConfiguration(runtimeId, bundleId, version, configuration) bool
+    }
+    class RuntimeManifest {
+        +RuntimeId: ulong
+        +Bundles: IReadOnlyList
+        +ExperienceContext: IStateContext
+        +LoadPlan: IReadOnlyList
+        +Schedule: RuntimeManifestSchedule
+        +Intent: SemanticIntent
+        +ValidateStagedPlan()
+    }
+    class MicroBundleManifestEntry {
+        <<record struct>>
+        +BundleId: ulong
+        +Version: string
+    }
+    class RuntimeManifestEntry {
+        <<record>>
+        +Reference: MicroBundleReference
+        +Stage: ManifestLoadStage
+        +IsValid: bool
+    }
+    class MicroBundleReference {
+        <<record struct>>
+        +BundleId: ulong
+        +Version: string
+        +ContentHash: string
+        +IsValid: bool
+        +Matches(entry): bool
+    }
+    class ManifestLoadStage {
+        <<enumeration>>
+        Bootstrap
+        Resident
+        Deferred
+    }
+    class RuntimeManifestSchedule {
+        +Entries: IReadOnlyList
+        +Dependencies: IReadOnlyList
+        +IndependentEntries: IReadOnlyList
+        +DependencyEntries: IReadOnlyList
+        +DependenciesOf(bundleId)
+        +IsDependencyReady(bundleId, isLoaded): bool
+    }
+    class RuntimeManifestDependency {
+        <<record struct>>
+        +BundleId: ulong
+        +DependencyId: ulong
+        +IsValid: bool
+    }
+    class RuntimeAssembly {
+        +RuntimeId: ulong
+        +Bundles: IReadOnlyList
+        +ArbitrationRounds: int
+        +Intent: SemanticIntent
+        +TryGetBundle(bundleId, bundle): bool
+    }
+
+    FsmCos ..|> IFsmCos
+    FsmCos --> IMicroBundleCatalog : resolves
+    FsmCos --> IMicroBundleConfigurationSource : optional input
+    FsmCos --> RuntimeManifest : consumes
+    FsmCos --> RuntimeAssembly : returns
+    RuntimeManifest *-- "0..*" MicroBundleManifestEntry : root requests
+    RuntimeManifest o-- "0..*" RuntimeManifestEntry : optional load plan
+    RuntimeManifest o-- RuntimeManifestSchedule : optional schedule
+    RuntimeManifestEntry --> MicroBundleReference : published identity
+    RuntimeManifestEntry --> ManifestLoadStage : intended stage
+    RuntimeManifestSchedule o-- "0..*" RuntimeManifestEntry : entries
+    RuntimeManifestSchedule o-- "0..*" RuntimeManifestDependency : dependency edges
+~~~
+
+The diagram is a map of type contracts, not a claim that constructing a schedule performs localization or that stage metadata activates deferred loading. See [Staged Manifest Loading](STAGED_MANIFEST_LOADING.md) for the implementation boundary.
+
 ## Runtime flow
 
 ![FSM_COS runtime flow](assets/fsm-cos-overview.svg)
