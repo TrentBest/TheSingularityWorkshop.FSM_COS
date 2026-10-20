@@ -24,7 +24,7 @@ Use one primary document for each question. Related pages should explain context
 | Concern | Primary authority | Scope |
 |---|---|---|
 | What FSM_COS owns | [Domain](docs/DOMAIN.md) | Domain boundary, not API reference |
-| How the implementation works | [Architecture](docs/ARCHITECTURE.md) | Current code flow and failure behavior |
+| How the implementation works | [Architecture](docs/ARCHITECTURE.md) | Current code flow and failure behavior |\n| Follow the exact Execute success/failure path | [Execute Sequence](docs/EXECUTION_SEQUENCE.md) | Source-derived sequence for validation, dependency resolution, loading, arbitration, and host handoff |
 | Why the composition boundary exists | [Theory](docs/THEORY.md) | Rationale and invariants |
 | Request shape and root version selection | [Runtime Manifest](docs/RUNTIME_MANIFEST.md) | Public manifest contract |
 | Staged metadata and its limits | [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md) | Planning/state metadata versus end-to-end localization |
@@ -51,7 +51,7 @@ The shared [Documentation Standard](DOCUMENTATION_STANDARD.md) governs writing q
 
 ## Living documentation
 
-The diagrams are explanatory assets, not independent specifications. Each diagram must agree with its adjacent contract and current implementation. The [Living Documentation Visual Audit](docs/LIVING_DOCUMENTATION_AUDIT.md) tracks visual coverage and accessibility-source checks; [Living SVG](docs/LIVING_SVG.md) explains the generated preflight picture, reduced-motion behavior, and the boundary between explanatory motion and a future host-bound live view. Neither document claims browser or screen-reader verification unless that evidence is explicitly recorded.
+The diagrams are explanatory assets, not independent specifications. Each diagram must agree with its adjacent contract and current implementation. The [Living Documentation Visual Audit](docs/LIVING_DOCUMENTATION_AUDIT.md) tracks visual coverage and accessibility-source checks; [Execute Sequence](docs/EXECUTION_SEQUENCE.md) traces the current composition contract; [Living SVG](docs/LIVING_SVG.md) explains the GUI.SVG-generated preflight picture, reduced-motion behavior, and the boundary between explanatory motion and a future host-bound live view. Neither document claims browser or screen-reader verification unless that evidence is explicitly recorded.
 
 ---
 
