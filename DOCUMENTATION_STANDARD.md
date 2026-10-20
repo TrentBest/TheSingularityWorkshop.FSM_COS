@@ -181,6 +181,48 @@ Visuals should clarify the idea, not merely decorate the page.
 - Link to a focused diagram or deeper explanation rather than repeating a large image many times.
 - Do not introduce an image dependency that can silently break package/repository documentation when a local asset would be appropriate.
 
+## 5A. Per-source-file and per-type documentation contract
+
+For maintained C# source, keep the source file, its focused explanation, and its relationship/use-case view distinct but linked. This is the default for production code; generated code, trivial declarations, test fixtures, and files whose contents are better documented as one cohesive unit may use a documented exception rather than producing empty boilerplate.
+
+For a maintained source file such as `RuntimeManifest.cs`, the companion set is:
+
+- **`RuntimeManifest.cs`** — authoritative implementation.
+- **`RuntimeManifest.md`** — focused type/file explanation. Begin with the repository's moniker/identity visual, explain the purpose and responsibility boundary in plain language, include the source-grounded UML class card for the focus type, then explain the class's key members/contracts, inputs and outputs, invariants, failure behavior, and links to relevant guides/tests. The class card belongs here because it is the fast, immediately useful view of the type.
+- **`RuntimeManifestUML.md`** — the wider UML relationship view for that source/type. Precede `UML.md` with the source/type stem so the companion is discoverable next to its source and primary explanation. This page contains the class diagram and a **Use cases** section; it should not duplicate the primary page's full member-by-member explanation.
+
+Use the actual source stem and repository naming conventions consistently. When one source file declares multiple maintained types, create an explicit page/card for each maintained type or document a deliberate grouped-page exception. Never silently choose the first declaration and imply the rest are covered. A generated inventory should make omissions visible.
+
+### Class diagram layout and relationship semantics
+
+Center the **focus class** as the visual anchor. Place classes that use or depend on the focus above it, with their relationship connectors directed down toward the focus where that direction accurately expresses the modeled dependency. Place classes the focus uses or depends on below it, with connectors directed from the focus toward those dependencies. Keep inheritance, interface realization, association, ownership/composition, and dependency visually distinct and label multiplicity or navigability only when the source/model supports it.
+
+This is a reading convention, not permission to falsify a relationship to force a layout. If a type participates in several relationship kinds or cycles, preserve the real semantics, label the edge, and adjust placement as needed for legibility. Avoid connectors that cross class compartments or appear to attach to the wrong type. Every edge must come from an explicit source/model fact or be clearly marked as a human-authored conceptual relationship.
+
+### Use cases: intentional human input
+
+The Use cases section records the goals actors have when using the system/type and the observable outcomes they need. Reflection, syntax trees, compiler symbols, and an AST can expose declared structure and some relationships; they cannot reliably infer user intent, actor goals, value, or whether a scenario is a supported use case. These require maintainer/user direction, with the LLM helping elicit, organize, challenge, and document that input—not inventing it as fact.
+
+For each relevant use case, record:
+- **Actor / stakeholder** and the goal they want to accomplish.
+- **Trigger and preconditions**, including required host/context where relevant.
+- **Main success path** and the observable result.
+- **Important alternatives and failure paths**, including rejection, cancellation, or non-convergence where applicable.
+- **Evidence/status**: implemented and tested, implemented but unverified, proposed, or explicitly unsupported; link to the source, tests, scenario, and any sequence/activity/state diagram that actually supports the claim.
+
+Use a UML use-case diagram when it clarifies actor-to-goal relationships across a meaningful system boundary. Keep the written use-case scenarios authoritative enough to review; a diagram alone cannot capture preconditions, outcomes, or evidence. Do not create a use-case diagram for every class by rote. Some low-level types have no meaningful actor-facing use case of their own; link to the containing subsystem's use cases and explain the type's contribution instead.
+
+### Source-derived model and generation boundary
+
+Maintain a source-derived inventory/model of the domain where practical, rather than treating each SVG as a hand-maintained island. The model may be built from reflection over loaded assemblies, compiler/Roslyn analysis, or another repository-appropriate source of truth; document the chosen input and its limits. A prior Unity workflow used reflection to derive an AST across the domain, which is a useful precedent, not a mandate to assume reflection alone can recover source semantics or user intent.
+
+Keep three concerns separate:
+1. **Structural facts** — declarations, signatures, references, and compiler-resolved relationships that tooling can derive and verify.
+2. **Human-authored intent** — use cases, actor goals, design rationale, and conceptual relationships that require maintainer/user direction.
+3. **Presentation** — class cards, relationship diagrams, use-case diagrams, and SVG/Markdown output.
+
+Prefer deterministic generation from a maintained inventory/model, with CI detecting stale or missing outputs. Every generated artifact must identify or link to the source/model inputs and generation contract. If a diagram is manually curated, label it honestly; if generated output omits a relationship or type, state the limitation instead of implying complete coverage. Do not make GUI.SVG parse source code by assumption: source analysis, semantic modeling, renderer-neutral diagram data, and SVG rendering are separate responsibilities with an explicit supported API boundary.
+
 ## 6. Examples must be runnable or honestly illustrative
 
 Every code example should be one of:
