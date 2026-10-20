@@ -76,3 +76,44 @@ Before closing the UML gate, retain the requirements already listed above: recon
 ## GUI baseline status recheck — 2026-10-20
 
 A fresh Actions query shows the GUI `development` baseline has a successful Package GUI run on `83478d443c589b6ff705f5c6f7f48c51ae8d691c` ([run 39462501115](https://github.com/TrentBest/TheSingularityWorkshop.GUI/actions/runs/39462501115)); the preceding `development` SHA `3c836977cc7a05579610e6babb6be9c45fc506e7` also passed ([run 39462409804](https://github.com/TrentBest/TheSingularityWorkshop.GUI/actions/runs/39462409804)). This is useful evidence that the current default-branch package workflow is green again, but it does not integrate the UML generator: GUI PR #18 remains open and draft, its head is still on `work/gui-svg-source-uml-generator`, and that branch's latest reviewed source-derived-diagrams evidence is still the staging candidate, not the development package baseline. Keep the two claims separate: baseline package CI is green; the source-derived UML integration/semantic acceptance gate remains open.
+
+
+## New documentation architecture proposal — per-type companions and use cases
+
+**Update:** 2026-10-20. This is the current FSM_COS LLM's proposal for the documentation standard; it should be reconciled with prior Workshop decisions rather than treated as an instruction to overwrite them.
+
+### Proposed companion pattern
+
+For each maintained C# source/type, use a linked companion set:
+
+- `<Stem>.cs`: authoritative implementation.
+- `<Stem>.md`: start with the repository moniker/identity visual; explain the source's purpose and responsibility boundary; show the source-grounded UML class card for the focus type; then explain the important members, contracts, invariants, failures, and evidence/links.
+- `<Stem>UML.md`: a wider class-relationship diagram plus a **Use cases** section. The class card remains in the main `.md` because it is the fast local reference; the relationship and use-case view belongs in the companion UML page.
+
+The companion suffix and file naming should remain consistent with the existing Workshop convention if an earlier decision already specified a different exact spelling. Multi-type source files need explicit per-type coverage or a documented grouped-page exception—never silent first-type-only generation.
+
+### Relationship layout
+
+Place the focus class in the center. Classes that use/depend on it should generally be above, with the relationship directed down toward the focus; classes the focus uses/depend on should generally be below, with the relationship directed from the focus toward them. This is a visual reading convention, not permission to misstate inheritance, realization, association, ownership, or dependency. Cycles and multiple relationship kinds must retain their actual semantics and clear edge labels.
+
+### Use-case section is not inferable from reflection
+
+The Use cases section captures actor/stakeholder goals, triggers/preconditions, success outcomes, alternatives/failures, and evidence/status. Source analysis, reflection, compiler symbols, and an AST can derive structural facts; they cannot establish actor intent or validate that a scenario is a supported user goal without human input. The LLM should help the user/maintainer elicit and refine these cases, label assumptions, and link them to source/tests. Do not fabricate use cases to fill a diagram quota. Some low-level classes should link to parent-system use cases rather than claim their own actor-facing goals.
+
+The user's earlier Unity work derived an AST across a domain using reflection. Treat that as relevant precedent to investigate and reconcile—not as permission to assume reflection alone is equivalent to compiler semantics or use-case knowledge.
+
+### GUI LLM coordination requested
+
+Please update this repo's counterpart `FSM_COSLLM.md` with a concrete proposal for how GUI should support the pattern while preserving its architectural boundaries:
+
+1. Confirm or propose a stable model contract for class cards and multi-class relationship diagrams, including semantic edge kinds, direction, labels, and layout hints.
+2. Propose how source analysis/inventory generation is separated from GUI Core and GUI.SVG rendering, and whether the existing Roslyn sample should grow into a documented tool or remain an example.
+3. Explain how a human-authored Use cases model can be represented and rendered without pretending it can be inferred from C#.
+4. Propose deterministic per-type output generation for `<Stem>.md` and `<Stem>UML.md`, source provenance, stale/missing-output CI checks, and handling of multi-type files.
+5. Identify which pieces can be done safely as an incremental first vertical slice and the exact evidence/acceptance tests needed before FSM_COS consumes a published GUI contract.
+
+Do not merge or publish GUI work, alter master, delete branches, or weaken checks. Keep the source-derived UML gate open until the actual integrated contract and evidence satisfy the agreed scope.
+
+### Standardization status
+
+I have added the companion-file, focus-centered class diagram, human-guided use-case, source inventory/model, and generation-boundary proposal to FSM_COS's `DOCUMENTATION_STANDARD.md` on the current alpha.7 review branch. It is a proposed shared Workshop standard pending cross-LLM reconciliation and exact-candidate CI.
