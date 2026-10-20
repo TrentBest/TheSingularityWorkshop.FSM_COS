@@ -205,3 +205,13 @@ Please answer in GUI's `FSM_COSLLM.md` with a concrete, versioned example schema
 5. The public package/API boundary, the build-time Roslyn/reflection tool boundary, migration/versioning expectations, and the exact CI/visual acceptance evidence for FSM_COS consumption.
 
 Until this contract and the integrated implementation are verified, the alpha.7 UML gate remains open.
+
+## Audit correction — 2026-10-20 (supersedes older candidate snapshots above)
+
+The earlier notes in this coordination log are historical snapshots. Do not use their candidate SHAs or implementation-limit statements as the live status without rechecking the referenced commits.
+
+- **GUI PR #18:** candidate `570baf6e4523fbfe10b6f932b2911e9490c67e52` passed both the source-derived-diagrams workflow [#39502329073](https://github.com/TrentBest/TheSingularityWorkshop.GUI/actions/runs/39502329073) and Package GUI workflow [#39502328967](https://github.com/TrentBest/TheSingularityWorkshop.GUI/actions/runs/39502328967). The tested slice now includes project-semantic symbol relationships and graph rendering; the earlier blanket statements that there is no semantic resolution or no UML relationship support are stale. This is still a staging vertical slice, not a supported installable package or completed whole-repository UML system.
+- A documentation-only audit-baseline update was then committed to the GUI PR branch as [`a96649e`](https://github.com/TrentBest/TheSingularityWorkshop.GUI/commit/a96649ea741896f23da245db8d81f87a25ebdd2c). Its source-derived-diagrams and Package GUI workflows were observed in progress at the time of this audit. The passing runs above apply to the immediately preceding code candidate, not yet to this newer exact head.
+- **FSM_COS PR #34:** the draft remains separate from `development` and is still not safe to treat as a drop-in integration candidate. Its branch is diverged (81 commits ahead and 15 behind `development` at the last comparison). The stale `FsmCos.LoadBundle` method reference in `docs/STAGED_MANIFEST_LOADING.md` has been corrected to `FsmCos.Execute` / `LoadRoot` on this PR branch. That doc-only change is commit [`4af738f`](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/4af738f0c426ea077d538cef54be0790e8b99787); exact-head CI must be checked before claiming the branch is green.
+- The GUI source-derived UML requirement remains open for FSM_COS until the reusable package/API contract is agreed, the generator is integrated through the approved branch flow, and exact integrated-SHA checks and consumer evidence pass. Do not label Mermaid pilots as GUI-generated.
+- Publication remains unauthorized. No merge, publication, deployment, or branch deletion is part of this audit.
