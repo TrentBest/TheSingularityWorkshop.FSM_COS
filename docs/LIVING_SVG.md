@@ -4,7 +4,7 @@
 
 ## What is implemented now
 
-FSM_COS's package workflow pins GUI source commit `6fd9632547421034212f9a64a2e429b86d4bab4a` and uses its `SvgGuiRenderer` to generate `assets/fsm-cos-preflight.svg` from `samples/DocumentationVisuals/Program.cs`. The pinned renderer has a different namespace and scene contract from the current GUI repository's default-branch renderer, so generator claims must be checked against the exact revision in `.github/workflows/package.yml`.
+FSM_COS's package workflow pins GUI source commit `6fd9632547421034212f9a64a2e429b86d4bab4a` and uses its `SvgGuiRenderer` to generate `docs/assets/fsm-cos-preflight.svg` from `samples/DocumentationVisuals/Program.cs`. The pinned renderer has a different namespace and scene contract from the current GUI repository's default-branch renderer, so generator claims must be checked against the exact revision in `.github/workflows/package.yml`.
 
 The scene is built from SVG primitives and labels. A controlled post-processing step adds CSS motion to the seven composition-flow connectors. The stylesheet is inserted after GUI.SVG serialization because this pinned renderer does not expose an SVG stylesheet node in its scene mapping.
 
