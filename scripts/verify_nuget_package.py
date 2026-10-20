@@ -69,16 +69,15 @@ def verify(package_dir: Path, project_path: Path) -> None:
                 title = children.get("title")
                 description = children.get("desc")
                 labelled_ids = set(svg_root.attrib.get("aria-labelledby", "").split())
-                required_ids = {
-                    item.attrib.get("id")
-                    for item in (title, description)
-                    if item is not None and item.attrib.get("id")
-                }
+                title_id = title.attrib.get("id") if title is not None else None
+                description_id = description.attrib.get("id") if description is not None else None
+                required_ids = {title_id, description_id}
                 if (
                     role != "img"
                     or title is None
                     or description is None
-                    or not required_ids
+                    or not title_id
+                    or not description_id
                     or not required_ids.issubset(labelled_ids)
                 ):
                     fail(
