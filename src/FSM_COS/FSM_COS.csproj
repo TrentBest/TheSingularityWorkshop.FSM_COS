@@ -43,7 +43,7 @@
     <None Include="../../LICENSE.txt" Pack="true" PackagePath="" />
     <None Include="../../SECURITY.md" Pack="true" PackagePath="" />
     <None Include="../../docs/*.md"
-          Exclude="../../docs/0.1.0-alpha.7-READINESS.md;../../docs/BRANCH_RECONCILIATION.md;../../docs/CONTINUATION_BRIEF_ALPHA6_FORGE_ANYAPP_WEBPAGE.md;../../docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md;../../docs/ECOSYSTEM_INTEGRATION_MAP.md;../../docs/PAUSE_POINT.md"
+          Exclude="../../docs/0.1.0-alpha.7-READINESS.md;../../docs/LIVING_DOCUMENTATION_AUDIT.md;../../docs/BRANCH_RECONCILIATION.md;../../docs/CONTINUATION_BRIEF_ALPHA6_FORGE_ANYAPP_WEBPAGE.md;../../docs/DEPENDENCY_ALIGNMENT_CHECKLIST.md;../../docs/ECOSYSTEM_INTEGRATION_MAP.md;../../docs/PAUSE_POINT.md"
           Pack="true"
           PackagePath="docs/" />
     <None Include="../../docs/releases/*.md" Pack="true" PackagePath="docs/releases/" />
