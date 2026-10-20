@@ -4,6 +4,8 @@
 
 ## UML class diagram: staged metadata and load-plan state
 
+This is a simplified, source-derived overview of the current metadata and state-tracker types, not a claim that staged composition is integrated end to end. Method signatures are abbreviated; the source and the staged-loading contract below define exact signatures and behavior.
+
 ~~~mermaid
 classDiagram
     class RuntimeManifest {
