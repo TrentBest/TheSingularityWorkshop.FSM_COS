@@ -14,7 +14,7 @@
 <g fill="#fff" text-anchor="middle">
 <text x="200" y="225" font-size="22" font-weight="700">Loaded Set</text><text x="200" y="258" font-size="14" fill="#9eb1c4">all reachable bundles</text><text x="200" y="283" font-size="14" fill="#9eb1c4">installed + configured</text>
 <text x="550" y="225" font-size="22" font-weight="700">Round 0…N−1</text><text x="550" y="258" font-size="14" fill="#9eb1c4">each bundle arbitrates</text><text x="550" y="283" font-size="14" fill="#ffb84d">changes → repeat</text>
-<text x="900" y="225" font-size="22" font-weight="700">Round 2…N</text><text x="900" y="258" font-size="14" fill="#9eb1c4">repeat until stable</text><text x="900" y="283" font-size="14" fill="#ffb84d">bounded by max rounds</text>
+<text x="900" y="225" font-size="22" font-weight="700">Round 1…N−1</text><text x="900" y="258" font-size="14" fill="#9eb1c4">repeat until stable</text><text x="900" y="283" font-size="14" fill="#ffb84d">bounded by max rounds</text>
 <text x="1225" y="225" font-size="22" font-weight="700">Stable</text><text x="1225" y="258" font-size="14" fill="#76cfff">no changes</text><text x="1225" y="283" font-size="14" fill="#76cfff">RuntimeAssembly</text>
 </g>
 <path d="M1010 390C890 390 850 500 700 500C560 500 520 430 520 330" fill="none" stroke="#ffb84d" stroke-width="3" stroke-dasharray="9 9"/>
