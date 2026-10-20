@@ -13,6 +13,7 @@ This index is the navigation map. It does not duplicate the contracts below.
 | Understand the rationale and design invariants | [Theory](docs/THEORY.md) |
 | Integrate the package | [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) |
 | Review the candidate's scope and limitations | [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) |
+| Review implemented domain capabilities, explicit deferrals, and follow-on engineering | [Domain Completion and Release Roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) |
 | Verify release readiness | [Alpha.7 readiness gate](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) |
 | Review trust assumptions and adversarial security coverage | [Security](SECURITY.md) |
 | Build, test, and understand CI modes | [Development](docs/DEVELOPMENT.md) |
