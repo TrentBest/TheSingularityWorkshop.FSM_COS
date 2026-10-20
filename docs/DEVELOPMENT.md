@@ -28,11 +28,9 @@ When a temporary branch is used, consolidate it into `development`, close its PR
 
 ## Consolidation record
 
-The repository previously accumulated overlapping branches for the domain-contract correction, staged manifest loading, and release preparation.
+The repository previously accumulated overlapping branches for the domain-contract correction, staged manifest loading, and release preparation. The domain-contract correction was consolidated into `development`; some staged-manifest proposals were superseded.
 
-The domain-contract correction was merged into `development`.
-
-The staged-manifest and release-preparation PRs were closed as superseded designs. Their branches remain historical references; they are not active development lanes.
+Branch and pull-request state is volatile, so this document deliberately does not assert that a particular temporary PR is open, closed, merged, or current. Verify live refs and PR state before acting. Only `master` and `development` are durable lanes; a temporary candidate branch is not integrated until its changes are present on `development`.
 
 This is intentional housekeeping, not deletion of architectural history.
 

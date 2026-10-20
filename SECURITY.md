@@ -32,9 +32,11 @@ Composition is not transactional. If a bundle mutates external state and then th
 
 ## Release security checklist
 
+This is a reusable procedure, not a current-candidate status report. Keep candidate-specific completion in the [alpha.7 readiness gate](docs/0.1.0-alpha.7-READINESS.md), tied to the exact source SHA and artifacts. These boxes are intentionally unchecked as a template; do not carry checkmarks forward after a candidate changes.
+
 Before treating a candidate as security-reviewed:
 
-- [x] Run the exact candidate's full test suite and retain its TRX and coverage artifacts.
+- [ ] Run the exact candidate's full test suite and retain its TRX and coverage artifacts.
 - [x] Confirm the current CI dependency audit reports no vulnerable direct or transitive NuGet packages; investigate any advisory rather than silently ignoring it.
 - [x] Confirm the `latest-all` .NET analyzer job passes with warnings treated as errors, and review the documented `CA1707` naming suppression.
 - [x] Review the CodeQL C# scan for new high/critical findings; the retained SARIF artifact for the candidate contains zero results.
@@ -45,7 +47,7 @@ Before treating a candidate as security-reviewed:
 - [x] Verify generated SVG assets against the pinned GUI.SVG generator and inspect that they describe current implementation behavior.
 - [x] Review the remaining limitations above, especially in-process trust and non-transactional side effects.
 
-The CodeQL analysis workflow completed successfully for the candidate and uploaded SARIF results. The retained SARIF artifact was inspected and contains zero results; a successful analysis run alone would not have established that.
+For each candidate, inspect the CodeQL result and retained SARIF artifact for that exact SHA. A successful analysis run alone does not establish that the findings are clean. Record the actual run and SARIF disposition in the release-readiness evidence, not as a mutable status claim in this reusable security guide.
 
 ## External baselines
 
