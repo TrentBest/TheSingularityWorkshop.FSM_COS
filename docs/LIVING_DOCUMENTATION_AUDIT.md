@@ -2,7 +2,7 @@
 
 **Purpose:** make FSM_COS documentation easier to understand through accurate diagrams, animated SVGs, interactive examples, and other living visuals where they materially teach the subject.
 
-**Current status:** the Markdown inventory and inline local-link pass are complete, and explicit visual decisions are now recorded for all 36 tracked Markdown documents. Source-to-diagram accuracy and hosted/accessibility verification remain open. An SVG existing in `docs/assets` does not mean it is embedded in the relevant document, and an embedded picture does not automatically qualify as a useful living visual.
+**Current status:** the Markdown inventory and inline local-link pass are complete, and explicit visual decisions are now recorded for the original 36 tracked Markdown documents. The new per-file UML companion set adds 24 Markdown pages (one index plus one page per each of 23 C# files); the inventory now contains 60 Markdown documents, and a fresh full local-link audit is still required. Source-to-diagram accuracy and hosted/accessibility verification remain open. An SVG existing in `docs/assets` does not mean it is embedded in the relevant document, and an embedded picture does not automatically qualify as a useful living visual.
 
 ## Standard
 
@@ -30,13 +30,15 @@ Inventory snapshot from the integrated `work/alpha7-living-docs-integration` can
 
 | Metric | Count | Interpretation |
 |---|---:|---|
-| Tracked Markdown documents | 36 | Every document needs an explicit visual decision, not necessarily an image |
+| Tracked Markdown documents | 60 | Every document needs an explicit visual decision, not necessarily an image; includes 24 new UML-folder pages |
 | SVG assets outside the divider/marker directories | 13 | Candidate semantic diagrams/illustrations; asset existence alone does not prove document coverage |
 | Section-divider SVGs | 13 | Navigation/branding assets, not technical subject diagrams |
 | Section-marker SVGs | 4 | Navigation/branding assets, not technical subject diagrams |
 | C# source files in `src/FSM_COS` | 16 | Current implementation surface to map against the diagrams |
 | C# test files in `tests/FSM_COS.Tests` | 5 | Behavioral evidence for diagram claims |
-| Mermaid UML-bearing guides | 6 | Five contract guides contain simplified class diagrams; `docs/EXECUTION_SEQUENCE.md` adds the source-derived `FsmCos.Execute` sequence. These are reviewable Markdown diagrams, not GUI.SVG-generated UML. |
+| C# files across runtime, tests, and samples | 23 | Each has a manually authored companion page under `docs/UML/` |
+| Per-C# UML companion pages | 23 | One page per source file; pages are manual and must be reconciled after source changes |
+| Mermaid/UML-bearing Markdown pages | 29 | Six prior guides plus 23 per-C# companion pages. These diagrams are manually authored, not GUI.SVG-generated UML. |
 
 These are **inventory counts, not a coverage score**. The next audit pass must measure per-document use separately: (1) visual embedded directly, (2) visual shared from another document, (3) source-generated visual, or (4) deliberately text-only with rationale. A shared overview should not be counted as equivalent to a subject-specific diagram when the document teaches a more complex contract.
 
@@ -130,6 +132,31 @@ Use the status labels consistently:
 | `docs/PAUSE_POINT.md` | Historical engineering pause decision | Archived pause note now directs readers to the maintained alpha.7 readiness gate and domain roadmap | No visual needed — archive notice and authority links are sufficient |
 | `docs/LIVING_DOCUMENTATION_AUDIT.md` | Coverage, validation, and completion criteria | This document is the coverage record; a separate picture would duplicate the status table | No visual needed — checklist is the source of truth |
 
+| `docs/UML/README.md` | Index for the per-file source UML set | Lists all companion pages, their source baseline, and evidence rules; no duplicate overview diagram needed | No extra visual needed — index and evidence rules are clearest as text |
+| `docs/UML/src/FSM_COS/ArbitrationContext.md` | Arbitration context type and exposed references | Manual class diagram maps interface, optional IStateContext, and bundle list; read-only interface is not deep immutability | Manual source map; hosted rendering pending |
+| `docs/UML/src/FSM_COS/FsmCos.md` | Composition engine contract and execution boundaries | Manual class diagram maps catalog/configuration interfaces, manifest, bundles, and successful assembly return; implementation summary distinguishes preflight from side effects | Manual source map; compare to source/tests on every change; hosted rendering pending |
+| `docs/UML/src/FSM_COS/IFsmCos.md` | Public composition interface | Diagram is limited to declared Execute signature and implementing FsmCos | Manual source map; no behavioral claims from signature alone |
+| `docs/UML/src/FSM_COS/IManifestLoadEvaluator.md` | Experience-owned deferred-load decision contract | Diagram maps evaluator inputs and load-plan call site without implying artifact loading | Manual source map; host policy not specified |
+| `docs/UML/src/FSM_COS/IMicroBundleCatalog.md` | Catalog resolution boundary | Diagram distinguishes exact-version root resolution from ID-only dependency resolution | Manual source map; concrete catalog policy not specified |
+| `docs/UML/src/FSM_COS/IMicroBundleConfigurationSource.md` | Optional per-runtime bundle configuration boundary | Diagram maps provider to FsmCos/load context; prose records copying and byte bounds | Manual source map; no confidentiality/persistence claims |
+| `docs/UML/src/FSM_COS/ManifestLoadStage.md` | Staged metadata roles | Enum diagram is paired with explicit warning that stage values do not themselves schedule or load bundles | Manual source map; stage-specific runtime behavior remains limited |
+| `docs/UML/src/FSM_COS/MicroBundleLoadContext.md` | Bundle load-context contract | Diagram maps domain interface and consumer; prose distinguishes read-only typing from defensive immutability | Manual source map; hosted rendering pending |
+| `docs/UML/src/FSM_COS/MicroBundleManifestEntry.md` | Versioned root identity value | Diagram shows root-manifest relationship; prose documents default-struct validation bypass | Manual source map; source recheck required |
+| `docs/UML/src/FSM_COS/MicroBundleReference.md` | Published identity/version/hash value | Diagram maps entry/reference and Matches relation; prose explicitly disclaims content-hash verification | Manual source map; repository verification remains external |
+| `docs/UML/src/FSM_COS/RuntimeAssembly.md` | Composition result and host handoff | Diagram maps result to bundle references and optional intent; prose distinguishes collection snapshot from mutable objects | Manual source map; hosted rendering pending |
+| `docs/UML/src/FSM_COS/RuntimeManifest.md` | Manifest fields and staged-plan validation | Diagram maps root entries, optional plan/schedule/context/intent; validation claims are tied to source implementation | Manual source map; hosted rendering pending |
+| `docs/UML/src/FSM_COS/RuntimeManifestDependency.md` | Directed published dependency edge | Diagram shows edge ownership and endpoint validation boundary | Manual source map; schedule performs graph validation |
+| `docs/UML/src/FSM_COS/RuntimeManifestEntry.md` | Published identity and stage record | Diagram maps reference and enum; prose avoids implying the entry loads or verifies artifacts | Manual source map; source recheck required |
+| `docs/UML/src/FSM_COS/RuntimeManifestLoadPlan.md` | Published/localized/loaded state and promotion evaluation | Diagram maps state, schedule readiness, and evaluator; prose says this tracker does not localize/load artifacts | Manual source map; hosted rendering pending |
+| `docs/UML/src/FSM_COS/RuntimeManifestSchedule.md` | Bounded dependency graph plan | Diagram maps entries/edges and public query methods; prose distinguishes plan from process scheduler | Manual source map; hosted rendering pending |
+| `docs/UML/tests/FSM_COS.Tests/GlobalUsings.md` | Test compilation directive | Single-node compilation-unit diagram; no runtime behavior visual needed | No extra visual needed beyond compilation-unit notation |
+| `docs/UML/tests/FSM_COS.Tests/AiGuiCapabilityHandoffTests.md` | Evidence scope for AI/GUI capability integration | Diagram maps private test fixtures and dependency edges; caveat limits claims to assertions in this file | Manual test-scope map; hosted accessibility not proved |
+| `docs/UML/tests/FSM_COS.Tests/FsmCosTests.md` | FsmCos behavior and failure-boundary test map | Flow diagram groups the source suite's assertions by validation, loading, snapshots, arbitration, schedules, and results | Manual test-scope map; exact-head CI remains separate evidence |
+| `docs/UML/tests/FSM_COS.Tests/RuntimeManifestPlanningTests.md` | Staged manifest and schedule test map | Flow diagram groups tests for validation, graph constraints, state transitions, promotion, and snapshots | Manual test-scope map; does not prove artifact localization |
+| `docs/UML/tests/FSM_COS.Tests/SnapshotIsolationTests.md` | Collection snapshot isolation test map | Diagram connects only the test class to schedule/load-plan contracts under mutation tests | Manual test-scope map; no deep immutability claim |
+| `docs/UML/samples/FSM_COS.MinimalConsumer/Program.md` | Minimal consumer sample execution | Sequence diagram reflects in-memory catalog and dependency-first loading in the sample | Illustrative sample only; not production catalog evidence |
+| `docs/UML/samples/DocumentationVisuals/Program.md` | GUI.SVG contract-map generator sample | Dependency diagram names GUI builder/SVG APIs and output; source explicitly says contract map, not live trace | Illustrative source map; generated SVG parity is a separate CI gate |
+
 ## Current verification boundary
 
 The following findings are verified at the source-markup level:
@@ -140,7 +167,7 @@ The following findings are verified at the source-markup level:
 - `dependency-resolution.svg` uses reduced-motion-aware animation to illustrate an example dependency-first order. It is not a live execution trace.
 - The earlier inline-link pass covered 29 tracked Markdown documents. This integration adds `docs/LIVING_SVG.md` and `docs/EXECUTION_SEQUENCE.md`; validate the complete 31-document candidate and package-relative links in CI before closing the link-audit gate.
 
-These findings do **not** establish complete semantic accuracy for every visual, hosted SVG rendering, browser accessibility-tree exposure, keyboard behavior, screen-reader output, or external-link reachability. Those require their own evidence and must not be inferred from source markup or a green build.
+The prior inline-link pass covered the then-current 31-document set; it predates the new 24-page UML addition. A fresh link audit of all 60 Markdown documents is required. These findings do **not** establish complete semantic accuracy for every visual, hosted SVG/Mermaid rendering, browser accessibility-tree exposure, keyboard behavior, screen-reader output, or external-link reachability. Those require their own evidence and must not be inferred from source markup or a green build.
 
 ## Findings from the current source-to-diagram re-audit
 
