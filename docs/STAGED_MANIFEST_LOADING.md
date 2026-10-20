@@ -2,6 +2,69 @@
 
 **Status:** first compatible contract slice is present on `development`; host localization and staged composition are not yet integrated. Do not describe deferred loading as a working end-to-end runtime feature until the host path is implemented and tested.
 
+## UML class diagram: staged metadata and load-plan state
+
+This is a simplified, source-derived overview of the current metadata and state-tracker types, not a claim that staged composition is integrated end to end. Method signatures are abbreviated; the source and the staged-loading contract below define exact signatures and behavior.
+
+~~~mermaid
+classDiagram
+    class RuntimeManifest {
+        +Bundles: IReadOnlyList~MicroBundleManifestEntry~
+        +LoadPlan: IReadOnlyList~RuntimeManifestEntry~
+        +Schedule: RuntimeManifestSchedule
+        +ValidateStagedPlan() void
+    }
+    class RuntimeManifestLoadPlan {
+        +Entries: IReadOnlyList~RuntimeManifestEntry~
+        +GetState(bundleId) MicroBundleRuntimeState
+        +MarkLocalized(bundleId) void
+        +MarkLoaded(bundleId) void
+        +EvaluatePromotions(evaluator, context, schedule) IEnumerable
+    }
+    class RuntimeManifestEntry {
+        +Reference: MicroBundleReference
+        +Stage: ManifestLoadStage
+        +IsValid: bool
+    }
+    class RuntimeManifestSchedule {
+        +Entries: IReadOnlyList~RuntimeManifestEntry~
+        +Dependencies: IReadOnlyList~RuntimeManifestDependency~
+        +IsDependencyReady(bundleId, isLoaded) bool
+    }
+    class RuntimeManifestDependency {
+        +BundleId: ulong
+        +DependencyId: ulong
+        +IsValid: bool
+    }
+    class IManifestLoadEvaluator {
+        <<interface>>
+        +ShouldLoad(entry, experienceContext) bool
+    }
+    class ManifestLoadStage {
+        <<enumeration>>
+        Bootstrap
+        Resident
+        Deferred
+    }
+    class MicroBundleRuntimeState {
+        <<enumeration>>
+        Published
+        Localized
+        Loaded
+    }
+
+    RuntimeManifest o-- "0..*" RuntimeManifestEntry : optional plan
+    RuntimeManifest o-- RuntimeManifestSchedule : optional schedule
+    RuntimeManifestLoadPlan o-- "1..*" RuntimeManifestEntry : tracked entries
+    RuntimeManifestLoadPlan --> RuntimeManifestSchedule : optional dependency gate
+    RuntimeManifestLoadPlan ..> IManifestLoadEvaluator : asks for deferred promotion
+    RuntimeManifestEntry --> ManifestLoadStage : intended stage
+    RuntimeManifestLoadPlan ..> MicroBundleRuntimeState : tracks availability
+    RuntimeManifestSchedule o-- "0..*" RuntimeManifestDependency : edges
+~~~
+
+This diagram is deliberately not an execution promise. The load-plan type tracks Published → Localized → Loaded state and can evaluate promotion candidates, but a host/repository must perform localization and actual loading. ManifestLoadStage labels intent; it does not automatically make FsmCos defer or promote bundles.
+
 ## Four responsibilities, four boundaries
 
 ![Dependency resolution and prerequisite relationships used during composition](assets/dependency-resolution.svg)
