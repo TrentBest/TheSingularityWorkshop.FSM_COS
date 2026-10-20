@@ -27,13 +27,11 @@ sequenceDiagram
     opt Manifest includes a published schedule
         COS->>COS: Compare scheduled IDs, versions, and edges with resolved graph
     end
-    loop Each requested root, recursively dependency-first
-        COS->>Bundle: Load(loadContext)
-        opt Configuration source supplied
-            COS->>Config: Resolve configuration for bundle
-            Config-->>COS: Configuration or failure
-        end
-        Bundle-->>COS: Loaded bundle
+    loop Each requested root, traversing dependencies depth-first
+        COS->>Config: TryGetConfiguration(runtimeId, bundleId, version)
+        Config-->>COS: Optional override; dependency configuration remains fallback
+        Note over COS,Bundle: Enter dependencies before invoking this bundle's Load
+        COS->>Bundle: Load(loadContext) after its dependencies finish
     end
     COS->>COS: Create ArbitrationContext
     loop Up to configured maximum arbitration rounds
@@ -42,10 +40,11 @@ sequenceDiagram
         alt No bundle reports a change
             COS->>Assembly: Construct RuntimeAssembly
             Assembly-->>Host: Return successful composition
-        else Round limit exhausted with changes
-            COS-->>Host: Throw non-convergence exception
+        else At least one bundle reports a change
+            Note over COS: Continue while rounds remain
         end
     end
+    COS-->>Host: Throw if every permitted round reports changes
 ```
 
 ## Failure boundaries
