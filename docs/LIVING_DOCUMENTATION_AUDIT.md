@@ -126,7 +126,7 @@ The following findings are verified at the source-markup level:
 - The 13 section-divider SVGs are decorative and use `role="presentation"` with `aria-hidden="true"`.
 - The four section-marker SVGs expose concise accessible labels.
 - `dependency-resolution.svg` uses reduced-motion-aware animation to illustrate an example dependency-first order. It is not a live execution trace.
-- The inventory covered all 29 tracked Markdown documents and found no unresolved inline relative Markdown or image/asset targets after the release-runbook link was corrected.
+- The earlier inline-link pass covered 29 tracked Markdown documents. This integration adds `docs/LIVING_SVG.md` and `docs/EXECUTION_SEQUENCE.md`; validate the complete 31-document candidate and package-relative links in CI before closing the link-audit gate.
 
 These findings do **not** establish complete semantic accuracy for every visual, hosted SVG rendering, browser accessibility-tree exposure, keyboard behavior, screen-reader output, or external-link reachability. Those require their own evidence and must not be inferred from source markup or a green build.
 
