@@ -58,7 +58,7 @@ This Gallery is the short visual index. Each exhibit links to its own deep dive 
 
 **See:** the assembly-crane metaphor: FSM_COS composes the requested capability set and hands it to the host. The animated variant is a visual metaphor, not an executing runtime trace.
 
-**Deep dive:** [Architecture](ARCHITECTURE.md) · [Living documentation audit](LIVING_DOCUMENTATION_AUDIT.md).
+**Deep dive:** [Architecture](ARCHITECTURE.md) · [Living documentation audit](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/LIVING_DOCUMENTATION_AUDIT.md).
 
 ## Gallery evidence rules
 
