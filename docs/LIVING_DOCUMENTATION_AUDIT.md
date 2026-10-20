@@ -186,3 +186,8 @@ The following source comparisons were performed against the integrated alpha.7 c
 - [ ] **Hosted verification:** these source comparisons do not close GitHub-rendered SVG/Mermaid, light/dark, narrow viewport, accessibility-tree, keyboard, screen-reader, or external-link checks.
 
 This pass narrows the source review; it does **not** close the full source-to-diagram audit or the release gate. Keep the draft PR unmerged until the visual corrections and exact-candidate verification are complete.
+
+
+### Additional execution-sequence correction
+
+The source review caught a meaningful failure-boundary distinction: dependency-request configuration payloads are bounded while resolving the complete graph, but configuration-provider overrides are fetched and byte-bounded as each bundle is entered by `LoadRoot`. A provider override can therefore exceed the remaining configuration budget after a prior dependency has already loaded. The execution sequence now records this separately from pre-load graph/resource rejection and preserves the no-transactional-rollback caveat. The GUI.SVG preflight's runtime-failure panel is updated to name provider-configuration failures too.
