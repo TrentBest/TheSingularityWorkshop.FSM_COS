@@ -192,7 +192,9 @@ explicit approval
     ↓
 merge to master
     ↓
-explicit publication
+verify the intended master commit with public dependencies
+    ↓
+explicit workflow dispatch from master (`publish: true`)
 ```
 
 No automatic branch state should be interpreted as permission to publish a NuGet package.
