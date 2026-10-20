@@ -79,6 +79,12 @@ This is a **build-time documentation-tooling dependency only**. `FSM_COS.csproj`
 
 The generated image is a contract map, not a live runtime trace. It must continue to distinguish complete dependency-closure preflight from runtime load or arbitration failures, and must not imply that staged metadata triggers deferred execution or that failed composition rolls back arbitrary bundle side effects.
 
+### GUI.SVG source-derived UML: current capability boundary
+
+The current GUI source-UML generator is a first vertical slice, not yet an authoritative semantic documentation pipeline. It currently emits only the first top-level type per invocation, and base-list references are textual rather than compiler-resolved relationship connectors. Therefore, the five Mermaid class diagrams in this candidate remain manually authored and reviewable; they must not be described as GUI-generated UML or as exhaustive type coverage.
+
+Before FSM_COS can adopt generated UML as authoritative documentation, the consumer contract still needs a versioned, stable semantic model for type identity and members, resolved relationship kinds and endpoints, supported multiplicity/navigability, multi-type and cross-project coverage, deterministic regeneration, and a visible inventory of missing/unsupported types. Structural facts should be generated from source analysis; use cases, actor goals, and conceptual intent remain explicit human-authored/reviewed inputs. The GUI generator's current limitations are a dependency coordination item, not something FSM_COS documentation can silently assume away.
+
 ## Coverage checklist
 
 Use the status labels consistently:
