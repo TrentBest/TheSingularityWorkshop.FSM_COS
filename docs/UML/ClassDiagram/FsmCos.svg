@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1020" viewBox="0 0 1440 1020" role="img" aria-labelledby="title desc">
+  <title id="title">FSM_COS source-grounded class diagram: FsmCos</title>
+  <desc id="desc">A namespace card with a thick blue border contains FsmCos and its nested LoadFrame. FsmCos implements IFsmCos, stores an IMicroBundleCatalog, accepts RuntimeManifest and optional IMicroBundleConfigurationSource in Execute, and returns RuntimeAssembly. RuntimeManifest and RuntimeAssembly use the domain IMicroBundle contract through the catalog and load context. Solid lines denote implementation or stored field; dashed lines denote method input/output or implementation flow, not ownership.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7faff}.ns{fill:#fff;stroke:#1769e0;stroke-width:8}.nshead{fill:#e6f0ff}.nslabel{font:700 22px system-ui,sans-serif;fill:#114ba6}.heading{font:700 23px system-ui,sans-serif;fill:#10233f}.member{font:16px ui-monospace,SFMono-Regular,Consolas,monospace;fill:#18324f}.small{font:15px system-ui,sans-serif;fill:#3c526c}.pill{font:700 14px system-ui,sans-serif;letter-spacing:.4px}.card{stroke-width:2.5;rx:12}.class{fill:#e8f7ef;stroke:#238653}.interface{fill:#fff3d9;stroke:#bd7900}.record{fill:#f0e9ff;stroke:#7752c7}.result{fill:#e4f5ff;stroke:#087ca7}.nested{fill:#fce9f1;stroke:#b64070}.edge{fill:none;stroke:#425b78;stroke-width:3}.flow{fill:none;stroke:#667b93;stroke-width:2.5;stroke-dasharray:9 7}.edgeLabel{font:14px system-ui,sans-serif;fill:#435b76}.legend{font:14px system-ui,sans-serif;fill:#2f4866}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#425b78"/></marker>
+    <marker id="arrowflow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#667b93"/></marker>
+  </defs>
+  <rect class="bg" width="1440" height="1020"/>
+  <rect x="28" y="28" width="1384" height="900" rx="20" class="ns"/>
+  <path d="M32 48 Q32 32 52 32 H1388 Q1408 32 1408 52 V104 H32 Z" class="nshead"/>
+  <text x="58" y="72" class="nslabel">NAMESPACE / DATA CARD</text>
+  <text x="58" y="94" class="small">TheSingularityWorkshop.FSM_COS</text>
+  <text x="1370" y="72" text-anchor="end" class="small">Source snapshot: development</text>
+  <!-- FsmCos -->
+  <rect x="440" y="155" width="560" height="340" class="card class"/>
+  <rect x="440" y="155" width="560" height="48" rx="12" fill="#238653"/>
+  <text x="462" y="186" class="pill" fill="#ffffff">CLASS · public sealed</text>
+  <text x="462" y="237" class="heading">FsmCos</text>
+  <text x="462" y="263" class="member">: IFsmCos</text>
+  <line x1="460" y1="280" x2="980" y2="280" stroke="#9ccbb0" stroke-width="1.5"/>
+  <text x="462" y="308" class="member">+ DefaultMaximumArbitrationRounds = 10</text>
+  <text x="462" y="333" class="member">+ DefaultMaximumBundleCount = 10_000</text>
+  <text x="462" y="358" class="member">+ DefaultMaximumDependencyRequestCount = 100_000</text>
+  <text x="462" y="383" class="member">+ DefaultMaximumConfigurationBytes = 64 MiB</text>
+  <text x="462" y="414" class="member">- _catalog : IMicroBundleCatalog</text>
+  <text x="462" y="439" class="member">- configured resource limits</text>
+  <line x1="460" y1="452" x2="980" y2="452" stroke="#9ccbb0" stroke-width="1.5"/>
+  <text x="462" y="476" class="member">+ Execute(manifest, configurationSource?) : RuntimeAssembly</text>
+  <!-- interface -->
+  <rect x="70" y="190" width="285" height="125" class="card interface"/>
+  <rect x="70" y="190" width="285" height="38" rx="10" fill="#bd7900"/>
+  <text x="90" y="215" class="pill" fill="#ffffff">INTERFACE</text>
+  <text x="90" y="256" class="heading">IFsmCos</text>
+  <text x="90" y="283" class="member">Execute(manifest, config?)</text>
+  <text x="90" y="304" class="member">→ RuntimeAssembly</text>
+  <path d="M440 225 H355" class="edge" marker-end="url(#arrow)"/>
+  <text x="397" y="211" text-anchor="middle" class="edgeLabel">implements</text>
+  <!-- catalog -->
+  <rect x="70" y="385" width="285" height="150" class="card interface"/>
+  <rect x="70" y="385" width="285" height="38" rx="10" fill="#bd7900"/>
+  <text x="90" y="410" class="pill" fill="#ffffff">INTERFACE · FIELD</text>
+  <text x="90" y="451" class="heading">IMicroBundleCatalog</text>
+  <text x="90" y="478" class="member">TryResolve(id, version, out bundle)</text>
+  <text x="90" y="503" class="member">TryResolve(id, out bundle)</text>
+  <text x="90" y="524" class="small">Host-owned resolution boundary</text>
+  <path d="M440 415 H355" class="edge" marker-end="url(#arrow)"/>
+  <text x="397" y="401" text-anchor="middle" class="edgeLabel">stores</text>
+  <!-- manifest input -->
+  <rect x="1070" y="155" width="285" height="145" class="card record"/>
+  <rect x="1070" y="155" width="285" height="38" rx="10" fill="#7752c7"/>
+  <text x="1090" y="180" class="pill" fill="#ffffff">INPUT</text>
+  <text x="1090" y="221" class="heading">RuntimeManifest</text>
+  <text x="1090" y="249" class="member">Root bundle requests</text>
+  <text x="1090" y="273" class="member">Optional load plan / schedule</text>
+  <path d="M1000 225 H1070" class="flow" marker-end="url(#arrowflow)"/>
+  <text x="1035" y="211" text-anchor="middle" class="edgeLabel">accepts</text>
+  <!-- config input -->
+  <rect x="1070" y="350" width="285" height="125" class="card interface"/>
+  <rect x="1070" y="350" width="285" height="38" rx="10" fill="#bd7900"/>
+  <text x="1090" y="375" class="pill" fill="#ffffff">OPTIONAL INPUT</text>
+  <text x="1090" y="416" class="heading">IMicroBundle</text>
+  <text x="1090" y="442" class="heading">ConfigurationSource</text>
+  <text x="1090" y="463" class="small">Per-bundle configuration bytes</text>
+  <path d="M1000 405 H1070" class="flow" marker-end="url(#arrowflow)"/>
+  <text x="1035" y="391" text-anchor="middle" class="edgeLabel">optional</text>
+  <!-- output -->
+  <rect x="1070" y="540" width="285" height="150" class="card result"/>
+  <rect x="1070" y="540" width="285" height="38" rx="10" fill="#087ca7"/>
+  <text x="1090" y="565" class="pill" fill="#ffffff">RETURN VALUE</text>
+  <text x="1090" y="606" class="heading">RuntimeAssembly</text>
+  <text x="1090" y="634" class="member">Bundles : IReadOnlyList&lt;IMicroBundle&gt;</text>
+  <text x="1090" y="659" class="member">RuntimeId · ArbitrationRounds</text>
+  <text x="1090" y="681" class="small">Stable composition result</text>
+  <path d="M1000 470 C1030 470 1030 600 1070 600" class="flow" marker-end="url(#arrowflow)"/>
+  <text x="1030" y="523" text-anchor="middle" class="edgeLabel">returns</text>
+  <!-- nested -->
+  <rect x="440" y="555" width="560" height="145" class="card nested"/>
+  <rect x="440" y="555" width="560" height="38" rx="10" fill="#b64070"/>
+  <text x="460" y="580" class="pill" fill="#ffffff">PRIVATE NESTED CLASS</text>
+  <text x="460" y="621" class="heading">LoadFrame</text>
+  <text x="460" y="648" class="member">Bundle : IMicroBundle</text>
+  <text x="460" y="673" class="member">DependencyConfiguration : ReadOnlyMemory&lt;byte&gt;</text>
+  <text x="460" y="693" class="small">Traversal state: NextDependencyIndex, Entered</text>
+  <path d="M720 495 V555" class="edge" marker-end="url(#arrow)"/>
+  <text x="735" y="529" class="edgeLabel">uses in loading traversal</text>
+  <!-- evidence note -->
+  <rect x="70" y="735" width="1285" height="145" rx="14" fill="#edf3fa" stroke="#a8bad0" stroke-width="1.5"/>
+  <text x="95" y="770" class="heading">How to read this diagram</text>
+  <line x1="95" y1="800" x2="175" y2="800" class="edge" marker-end="url(#arrow)"/>
+  <text x="190" y="805" class="legend">Solid: implemented interface, stored field, or nested helper use</text>
+  <line x1="95" y1="833" x2="175" y2="833" class="flow" marker-end="url(#arrowflow)"/>
+  <text x="190" y="838" class="legend">Dashed: method input/output flow; not an ownership or lifetime claim</text>
+  <text x="95" y="863" class="small">Evidence: src/FSM_COS/FsmCos.cs, IFsmCos.cs, IMicroBundleCatalog.cs, RuntimeAssembly.cs at development snapshot.</text>
+  <text x="720" y="972" text-anchor="middle" class="small">Static source-derived view · not a live runtime trace · relationships should be re-audited when source changes</text>
+</svg>
