@@ -82,7 +82,7 @@ dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csp
 
 This is a source-repository example and references the local FSM_COS project so it can be verified before a release is published. For the exact published package status, check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS). To build your own host, start with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md), which explains the catalog, manifest, configuration, and bundle contracts.
 
-The source targets **.NET 8** and currently declares version `0.1.0-alpha.7`. This is a source candidate, not proof of publication; verify availability on the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS).
+The package targets **.NET 8** and is versioned `0.1.0-alpha.7`.
   
 ## 🟪 05 — Documentation
 
