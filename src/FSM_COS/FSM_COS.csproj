@@ -44,6 +44,7 @@
     <!-- Ship task-oriented consumer documentation only. Internal roadmaps, ancestry,
          integration planning, release gates, and documentation-process notes stay in source. -->
     <None Include="../../docs/WHAT_IS_FSM_COS.md" Pack="true" PackagePath="docs/" />
+    <None Include="../../docs/THEORY.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/ARCHITECTURE.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/CONSUMING_MICROBUNDLES.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/DOMAIN.md" Pack="true" PackagePath="docs/" />
