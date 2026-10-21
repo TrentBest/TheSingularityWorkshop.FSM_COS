@@ -6,7 +6,7 @@ This guide answers one question: **how does a host use FSM_COS, and what is actu
 
 ## Follow the reader's goal
 
-- **I want to understand or write an FSM_COS consumer.** Start with [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md), then run the [Minimal Consumer sample](../samples/FSM_COS.MinimalConsumer/Program.cs).
+- **I want to understand or write an FSM_COS consumer.** Start with [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md), then run the [Minimal Consumer sample](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.cs).
 - **I want to see a native desktop host.** Read the [AnyApp README](https://github.com/TrentBest/AnyApp/blob/development/README.md), then its [CI dependency modes](https://github.com/TrentBest/AnyApp/blob/development/docs/CI-DEPENDENCY-MODES.md).
 - **I want to understand the intended browser host.** Read the [WebApp README](https://github.com/TrentBest/TheSingularityWorkshop.WebApp/blob/development/README.md) and its [architecture contract](https://github.com/TrentBest/TheSingularityWorkshop.WebApp/blob/development/docs/ARCHITECTURE.md).
 - **I want to see the Workshop's existing browser proving ground.** Read [WebPage's README](https://github.com/TrentBest/WebPage/blob/development/README.md) and its [FSM_COS usage guide](https://github.com/TrentBest/WebPage/blob/development/docs/FSM_COS_USAGE.md).
