@@ -97,3 +97,9 @@ Before calling this automated or release-grade, add checks for source-file inven
 - [FsmCosTests](tests/FSM_COS.Tests/FsmCosTests.md) — current-source companion for 86 focused test cases / facts.
 - [RuntimeManifestPlanningTests](tests/FSM_COS.Tests/RuntimeManifestPlanningTests.md) — current-source companion for 33 focused test cases / facts.
 - [SnapshotIsolationTests](tests/FSM_COS.Tests/SnapshotIsolationTests.md) — current-source companion for 3 focused test cases / facts.
+
+
+## Sample companions
+
+- [Minimal consumer Program](../../samples/FSM_COS.MinimalConsumer/Program.md) — sample-specific UML card, use cases, and dependency-closure recipe.
+- [Documentation visual generator Program](../../samples/DocumentationVisuals/Program.md) — sample-specific UML card, generation path, and verification boundaries.
