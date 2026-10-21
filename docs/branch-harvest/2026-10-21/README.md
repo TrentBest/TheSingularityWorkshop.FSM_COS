@@ -22,3 +22,13 @@ This is a substantial recovery archive, but not a complete reconciliation of eve
 - `docs/branch-harvest/2026-10-21/ADDITIONAL-SVG-ASSETS.md` — preserved divergent arbitration and overview SVGs.
 
 Branch comparison refreshed after the harvest: 97 ahead / 120 behind `development`. The active project file `src/FSM_COS/FSM_COS.csproj` is byte-identical across the branch and development despite the compare summary listing it as modified. The proposed branch package workflow is unsafe to merge as-is: its publish condition lacks the canonical `&& false` hard stop. It remains archived as inert text only. The integration branch's `DocumentationVisuals/Program.cs` and package-verifier differences are likewise archived, not adopted without regeneration/tests.
+
+## Additional branch snapshots added in the accelerated pass
+
+- `READINESS-BRANCH-SNAPSHOT.md` — readiness branch's unique readiness/README/index versions.
+- `VISUAL-CONTRACT-BRANCH-SNAPSHOT.md` — visual-contract audit branch's audit and overview SVG.
+- `CI-DEPENDENCY-BRANCH-SNAPSHOT.md` — CI dependency branch workflow and development guide, both archived as inert text.
+- `LIVING-SVG-BRANCH-SNAPSHOT.md` — living-SVG branch's index, NuGet README, guide, preflight SVG, and generator snapshots.
+- `UML-CONTRACT-BRANCH-SNAPSHOT.md` — UML branch's expanded arbitration, architecture, runtime assembly/manifest, and staged-loading docs.
+
+The changed-file inventory from all six surplus FSM_COS branches has now been preserved in the archive as branch-specific snapshots, including code/tooling/workflow proposals in inert text where applicable. Byte-identical files are documented as such rather than duplicated as implementation changes. This materially protects the recoverable content if the owner deletes the source branches. It is not a claim that all archived material should be integrated, that branch commit metadata is preserved, or that current `development` passes CI.
