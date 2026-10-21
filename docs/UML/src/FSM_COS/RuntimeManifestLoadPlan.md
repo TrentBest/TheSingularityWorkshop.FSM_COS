@@ -20,7 +20,7 @@ classDiagram
         +GetState(bundleId) MicroBundleRuntimeState
         +MarkLocalized(bundleId) void
         +MarkLoaded(bundleId) void
-        +EvaluatePromotions() IReadOnlyList~ulong~
+        +EvaluatePromotions(evaluator, experienceContext, schedule) IEnumerable~RuntimeManifestEntry~
     }
     class RuntimeManifestSchedule
     class RuntimeManifestEntry
@@ -39,12 +39,12 @@ classDiagram
 
 - Constructing the plan does not localize or load anything.
 - A host/repository adapter owns those operations and reports successful transitions.
-- Promotion evaluation is metadata/state evaluation; it does not schedule an FSM_API process or automatically execute a deferred stage.
+- Promotion evaluation requires an IManifestLoadEvaluator and optional experience context, and yields eligible entries; it does not itself load artifacts or schedule an FSM_API process.
 
 ## Use cases
 
-1. Validate and snapshot published dependency metadata before a host attempts composition.
-2. Inspect dependency/state metadata without confusing it with artifact localization or execution.
+1. Track localization and load-state transitions for a bounded set of published entries.
+2. Evaluate localized entries for promotion against experience policy and optional dependency readiness.
 3. Test invalid identity, dependency, and transition inputs within documented resource bounds.
 
 ## Verification status
