@@ -11,4 +11,7 @@ Preserved from `work/alpha7-living-docs-integration` to keep potentially valuabl
 - `docs/branch-harvest/2026-10-21/RuntimeManifest-source-companion.md` ← `src/FSM_COS/RuntimeManifest.md` (source blob `53bc982ecda9270d6d2c80127a4defc59018fd25`, 4380 characters)
 - `docs/branch-harvest/2026-10-21/RuntimeManifest-source-UML.md` ← `src/FSM_COS/RuntimeManifestUML.md` (source blob `32a6f91a31e28975aff6cb919aead6554111c5db`, 6659 characters)
 
-This is a targeted documentation harvest, not a complete reconciliation of the branch's source, test, workflow, and remaining documentation diffs. The branch is not yet cleared for deletion.
+- `docs/branch-harvest/2026-10-21/PER-TYPE-UML-PAGES.md` — ten per-type UML companion pages preserved with source blob hashes.
+- `docs/branch-harvest/2026-10-21/SAMPLES-TESTS-AND-CI.md` — sample docs, test companions, documentation sample source, NuGet verification script, and proposed package workflow preserved as inert text.
+
+This is a substantial recovery archive, but not a complete reconciliation of every changed file or all implementation diffs. The branch is not yet cleared for deletion; remaining source/project/workflow/documentation diffs still need a disposition.
