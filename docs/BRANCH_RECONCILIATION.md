@@ -164,3 +164,17 @@ The following comparisons were made against the live `development` files, rather
 - Destination: `development:docs/ARBITRATION.md`; inserted the diagram section without replacing current arbitration contract prose.
 - Source cross-check: `ArbitrationContext.cs`, `RuntimeAssembly.cs`, and `FsmCos.cs` were inspected on development. The diagram labels MicroBundle interfaces as external MicroBundleDomain contracts and preserves the distinction between bounded convergence and proof of semantic compatibility.
 - Integration commit: `18407454bcbc378f516589a220023d003ce9dfa9`. Rendering and exact-HEAD CI are still required.
+
+
+### Follow-on inventory — UML companion pages require source-baseline review
+
+The `work/alpha7-living-docs-integration` branch contains a second class of unique material beyond the five architecture/contract diagrams harvested from `work/fsm-cos-uml-class-diagrams`:
+
+- 15 per-source companion documents under `docs/UML/src/FSM_COS/` (including FsmCos, RuntimeAssembly, RuntimeManifest, RuntimeManifestLoadPlan, RuntimeManifestSchedule, and the contracts).
+- 5 test-companion documents under `docs/UML/tests/FSM_COS.Tests/`.
+- 2 sample-companion documents under `docs/UML/samples/`.
+- A branch-specific UML map README and a 28.9 KB `GUILLM.md` coordination artifact; neither exists at that path on current development.
+
+These are promising harvest targets because they align with the repository's per-`.cs` documentation standard, but the branch README names an older source baseline (`ce43e8f5...`) while current development's UML inventory cites a newer source-tree snapshot. **Do not bulk-copy the companions as-is.** Next pass should inspect each page's stated source SHA/member list against current source and tests, then port only still-accurate pages or regenerate them. The test companions and GUILLM also need checks for obsolete claims and cross-repository instructions.
+
+The UML documentation branch is therefore not yet fully reconciled despite five high-level diagrams now being integrated. Its branch-level changes and PR checks are not a substitute for source-baseline validation.
