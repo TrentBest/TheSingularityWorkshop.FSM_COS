@@ -133,3 +133,11 @@ The following comparisons were made against the live `development` files, rather
 4. **Then:** inspect remaining unique files and update this ledger with exact destination paths and commits. Do not mark a source branch harvested merely because a related PR has green checks.
 
 **Deletion gate remains NOT READY.** This pass identified specific harvest targets but did not yet integrate or validate them. The six surplus branches remain; no branch or PR was deleted, merged, or closed. Current development HEAD still needs a fresh CI run before it can be designated the release candidate. Publication remains unauthorized and disabled.
+
+
+### Verified harvest 1 — composition UML
+
+- Source: `work/fsm-cos-uml-class-diagrams`, file `docs/ARCHITECTURE.md` (branch blob `1bd9acb25c92eefc1228be89d5978d1a0a7ddb4e`).
+- Destination: `development:docs/ARCHITECTURE.md`; added a focused class diagram ahead of Runtime flow while retaining the current architecture text and caveats.
+- Source cross-check: the diagram's principal types and signatures were checked against live development files `src/FSM_COS/FsmCos.cs`, `IFsmCos.cs`, `IMicroBundleCatalog.cs`, `RuntimeManifest.cs`, `RuntimeManifestSchedule.cs`, and `RuntimeAssembly.cs`. The diagram explicitly labels member signatures/collection element types as abbreviated and says schedule metadata does not activate deferred execution or localize artifacts.
+- Integration commit: `9ede8b5b39aaf2241edb373ff45858098eb16fbc`. This is a bounded documentation harvest, not a branch merge and not release verification. Exact-head CI and Markdown/Mermaid rendering still need to pass.
