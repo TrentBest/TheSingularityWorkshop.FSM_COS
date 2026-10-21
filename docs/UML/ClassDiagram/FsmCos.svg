@@ -61,8 +61,7 @@
   <rect x="1070" y="350" width="285" height="125" class="card interface"/>
   <rect x="1070" y="350" width="285" height="38" rx="10" fill="#bd7900"/>
   <text x="1090" y="375" class="pill" fill="#ffffff">OPTIONAL INPUT</text>
-  <text x="1090" y="416" class="heading">IMicroBundle</text>
-  <text x="1090" y="442" class="heading">ConfigurationSource</text>
+  <text x="1090" y="429" style="font:700 18px system-ui,sans-serif;fill:#10233f">IMicroBundleConfigurationSource</text>
   <text x="1090" y="463" class="small">Per-bundle configuration bytes</text>
   <path d="M1000 405 H1070" class="flow" marker-end="url(#arrowflow)"/>
   <text x="1035" y="391" text-anchor="middle" class="edgeLabel">optional</text>
