@@ -206,3 +206,8 @@ Created two more current-source pages rather than copying their stale-baseline c
 - Added both to `docs/UML/README.md`, commit `ec603037cfd1e5d1e9716bb55aa9da98b0f9fa22`.
 
 The schedule companion documents bounded input snapshots, dependency validation, and the explicit boundary that it is not a process scheduler. The load-plan companion distinguishes state tracking from host-owned localization/loading and automatic execution. Both pages point at current source and mark rendering, links, and exact-head CI as unverified.
+
+
+### API accuracy follow-up — UML companion signatures
+
+Rechecked the two new state/schedule companions against the full current source files. Updated the schedule diagram to include `DependencyEntries`, `DependenciesOf`, and `IsDependencyReady`; updated the load-plan diagram to reflect the actual `EvaluatePromotions(IManifestLoadEvaluator, IStateContext?, RuntimeManifestSchedule?)` signature and its `IEnumerable<RuntimeManifestEntry>` result. Commits: `e91d14cb0e862fc66f0350e9c32cb3977bc2d9cd`, `90439c648c31e713fa05ef71b0b93c7d167a9e1a`. This correction is recorded because generated Mermaid and exact-head CI have not yet independently validated the docs.
