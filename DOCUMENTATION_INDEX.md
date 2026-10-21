@@ -18,6 +18,7 @@ This index is the navigation map. It does not duplicate the contracts below.
 | Compare AnyApp, WebApp, and WebPage host boundaries | [Host integration map](docs/HOST_INTEGRATION_MAP.md) | Source-reviewed current state and explicit gaps; not a substitute for host-specific contracts |
 | Review the candidate's scope and limitations | [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) |
 | Verify release readiness | [Alpha.7 readiness gate](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) |
+| Follow the exact composition call sequence and failure boundaries | [Execute sequence](docs/EXECUTION_SEQUENCE.md) | Source-reviewed sequence diagram; not a runtime trace |
 | Review trust assumptions and adversarial security coverage | [Security](SECURITY.md) |
 | Build, test, and understand CI modes | [Development](docs/DEVELOPMENT.md) |
 
