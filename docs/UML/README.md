@@ -78,3 +78,6 @@ Before calling this automated or release-grade, add checks for source-file inven
 
 - [RuntimeManifestSchedule](src/FSM_COS/RuntimeManifestSchedule.md) — current-source dependency schedule contract.
 - [RuntimeManifestLoadPlan](src/FSM_COS/RuntimeManifestLoadPlan.md) — current-source localization/composition state tracker.
+- [RuntimeManifestEntry](src/FSM_COS/RuntimeManifestEntry.md) — current-source companion documenting the type's identity and responsibility boundaries.
+- [MicroBundleReference](src/FSM_COS/MicroBundleReference.md) — current-source companion documenting the type's identity and responsibility boundaries.
+- [RuntimeManifestDependency](src/FSM_COS/RuntimeManifestDependency.md) — current-source companion documenting the type's identity and responsibility boundaries.
