@@ -8,7 +8,7 @@ This index is the navigation map. It does not duplicate the contracts below.
 |---|---|
 | Understand the package quickly | [README](README.md) |
 | Browse visual examples and explanatory diagrams | [Gallery](docs/GALLERY.md) | Source-grounded visual index with links to the detailed contract guides |
-| Understand source-to-UML coverage and diagram status | [Source-to-UML map](docs/UML/README.md) | File-to-type inventory and explicit diagram/verification gaps |
+| Understand source-to-UML coverage and diagram status | [Source-to-UML map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/README.md) | File-to-type inventory and explicit diagram/verification gaps (repository documentation; not included in the NuGet package) |
 | Review domain gaps and planned completion work | [Domain completion roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) | Implemented behavior, explicit deferrals, and follow-on proof requirements |
 | Learn the idea without assuming programming experience | [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) |
 | Run a concrete consumer | [Minimal consumer sample](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.cs) |
