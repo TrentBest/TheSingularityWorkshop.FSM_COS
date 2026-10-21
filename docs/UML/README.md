@@ -58,6 +58,10 @@ The intended visual language is:
 
 The first manually authored, source-grounded class view is [FsmCos.svg](ClassDiagram/FsmCos.svg), with its explanatory [detail page](ClassDiagram/FsmCos.md). It covers the public composition contract, catalog field, manifest/configuration inputs, result type, and private nested traversal frame. Its connector legend distinguishes implementation/field relationships from method input/output flow. The diagram is not generator-produced, and SVG rendering/accessibility checks have not yet been run.
 
+## Second detailed diagram: manifest schedule and load plan
+
+[RuntimeManifestSchedule.svg](ClassDiagram/RuntimeManifestSchedule.svg) and its [detail page](ClassDiagram/RuntimeManifestSchedule.md) document the distinction between publish-time dependency analysis and host-reported runtime availability. Related records and the Experience-owned deferred-load evaluator are included. The diagram is manually authored; SVG rendering/accessibility checks and build/test verification remain pending.
+
 ## Coverage still required
 
 This file does not yet provide a full AST diagram set, per-type class diagrams, collaboration diagrams, or use-case diagrams. Those should be added in separate, reviewable assets after each diagram's source relationships have been checked. The next useful slice is `FsmCos` plus its directly consumed contracts, followed by manifest/load-plan types.
