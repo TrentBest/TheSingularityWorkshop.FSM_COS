@@ -149,3 +149,10 @@ The following comparisons were made against the live `development` files, rather
 - Destination: `development:docs/STAGED_MANIFEST_LOADING.md`, integrated the bounded class-diagram section only; retained all existing development contract text and verification checklist.
 - Cross-check: diagram types and behaviors were checked against `RuntimeManifest.cs`, `RuntimeManifestEntry.cs`, `RuntimeManifestSchedule.cs`, `RuntimeManifestLoadPlan.cs`, `IManifestLoadEvaluator.cs`, `ManifestLoadStage.cs`, and the in-file `MicroBundleRuntimeState` enum. The diagram's caveat explicitly states localization/loading remains host/repository responsibility and stage metadata is not an execution promise.
 - Integration commit: `8bc87007964df4354efc216b4741cbac46474526`. Markdown/Mermaid rendering and exact-HEAD CI remain unverified.
+
+
+### Verified harvests 3–4 — manifest and assembly UML
+
+- `docs/RUNTIME_MANIFEST.md`: ported the bounded `manifest and published plan` diagram from `work/fsm-cos-uml-class-diagrams` (source blob `d3753aeb315781243216ee81418f117d41eff29c`). Kept the existing development contract text. The diagram calls out the distinction between root version requests and published references containing content hashes, and explicitly does not promise artifact retrieval or staged execution. Commit: `568e382a894499224212c59e1e4f28b3ff14600e`.
+- `docs/RUNTIME_ASSEMBLY.md`: ported the bounded `assembly handoff` diagram from the same branch (source blob `217115fbbdce40d17656854342441a9b80bcf7fa`). Kept current development prose. The diagram identifies the host as outside FSM_COS and states that RuntimeAssembly is not a UI renderer, process scheduler, or rollback boundary. Commit: `7d682269092cc806a7262bf0ccba7f31b783cdc7`.
+- These are content-level diagram harvests only, not wholesale file replacement. The exact source files were compared to development before insertion; Mermaid rendering, link validation, and exact-HEAD CI are still required.
