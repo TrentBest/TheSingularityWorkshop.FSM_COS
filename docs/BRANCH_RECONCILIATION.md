@@ -77,3 +77,27 @@ A direct fetch of the live workflow files adds an important qualification to the
 - Do not remove the hard-disable or enable publishing as part of branch cleanup. Any future change to the release gate must be a deliberate, separately reviewed owner-approved action.
 
 The ledger update itself changed `development` after the readiness checklist's previous candidate evidence. Therefore, even if that checklist contains checked gates from a prior exact candidate, the current `development` HEAD must be re-verified before being described as the verified release candidate.
+
+
+## Follow-up branch-by-branch verification — 2026-10-21
+
+A fresh live compare against `development` confirms the same six surplus branches remain. Current ahead/behind counts are not deletion criteria; all six remain diverged. Open PRs #31–#35 are still visible in the repository search, and none was merged or closed during this pass.
+
+### Verified SVG-flow gap (do not call harvested yet)
+
+The living-SVG work is **not fully represented on `development`** at this point:
+
+- Fetching `docs/LIVING_SVG.md` from `development` returns not found, while the file exists on `work/fsm-cos-living-svg-flow` and `work/alpha7-living-docs-integration`.
+- The current development generator `samples/DocumentationVisuals/Program.cs` does not include the `System.Xml.Linq` post-processing used by the SVG-flow branch to add the connector stylesheet.
+- The current development asset `docs/assets/fsm-cos-preflight.svg` has no stylesheet, animation, or `prefers-reduced-motion` rule. The SVG-flow branch asset does include CSS animation and a reduced-motion fallback.
+- The branch documentation explicitly labels the animation as explanatory (not runtime telemetry) and says browser/assistive-technology verification remains open.
+
+This is a concrete, bounded harvest candidate, but it must be integrated as a **single source/asset/documentation change**: generator, generated SVG, living-SVG explanation, and documentation index/package boundaries must agree. Do not copy only the SVG or claim the feature is integrated until the pinned GUI renderer can reproduce it and exact-head CI verifies it. PR #33 is relevant, but its latest head/check status must be checked before choosing the safest integration path.
+
+### Workflow branch disposition
+
+The fresh compare still shows `work/ci-development-dependencies` changes to `.github/workflows/package.yml` and `docs/DEVELOPMENT.md`. Its publish condition differs from the canonical development workflow and points at `refs/heads/development` (still hard-disabled by `&& false`). It is not safe to harvest the workflow wholesale; preserve the current source-integration/package-verification jobs and do not enable publication.
+
+### Current gate
+
+**Manual deletion remains NOT READY.** No new files have been marked harvested, because the living-SVG implementation needs a reproducible multi-file integration and the remaining divergent branches still require per-file reconciliation. No branch deletion, PR merge/closure, canonical ref rewrite, or package publication was performed in this pass.
