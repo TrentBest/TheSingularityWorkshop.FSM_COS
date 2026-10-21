@@ -16,9 +16,9 @@
 
 **[Gallery](docs/GALLERY.md)** — a visual index of composition, validation, arbitration, and host handoff.
 
-**[Minimal consumer recipe](samples/FSM_COS.MinimalConsumer/Program.md)** — source, UML class card, use cases, and reproduction notes.
+**[Minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md)** — source, UML class card, use cases, and reproduction notes.
 
-**[Visual generator recipe](samples/DocumentationVisuals/Program.md)** — how the preflight SVG is generated and verified.
+**[Visual generator recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/DocumentationVisuals/Program.md)** — how the preflight SVG is generated and verified.
 
 **[Living SVG](docs/LIVING_SVG.md)** — how the preflight picture is generated, what its motion means, and what still needs browser/accessibility verification.
 
