@@ -72,3 +72,6 @@ Before calling this automated or release-grade, add checks for source-file inven
 ## Current source companion
 
 - [FsmCos](src/FSM_COS/FsmCos.md) — source-reviewed companion for current development baseline `326a021498156f2bb7dc7a31219d6118d3427e37`; diagram rendering and link checks remain unverified.
+
+- [RuntimeManifest](src/FSM_COS/RuntimeManifest.md) — source-reviewed companion for the current development baseline.
+- [RuntimeAssembly](src/FSM_COS/RuntimeAssembly.md) — source-reviewed companion for the current development baseline.
