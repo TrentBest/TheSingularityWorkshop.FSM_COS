@@ -196,3 +196,13 @@ Created current-baseline companions rather than copying the older branch version
 - Indexed both in `docs/UML/README.md`, commit `574f5ff168b15698260ac62592c1938b380f5815`.
 
 Both pages explicitly document the host/repository boundaries and avoid claiming that manifest metadata loads bundles or that RuntimeAssembly provides rendering, scheduling, or rollback. Mermaid rendering and automated link checks remain unverified. This still leaves the other 12 source companions, five test companions, two sample companions, and branch-level docs to reconcile.
+
+
+### Verified harvests 9–10 — current-source schedule and load-plan companions
+
+Created two more current-source pages rather than copying their stale-baseline counterparts from `work/alpha7-living-docs-integration`:
+- `docs/UML/src/FSM_COS/RuntimeManifestSchedule.md`, source blob `28f1c71f6a1f85eb177147740c4a15a1052d5cd8`, commit `6761f17c45bc2c68572a267c91487396be4c6db6`.
+- `docs/UML/src/FSM_COS/RuntimeManifestLoadPlan.md`, source blob `484a0882e792bc75e9e766b5368691fba561d618`, commit `07d2ca14b1dc021b005078067c600d5419d006bc`.
+- Added both to `docs/UML/README.md`, commit `ec603037cfd1e5d1e9716bb55aa9da98b0f9fa22`.
+
+The schedule companion documents bounded input snapshots, dependency validation, and the explicit boundary that it is not a process scheduler. The load-plan companion distinguishes state tracking from host-owned localization/loading and automatic execution. Both pages point at current source and mark rendering, links, and exact-head CI as unverified.
