@@ -178,3 +178,11 @@ The `work/alpha7-living-docs-integration` branch contains a second class of uniq
 These are promising harvest targets because they align with the repository's per-`.cs` documentation standard, but the branch README names an older source baseline (`ce43e8f5...`) while current development's UML inventory cites a newer source-tree snapshot. **Do not bulk-copy the companions as-is.** Next pass should inspect each page's stated source SHA/member list against current source and tests, then port only still-accurate pages or regenerate them. The test companions and GUILLM also need checks for obsolete claims and cross-repository instructions.
 
 The UML documentation branch is therefore not yet fully reconciled despite five high-level diagrams now being integrated. Its branch-level changes and PR checks are not a substitute for source-baseline validation.
+
+
+### Verified harvest 6 — current-source FsmCos companion
+
+- The 15 existing companion pages on `work/alpha7-living-docs-integration` all reference old baseline `ce43e8f5bf3dfc229f28678fc2e0d944c5c8d38a`; this differs from the current development baseline and is not safe for wholesale copying.
+- Created a new, explicitly source-reviewed `docs/UML/src/FSM_COS/FsmCos.md` against current baseline `326a021498156f2bb7dc7a31219d6118d3427e37` and source blob `42b016f84c75ea6e599259d5b02ee8aede95a895`. It includes a class card, source links, boundary caveats, use cases, and a verification-status statement. Commit: `82909a4399c17e207d7c3ffce8d93217ab0078f6`.
+- Added the companion to `docs/UML/README.md` rather than importing the old branch's entire README. Commit: `f0ed2dd8c0b28c0a936fcbcd806256f92fa8aa0a`.
+- This establishes a safe pattern for further companions; it does not mean the other 14 source pages, five test pages, or two sample pages are reconciled. Mermaid rendering, automated links, and exact-head CI remain open.
