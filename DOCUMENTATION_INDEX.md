@@ -14,6 +14,7 @@ This index is the navigation map. It does not duplicate the contracts below.
 | Understand ownership and runtime flow | [Architecture](docs/ARCHITECTURE.md) |
 | Understand the rationale and design invariants | [Theory](docs/THEORY.md) |
 | Integrate the package | [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) |
+| Compare AnyApp, WebApp, and WebPage host boundaries | [Host integration map](docs/HOST_INTEGRATION_MAP.md) | Source-reviewed current state and explicit gaps; not a substitute for host-specific contracts |
 | Review the candidate's scope and limitations | [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) |
 | Verify release readiness | [Alpha.7 readiness gate](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) |
 | Review trust assumptions and adversarial security coverage | [Security](SECURITY.md) |
