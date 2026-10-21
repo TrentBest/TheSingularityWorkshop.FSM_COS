@@ -211,3 +211,14 @@ The schedule companion documents bounded input snapshots, dependency validation,
 ### API accuracy follow-up — UML companion signatures
 
 Rechecked the two new state/schedule companions against the full current source files. Updated the schedule diagram to include `DependencyEntries`, `DependenciesOf`, and `IsDependencyReady`; updated the load-plan diagram to reflect the actual `EvaluatePromotions(IManifestLoadEvaluator, IStateContext?, RuntimeManifestSchedule?)` signature and its `IEnumerable<RuntimeManifestEntry>` result. Commits: `e91d14cb0e862fc66f0350e9c32cb3977bc2d9cd`, `90439c648c31e713fa05ef71b0b93c7d167a9e1a`. This correction is recorded because generated Mermaid and exact-head CI have not yet independently validated the docs.
+
+
+### Verified harvests 11–13 — current-source manifest identity companions
+
+Created and indexed current-source companions:
+- `docs/UML/src/FSM_COS/RuntimeManifestEntry.md` — source blob `acd95c2ce7ff7f10ce4696d3ff3c11dec70837ad`, commit `d7b0cb4f29be61e2b04f3a4ac12cb988edf8eecd`.
+- `docs/UML/src/FSM_COS/MicroBundleReference.md` — source blob `931905da936669cb1fdad47f0fef8015f0e4d451`, commit `1c6ee02d9e2dff9156cd8c9bf199c9da914e49f6`.
+- `docs/UML/src/FSM_COS/RuntimeManifestDependency.md` — source blob `2ad81443708f5ef9e4df7f96a6cc477ffb059778`, commit `202f91986e107bb6f28abe703056124d61baaae1`.
+- Index commit: `97cb479651361c886992acec1dca2e966d0ea92e`.
+
+The pages distinguish validity checks from artifact retrieval/hash verification and graph-level validation. The corresponding older branch pages use the old source baseline and were not copied. Rendering, automated link checks, and exact-head CI remain unverified.
