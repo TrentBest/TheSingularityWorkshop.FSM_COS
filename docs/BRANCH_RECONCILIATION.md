@@ -308,3 +308,22 @@ Evidence: [failed Pack and publish run](https://github.com/TrentBest/TheSingular
 For commit `e45fb7094e7e83219e58631c12bb325d6529d3c5`, the [Pack and publish workflow](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39679444389) and [CodeQL](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39679444587) completed successfully. The run's source-integration, build/test, SVG regeneration/diff, package-content/metadata verification, and public-feed compatibility jobs all passed; the `publish_nuget` job was explicitly **skipped**. This confirms the absolute GitHub recipe-link correction fixed the earlier package verifier failure. Public-feed compatibility checks restore/build/test against already-published dependencies; they do not publish the candidate package.
 
 The passing result applies to this exact SHA only. The standing manual branch-deletion gate remains closed until the remaining branch/PR and hosted visual verification criteria are reconciled.
+
+
+### Operation Sith recheck — exact-head release evidence and GUI coordination handoff
+
+The current branch inventory was rechecked against the live GitHub API. Eight branches remain: canonical `master` and `development`, plus six surplus branches. No branch was deleted, and draft PRs #31–#35 remain open. Manual deletion is not authorized by this ledger and is not yet recommended.
+
+The six surplus branches are still divergent from current `development`; no wholesale merges are justified. Fresh comparisons report:
+- `docs/alpha7-release-readiness`: 4 ahead / 380 behind. Its release-gate material is already represented in `docs/0.1.0-alpha.7-READINESS.md`; the current exact-head evidence is being recorded there.
+- `docs/fsm-cos-visual-contract-audit`: 5 ahead / 107 behind. Its overview connector correction and visual audit findings have been harvested; retain the branch until manual deletion review.
+- `work/alpha7-living-docs-integration`: 97 ahead / 103 behind. Its broad documentation and UML work has been selectively reconciled, not wholesale merged. One important unique cross-repository handoff, `GUILLM.md`, is now preserved as a concise current coordination contract on `development`.
+- `work/ci-development-dependencies`: 2 ahead / 410 behind. Its workflow changes remain rejected as a whole because they weaken the pinned-action safety boundary; no workflow harvest.
+- `work/fsm-cos-living-svg-flow`: 8 ahead / 107 behind. Its generator/asset/guide work has been selectively integrated; no wholesale merge.
+- `work/fsm-cos-uml-class-diagrams`: 11 ahead / 107 behind. Its architecture/class-diagram documentation has been selectively harvested; no wholesale merge.
+
+The new root `GUILLM.md` states the cross-repository contract: GUI owns reusable rendering, source analysis stays a tooling boundary unless explicitly designed otherwise, manual Mermaid is not called generated UML, and semantic/source-provenance/fixture/SVG/accessibility acceptance evidence remains required. It links the counterpart GUI `FSM_COSLLM.md` and explicitly avoids treating staged GUI work as integrated.
+
+The alpha.7 readiness gate now records the exact verified candidate `43fae5aa6eec84aaf98f305b758bda03d0cc9a0e`, passing Pack and publish run [39679881326](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39679881326), passing CodeQL run [39679881297](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39679881297), and both inspected package artifact hashes. It retains **22/23 (96%)** with hosted rendering/accessibility behavior open. The subsequent documentation commits that record this evidence and preserve `GUILLM.md` create a new candidate; rerun the required workflows on the resulting exact `development` HEAD before carrying verification forward.
+
+**NuGet owner-authorization boundary remains absolute:** `publish_nuget` retains its hard-disabled `&& false` condition. Successful CI is not permission to publish. No publish, branch deletion, PR merge, or PR closure occurred.
