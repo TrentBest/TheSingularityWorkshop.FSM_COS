@@ -53,7 +53,6 @@
     <None Include="../../docs/STAGED_MANIFEST_LOADING.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/WEBPAGE_INTEGRATION.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/GALLERY.md" Pack="true" PackagePath="docs/" />
-    <None Include="../../docs/LIVING_SVG.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/releases/0.1.0-alpha.7.md" Pack="true" PackagePath="docs/releases/" />
     <None Include="../../docs/assets/**/*" Pack="true" PackagePath="docs/assets/%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
