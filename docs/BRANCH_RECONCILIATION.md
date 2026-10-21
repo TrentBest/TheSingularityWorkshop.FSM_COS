@@ -64,3 +64,16 @@ Open PRs observed on October 21 include:
 5. Update this ledger with harvested commit/file evidence and the final per-branch disposition. Only then report branches as ready for the owner's manual deletion.
 
 No branch was deleted, no PR was merged or closed, no canonical ref was force-updated, and no package was published as part of this audit.
+
+
+## Follow-up workflow inspection — 2026-10-21
+
+A direct fetch of the live workflow files adds an important qualification to the PR descriptions:
+
+- On `master`, `.github/workflows/package.yml` currently defines the publish condition as `github.event_name == 'workflow_dispatch' && inputs.publish == true && false`. This is **hard-disabled**, so the workflow as currently committed cannot publish even on an authorized manual dispatch.
+- On `development`, the condition is `github.event_name == 'workflow_dispatch' && inputs.publish == true && github.ref == 'refs/heads/master' && false`. This is also **hard-disabled**, and additionally includes the explicit `refs/heads/master` guard.
+- The development workflow has additional source-integration, GUI.SVG reproducibility, package verification, dependency audit, analyzer, and minimal-consumer jobs. The master workflow differs materially; neither file should be copied wholesale over the other.
+- PR #35's statement that the current master workflow permits publishing on manual dispatch is not consistent with the live master file fetched during this audit. Treat the actual workflow at the current branch head as authoritative and resolve this discrepancy before any release integration.
+- Do not remove the hard-disable or enable publishing as part of branch cleanup. Any future change to the release gate must be a deliberate, separately reviewed owner-approved action.
+
+The ledger update itself changed `development` after the readiness checklist's previous candidate evidence. Therefore, even if that checklist contains checked gates from a prior exact candidate, the current `development` HEAD must be re-verified before being described as the verified release candidate.
