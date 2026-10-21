@@ -290,3 +290,12 @@ Added the missing `.md` companions for the two current C# sample programs, follo
 - `samples/DocumentationVisuals/Program.md` documents GUI.SVG scene generation, the XML/CSS reduced-motion post-pass, the exact-pinned-renderer caveat, and the distinction between explanatory motion and runtime telemetry.
 
 Both are linked from the README, `DOCUMENTATION_INDEX.md`, and `docs/UML/README.md`. These are documentation additions; they do not establish a fresh sample run, exact-head CI success, or browser accessibility verification.
+
+
+### CI regression found and corrected — package-contained Markdown links
+
+The exact-head Pack and publish run `39679027280` for `64b6378520b570487e0cd228c2f60c9928f38a09` failed after build, tests, the minimal consumer, analyzers, and SVG regeneration/diff all succeeded. Both package verifiers rejected the new relative links from `DOCUMENTATION_INDEX.md` to sample companions, because the sample source/docs are not packed into the NuGet package. The public-feed compatibility verifier hit the same contract error.
+
+Corrected both README and `DOCUMENTATION_INDEX.md` recipe links to absolute GitHub repository URLs, which the verifier explicitly permits. No package contents or runtime behavior were changed. The next exact-head workflow must confirm the fix; do not infer success from the edit alone.
+
+Evidence: [failed Pack and publish run](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39679027280). In that run, source integration, tests, consumer verification, analyzer build, and SVG generation/diff passed; package metadata/content verification failed only on the local sample-document links. CodeQL passed at the same earlier candidate SHA. The publish job was skipped.
