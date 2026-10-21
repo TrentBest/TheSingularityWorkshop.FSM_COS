@@ -8,6 +8,47 @@ See [FSM_COS Theory](THEORY.md#8-arbitration-is-composition-negotiation) for the
 
 *Implementation note: the successful round is recorded as a zero-based index in `RuntimeAssembly.ArbitrationRounds` (`0` means the first round converged). If every allowed round reports changes, `FsmCos.Execute` throws instead of returning an unstable assembly.*
 
+
+## UML class diagram: arbitration participants
+
+This is a simplified, source-derived overview of the arbitration relationships, not a complete per-type API inventory. Parameter types and nullability are abbreviated; the source and the contract above remain authoritative for exact signatures and failure behavior.
+
+~~~mermaid
+classDiagram
+    class FsmCos {
+        +Execute(manifest, configurationSource) RuntimeAssembly
+    }
+    class ArbitrationContext {
+        +RuntimeId: ulong
+        +ExperienceContext: IStateContext
+        +Bundles: IReadOnlyList~IMicroBundle~
+        +LoadedBundles: IReadOnlyList~IMicroBundle~
+    }
+    class IMicroBundle {
+        <<MicroBundleDomain contract>>
+        +Arbitrate(context, roundIndex) bool
+    }
+    class IMicroBundleArbitrationContext {
+        <<MicroBundleDomain contract>>
+        +RuntimeId: ulong
+        +Bundles
+        +ExperienceContext
+    }
+    class RuntimeAssembly {
+        +RuntimeId: ulong
+        +Bundles: IReadOnlyList~IMicroBundle~
+        +ArbitrationRounds: int
+    }
+
+    FsmCos ..> ArbitrationContext : creates after loading
+    ArbitrationContext ..|> IMicroBundleArbitrationContext
+    IMicroBundle ..> IMicroBundleArbitrationContext : receives during each round
+    FsmCos ..> RuntimeAssembly : returns only on convergence
+    RuntimeAssembly o-- "0..*" IMicroBundle : loaded participants
+~~~
+
+The two interfaces shown as MicroBundleDomain contracts are external to this repository; FSM_COS supplies their concrete context and invokes the domain-owned arbitration callback. A returned assembly means a complete round reported no changes before the configured bound, not that all possible domain compatibility rules have been proven.
+
 ## The question arbitration actually answers
 
 Dependency resolution asks:
