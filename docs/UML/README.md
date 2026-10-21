@@ -75,3 +75,6 @@ Before calling this automated or release-grade, add checks for source-file inven
 
 - [RuntimeManifest](src/FSM_COS/RuntimeManifest.md) — source-reviewed companion for the current development baseline.
 - [RuntimeAssembly](src/FSM_COS/RuntimeAssembly.md) — source-reviewed companion for the current development baseline.
+
+- [RuntimeManifestSchedule](src/FSM_COS/RuntimeManifestSchedule.md) — current-source dependency schedule contract.
+- [RuntimeManifestLoadPlan](src/FSM_COS/RuntimeManifestLoadPlan.md) — current-source localization/composition state tracker.
