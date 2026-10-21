@@ -16,6 +16,8 @@
 
 **[Gallery](docs/GALLERY.md)** — a visual index of composition, validation, arbitration, and host handoff.
 
+**[Living SVG](docs/LIVING_SVG.md)** — how the preflight picture is generated, what its motion means, and what still needs browser/accessibility verification.
+
 FSM_COS is The Singularity Workshop's **runtime composition kernel**. It takes a request for capabilities, resolves the MicroBundles and dependencies needed to satisfy it, and hands the assembled result to a host.
 
 ## 🟦 01 — What is FSM_COS?
