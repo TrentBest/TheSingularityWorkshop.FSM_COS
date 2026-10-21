@@ -390,3 +390,24 @@ Exact-head verification:
 - Both `master` and `development` package workflows still contain an explicit `&& false` publication guard. Do not weaken or remove it; NuGet publication remains unauthorized absent explicit owner approval.
 
 Disposition remains **NOT READY for manual deletion**. No branch was deleted, no PR merged/closed, no canonical ref force-updated, and no package published. Re-query refs and verify exact-HEAD CI after any subsequent commit before making a deletion-readiness claim.
+
+
+## Operation Sith — accelerated preservation pass (2026-10-21 22:32 UTC)
+
+The broad integration branch `work/alpha7-living-docs-integration` was re-compared against live `development` and selectively harvested into `docs/branch-harvest/2026-10-21/`. Recovery index: [branch harvest README](branch-harvest/2026-10-21/README.md).
+
+Preservation batches committed on `development`:
+- `1f6fcbaa002ecba8591c2bbdbb1d661bafc7372e` — initial harvest index and companion/source documentation snapshots.
+- `8a5d6720abf179f0d7705295a2fd5fe1543a2e78` — ten per-type UML companion pages.
+- `8dd3ca106044b20d69343e65055e3cb36e88134c` — samples, test companions, sample source, package verifier, and proposed workflow as inert text.
+- `e92578ad0dacb03a3030e39684e26f87e809963b`, `e6ad637197511f3fa34e2457f469bf6bebfa577c`, `9fd75060c59f76551fd68ed9e560734efe9f6c37` — additional divergent documentation snapshots.
+- `fad22f14596cb652a89ada579b89b8a5b71e9bd8` — remaining divergent SVG assets.
+- `29cd8177ae496e13395b1813e61de69b0e93ee76` — expanded archive index.
+
+The archived material includes the substantially expanded `GUILLM.md`, documentation standard/index, execution sequence, living-documentation audit, readiness and architecture documentation, per-type UML companions, test/sample companions, release notes, visuals, package verification script, and proposed package workflow. These are recovery copies, not automatically integrated/certified replacements. Most of this branch is documentation and visualization; no broad runtime-source implementation diff appeared in the compared file list. `src/FSM_COS/FSM_COS.csproj` was checked directly and is byte-identical to `development` (same blob SHA `76b94dc8f376783827c271e84835cde5d16f5530`) despite a stale compare summary marking it modified.
+
+**Important security finding:** the branch's `.github/workflows/package.yml` publish condition allows a manual publish from `master` without the canonical `&& false` hard stop. It is archived only as inert text and must not be copied into the active workflow. Canonical workflow publication guards remain untouched. The branch's sample generator and NuGet verifier also differ from development and remain archived, not adopted without fresh generation and test evidence.
+
+The branch compare at this point reports 97 ahead / 120 behind. The archive materially reduces the risk of losing documentation, but this is not proof that every changed line or commit has been dispositioned, and the branch is **not yet certified safe for deletion**. No surplus branch was deleted; no PR merged or closed; no canonical ref rewritten; no NuGet package published.
+
+Latest preservation commit before this ledger append: `29cd8177ae496e13395b1813e61de69b0e93ee76`. Exact-HEAD CI for the new commits remains unverified; the historical 22/23 (96%) gate figure does not certify these commits. NuGet publication remains unauthorized and hard-disabled.
