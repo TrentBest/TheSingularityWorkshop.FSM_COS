@@ -294,9 +294,9 @@ jobs:
 
   publish_nuget:
     needs: [build-and-test, public-package-compatibility, source-integration]
-    # Publishing is available only when deliberately dispatched from development
-    # with the boolean input checked. Pushes and pull requests never publish.
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true && github.ref == 'refs/heads/master' }}
+    # Keep development permanently non-publishing. An authorized release must
+    # deliberately enable the gate on master for that release commit only.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == true && github.ref == 'refs/heads/master' && false }}
     runs-on: ubuntu-24.04
     permissions:
       contents: read
