@@ -23,8 +23,8 @@ This index is the navigation map. It does not duplicate the contracts below.
 | Build, test, and understand CI modes | [Development](docs/DEVELOPMENT.md) |
 
 
-| Run and understand the minimal consumer | [Minimal consumer recipe](samples/FSM_COS.MinimalConsumer/Program.md) | Source companion with UML class card, use cases, and boundaries |
-| Regenerate the living preflight picture | [Visual generator recipe](samples/DocumentationVisuals/Program.md) | Source companion with generator flow and reproducibility notes |
+| Run and understand the minimal consumer | [Minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md) | Source companion with UML class card, use cases, and boundaries |
+| Regenerate the living preflight picture | [Visual generator recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/DocumentationVisuals/Program.md) | Source companion with generator flow and reproducibility notes |
 
 ## Contract authority map
 
