@@ -347,3 +347,23 @@ The combined-status endpoint returned no status entries for the current `develop
 The previously recorded **22/23 (96%)** alpha.7 result applies to historical candidate `43fae5aa6eec84aaf98f305b758bda03d0cc9a0e`, not this later HEAD. Do not report it as current verified readiness.
 
 **Deletion gate remains NOT READY.** This refresh records comparisons only; it does not authorize deletion. No branches or PRs were deleted, merged, or closed, no canonical refs were rewritten, and NuGet publication remains unauthorized and hard-disabled.
+
+
+### Live compare refresh — 2026-10-21 22:10 UTC
+
+Rechecked every surplus branch against the exact live `development` base, now `2b9d1fbfe9ad7d09140ef4f202d5cfe708b74c18`. The connector's compare response reports all six refs as divergent; updated counts differ slightly from the 22:01 snapshot, so use this newer table for subsequent manual review.
+
+| Branch | Ahead | Behind | Preservation / disposition |
+|---|---:|---:|---|
+| `docs/alpha7-release-readiness` | 4 | 385 | Readiness gate is represented on development; do not wholesale copy or merge. |
+| `docs/fsm-cos-visual-contract-audit` | 5 | 112 | Visual audit and overview SVG changes are represented; retain for final human deletion review. |
+| `work/alpha7-living-docs-integration` | 97 | 108 | Broad documentation, UML companions, and living-doc work selectively reconciled. Compare still lists README/index, readiness/audit, docs and source changes; do not treat commit counts as proof every file is identical. |
+| `work/ci-development-dependencies` | 2 | 415 | Workflow changes are not harvested: they alter package workflow safety and require independent line-by-line review before any possible reuse. |
+| `work/fsm-cos-living-svg-flow` | 8 | 112 | Living-SVG guide, generator, generated preflight asset, and index/README references are represented on development; retain until final review. |
+| `work/fsm-cos-uml-class-diagrams` | 11 | 112 | Architecture, arbitration, runtime assembly/manifest and staged-loading content was selectively harvested; retain until final review. |
+
+Exact-candidate verification has since been recorded for `2b9d1fbfe9ad7d09140ef4f202d5cfe708b74c18`: Pack/package workflow passed (run `39683445755`), CodeQL passed (run `39683445753`), package artifact was downloaded and inspected, and the generated SVG parity check passed. The CodeQL artifact contained zero findings. These results apply only to that exact candidate. Hosted browser rendering, accessibility-tree exposure, keyboard behavior, and screen-reader behavior remain open; retain the 22/23 (96%) readiness figure with those qualifications.
+
+The compare is a structural inventory, not a complete patch-by-patch proof of preservation. Before deletion, review each branch's unique commits/files against development, especially the two-commit CI dependency branch and the broad living-documentation branch. No wholesale merge is recommended.
+
+**Deletion gate remains NOT READY.** This entry does not authorize deletion. No branches or PRs were deleted, merged, or closed; canonical refs were not rewritten; NuGet publication remains unauthorized and hard-disabled.
