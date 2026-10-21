@@ -238,3 +238,15 @@ Created and indexed eight more pages against current development source:
 - UML index update: `9b7b8c957b5a9b5397ee00552dba0bccfb720f27`.
 
 The pages cover Experience-owned promotion policy, catalog resolution, optional configuration, intended load-stage metadata, root request identity, load context, composition entry interface, and arbitration context. Each states the boundary between its contract and artifact localization/loading. Rendering, automated links, and exact-head CI remain unverified.
+
+
+### Verified harvests 22–25 — current-source test companions
+
+Compared the old integration branch's UML/test inventory with current `development`. The four substantive test files were present in source but had no current UML companions. Created and indexed:
+- `docs/UML/tests/FSM_COS.Tests/AiGuiCapabilityHandoffTests.md` — source blob `b28a6df5b7b5c4a7f8a6dc9ad9cf192b78c21f99`, 3 `[Fact]` tests, commit `f03b3fd1fc282cd86538b4a597db4cff6916c417`.
+- `docs/UML/tests/FSM_COS.Tests/FsmCosTests.md` — source blob `6ee7f5e2b5feb0286f08fb8403b92f17edc31447`, 86 `[Fact]` tests, commit `5e516e45cd6d5fcf5d85643743d7debba0419328`.
+- `docs/UML/tests/FSM_COS.Tests/RuntimeManifestPlanningTests.md` — source blob `8f4f1f8ee010f8a3b8bc7b68582998a57bccc940`, 33 `[Fact]` tests, commit `42f679e466ec6a6712a6bae9bb7a98233e5100b8`.
+- `docs/UML/tests/FSM_COS.Tests/SnapshotIsolationTests.md` — source blob `4b878f7c350f764f1cb5ae9d8153065b5d79b8ac`, 3 `[Fact]` tests, commit `4bbdf6eff0a440040a6aa2e8dc5ca469e9e8bd5a`.
+- Index commit: `5b984900542e5cac550f2c33465be6a96fe9bef5`.
+
+The test docs summarize the actual current test themes; they are not assertions that tests passed. The test project must run on the exact integrated HEAD, and Mermaid/link verification remains outstanding. The old `GlobalUsings.md` is not being copied as a class companion because `GlobalUsings.cs` only declares `global using Xunit;`; it can be covered by a concise project-level note if needed.
