@@ -12,15 +12,13 @@
   <img src="docs/assets/fsm-cos-overview.svg" alt="A runtime manifest enters FSM_COS; the kernel resolves dependencies and composes MicroBundles into a RuntimeAssembly for a host." width="1000">
 </p>
 
-*If a picture is worth a thousand words, then what is a living picture worth?* FSM_COS uses source-backed diagrams to explain dependency closure, preflight validation, failure boundaries, and the host handoff. They illustrate the real contract; they are not presented as live execution traces.
+*If a picture is worth a thousand words, then what is a living picture worth?* FSM_COS uses source-backed diagrams to explain dependency closure, preflight validation, failure boundaries, and the host handoff. 
 
 **[Gallery](docs/GALLERY.md)** — a visual index of composition, validation, arbitration, and host handoff.
 
 **[Minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md)** — source, UML class card, use cases, and reproduction notes.
 
 **[Visual generator recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/DocumentationVisuals/Program.md)** — how the preflight SVG is generated and verified.
-
-**[Living SVG](docs/LIVING_SVG.md)** — how the preflight picture is generated, what its motion means, and what still needs browser/accessibility verification.
 
 FSM_COS is The Singularity Workshop's **runtime composition kernel**. It takes a request for capabilities, resolves the MicroBundles and dependencies needed to satisfy it, and hands the assembled result to a host.
 
@@ -86,26 +84,15 @@ This is a source-repository example and references the local FSM_COS project so 
 
 The source targets **.NET 8** and currently declares version `0.1.0-alpha.7`. This is a source candidate, not proof of publication; verify availability on the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS).
   
-## 🟪 05 — Available documentation and theory
+## 🟪 05 — Documentation
 
-Pick the question you want answered; each document focuses on one topic.
-
-- **New to software or this architecture?** [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) introduces the problem and key terms without assuming programming experience. [FSM_COS Theory](docs/THEORY.md) develops the deeper rationale.
-- **Need the system map?** [Architecture](docs/ARCHITECTURE.md) explains component ownership and runtime flow.
-- **Building a consumer?** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) shows how to provide a catalog and bundles.
-- **Defining a request?** [Runtime Manifest](docs/RUNTIME_MANIFEST.md) explains requested bundle identities and versions; [Manifest Theory](docs/MANIFEST_THEORY.md) explains the design rationale.
-- **Receiving the result?** [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) describes the handoff object.
-- **Need the exact stopping point?** [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) explains what FSM_COS owns and what remains with the host.
-- **Wondering how stability is reached?** [Arbitration](docs/ARBITRATION.md) covers reconciliation and convergence.
-- **Integrating a host?** [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) documents one browser-host integration without moving browser concerns into the kernel.
-- **Comparing host integrations?** [Host Integration Map](docs/HOST_INTEGRATION_MAP.md) separates AnyApp's native composition path, WebApp's intended browser-host contract, and WebPage's current proving-ground evidence—without claiming the remaining execution gaps are solved.
-- **Checking how Workshop packages fit together?** [Ecosystem Integration Map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ECOSYSTEM_INTEGRATION_MAP.md) is a source-repository working snapshot; verify its point-in-time source facts before relying on them.
-- **Checking alpha.7 scope and limitations?** [Release notes](docs/releases/0.1.0-alpha.7.md) describe the source candidate's contracts and explicit non-goals.
-- **What is in the domain, and what remains?** [Domain Completion and Release Roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) separates implemented behavior from deferred capabilities and defines evidence required to close them.
-- **Preparing a release?** The [alpha.7 Release Readiness checklist](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) is the sole authority for exact-candidate gates and evidence. The [Domain Completion and Release Roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) describes implemented behavior, deferred capabilities, and follow-on engineering—not candidate CI or package evidence.
-- **Building or contributing?** [Development](docs/DEVELOPMENT.md) covers repository setup, tests, and workflows.
-- **Looking for another topic?** Open the [Documentation Index](DOCUMENTATION_INDEX.md).
-
+- **Start here:** [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md)
+- **Understand the runtime:** [Architecture](docs/ARCHITECTURE.md), [Runtime Manifest](docs/RUNTIME_MANIFEST.md), [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md), [Arbitration](docs/ARBITRATION.md), and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md).
+- **Build a consumer:** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) explains the catalog, manifest, configuration, and bundle contracts.
+- **Integrate a host:** [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) describes the browser-host adapter.
+- **Explore the examples:** [Gallery](docs/GALLERY.md) and the [minimal consumer recipe](samples/FSM_COS.MinimalConsumer/Program.md).
+- **Build and test from source:** [Development](docs/DEVELOPMENT.md).
+- **Find a topic:** [Documentation Index](DOCUMENTATION_INDEX.md).
 ---
 <p align="center">
   <a href="https://github.com/TrentBest/WebPage" aria-label="Visit The Singularity Workshop">
