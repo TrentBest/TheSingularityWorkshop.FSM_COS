@@ -7,7 +7,7 @@ This folder is the source-grounded index for FSM_COS type diagrams. It is delibe
 - Repository: `TrentBest/TheSingularityWorkshop.FSM_COS`
 - Branch inspected: `development` (the current working branch, not the published line)
 - Source subtree inspected: `src/FSM_COS/`
-- Source tree commit: `0e97c1b68644838b51424c4712de7f6ca5cb4c30`
+- Source tree commit at the time of this update: `e1eeb62147091801332d0b7ef97259b0fb60e4c8`
 - Inspection scope: the complete Git tree returned for the project source directory; it contained 16 C# files and one project file.
 - Verification boundary: this is a GitHub source-tree inventory. It is not a build, test run, generator run, browser rendering check, or package inspection.
 
@@ -24,7 +24,7 @@ Because development is live, this inventory must be refreshed whenever source ch
 
 | Source file | Declared type(s) observed | Primary responsibility (summary) | UML status in this index |
 |---|---|---|---|
-| [FsmCos.cs](../../src/FSM_COS/FsmCos.cs) | `FsmCos`, nested `LoadFrame` | Composition orchestration and internal load traversal | Diagram not yet inventoried here; review nested type separately |
+| [FsmCos.cs](../../src/FSM_COS/FsmCos.cs) | `FsmCos`, nested `LoadFrame` | Composition orchestration and internal load traversal | [Class diagram](ClassDiagram/FsmCos.svg) and [detail](ClassDiagram/FsmCos.md) added; source review documented, visual/browser validation pending |
 | [IFsmCos.cs](../../src/FSM_COS/IFsmCos.cs) | `IFsmCos` | Public composition entry-point abstraction | Diagram not yet inventoried here |
 | [ArbitrationContext.cs](../../src/FSM_COS/ArbitrationContext.cs) | `ArbitrationContext` | Context passed through arbitration | Diagram not yet inventoried here |
 | [IManifestLoadEvaluator.cs](../../src/FSM_COS/IManifestLoadEvaluator.cs) | `IManifestLoadEvaluator` | Experience-owned decision boundary for promoting deferred manifest entries | Diagram not yet inventoried here |
@@ -53,6 +53,10 @@ The intended visual language is:
 - **Grounded relationships only:** every connector must be supported by declarations or implementation. A visual proximity is not a relationship.
 - **No decorative connector rails masquerading as dependencies:** any stub or continuation rail must be labelled as such.
 - **Accessible fallback:** include a text explanation and source links; never make color the sole way to distinguish type kinds or states.
+
+## First detailed diagram: FsmCos
+
+The first manually authored, source-grounded class view is [FsmCos.svg](ClassDiagram/FsmCos.svg), with its explanatory [detail page](ClassDiagram/FsmCos.md). It covers the public composition contract, catalog field, manifest/configuration inputs, result type, and private nested traversal frame. Its connector legend distinguishes implementation/field relationships from method input/output flow. The diagram is not generator-produced, and SVG rendering/accessibility checks have not yet been run.
 
 ## Coverage still required
 
