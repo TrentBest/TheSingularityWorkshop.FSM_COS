@@ -299,3 +299,12 @@ The exact-head Pack and publish run `39679027280` for `64b6378520b570487e0cd228c
 Corrected both README and `DOCUMENTATION_INDEX.md` recipe links to absolute GitHub repository URLs, which the verifier explicitly permits. No package contents or runtime behavior were changed. The next exact-head workflow must confirm the fix; do not infer success from the edit alone.
 
 Evidence: [failed Pack and publish run](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39679027280). In that run, source integration, tests, consumer verification, analyzer build, and SVG generation/diff passed; package metadata/content verification failed only on the local sample-document links. CodeQL passed at the same earlier candidate SHA. The publish job was skipped.
+
+
+### Explicit NuGet authorization boundary and corrected-candidate CI result
+
+**Owner authorization rule:** Do not publish to NuGet until Trent explicitly declares that publication is authorized. This is a standing project constraint, not a per-run question. Build/test/package-verification success never implies publication permission. Preserve the workflow's hard-disabled publish guard (`&& false`) unless the owner explicitly authorizes a separately reviewed change. No package publication is authorized by this entry.
+
+For commit `e45fb7094e7e83219e58631c12bb325d6529d3c5`, the [Pack and publish workflow](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39679444389) and [CodeQL](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39679444587) completed successfully. The run's source-integration, build/test, SVG regeneration/diff, package-content/metadata verification, and public-feed compatibility jobs all passed; the `publish_nuget` job was explicitly **skipped**. This confirms the absolute GitHub recipe-link correction fixed the earlier package verifier failure. Public-feed compatibility checks restore/build/test against already-published dependencies; they do not publish the candidate package.
+
+The passing result applies to this exact SHA only. The standing manual branch-deletion gate remains closed until the remaining branch/PR and hosted visual verification criteria are reconciled.
