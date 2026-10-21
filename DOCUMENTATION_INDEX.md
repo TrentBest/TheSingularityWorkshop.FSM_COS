@@ -22,6 +22,10 @@ This index is the navigation map. It does not duplicate the contracts below.
 | Review trust assumptions and adversarial security coverage | [Security](SECURITY.md) |
 | Build, test, and understand CI modes | [Development](docs/DEVELOPMENT.md) |
 
+
+| Run and understand the minimal consumer | [Minimal consumer recipe](samples/FSM_COS.MinimalConsumer/Program.md) | Source companion with UML class card, use cases, and boundaries |
+| Regenerate the living preflight picture | [Visual generator recipe](samples/DocumentationVisuals/Program.md) | Source companion with generator flow and reproducibility notes |
+
 ## Contract authority map
 
 Use one primary document for each question. Related pages should explain context and link here rather than restating the same contract.
