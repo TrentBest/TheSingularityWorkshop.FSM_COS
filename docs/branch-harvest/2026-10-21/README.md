@@ -15,3 +15,10 @@ Preserved from `work/alpha7-living-docs-integration` to keep potentially valuabl
 - `docs/branch-harvest/2026-10-21/SAMPLES-TESTS-AND-CI.md` — sample docs, test companions, documentation sample source, NuGet verification script, and proposed package workflow preserved as inert text.
 
 This is a substantial recovery archive, but not a complete reconciliation of every changed file or all implementation diffs. The branch is not yet cleared for deletion; remaining source/project/workflow/documentation diffs still need a disposition.
+
+- `docs/branch-harvest/2026-10-21/ADDITIONAL-DOCS-1.md` — preserved AGENTS, index, NuGet README, README, SECURITY, readiness, AI composition, arbitration, architecture, and branch ledger snapshots.
+- `docs/branch-harvest/2026-10-21/ADDITIONAL-DOCS-2.md` — preserved MicroBundle consumption, continuation, dependency checklist, development, domain/roadmap, ecosystem map, Gallery, living-documentation audit, and manifest theory snapshots.
+- `docs/branch-harvest/2026-10-21/ADDITIONAL-DOCS-3.md` — preserved pause point, runtime assembly/boundary/manifest, staged loading, theory, WebPage integration, FSM_COS overview, and release notes.
+- `docs/branch-harvest/2026-10-21/ADDITIONAL-SVG-ASSETS.md` — preserved divergent arbitration and overview SVGs.
+
+Branch comparison refreshed after the harvest: 97 ahead / 120 behind `development`. The active project file `src/FSM_COS/FSM_COS.csproj` is byte-identical across the branch and development despite the compare summary listing it as modified. The proposed branch package workflow is unsafe to merge as-is: its publish condition lacks the canonical `&& false` hard stop. It remains archived as inert text only. The integration branch's `DocumentationVisuals/Program.cs` and package-verifier differences are likewise archived, not adopted without regeneration/tests.
