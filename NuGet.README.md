@@ -65,21 +65,15 @@ For a complete consumer guide, see [Consuming MicroBundles](https://github.com/T
 
 This source currently declares version `0.1.0-alpha.7`. A source version declaration alone does not establish publication status; check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for the version actually available.
 
-## 🟪 05 — Available documentation and theory
+## 🟪 05 — Documentation
 
-- [Project overview](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/README.md) — the bigger picture and quick proof.
-- [What Is FSM_COS?](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/WHAT_IS_FSM_COS.md) — a plain-language introduction for readers new to software composition.
-- [Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/THEORY.md) — why composition is a distinct operation.
-- [Architecture](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ARCHITECTURE.md) — ownership and runtime flow.
-- [Domain completion roadmap](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/DOMAIN_COMPLETION_ROADMAP.md) — implemented capabilities, deferred work, dependency relationships, and follow-on engineering.
+- [Consumer guide](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/CONSUMING_MICROBUNDLES.md) — catalog, manifest, configuration, and MicroBundle contracts.
+- [Architecture](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ARCHITECTURE.md) — composition flow and responsibility boundaries.
 - [Runtime Manifest](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/RUNTIME_MANIFEST.md) — the composition request.
 - [RuntimeAssembly](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/RUNTIME_ASSEMBLY.md) — the host handoff.
-- [Arbitration](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ARBITRATION.md) — reconciliation and convergence.
-- [Documentation Index](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_INDEX.md) — all focused guides.
-- [Alpha.7 release notes](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/releases/0.1.0-alpha.7.md) — included contracts and explicit limitations.
-- [Development](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/DEVELOPMENT.md) — build and verification.
-- [Source and issues](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
-
+- [Arbitration](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/ARBITRATION.md) — bounded reconciliation.
+- [Gallery](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/GALLERY.md) — visual walkthroughs.
+- [Source repository](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) — runnable sample and development instructions.
 ---
 <p align="center">
   <a href="https://github.com/TrentBest/WebPage" aria-label="Visit The Singularity Workshop">
