@@ -38,7 +38,6 @@
   <ItemGroup>
     <None Include="../../README.md" Pack="true" PackagePath="" />
     <None Include="../../NuGet.README.md" Pack="true" PackagePath="" />
-    <None Include="../../DOCUMENTATION_INDEX.md" Pack="true" PackagePath="" />
     <None Include="../../LICENSE.txt" Pack="true" PackagePath="" />
     <None Include="../../SECURITY.md" Pack="true" PackagePath="" />
     <!-- Ship task-oriented consumer documentation only. Internal roadmaps, ancestry,
@@ -55,7 +54,7 @@
     <None Include="../../docs/WEBPAGE_INTEGRATION.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/GALLERY.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/LIVING_SVG.md" Pack="true" PackagePath="docs/" />
-    <None Include="../../docs/releases/*.md" Pack="true" PackagePath="docs/releases/" />
+    <None Include="../../docs/releases/0.1.0-alpha.7.md" Pack="true" PackagePath="docs/releases/" />
     <None Include="../../docs/assets/**/*" Pack="true" PackagePath="docs/assets/%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 </Project>
