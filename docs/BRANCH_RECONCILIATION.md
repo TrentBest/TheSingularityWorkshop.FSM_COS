@@ -101,3 +101,12 @@ The fresh compare still shows `work/ci-development-dependencies` changes to `.gi
 ### Current gate
 
 **Manual deletion remains NOT READY.** No new files have been marked harvested, because the living-SVG implementation needs a reproducible multi-file integration and the remaining divergent branches still require per-file reconciliation. No branch deletion, PR merge/closure, canonical ref rewrite, or package publication was performed in this pass.
+
+
+### Exact-head check on the living-SVG PR — 2026-10-21
+
+- PR #33 remains **open and draft**, based on `development`, with head `1595e1b769b80b381e8881bed0acaf3187bdaaff`.
+- GitHub reports successful completed workflow runs for that exact PR head: Pack and publish run [39364227302](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39364227302) and CodeQL run [39364227304](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39364227304).
+- This verifies CI for the PR head only. It does **not** mean the changes are on `development`, and it does not close the separately stated browser, reduced-motion, hosted rendering, or assistive-technology verification gaps.
+- The live `development` HEAD after this ledger update has no reported commit statuses or PR-triggered workflow runs for its new ledger commit. The current development candidate is therefore not currently verified by this check.
+- I have not merged or closed PR #33. The SVG generator, generated asset, explanatory document, and index still need to be reconciled as one source-consistent change before that branch can be marked harvested.
