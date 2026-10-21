@@ -186,3 +186,13 @@ The UML documentation branch is therefore not yet fully reconciled despite five 
 - Created a new, explicitly source-reviewed `docs/UML/src/FSM_COS/FsmCos.md` against current baseline `326a021498156f2bb7dc7a31219d6118d3427e37` and source blob `42b016f84c75ea6e599259d5b02ee8aede95a895`. It includes a class card, source links, boundary caveats, use cases, and a verification-status statement. Commit: `82909a4399c17e207d7c3ffce8d93217ab0078f6`.
 - Added the companion to `docs/UML/README.md` rather than importing the old branch's entire README. Commit: `f0ed2dd8c0b28c0a936fcbcd806256f92fa8aa0a`.
 - This establishes a safe pattern for further companions; it does not mean the other 14 source pages, five test pages, or two sample pages are reconciled. Mermaid rendering, automated links, and exact-head CI remain open.
+
+
+### Verified harvests 7–8 — current-source manifest and assembly companions
+
+Created current-baseline companions rather than copying the older branch versions:
+- `docs/UML/src/FSM_COS/RuntimeManifest.md` (source blob `c2b448da5e076f13209d68b1edd7ce50cbbd4d7a`), commit `d0a5907ae8db6e99ab99bf88236ba3358a1a99c6`.
+- `docs/UML/src/FSM_COS/RuntimeAssembly.md` (source blob `6ef0c80aacce694fc513a7afaea76309d79fe6a5`), commit `46a532753cf3b0558af0319369f9f670d7e21d10`.
+- Indexed both in `docs/UML/README.md`, commit `574f5ff168b15698260ac62592c1938b380f5815`.
+
+Both pages explicitly document the host/repository boundaries and avoid claiming that manifest metadata loads bundles or that RuntimeAssembly provides rendering, scheduling, or rollback. Mermaid rendering and automated link checks remain unverified. This still leaves the other 12 source companions, five test companions, two sample companions, and branch-level docs to reconcile.
