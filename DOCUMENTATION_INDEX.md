@@ -1,67 +1,33 @@
-# FSM_COS Documentation Index
+# FSM_COS Documentation
 
-This index is the navigation map. It does not duplicate the contracts below.
+This index links to the current product guides and development instructions.
 
-## Start here
+## Get started
 
-| Reader goal | Read |
-|---|---|
-| Understand the package quickly | [README](README.md) |
-| Browse visual examples and explanatory diagrams | [Gallery](docs/GALLERY.md) | Source-grounded visual index with links to the detailed contract guides |
-| Understand source-to-UML coverage and diagram status | [Source-to-UML map](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/README.md) | File-to-type inventory and explicit diagram/verification gaps (repository documentation; not included in the NuGet package) |
-| Review domain gaps and planned completion work | [Domain completion roadmap](docs/DOMAIN_COMPLETION_ROADMAP.md) | Implemented behavior, explicit deferrals, and follow-on proof requirements |
-| Learn the idea without assuming programming experience | [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) |
-| Run a concrete consumer | [Minimal consumer sample](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.cs) |
-| Understand ownership and runtime flow | [Architecture](docs/ARCHITECTURE.md) |
-| Understand the rationale and design invariants | [Theory](docs/THEORY.md) |
-| Integrate the package | [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) |
-| Compare AnyApp, WebApp, and WebPage host boundaries | [Host integration map](docs/HOST_INTEGRATION_MAP.md) | Source-reviewed current state and explicit gaps; not a substitute for host-specific contracts |
-| Review the candidate's scope and limitations | [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) |
-| Verify release readiness | [Alpha.7 readiness gate](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) |
-| Follow the exact composition call sequence and failure boundaries | [Execute sequence](docs/EXECUTION_SEQUENCE.md) | Source-reviewed sequence diagram; not a runtime trace |
-| Review trust assumptions and adversarial security coverage | [Security](SECURITY.md) |
-| Build, test, and understand CI modes | [Development](docs/DEVELOPMENT.md) |
+- [Project overview](README.md) — purpose, architecture at a glance, and a runnable consumer.
+- [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) — introduction to runtime composition.
+- [Minimal consumer](samples/FSM_COS.MinimalConsumer/Program.md) — working example with a local catalog and two MicroBundles.
+- [Gallery](docs/GALLERY.md) — diagrams of the composition and handoff flow.
 
+## Use FSM_COS
 
-| Run and understand the minimal consumer | [Minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md) | Source companion with UML class card, use cases, and boundaries |
-| Regenerate the living preflight picture | [Visual generator recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/DocumentationVisuals/Program.md) | Source companion with generator flow and reproducibility notes |
+- [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) — catalog, manifest, configuration, dependency resolution, loading, and consumer errors.
+- [Architecture](docs/ARCHITECTURE.md) — runtime flow and responsibility boundaries.
+- [Domain](docs/DOMAIN.md) — kernel ownership and the MicroBundle contract boundary.
+- [Runtime Manifest](docs/RUNTIME_MANIFEST.md) — request structure and version selection.
+- [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md) — load-plan and schedule metadata.
+- [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) — successful composition result and host handoff.
+- [Arbitration](docs/ARBITRATION.md) — bounded reconciliation and convergence behavior.
+- [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) — responsibilities owned by the host and adjacent packages.
+- [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — browser-host integration.
 
-## Contract authority map
+## Reference
 
-Use one primary document for each question. Related pages should explain context and link here rather than restating the same contract.
+- [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) — version-specific API and behavior changes.
+- [Security](SECURITY.md) — threat model, resource limits, trust assumptions, and security verification.
+- [Development](docs/DEVELOPMENT.md) — build, test, and CI instructions.
+- [Public API UML](docs/UML/README.md) — source-to-type diagrams and class cards.
 
-| Concern | Primary authority | Scope |
-|---|---|---|
-| What FSM_COS owns | [Domain](docs/DOMAIN.md) | Domain boundary, not API reference |
-| How the implementation works | [Architecture](docs/ARCHITECTURE.md) | Current code flow and failure behavior |
-| Why the composition boundary exists | [Theory](docs/THEORY.md) | Rationale and invariants |
-| Request shape and root version selection | [Runtime Manifest](docs/RUNTIME_MANIFEST.md) | Public manifest contract |
-| Staged metadata and its limits | [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md) | Planning/state metadata versus end-to-end localization |
-| Host handoff | [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) | Output contract and explicit non-promises |
-| Runtime ownership limits | [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) | What belongs to hosts and adjacent packages |
-| Resolution, loading, and consuming bundles | [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) | Consumer-facing use and errors |
-| Arbitration and convergence | [Arbitration](docs/ARBITRATION.md) | Negotiation semantics and limits |
-| AI-related composition concepts | [AI Composition](docs/AI_COMPOSITION.md) | Architectural exploration; not proof of provider integration |
-| WebPage host integration | [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) | Host-specific integration boundary |
-| Release-specific behavior | [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) | Version scope and deferrals |
-| Release gate | [Alpha.7 readiness](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) | Evidence and release criteria |
-| Security boundaries and adversarial test plan | [Security](SECURITY.md) | Threat model, mitigations, external baselines, and residual risks |
+## Repository verification
 
-## Documentation layers
-
-- **Public orientation:** `README.md` and `NuGet.README.md`. The root README is the repository entry point; the NuGet README is the package-consumer entry point.
-- **Current contract and explanation:** the primary authority documents listed above.
-- **Repository process:** [Development](docs/DEVELOPMENT.md), [Documentation Standard](DOCUMENTATION_STANDARD.md), and [AI agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/AGENTS.md).
-- **Working and historical records:** branch reconciliation, dependency alignment, ecosystem integration, continuation, and pause-point documents are planning records. They are not API specifications or release evidence; verify any current-state statement against source, tests, and current CI before acting on it. These records are intentionally excluded from the consumer package.
-
-## Accuracy and release evidence
-
-The shared [Documentation Standard](DOCUMENTATION_STANDARD.md) governs writing quality, source accuracy, and link hygiene. The [alpha.7 readiness gate](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md) governs exact-candidate release evidence. Historical planning notes are context, not current specifications; verify present-tense claims against source, tests, and current CI.
-
-## Living documentation
-
-The [Gallery](docs/GALLERY.md) is the visual entry point; use each linked contract document for authoritative behavior. The diagrams are explanatory assets, not independent specifications. Each diagram must agree with its adjacent contract and current implementation. The [Living Documentation Visual Audit](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/LIVING_DOCUMENTATION_AUDIT.md) tracks visual coverage and accessibility-source checks; it does not claim browser or screen-reader verification unless that evidence is explicitly recorded.
-
----
-
-<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong></p>
+The implementation and tests define runtime behavior. The focused contract guides explain those contracts; examples demonstrate usage. Release evidence is valid only for the exact commit and package artifact that were tested.
