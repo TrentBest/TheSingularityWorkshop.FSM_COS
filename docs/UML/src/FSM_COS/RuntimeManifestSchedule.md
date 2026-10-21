@@ -21,6 +21,9 @@ classDiagram
         +Entries: IReadOnlyList~RuntimeManifestEntry~
         +Dependencies: IReadOnlyList~RuntimeManifestDependency~
         +IndependentEntries: IReadOnlyList~RuntimeManifestEntry~
+        +DependencyEntries: IReadOnlyList~RuntimeManifestEntry~
+        +DependenciesOf(bundleId) IReadOnlyList~RuntimeManifestDependency~
+        +IsDependencyReady(bundleId, isLoaded) bool
     }
     class RuntimeManifestEntry
     class RuntimeManifestDependency
@@ -39,7 +42,7 @@ classDiagram
 ## Use cases
 
 1. Validate and snapshot published dependency metadata before a host attempts composition.
-2. Inspect dependency/state metadata without confusing it with artifact localization or execution.
+2. Inspect dependency entries and query whether prerequisites are loaded.
 3. Test invalid identity, dependency, and transition inputs within documented resource bounds.
 
 ## Verification status
