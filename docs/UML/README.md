@@ -90,3 +90,10 @@ Before calling this automated or release-grade, add checks for source-file inven
 - [MicroBundleLoadContext](src/FSM_COS/MicroBundleLoadContext.md) — current-source companion for the composition contract.
 - [IFsmCos](src/FSM_COS/IFsmCos.md) — current-source companion for the composition contract.
 - [ArbitrationContext](src/FSM_COS/ArbitrationContext.md) — current-source companion for the composition contract.
+
+## Test companions
+
+- [AiGuiCapabilityHandoffTests](tests/FSM_COS.Tests/AiGuiCapabilityHandoffTests.md) — current-source companion for 3 focused test cases / facts.
+- [FsmCosTests](tests/FSM_COS.Tests/FsmCosTests.md) — current-source companion for 86 focused test cases / facts.
+- [RuntimeManifestPlanningTests](tests/FSM_COS.Tests/RuntimeManifestPlanningTests.md) — current-source companion for 33 focused test cases / facts.
+- [SnapshotIsolationTests](tests/FSM_COS.Tests/SnapshotIsolationTests.md) — current-source companion for 3 focused test cases / facts.
