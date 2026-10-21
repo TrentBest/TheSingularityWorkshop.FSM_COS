@@ -1,0 +1,52 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
+# RuntimeManifestEntry
+
+**Source:** [`src/FSM_COS/RuntimeManifestEntry.cs`](../../../src/FSM_COS/RuntimeManifestEntry.cs)  
+**Source baseline:** `342c6fe71aee5ae9089547348c140a612e083248`  
+**Source file blob:** `acd95c2ce7ff7f10ce4696d3ff3c11dec70837ad`  
+**Authorship:** manually authored against current `development`; not GUI.SVG-generated.
+
+## Purpose
+
+Immutable published artifact identity plus the intended ManifestLoadStage for one runtime capability.
+
+## UML class card
+
+~~~mermaid
+classDiagram
+    class RuntimeManifestEntry {
+        +Reference: MicroBundleReference
+        +Stage: ManifestLoadStage
+        +IsValid: bool
+    }
+    class MicroBundleReference {
+        +BundleId: ulong
+        +Version: string
+        +ContentHash: string
+        +IsValid: bool
+        +Matches(entry) bool
+    }
+    class ManifestLoadStage {
+        <<enumeration>>
+        Bootstrap
+        Resident
+        Deferred
+    }
+    RuntimeManifestEntry *-- MicroBundleReference : published identity
+    RuntimeManifestEntry --> ManifestLoadStage : intended stage
+~~~
+
+## Important boundaries
+
+- `IsValid` validates the reference and enum value; it does not retrieve or hash-check artifact bytes.
+- Stage values describe intended policy, not proof that the current composition engine performs deferred or bootstrap-only loading.
+
+## Use cases
+
+1. Represent and validate published identity or dependency metadata.
+2. Keep artifact resolution and runtime policy at the appropriate repository or composition boundary.
+
+## Verification status
+
+Source-reviewed against the recorded baseline. Mermaid rendering, automated link checking, and exact-HEAD CI have not been verified.
