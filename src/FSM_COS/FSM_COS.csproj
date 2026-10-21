@@ -40,6 +40,7 @@
     <None Include="../../NuGet.README.md" Pack="true" PackagePath="" />
     <None Include="../../LICENSE.txt" Pack="true" PackagePath="" />
     <None Include="../../SECURITY.md" Pack="true" PackagePath="" />
+    <None Include="../../DOCUMENTATION_INDEX.md" Pack="true" PackagePath="" />
     <!-- Ship task-oriented consumer documentation only. Internal roadmaps, ancestry,
          integration planning, release gates, and documentation-process notes stay in source. -->
     <None Include="../../docs/WHAT_IS_FSM_COS.md" Pack="true" PackagePath="docs/" />
