@@ -88,4 +88,4 @@ Historical planning notes are useful context, not current contracts or release e
 
 ---
 
-[Documentation index](../DOCUMENTATION_INDEX.md) · [Release readiness gate](0.1.0-alpha.7-READINESS.md)
+[Documentation index](../DOCUMENTATION_INDEX.md) · [Release readiness gate](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/0.1.0-alpha.7-READINESS.md)
