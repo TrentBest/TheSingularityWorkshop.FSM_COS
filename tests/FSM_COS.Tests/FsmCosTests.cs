@@ -53,6 +53,69 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_rejects_load_plan_count_over_configured_bundle_limit_before_loading()
+    {
+        var root = new TestBundle(1);
+        var plan = new[]
+        {
+            new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", "hash-1")),
+            new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", "hash-2"))
+        };
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root), 10, 1, 10).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) }, LoadPlan: plan)));
+
+        Assert.Contains("Runtime manifest load plan contains 2 entries", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_schedule_entry_count_over_configured_bundle_limit_before_loading()
+    {
+        var root = new TestBundle(1);
+        var schedule = new RuntimeManifestSchedule(
+            new[]
+            {
+                new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", "hash-1")),
+                new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", "hash-2"))
+            },
+            Array.Empty<RuntimeManifestDependency>());
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root), 10, 1, 10).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) }, Schedule: schedule)));
+
+        Assert.Contains("Runtime manifest schedule contains 2 entries", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_schedule_dependency_count_over_configured_limit_before_loading()
+    {
+        var root = new TestBundle(1);
+        var schedule = new RuntimeManifestSchedule(
+            new[]
+            {
+                new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", "hash-1")),
+                new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", "hash-2")),
+                new RuntimeManifestEntry(new MicroBundleReference(3, "0.1.0-test", "hash-3"))
+            },
+            new[]
+            {
+                new RuntimeManifestDependency(2, 1),
+                new RuntimeManifestDependency(3, 1)
+            });
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root), 10, 10, 1).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) }, Schedule: schedule)));
+
+        Assert.Contains("Runtime manifest schedule contains 2 dependency edges", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_rejects_dependency_graph_over_limit_before_loading_any_bundle()
     {
         var dependency = new TestBundle(2);
