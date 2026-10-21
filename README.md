@@ -90,8 +90,8 @@ The package targets **.NET 8** and is versioned `0.1.0-alpha.7`.
 - **Understand the runtime:** [Architecture](docs/ARCHITECTURE.md), [Runtime Manifest](docs/RUNTIME_MANIFEST.md), [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md), [Arbitration](docs/ARBITRATION.md), and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md).
 - **Build a consumer:** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) explains the catalog, manifest, configuration, and bundle contracts.
 - **Integrate a host:** [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) describes the browser-host adapter.
-- **Explore the examples:** [Gallery](docs/GALLERY.md) and the [minimal consumer recipe](samples/FSM_COS.MinimalConsumer/Program.md).
-- **Build and test from source:** [Development](docs/DEVELOPMENT.md).
+- **Explore the examples:** [Gallery](docs/GALLERY.md) and the [minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md).
+- **Build and test from source:** [Development](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/DEVELOPMENT.md).
 - **Find a topic:** [Documentation Index](DOCUMENTATION_INDEX.md).
 ---
 <p align="center">
