@@ -367,3 +367,26 @@ Exact-candidate verification has since been recorded for `2b9d1fbfe9ad7d09140ef4
 The compare is a structural inventory, not a complete patch-by-patch proof of preservation. Before deletion, review each branch's unique commits/files against development, especially the two-commit CI dependency branch and the broad living-documentation branch. No wholesale merge is recommended.
 
 **Deletion gate remains NOT READY.** This entry does not authorize deletion. No branches or PRs were deleted, merged, or closed; canonical refs were not rewritten; NuGet publication remains unauthorized and hard-disabled.
+
+
+## Live Operation Sith follow-up — 2026-10-21 (refreshed comparison)
+
+This addendum supersedes the earlier live counts above wherever they differ. GitHub was queried again against the then-current `development` HEAD `e3b4cb4d7ec5290b15f0b0441b9e452ede53dc45`.
+
+Canonical divergence:
+- `development` is **737 commits ahead and 48 behind** `master`; merge base remains `e9c9968b9cdbec0478e77d9f89b4e74a0e404d3d`. The earlier 661-ahead figure is stale. Do not merge or reset the divergent histories wholesale.
+
+Current surplus-branch comparisons (branch unique commits / behind development; per-file diffs are against current development at query time):
+- `docs/alpha7-release-readiness`: 4 / 386. Unique readiness gate (144 added lines) and small README/index edits. Preserve/review; do not treat its older gate as canonical without reconciling it to the live gate.
+- `docs/fsm-cos-visual-contract-audit`: 5 / 113. Unique changes include `docs/LIVING_DOCUMENTATION_AUDIT.md` and `docs/assets/fsm-cos-overview.svg`. Review and harvest the source-to-diagram correction.
+- `work/alpha7-living-docs-integration`: 97 / 109. Broad overlapping integration affecting workflows, documentation standards, readiness/ledger, source and test companion docs, UML, SVG generation, sample projects, and package verification. Highest-risk branch; harvest file by file, never wholesale.
+- `work/ci-development-dependencies`: 2 / 416. Workflow and development-guide changes. Compare semantics with both canonical workflows; preserve all publish guards.
+- `work/fsm-cos-living-svg-flow`: 8 / 113. Living-SVG guide, preflight SVG, and generator changes. Reconcile against the integration branch and current committed output.
+- `work/fsm-cos-uml-class-diagrams`: 11 / 113. UML/contract-documentation changes to architecture, arbitration, runtime assembly/manifest, and staged loading. Reconcile overlaps and verify diagrams against implementation.
+
+Exact-head verification:
+- For `e3b4cb4d7ec5290b15f0b0441b9e452ede53dc45`, the combined status endpoint returned no status checks and the available commit-workflow lookup returned no PR-triggered runs. That lookup filters to PR-triggered runs, so it does **not** prove that no push-triggered run exists. Treat exact-head CI as **unverified**, not passed or failed, until workflow evidence tied to the exact SHA is obtained.
+- The readiness gate at `docs/0.1.0-alpha.7-READINESS.md` still contains checked boxes claiming that exact-candidate gates passed, but its text does not name the current SHA and the current SHA has no verified run evidence in the checks above. Those checkmarks must not be relied upon as certification for the current HEAD.
+- Both `master` and `development` package workflows still contain an explicit `&& false` publication guard. Do not weaken or remove it; NuGet publication remains unauthorized absent explicit owner approval.
+
+Disposition remains **NOT READY for manual deletion**. No branch was deleted, no PR merged/closed, no canonical ref force-updated, and no package published. Re-query refs and verify exact-HEAD CI after any subsequent commit before making a deletion-readiness claim.
