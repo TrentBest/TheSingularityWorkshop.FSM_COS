@@ -156,3 +156,11 @@ The following comparisons were made against the live `development` files, rather
 - `docs/RUNTIME_MANIFEST.md`: ported the bounded `manifest and published plan` diagram from `work/fsm-cos-uml-class-diagrams` (source blob `d3753aeb315781243216ee81418f117d41eff29c`). Kept the existing development contract text. The diagram calls out the distinction between root version requests and published references containing content hashes, and explicitly does not promise artifact retrieval or staged execution. Commit: `568e382a894499224212c59e1e4f28b3ff14600e`.
 - `docs/RUNTIME_ASSEMBLY.md`: ported the bounded `assembly handoff` diagram from the same branch (source blob `217115fbbdce40d17656854342441a9b80bcf7fa`). Kept current development prose. The diagram identifies the host as outside FSM_COS and states that RuntimeAssembly is not a UI renderer, process scheduler, or rollback boundary. Commit: `7d682269092cc806a7262bf0ccba7f31b783cdc7`.
 - These are content-level diagram harvests only, not wholesale file replacement. The exact source files were compared to development before insertion; Mermaid rendering, link validation, and exact-HEAD CI are still required.
+
+
+### Verified harvest 5 — arbitration participants UML
+
+- Source: `work/fsm-cos-uml-class-diagrams:docs/ARBITRATION.md`, blob `898faf1ba84788841fbd9eb70fc4fb32d7a827f2`.
+- Destination: `development:docs/ARBITRATION.md`; inserted the diagram section without replacing current arbitration contract prose.
+- Source cross-check: `ArbitrationContext.cs`, `RuntimeAssembly.cs`, and `FsmCos.cs` were inspected on development. The diagram labels MicroBundle interfaces as external MicroBundleDomain contracts and preserves the distinction between bounded convergence and proof of semantic compatibility.
+- Integration commit: `18407454bcbc378f516589a220023d003ce9dfa9`. Rendering and exact-HEAD CI are still required.
