@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # RuntimeManifestLoadPlan
 
 **Source:** `src/FSM_COS/RuntimeManifestLoadPlan.cs`  
@@ -36,3 +38,11 @@ RuntimeManifestLoadPlan ..> IManifestLoadEvaluator : deferred decisions
 Constructor snapshots/bounds entries and rejects invalid/duplicate IDs; optional schedule must match identity/stage coverage. MarkLoaded requires Localized and loaded prerequisites. EvaluatePromotions considers localized entries in stage order, calls evaluator only for Deferred entries, and validates replacement schedule consistency. This is a tracker/candidate evaluator, not an artifact loader or hot-reload mechanism.
 
 For behavior beyond the declaration summarized here, inspect the implementation and relevant tests at the same baseline. This page is not evidence of hosted rendering or accessibility behavior by itself.
+
+---
+
+**The Singularity Workshop**  
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)  
+[ FSM_API ](https://github.com/TrentBest/FSM_API) · [ FSM_Serialization ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [ WebPage ](https://github.com/TrentBest/WebPage) · [ FSM_COS Documentation Standard ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)  
+**Because state shouldn't be a mess.**  
+*And because static boundaries are invitations to cause trouble.*

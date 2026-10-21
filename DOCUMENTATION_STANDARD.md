@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # Documentation Standard
 
 This document defines the shared documentation standard for The Singularity Workshop repositories. It is a quality standard, not a demand that every repository use identical prose or contain every possible document.
@@ -341,3 +343,22 @@ The Gallery is the Workshop's common answer to “show me”: each package choos
 - [ ] Development CI resolves dependent source/artifacts from `development`; release CI uses the intended `master`/published dependency contract.
 - [ ] Release workflows are gated and the publish step's outcome is checked separately from build/test success.
 - [ ] Documentation, badges, and release notes distinguish current development state from the published release.
+
+## Required Workshop branding
+
+Every tracked Markdown file in FSM_COS uses the same Workshop identity shell:
+
+- Place the animated moniker image first, before the document title or other content, using the canonical Renderer asset URL used by the repository README.
+- End with the same text-based, linkable Workshop footer. The footer must not embed an SVG avatar or other image; the animated moniker at the top is the shared visual signature.
+- Apply the rule to repository instructions, READMEs, package README, security and release documents, technical guides, UML companion pages, historical notes, and maintainer audits. Do not exempt a file merely because it is generated-looking, technical, or archived.
+- Keep the footer identical across files. Only the document body and title vary.
+- Branding is not evidence that a diagram is “living,” source-accurate, interactive, or release-ready. Those claims require separate definitions and verification.
+
+
+---
+
+**The Singularity Workshop**  
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)  
+[ FSM_API ](https://github.com/TrentBest/FSM_API) · [ FSM_Serialization ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [ WebPage ](https://github.com/TrentBest/WebPage) · [ FSM_COS Documentation Standard ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)  
+**Because state shouldn't be a mess.**  
+*And because static boundaries are invitations to cause trouble.*

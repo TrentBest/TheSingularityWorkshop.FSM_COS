@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # Archived Pause Point — FSM_COS
 
 > **Archive status:** This note preserves an earlier engineering pause decision and its rationale. It is not a live release checklist or a current CI report.
@@ -25,3 +27,11 @@ This file previously combined alpha.6 release checkpoints, old `&& false` public
 ## Resume rule
 
 Check the current `development` HEAD, read the alpha.7 readiness gate, and verify current workflow results for that exact SHA. A green run on an earlier commit is not proof for a later candidate. Package readiness is distinct from permission to publish; no publication without explicit owner authorization.
+
+---
+
+**The Singularity Workshop**  
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)  
+[ FSM_API ](https://github.com/TrentBest/FSM_API) · [ FSM_Serialization ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [ WebPage ](https://github.com/TrentBest/WebPage) · [ FSM_COS Documentation Standard ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)  
+**Because state shouldn't be a mess.**  
+*And because static boundaries are invitations to cause trouble.*

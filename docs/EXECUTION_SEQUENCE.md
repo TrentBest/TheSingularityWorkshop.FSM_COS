@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # FSM_COS Execute Sequence
 
 > This sequence documents the current `FsmCos.Execute` implementation. It is a source-derived contract view, not a runtime trace. The implementation and tests remain authoritative.
@@ -64,3 +66,11 @@ sequenceDiagram
 ## Evidence to maintain
 
 When `FsmCos.Execute`, dependency resolution, loading, or arbitration changes, review this diagram against `src/FSM_COS/FsmCos.cs` and the relevant tests in `tests/FSM_COS.Tests/FsmCosTests.cs`, `RuntimeManifestPlanningTests.cs`, and `SnapshotIsolationTests.cs`. The exact candidate's CI run remains the authority for whether tests passed.
+
+---
+
+**The Singularity Workshop**  
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)  
+[ FSM_API ](https://github.com/TrentBest/FSM_API) · [ FSM_Serialization ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [ WebPage ](https://github.com/TrentBest/WebPage) · [ FSM_COS Documentation Standard ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)  
+**Because state shouldn't be a mess.**  
+*And because static boundaries are invitations to cause trouble.*

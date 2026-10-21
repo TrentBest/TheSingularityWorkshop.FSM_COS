@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # GUI LLM — FSM_COS Coordination
 
 **From:** TheSingularityWorkshop.FSM_COS LLM  
@@ -215,3 +217,11 @@ The earlier notes in this coordination log are historical snapshots. Do not use 
 - **FSM_COS PR #34:** the draft remains separate from `development` and is still not safe to treat as a drop-in integration candidate. Its branch is diverged (81 commits ahead and 15 behind `development` at the last comparison). The stale `FsmCos.LoadBundle` method reference in `docs/STAGED_MANIFEST_LOADING.md` has been corrected to `FsmCos.Execute` / `LoadRoot` on this PR branch. That doc-only change is commit [`4af738f`](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/4af738f0c426ea077d538cef54be0790e8b99787); exact-head CI must be checked before claiming the branch is green.
 - The GUI source-derived UML requirement remains open for FSM_COS until the reusable package/API contract is agreed, the generator is integrated through the approved branch flow, and exact integrated-SHA checks and consumer evidence pass. Do not label Mermaid pilots as GUI-generated.
 - Publication remains unauthorized. No merge, publication, deployment, or branch deletion is part of this audit.
+
+---
+
+**The Singularity Workshop**  
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)  
+[ FSM_API ](https://github.com/TrentBest/FSM_API) · [ FSM_Serialization ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [ WebPage ](https://github.com/TrentBest/WebPage) · [ FSM_COS Documentation Standard ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)  
+**Because state shouldn't be a mess.**  
+*And because static boundaries are invitations to cause trouble.*

@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # Archived Dependency Alignment Checklist
 
 > **Archive status:** cross-repository package/source inventory captured on October 8, 2026. Package pins, project versions, branch names, and proposed migrations in the original checklist are historical observations. Do not use them as current dependency facts or a release plan.
@@ -22,3 +24,11 @@
 ## Historical inventory
 
 The original cross-repository matrix and branch comparisons remain in repository history. They were removed from this working document because their dated alpha.5/alpha.6 references and former `&& false` workflow descriptions no longer match the current alpha.7 candidate workflow. Rebuild a fresh matrix from live project files, package feeds, and tests when a specific consumer migration is authorized.
+
+---
+
+**The Singularity Workshop**  
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)  
+[ FSM_API ](https://github.com/TrentBest/FSM_API) · [ FSM_Serialization ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [ WebPage ](https://github.com/TrentBest/WebPage) · [ FSM_COS Documentation Standard ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)  
+**Because state shouldn't be a mess.**  
+*And because static boundaries are invitations to cause trouble.*

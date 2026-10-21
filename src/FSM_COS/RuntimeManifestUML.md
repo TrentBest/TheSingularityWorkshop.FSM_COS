@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # `RuntimeManifest` — UML relationships and use cases
 
 **Focus type:** [`RuntimeManifest`](RuntimeManifest.md)  
@@ -94,3 +96,11 @@ These are maintainer-facing scenarios grounded in the current public contract an
 - **Behavioral claims:** tied to the source and linked tests/docs above.
 - **Human-authored intent:** the use cases are explicit draft scenarios, not generated claims. Their wording and status need maintainer review.
 - **Generator boundary:** GUI should eventually generate the class card/relationships from a stable semantic model, while use-case intent remains explicitly authored or reviewed.
+
+---
+
+**The Singularity Workshop**  
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)  
+[ FSM_API ](https://github.com/TrentBest/FSM_API) · [ FSM_Serialization ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [ WebPage ](https://github.com/TrentBest/WebPage) · [ FSM_COS Documentation Standard ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)  
+**Because state shouldn't be a mess.**  
+*And because static boundaries are invitations to cause trouble.*

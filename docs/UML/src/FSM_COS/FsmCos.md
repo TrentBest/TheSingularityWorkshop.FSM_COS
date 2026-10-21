@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # FsmCos
 
 **Source:** `src/FSM_COS/FsmCos.cs`  
@@ -37,3 +39,11 @@ FsmCos ..> RuntimeAssembly : success result
 Resource limits: default 10 arbitration rounds, 10,000 bundles, 100,000 dependency requests, 64 MiB total configuration. Preflight happens before Load callbacks. Iterative graph traversal avoids recursive stack growth. Configuration bytes are copied. If a later Load fails, earlier bundle side effects are not rolled back; tests cover this. A schedule is not the FSM_API process scheduler.
 
 For behavior beyond the declaration summarized here, inspect the implementation and relevant tests at the same baseline. This page is not evidence of hosted rendering or accessibility behavior by itself.
+
+---
+
+**The Singularity Workshop**  
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)  
+[ FSM_API ](https://github.com/TrentBest/FSM_API) · [ FSM_Serialization ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [ WebPage ](https://github.com/TrentBest/WebPage) · [ FSM_COS Documentation Standard ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)  
+**Because state shouldn't be a mess.**  
+*And because static boundaries are invitations to cause trouble.*

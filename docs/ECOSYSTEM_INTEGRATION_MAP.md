@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # Ecosystem Integration Map
 
 > **Status:** architecture working document. This map separates verified repository/package facts from proposed composition decisions. It is not a release plan and does not authorize publishing, merging, or breaking package changes.
@@ -266,3 +268,11 @@ The source comparison strengthens the dependency-light Core recommendation. Deve
 **Target split:** Core owns artifact address, content identity, hash validation, and repository contracts. An optional metadata/catalog contract owns semantic addresses and publication pointers. A serialization/materialization adapter owns the assembly envelope and turns verified bytes into an `IMicroBundle`. A standalone publisher or integration test should preserve the feature branch's end-to-end upload/retrieve/materialize check. The development CLI's REST operations are complementary, not a replacement for that validation path.
 
 The source-level compatibility gaps remain unverified: master pins FSM_COS alpha.5 and Ontology alpha.2; development REST pins FSM_COS alpha.3; inspected current source declarations are FSM_COS alpha.6 and Ontology alpha.3. Do not alter package pins until restore/build/test results establish compatibility. No build or CI pass is claimed by this source inspection.
+
+---
+
+**The Singularity Workshop**  
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)  
+[ FSM_API ](https://github.com/TrentBest/FSM_API) · [ FSM_Serialization ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [ WebPage ](https://github.com/TrentBest/WebPage) · [ FSM_COS Documentation Standard ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)  
+**Because state shouldn't be a mess.**  
+*And because static boundaries are invitations to cause trouble.*

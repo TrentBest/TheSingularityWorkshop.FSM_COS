@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # Living Documentation Visual Audit
 
 **Purpose:** make FSM_COS documentation easier to understand through accurate diagrams, animated SVGs, interactive examples, and other living visuals where they materially teach the subject.
@@ -244,3 +246,11 @@ These remain coverage targets even where current simplified diagrams exist. Merm
 5. **Arbitration sequence/state view:** show per-round arbitration, change aggregation, convergence, configured limit, and failure. Distinguish the zero-based convergence index from the number of calls.
 
 Each visual decision must distinguish a source-grounded claim from an illustrative model. An asset's existence does not prove it is embedded in the relevant document, and embedding alone does not prove the visual is accurate or accessible. Hosted rendering and accessibility remain separate verification gates.
+
+---
+
+**The Singularity Workshop**  
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)  
+[ FSM_API ](https://github.com/TrentBest/FSM_API) · [ FSM_Serialization ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [ WebPage ](https://github.com/TrentBest/WebPage) · [ FSM_COS Documentation Standard ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)  
+**Because state shouldn't be a mess.**  
+*And because static boundaries are invitations to cause trouble.*

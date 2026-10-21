@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # Security posture and adversarial test plan
 
 FSM_COS is a composition kernel that invokes host-supplied catalog, configuration-provider, and MicroBundle code. This document separates guarantees enforced by FSM_COS from guarantees that belong to the host and deployment.
@@ -61,3 +63,11 @@ The relevant attack surface for this package is narrower than a web application,
 ## Reporting a vulnerability
 
 Please report suspected vulnerabilities privately to the repository maintainer rather than publishing an exploit before a fix is available. Do not include secrets, production data, or credentials in public issues.
+
+---
+
+**The Singularity Workshop**  
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)  
+[ FSM_API ](https://github.com/TrentBest/FSM_API) · [ FSM_Serialization ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [ WebPage ](https://github.com/TrentBest/WebPage) · [ FSM_COS Documentation Standard ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)  
+**Because state shouldn't be a mess.**  
+*And because static boundaries are invitations to cause trouble.*

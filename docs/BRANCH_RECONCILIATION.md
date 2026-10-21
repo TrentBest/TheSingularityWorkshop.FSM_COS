@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # Live Branch Reconciliation Ledger
 
 > **Snapshot:** 2026-10-20 18:23 UTC. Live refs and comparisons refreshed. This is an evidence ledger, not authorization to merge, publish, or delete branches.
@@ -59,3 +61,11 @@ The latest compare API result reports `development` as 628 commits ahead of `mas
 5. Report the exact temporary branch names as safe for the owner to delete only after these gates are met.
 
 Green CI is not permission to merge or publish. This ledger does not authorize branch deletion.
+
+---
+
+**The Singularity Workshop**  
+[GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)  
+[ FSM_API ](https://github.com/TrentBest/FSM_API) · [ FSM_Serialization ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [ WebPage ](https://github.com/TrentBest/WebPage) · [ FSM_COS Documentation Standard ](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md)  
+**Because state shouldn't be a mess.**  
+*And because static boundaries are invitations to cause trouble.*
