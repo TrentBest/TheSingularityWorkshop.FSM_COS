@@ -81,3 +81,12 @@ Before calling this automated or release-grade, add checks for source-file inven
 - [RuntimeManifestEntry](src/FSM_COS/RuntimeManifestEntry.md) — current-source companion documenting the type's identity and responsibility boundaries.
 - [MicroBundleReference](src/FSM_COS/MicroBundleReference.md) — current-source companion documenting the type's identity and responsibility boundaries.
 - [RuntimeManifestDependency](src/FSM_COS/RuntimeManifestDependency.md) — current-source companion documenting the type's identity and responsibility boundaries.
+
+- [IManifestLoadEvaluator](src/FSM_COS/IManifestLoadEvaluator.md) — current-source companion for the composition contract.
+- [IMicroBundleCatalog](src/FSM_COS/IMicroBundleCatalog.md) — current-source companion for the composition contract.
+- [IMicroBundleConfigurationSource](src/FSM_COS/IMicroBundleConfigurationSource.md) — current-source companion for the composition contract.
+- [ManifestLoadStage](src/FSM_COS/ManifestLoadStage.md) — current-source companion for the composition contract.
+- [MicroBundleManifestEntry](src/FSM_COS/MicroBundleManifestEntry.md) — current-source companion for the composition contract.
+- [MicroBundleLoadContext](src/FSM_COS/MicroBundleLoadContext.md) — current-source companion for the composition contract.
+- [IFsmCos](src/FSM_COS/IFsmCos.md) — current-source companion for the composition contract.
+- [ArbitrationContext](src/FSM_COS/ArbitrationContext.md) — current-source companion for the composition contract.
