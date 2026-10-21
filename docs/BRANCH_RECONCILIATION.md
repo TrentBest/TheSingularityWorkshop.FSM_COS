@@ -141,3 +141,11 @@ The following comparisons were made against the live `development` files, rather
 - Destination: `development:docs/ARCHITECTURE.md`; added a focused class diagram ahead of Runtime flow while retaining the current architecture text and caveats.
 - Source cross-check: the diagram's principal types and signatures were checked against live development files `src/FSM_COS/FsmCos.cs`, `IFsmCos.cs`, `IMicroBundleCatalog.cs`, `RuntimeManifest.cs`, `RuntimeManifestSchedule.cs`, and `RuntimeAssembly.cs`. The diagram explicitly labels member signatures/collection element types as abbreviated and says schedule metadata does not activate deferred execution or localize artifacts.
 - Integration commit: `9ede8b5b39aaf2241edb373ff45858098eb16fbc`. This is a bounded documentation harvest, not a branch merge and not release verification. Exact-head CI and Markdown/Mermaid rendering still need to pass.
+
+
+### Verified harvest 2 — staged manifest/load-plan UML
+
+- Source: `work/fsm-cos-uml-class-diagrams:docs/STAGED_MANIFEST_LOADING.md`, blob `abc5012915235906402550b912eb43b6ac2b2939`.
+- Destination: `development:docs/STAGED_MANIFEST_LOADING.md`, integrated the bounded class-diagram section only; retained all existing development contract text and verification checklist.
+- Cross-check: diagram types and behaviors were checked against `RuntimeManifest.cs`, `RuntimeManifestEntry.cs`, `RuntimeManifestSchedule.cs`, `RuntimeManifestLoadPlan.cs`, `IManifestLoadEvaluator.cs`, `ManifestLoadStage.cs`, and the in-file `MicroBundleRuntimeState` enum. The diagram's caveat explicitly states localization/loading remains host/repository responsibility and stage metadata is not an execution promise.
+- Integration commit: `8bc87007964df4354efc216b4741cbac46474526`. Markdown/Mermaid rendering and exact-HEAD CI remain unverified.
