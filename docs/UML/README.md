@@ -67,3 +67,8 @@ The first manually authored, source-grounded class view is [FsmCos.svg](ClassDia
 This file does not yet provide a full AST diagram set, per-type class diagrams, collaboration diagrams, or use-case diagrams. Those should be added in separate, reviewable assets after each diagram's source relationships have been checked. The next useful slice is `FsmCos` plus its directly consumed contracts, followed by manifest/load-plan types.
 
 Before calling this automated or release-grade, add checks for source-file inventory, declared-type inventory (including nested/partial types), stale source revisions, missing/orphan diagrams, SVG/XML validity, accessible text, and generated-diff review. No such automation is claimed by this index.
+
+
+## Current source companion
+
+- [FsmCos](src/FSM_COS/FsmCos.md) — source-reviewed companion for current development baseline `326a021498156f2bb7dc7a31219d6118d3427e37`; diagram rendering and link checks remain unverified.
