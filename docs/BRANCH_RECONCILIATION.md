@@ -222,3 +222,19 @@ Created and indexed current-source companions:
 - Index commit: `97cb479651361c886992acec1dca2e966d0ea92e`.
 
 The pages distinguish validity checks from artifact retrieval/hash verification and graph-level validation. The corresponding older branch pages use the old source baseline and were not copied. Rendering, automated link checks, and exact-head CI remain unverified.
+
+
+### Verified harvests 14–21 — current-source composition contract companions
+
+Created and indexed eight more pages against current development source:
+- `docs/UML/src/FSM_COS/IManifestLoadEvaluator.md` — source blob `735a28a7ec2180330f20d600152f83c3f391c519`, commit `495cb6b8612d7d8c83902037f87658b3b20061cd`.
+- `docs/UML/src/FSM_COS/IMicroBundleCatalog.md` — source blob `54925e70584fa414abc7c86669f8beb738004d6d`, commit `a7b2b8a541f3af3fc8f27e84cae4bea4649549f4`.
+- `docs/UML/src/FSM_COS/IMicroBundleConfigurationSource.md` — source blob `eaad15c340817391e41bfb3d5e6dc9028e193e5a`, commit `354fc7d711d31b8901af85f533a06c5fca5afa20`.
+- `docs/UML/src/FSM_COS/ManifestLoadStage.md` — source blob `e7313fb890ac15cc1f61648056edb885ac856a0f`, commit `2ac48ea1c1b400549d19154a6f7c9d730ddd14a7`.
+- `docs/UML/src/FSM_COS/MicroBundleManifestEntry.md` — source blob `f53611126fde9a3eacb5f596d6fa13fc4e61ce6e`, commit `4483718751770e72af345cc2b089a38f48a8db61`.
+- `docs/UML/src/FSM_COS/MicroBundleLoadContext.md` — source blob `4ede9c138d0fd5fca0638b135565e2724b283b62`, commit `1c309f64e9e3be9947d1ed691a8ce7a7e9841cc5`.
+- `docs/UML/src/FSM_COS/IFsmCos.md` — source blob `6b3d18419609e364d00918b8ef632e443c93a31f`, commit `c032d1a1ba67e3a8c84b116766c4c931a42afda8`.
+- `docs/UML/src/FSM_COS/ArbitrationContext.md` — source blob `e74a4d177f894de85cd2a34c4df00a182b973c07`, commit `1c77bc2ac29abb42d9a05c7d4f6e31e0830a6f89`.
+- UML index update: `9b7b8c957b5a9b5397ee00552dba0bccfb720f27`.
+
+The pages cover Experience-owned promotion policy, catalog resolution, optional configuration, intended load-stage metadata, root request identity, load context, composition entry interface, and arbitration context. Each states the boundary between its contract and artifact localization/loading. Rendering, automated links, and exact-head CI remain unverified.
