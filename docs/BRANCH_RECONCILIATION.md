@@ -250,3 +250,16 @@ Compared the old integration branch's UML/test inventory with current `developme
 - Index commit: `5b984900542e5cac550f2c33465be6a96fe9bef5`.
 
 The test docs summarize the actual current test themes; they are not assertions that tests passed. The test project must run on the exact integrated HEAD, and Mermaid/link verification remains outstanding. The old `GlobalUsings.md` is not being copied as a class companion because `GlobalUsings.cs` only declares `global using Xunit;`; it can be covered by a concise project-level note if needed.
+
+
+### Living-SVG harvest — integrated as a coherent generator/asset/doc set
+
+Compared `work/fsm-cos-living-svg-flow` with current `development`. The branch had only one file absent from development, `docs/LIVING_SVG.md`; its other unique value was the coordinated change across the generator, generated SVG, and documentation. The generator change was narrowly reviewed: add `System.Xml.Linq`, tag the seven connector lines with `flow-line`, and inject the CSS stylesheet after serialization. The reduced-motion media query disables motion and restores solid connectors. Existing scene labels and diagram intent match the current development asset.
+
+Integrated:
+- Generator commit: `2aaa0e68483e19b64b0571514c3a0c1f6eb92d99`
+- Generated SVG commit: `12b6ae559dc844765de50ddaa9e283a751c10831`
+- Living-SVG contract doc commit: `04d08fc67e72637b937f514f3cd59e2e4b174caa`
+- README link commit: `43725b06218a888705e4ef74529104a67508fdc3`
+
+The package workflow's existing pinned GUI.SVG checkout and regeneration/diff guard were preserved; no workflow or publishing condition was changed. The generated SVG was harvested from the matching generator branch, but exact-head workflow regeneration has not yet verified byte-for-byte reproducibility on the integrated development candidate. Browser rendering, hosted appearance, accessibility-tree exposure, and screen-reader behavior remain unverified. PR #33 and #34 remain open/draft pending a fresh check review.
