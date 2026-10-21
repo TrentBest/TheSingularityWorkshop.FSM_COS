@@ -411,3 +411,22 @@ The archived material includes the substantially expanded `GUILLM.md`, documenta
 The branch compare at this point reports 97 ahead / 120 behind. The archive materially reduces the risk of losing documentation, but this is not proof that every changed line or commit has been dispositioned, and the branch is **not yet certified safe for deletion**. No surplus branch was deleted; no PR merged or closed; no canonical ref rewritten; no NuGet package published.
 
 Latest preservation commit before this ledger append: `29cd8177ae496e13395b1813e61de69b0e93ee76`. Exact-HEAD CI for the new commits remains unverified; the historical 22/23 (96%) gate figure does not certify these commits. NuGet publication remains unauthorized and hard-disabled.
+
+
+## Operation Sith — six-branch preservation sweep (2026-10-21 22:34 UTC)
+
+Completed a targeted changed-file preservation pass across all six surplus FSM_COS branches. The source branch refs have not been deleted or altered. The consolidated recovery index is `docs/branch-harvest/2026-10-21/README.md`; all archived items are snapshots for recovery/review, not automatic integration.
+
+Branch-specific preservation:
+- `docs/alpha7-release-readiness`: readiness gate, README, and documentation index snapshots preserved in `READINESS-BRANCH-SNAPSHOT.md`.
+- `docs/fsm-cos-visual-contract-audit`: unique living-documentation audit and overview SVG preserved in `VISUAL-CONTRACT-BRANCH-SNAPSHOT.md`.
+- `work/alpha7-living-docs-integration`: expanded `GUILLM.md`, documentation standard/index and broad architecture/runtime/living-doc content, per-type UML companions, sample/test companions, sample generator, package verifier, workflow proposal, release docs and divergent SVGs preserved across the archive's initial and `ADDITIONAL-*` batches. Direct comparison showed `src/FSM_COS/FSM_COS.csproj` is byte-identical despite a compare-summary entry.
+- `work/ci-development-dependencies`: package workflow and development guide preserved in `CI-DEPENDENCY-BRANCH-SNAPSHOT.md`.
+- `work/fsm-cos-living-svg-flow`: index/NuGet README, living-SVG guide, preflight SVG, and generator snapshots preserved in `LIVING-SVG-BRANCH-SNAPSHOT.md`.
+- `work/fsm-cos-uml-class-diagrams`: expanded arbitration, architecture, runtime assembly/manifest and staged-loading docs preserved in `UML-CONTRACT-BRANCH-SNAPSHOT.md`.
+
+**Security guardrail:** both divergent workflow proposals remain archived only as text. The alpha.7 integration workflow lacks the canonical `&& false` publish hard stop; it must not replace the active workflow. Canonical publish conditions remain untouched. NuGet publication is still unauthorized.
+
+This pass preserves the changed-file content for recovery if the owner chooses to delete surplus refs. It does not preserve all Git commit metadata, certify every historical claim, or mean the archived code/visuals should be adopted without review. The archive is intentionally kept under `docs/branch-harvest/2026-10-21/` so recovery does not depend on the surplus branches remaining.
+
+Latest index commit before this ledger update: `d65b6c1e509f22b7776322ef9de85d889051e287`. This ledger update itself changes the candidate HEAD and requires fresh CI verification. Historical release-gate evidence remains 22/23 (96%) only for its previously tested candidate; current-HEAD certification remains **unverified**. No branch was deleted, no PR merged/closed, no canonical ref rewritten, and no package published.
