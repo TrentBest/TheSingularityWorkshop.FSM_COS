@@ -34,3 +34,5 @@ Branch comparison refreshed after the harvest: 97 ahead / 120 behind `developmen
 The changed-file inventory from all six surplus FSM_COS branches has now been preserved in the archive as branch-specific snapshots, including code/tooling/workflow proposals in inert text where applicable. Byte-identical files are documented as such rather than duplicated as implementation changes. This materially protects the recoverable content if the owner deletes the source branches. It is not a claim that all archived material should be integrated, that branch commit metadata is preserved, or that current `development` passes CI.
 
 - `docs/branch-harvest/2026-10-21/BRANCH-HEADS.md` — captured exact head SHAs and commit URLs for all six surplus branches before manual cleanup; warns that SHAs alone do not retain unreachable Git objects.
+
+- `docs/branch-harvest/2026-10-21/FINAL-PRE-CLEANUP-DISPOSITION.md` — final six-branch disposition matrix, exact compare counts, implementation/workflow findings, open PR status, and exact-HEAD CI status as of the last round.
