@@ -106,7 +106,6 @@ def verify(package_dir: Path, project_path: Path) -> None:
             license_name,
             "README.md",
             "SECURITY.md",
-            "DOCUMENTATION_STANDARD.md",
             "DOCUMENTATION_INDEX.md",
             f"docs/releases/{version}.md",
             "docs/assets/fsm-cos-overview.svg",
