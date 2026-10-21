@@ -6,7 +6,7 @@ This index links to the current product guides and development instructions.
 
 - [Project overview](README.md) — purpose, architecture at a glance, and a runnable consumer.
 - [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) — introduction to runtime composition.
-- [Minimal consumer](samples/FSM_COS.MinimalConsumer/Program.md) — working example with a local catalog and two MicroBundles.
+- [Minimal consumer](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md) — working example with a local catalog and two MicroBundles.
 - [Gallery](docs/GALLERY.md) — diagrams of the composition and handoff flow.
 
 ## Use FSM_COS
@@ -25,8 +25,8 @@ This index links to the current product guides and development instructions.
 
 - [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) — version-specific API and behavior changes.
 - [Security](SECURITY.md) — threat model, resource limits, trust assumptions, and security verification.
-- [Development](docs/DEVELOPMENT.md) — build, test, and CI instructions.
-- [Public API UML](docs/UML/README.md) — source-to-type diagrams and class cards.
+- [Development](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/DEVELOPMENT.md) — build, test, and CI instructions.
+- [Public API UML](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/README.md) — source-to-type diagrams and class cards.
 
 ## Repository verification
 
