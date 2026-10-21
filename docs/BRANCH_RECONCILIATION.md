@@ -327,3 +327,23 @@ The new root `GUILLM.md` states the cross-repository contract: GUI owns reusable
 The alpha.7 readiness gate now records the exact verified candidate `43fae5aa6eec84aaf98f305b758bda03d0cc9a0e`, passing Pack and publish run [39679881326](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39679881326), passing CodeQL run [39679881297](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39679881297), and both inspected package artifact hashes. It retains **22/23 (96%)** with hosted rendering/accessibility behavior open. The subsequent documentation commits that record this evidence and preserve `GUILLM.md` create a new candidate; rerun the required workflows on the resulting exact `development` HEAD before carrying verification forward.
 
 **NuGet owner-authorization boundary remains absolute:** `publish_nuget` retains its hard-disabled `&& false` condition. Successful CI is not permission to publish. No publish, branch deletion, PR merge, or PR closure occurred.
+
+
+### Live compare refresh — 2026-10-21 22:01 UTC
+
+Rechecked all six surplus refs against the live `development` branch after the readiness document was updated. The current `development` HEAD is `0849d31dd62e332c251ff7cb8015ef5657bb9961`. The comparisons below are point-in-time counts; all six refs remain divergent.
+
+| Branch | Ahead | Behind | Current disposition |
+|---|---:|---:|---|
+| `docs/alpha7-release-readiness` | 4 | 384 | Current readiness gate supersedes older checklist; do not wholesale copy. |
+| `docs/fsm-cos-visual-contract-audit` | 5 | 111 | Audit/SVG material selectively harvested; remaining branch content still needs final review. |
+| `work/alpha7-living-docs-integration` | 97 | 107 | Broad documentation/UML work selectively reconciled; do not wholesale merge. |
+| `work/ci-development-dependencies` | 2 | 414 | Reject workflow wholesale because it weakens the pinned-action safety boundary. |
+| `work/fsm-cos-living-svg-flow` | 8 | 111 | Generator/asset/guide selectively integrated; browser/accessibility evidence remains open. |
+| `work/fsm-cos-uml-class-diagrams` | 11 | 111 | Contract diagrams selectively harvested; remaining unique content requires review. |
+
+The combined-status endpoint returned no status entries for the current `development` HEAD, and the connector's commit-workflow-runs lookup returned no PR-triggered workflow runs. That workflow lookup is filtered to PR-triggered runs, so it is not proof that no other Actions run exists. Treat exact-head Pack/publish-verification, CodeQL, package-artifact inspection, and living-SVG regeneration as **unverified for this HEAD** until evidence tied to this SHA is available.
+
+The previously recorded **22/23 (96%)** alpha.7 result applies to historical candidate `43fae5aa6eec84aaf98f305b758bda03d0cc9a0e`, not this later HEAD. Do not report it as current verified readiness.
+
+**Deletion gate remains NOT READY.** This refresh records comparisons only; it does not authorize deletion. No branches or PRs were deleted, merged, or closed, no canonical refs were rewritten, and NuGet publication remains unauthorized and hard-disabled.
