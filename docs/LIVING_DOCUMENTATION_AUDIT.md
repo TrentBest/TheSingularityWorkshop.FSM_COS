@@ -116,3 +116,10 @@ These findings do **not** establish complete semantic accuracy for every visual,
 ## Definition of done
 
 This audit is complete only when every documentation file has been considered, each visual that materially helps is present and source-aligned, every local asset reference is valid, remaining text-only documents have a recorded reason, and the open verification boundaries above are closed or explicitly accepted with a documented rationale. Visual quantity is not a completion criterion.
+
+
+## Latest reconciliation note — overview handoff and execution sequence
+
+The source-to-diagram audit branch exposed a concrete overview defect: the overview SVG drew a second connector from `RuntimeAssembly` toward `Experience`, bypassing the Host. The current asset now routes the handoff from the Host to the Experience instead. This correction is integrated in `development`; hosted layout and the full semantic audit remain open.
+
+The previously missing execute sequence is now available at [Execute Sequence](EXECUTION_SEQUENCE.md). It documents the current `FsmCos.Execute` order, dependency-first loading, bounded arbitration, and failure boundaries. It is a manually authored Mermaid sequence diagram grounded in source and tests, not GUI.SVG-generated UML or live telemetry. Exact-head CI and hosted rendering/accessibility remain the evidence gates.
