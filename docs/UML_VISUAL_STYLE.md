@@ -3,7 +3,7 @@
 
 # Living UML and Data-Card Visual Standard
 
-This repository follows the Workshop's GUI data-card direction: **a picture should explain the structure, and a living picture should let readers follow the meaning as it changes.**
+This page is the FSM_COS-specific supplement to the shared [Documentation Standard](../DOCUMENTATION_STANDARD.md), especially its canonical recursive, target-centered UML and data-card rules. A picture should explain the structure, and a living picture should let readers follow the meaning as it changes.
 
 The canonical design rationale and broader interaction contract live in the GUI repository's [UML-Inspired Data Cards](https://github.com/TrentBest/TheSingularityWorkshop.GUI/blob/development/docs/DATA_CARDS_AND_UML.md). This page records the practical rules for FSM_COS documentation and for future Workshop repositories adopting the same style.
 
