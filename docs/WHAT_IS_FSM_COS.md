@@ -1,100 +1,91 @@
 <!-- The Singularity Workshop moniker -->
 <p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
 
-# What Is FSM_COS? A First Visit
+# What Is FSM_COS? The Compute Operating System
 
-You do not need to know how to program to start understanding FSM_COS. Begin with the problem it solves: **how can a program gather the right pieces of behavior without hard-wiring every possible combination into one giant application?**
+FSM_COS is The Singularity Workshop's **Compute Operating System for assembling composable runtime systems**. A host declares what computation it wants; FSM_COS resolves the required MicroBundles, checks their dependency relationships, loads the composition in dependency order, runs bounded arbitration, and returns a `RuntimeAssembly` for the host to use.
 
-FSM_COS is The Singularity Workshop's **runtime composition kernel**. In plain language, it helps a host put compatible pieces together for a requested experience. It does not, by itself, create the whole experience or run the finished application.
+“Operating system” here describes the **runtime composition layer** of the Workshop architecture. FSM_COS is not a general-purpose desktop operating system, a hardware kernel, or the application's execution loop. Its job is to turn a composition request into a validated, assembled result at a well-defined boundary.
 
-## Start with a familiar problem
+The **FSM** in its name points to the [FSM_API](https://github.com/TrentBest/FSM_API) foundation: FSM_COS consumes finite-state-machine/state-context primitives as part of the wider Workshop runtime model. Its own responsibility is composition, not scheduling every process or running the finished experience.
 
-Imagine you are setting up a workshop for a particular job. You need a set of tools, and some tools require other tools to be available first. You want to describe the job, find the necessary pieces, give them a defined opportunity to reconcile their shared setup, and then hand the prepared setup to the person who will actually do the work.
+## The problem it solves
 
-A software system faces a similar problem. One experience might need several independent capabilities. Some capabilities depend on others. Different hosts may want different combinations.
+Applications often need different combinations of capabilities. A reporting experience may need a data source; a WebPage may need several presentation and domain capabilities; a simulation may need a different set. Some capabilities depend on others, and those prerequisites must be present before the dependent capability is loaded.
 
-Without a separate composition step, each application can end up repeating the rules for finding dependencies and wiring capabilities together. FSM_COS gives that composition work a defined home.
+Without a shared composition layer, each host tends to grow its own dependency resolution, validation, loading order, and readiness rules. That logic becomes duplicated and tightly coupled to the application.
 
-The workshop analogy has a limit: FSM_COS is software with specific contracts and algorithms, not a human making judgment calls. The analogy is only a starting point for understanding the responsibilities.
+FSM_COS centralizes that common work. The host remains free to choose its catalog, configuration source, runtime lifecycle, interface, and presentation.
 
-## The idea in one picture
+## One request, one assembled result
 
 ![FSM_COS overview: a runtime manifest enters the composition kernel and a RuntimeAssembly is handed to a host](assets/fsm-cos-overview.svg)
 
-*The picture is the whole promise: a request enters, composition happens at a defined boundary, and the host receives the result. FSM_COS does not become the host application.*
-
-
 ```text
-A request for capabilities
-          |
-          v
-   Runtime Manifest
-   "I need these pieces"
-          |
-          v
-       FSM_COS
-   - finds requested bundles
-   - resolves their dependencies
-   - loads the composition
-   - runs bounded arbitration
-          |
-          v
-    RuntimeAssembly
-   "Here is the assembled result"
-          |
-          v
-   The host application
-   decides how to use it
+Host supplies:
+  RuntimeManifest + MicroBundle catalog + optional configuration
+                         │
+                         ▼
+                      FSM_COS
+          resolve → validate → load → arbitrate
+                         │
+                         ▼
+                  RuntimeAssembly
+                         │
+                         ▼
+             host executes or presents it
 ```
 
-The manifest describes the request. FSM_COS composes the requested pieces and their dependencies. The resulting `RuntimeAssembly` is handed to the host, which owns the application experience and what happens next.
+The request names the root MicroBundles and requested versions. FSM_COS discovers their dependency closure through the supplied catalog. It validates the reachable composition, loads prerequisites before dependents, and runs arbitration for a bounded number of rounds. If a required step fails or arbitration does not converge, composition fails rather than returning a successful assembly.
 
-## Five terms, in everyday language
+A successful `RuntimeAssembly` is a composition handoff. It is not proof that all bundles are semantically compatible, and it does not start an application or render an interface.
 
-| Term | Plain-language meaning |
+## Why would I use it?
+
+FSM_COS is worth using when you need one or more of these properties:
+
+- **Combinations are selected at runtime.** Different manifests can request different roots without requiring a separate hard-wired host for every combination.
+- **Dependencies matter.** A requested capability can bring in the prerequisites it declares.
+- **Hosts should share composition rules.** A website, desktop app, service, simulation, or headless process can use the same composition algorithm while retaining its own execution model.
+- **Failures must stop the handoff.** Missing dependencies, invalid dependency relationships, cycles, and failure to converge are treated as composition failures.
+- **Composition should remain separate from infrastructure.** The catalog may use in-memory objects, local resources, or a repository integration supplied by the host; FSM_COS does not dictate that implementation.
+
+FSM_COS is not mandatory for every program. It earns its place when reusable capabilities need to be assembled consistently across different runtime requests or hosts.
+
+## Five important terms
+
+| Term | Meaning |
 |---|---|
-| **Host** | The application or program that provides the overall experience. It might be a desktop app, website, service, simulator, or something else. |
-| **MicroBundle** | A unit of behavior that follows the MicroBundle contract. Think of it as a defined capability that can participate in a composition. It is not simply any small NuGet package. |
-| **Runtime Manifest** | The request describing which MicroBundles and versions are wanted. It says what is requested, not every detail of how the host presents it. |
-| **Dependency** | Another piece that must be available for a requested piece to be composed correctly. |
-| **RuntimeAssembly** | The composition result FSM_COS hands to the host. It is a handoff, not a finished application. |
+| **Host** | The application or runtime that requests a composition and decides how to use the result. |
+| **MicroBundle** | A unit that implements the MicroBundleDomain contract and can participate in composition. It is not merely any small library or NuGet package. |
+| **RuntimeManifest** | The request: root MicroBundles and their requested versions, plus optional supported metadata. |
+| **Catalog** | A host-supplied resolver that makes requested MicroBundles available to FSM_COS. It is not automatically an artifact downloader. |
+| **RuntimeAssembly** | The successful composition result handed back to the host. |
 
-The MicroBundle contract belongs to the separate **MicroBundleDomain** package. FSM_COS consumes that contract; it does not redefine the entire MicroBundle domain.
+The MicroBundle contract is owned by [MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain). FSM_COS consumes that domain contract and provides the composition algorithm.
 
-## A small conceptual example
+## What FSM_COS currently does—and what it does not
 
-Suppose a host wants to provide a map experience. For the sake of this example, imagine that the requested map capability depends on a separate capability that supplies map data.
+**Current composition behavior:**
+- resolves requested MicroBundles through a host-supplied catalog;
+- discovers and validates dependency closure;
+- checks for missing dependencies and dependency cycles before successful handoff;
+- loads prerequisites before dependents;
+- accepts optional configuration through a separate host-supplied source;
+- performs bounded arbitration and returns a `RuntimeAssembly` only on convergence.
 
-1. The manifest requests the map capability.
-2. The catalog gives FSM_COS a way to locate the requested MicroBundles.
-3. FSM_COS discovers that the map capability depends on the map-data capability.
-4. It resolves the dependency and composes the pieces in dependency order.
-5. FSM_COS produces a `RuntimeAssembly` for the host.
-6. The host decides how to display the map and how people interact with it.
+**Not implied by the current package:**
+- downloading or localizing MicroBundle artifacts;
+- verifying the bytes represented by a content hash;
+- activating deferred bundles inside an already-running assembly;
+- automatically refreshing, replacing, or retiring a running composition;
+- scheduling application work, rendering UI, or owning the host lifecycle.
 
-This is an **illustrative scenario**, not a claim that this repository ships a map MicroBundle. The point is the relationship between a request, its dependencies, the composition step, and the host's responsibility.
+These distinctions separate implemented behavior from future architecture. See [Staged Manifest Loading](STAGED_MANIFEST_LOADING.md) and [Runtime Boundary](RUNTIME_BOUNDARY.md) for the precise current contract.
 
-## What FSM_COS does—and does not do
+## Run the smallest example
 
-**It does:**
-- resolve requested MicroBundles and their dependencies through a supplied catalog;
-- apply available configuration through the supported composition path;
-- load the composition in dependency order;
-- perform bounded arbitration, giving participants a limited opportunity to reconcile;
-- return a `RuntimeAssembly` to the caller.
-
-**It does not automatically:**
-- find or download artifacts from the internet; the host or a repository integration must provide discovery and retrieval;
-- turn arbitrary libraries into MicroBundles;
-- guarantee that unrelated capabilities are compatible simply because they can be loaded;
-- create a user interface, run an application's main loop, or decide how a host presents an experience;
-- make every proposed future integration a current feature.
-
-These limits are intentional. Keeping the composition kernel focused makes it possible for different hosts to use it without forcing every host to adopt the same UI, storage system, or execution model.
-
-## How to try something real
-
-If you have Git and the **.NET 8 SDK** installed, clone the source repository and run its minimal consumer:
+Install Git and the **.NET 8 SDK**, then run:
 
 ```bash
 git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git
@@ -102,66 +93,20 @@ cd TheSingularityWorkshop.FSM_COS
 dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
 ```
 
-The sample creates an in-memory catalog with a report bundle that depends on a data-source bundle. You should see loading messages followed by:
+The sample requests a report bundle that depends on a data-source bundle. Its in-memory catalog provides both. The expected final line is:
 
 ```text
 Assembly order: 2 -> 1
 ```
 
-That output is the important result: FSM_COS loaded the prerequisite before the requested report. The catalog and example bundles are defined by the sample; they are not extra built-in types supplied by FSM_COS.
+The sample's catalog and bundles are example implementations, not built-in FSM_COS types. Read the [minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md) or continue to [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) to build your own.
 
-If you want to verify the behavior with a focused test instead, run:
+## Where to go next
 
-```bash
-dotnet test tests/FSM_COS.Tests/FSM_COS.Tests.csproj --filter "FullyQualifiedName~Execute_loads_dependencies_before_requesting_bundle"
-```
-
-This test checks the same dependency-ordering rule. FSM_COS is infrastructure, so its proof is a correct composition handoff—not a window or a screen. To build your own consumer, continue with [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md), which explains the catalog, manifest, configuration, and bundle contracts in practical terms.
-
-## A two-minute exercise
-
-**Without writing code:** think of an experience you know—such as a report, a map, or a classroom page. Name one capability the experience requests, one other capability it might depend on, and the host responsibility that remains outside composition (for example, showing the result on screen). There is no single correct answer; the goal is to practice separating the request, its prerequisites, and the host.
-
-**If you have the .NET 8 SDK:** run the sample above, then open `samples/FSM_COS.MinimalConsumer/Program.cs`. In the `RuntimeManifest`, change the requested root from `reportBundle.Id` to `dataBundle.Id` and run the sample again. The assembly should contain only bundle `2`, because the request no longer asks for the report bundle. Restore the original line afterwards. This small experiment changes the request, not the composition algorithm.
-
-## A learning path, at your own pace
-
-<details>
-<summary><strong>I'm completely new to software</strong></summary>
-
-Start here, then read [FSM_COS Theory](THEORY.md) for the reasoning behind the composition boundary. You do not need to memorize the names of every interface. Focus first on the distinction between **requesting pieces**, **assembling pieces**, and **using the result**.
-</details>
-
-<details>
-<summary><strong>I understand applications, but not this architecture</strong></summary>
-
-Read [Architecture](ARCHITECTURE.md), then [Runtime Manifest](RUNTIME_MANIFEST.md) and [RuntimeAssembly](RUNTIME_ASSEMBLY.md). Together they explain what enters the kernel, what it does, and what leaves it.
-</details>
-
-<details>
-<summary><strong>I want to write code that uses FSM_COS</strong></summary>
-
-Follow [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) to build a consumer. Exact signatures and runtime behavior are defined by the public source and tested contracts.
-</details>
-
-<details>
-<summary><strong>I need the precise limits and design rationale</strong></summary>
-
-Read [Runtime Boundary](RUNTIME_BOUNDARY.md), [Arbitration and Convergence](ARBITRATION.md), and [Staged Manifest Loading](STAGED_MANIFEST_LOADING.md). The staged-loading guide explicitly distinguishes the current contract slice from a complete integrated staged-loading pipeline.
-</details>
-
-## The main takeaway
-
-FSM_COS separates **what a host asks for**, **how the necessary pieces are composed**, and **what the host does with the result**. That separation is the value. It gives developers a reusable composition boundary without pretending that composition alone solves discovery, compatibility, presentation, execution, or every other problem in an application.
-
----
-
----
-
-## 🔗 Resources & Support
-
-- [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) · [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
-- [GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
-
-<!-- THE SINGULARITY WORKSHOP FOOTER -->
-<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
+- [Consumer guide](CONSUMING_MICROBUNDLES.md) — build the catalog and manifest.
+- [Architecture](ARCHITECTURE.md) — follow the responsibilities and composition algorithm.
+- [Runtime Manifest](RUNTIME_MANIFEST.md) — inspect the request contract.
+- [RuntimeAssembly](RUNTIME_ASSEMBLY.md) — inspect the handoff contract.
+- [Arbitration](ARBITRATION.md) — understand the bounded reconciliation step.
+- [Gallery](GALLERY.md) — view source-backed diagrams.
+- [Documentation index](../DOCUMENTATION_INDEX.md) — browse the full documentation set.
