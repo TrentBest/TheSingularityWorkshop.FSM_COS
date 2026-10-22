@@ -20,13 +20,13 @@
 
 | Branch | Evidence | Reconciliation decision |
 |---|---|---|
-| `work/alpha7-educational-docs` | PR #36 is merged into `development` at `afd422b6e5d713776125bbce1427caa2875b7e2c`. A fresh comparison observed `ahead_by=0`, `behind_by=46`: the branch has no commits missing from development and is 46 commits behind. | **Safe for owner-reviewed manual deletion**, provided a fresh comparison still agrees. No cherry-pick or merge was indicated by that comparison. |
+| `work/alpha7-educational-docs` | PR #36 is merged into `development` at `afd422b6e5d713776125bbce1427caa2875b7e2c`. A fresh comparison used `work/alpha7-educational-docs` as base and `development` as head; GitHub reported `ahead_by=52`, `behind_by=0`. Thus development contains 52 commits not on the surplus branch, while the surplus branch has zero commits missing from development: it is 52 commits behind and has no unique commits. | **Safe for owner-reviewed manual deletion**, provided a fresh comparison still agrees. No cherry-pick or merge was indicated by that comparison. |
 
 The fresh branch inventory contains `master`, `development`, and `work/alpha7-educational-docs`. The surplus branch remains the only identified Sith-policy exception. Re-query before deletion because this inventory is time-sensitive.
 
 ## Do not conflate branch cleanup with release integration
 
-Draft PR #35 (`development` → `master`) remains open and should remain draft while the two release histories are reconciled. The fresh comparison observed **882 commits ahead and 48 behind** for development relative to master. That is substantial divergence, not a routine merge. Master has release workflow, public-package compatibility, release-history, and documentation changes that must be preserved deliberately. In particular, retain the master-only publication safety guard; do not publish as part of documentation cleanup.
+Draft PR #35 (`development` → `master`) remains open and should remain draft while the two release histories are reconciled. The fresh comparison observed **888 commits ahead and 48 behind** for development relative to master. That is substantial divergence, not a routine merge. Master has release workflow, public-package compatibility, release-history, and documentation changes that must be preserved deliberately. In particular, retain the master-only publication safety guard; do not publish as part of documentation cleanup.
 
 The package workflow passed on documentation candidate `056adc64500a9a5d01552b4b760558d5b0657bbe`; that pass is not release certification and is not evidence for a later exact head. The last recorded candidate-specific CodeQL/package evidence in PR #35 remains historical and must not be treated as current-head certification. It is historical evidence only, not proof that the current head passed those gates. The documentation commits must be verified on their own exact candidate SHA.
 

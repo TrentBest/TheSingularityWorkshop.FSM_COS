@@ -36,7 +36,7 @@ Every public document should answer the question appropriate to its role, use th
 | `docs/WHAT_IS_FSM_COS.md` | Replace the introductory explanation with a direct product definition, use cases, contract boundaries, and runnable proof. | Rewritten and aligned to canonical footer; verify in the full document pass. |
 | `DOCUMENTATION_INDEX.md` | Organize links by reader goal instead of a flat topic inventory; keep internal branch history out of the public index. | Rewritten and iterated on `development`; latest package-local links were validated by the passing package workflow above. |
 
-The package workflow passed on pre-audit-register-refresh candidate `056adc64500a9a5d01552b4b760558d5b0657bbe`: build-and-test, source integration, and public-package compatibility succeeded; `publish_nuget` was skipped. This note update creates a new commit, so verify the new exact head again before making any release-readiness claim.
+The package workflow passed on `da9078d7cf95243083cb0b078fd97239a1a8ab9c`: build-and-test, source integration, and public-package compatibility succeeded; `publish_nuget` was skipped. CodeQL was still running at that point. This audit/ledger update creates a new exact head, so rerun applicable checks before any release-readiness claim.
 
 ## Public documentation inventory and disposition
 
@@ -60,11 +60,11 @@ The package workflow passed on pre-audit-register-refresh candidate `056adc64500
 | `docs/WEBPAGE_INTEGRATION.md` | Host integration example/boundary | Keep only as a useful host recipe; make the absence of a shipped WebPage adapter clear without making the page mostly disclaimers. | Review next |
 | `docs/GALLERY.md` | Visual tour | Organize exhibits as a consumer journey; each image must teach a distinct concept and link to its authoritative explanation. Source-only sample links must work from the NuGet package too. | Expanded; verify |
 | `docs/WORKSHOP_REPOSITORIES.md` | Workshop project discovery | A user-facing index of repositories grouped by what someone wants to build. Verify every repository URL and one-line product description against live repositories; it is included in the NuGet package because the README links to it locally. | Added; verify links and package inclusion |
-| `docs/UML_VISUAL_STYLE.md` | Diagram authoring standard | Maintainer-facing standard, not a required end-user read; decide whether this belongs under internal notes or a cross-repo docs standard. | Review next |
-| `docs/UML/README.md` | Type/source navigation | Keep if it materially improves source navigation; verify every companion path and label manually maintained material honestly. | Review next |
-| `docs/UML/ClassDiagram/*.md` | Focused class cards/use cases | Keep one canonical card per meaningful public class; validate class names, members, relationships, and use cases against source. | Review next |
-| `docs/UML/src/FSM_COS/*.md` | Per-source-type companion pages | Validate one-to-one correspondence with current `.cs` files; remove stale members and ensure each page has purpose, moniker, class card, and use cases. | Review next |
-| `docs/UML/tests/FSM_COS.Tests/*.md` | Test/use-case reference | Keep only if it helps readers learn usage or contract coverage; otherwise link to the actual test files from a smaller test map. | Review next |
+| `docs/UML_VISUAL_STYLE.md` | Diagram authoring standard | Keep as a maintainer standard; remove repeated resource footer. Compare its source/semantic/accessibility guidance against current GUI.SVG tooling before treating it as a proven workflow. | Boilerplate pruned; workflow proof remains |
+| `docs/UML/README.md` | Type/source navigation | Keep as source navigation and explicitly label diagrams as manually authored. Relative links across the UML index, 16 source companions, 4 test companions, and 2 class diagrams were manually checked. Source/signature and visual accessibility review remains. | Links checked; content review remains |
+| `docs/UML/ClassDiagram/*.md` | Focused class cards/use cases | Keep the two focused source-grounded diagrams; remove duplicate resource footers and verify claims, SVG rendering, and accessibility separately. | Boilerplate pruned; source/visual review remains |
+| `docs/UML/src/FSM_COS/*.md` | Per-source-type companion pages | Replaced generic use cases with type-specific tasks, corrected broken relative source links, and removed repeated verification/resource boilerplate. Source signatures and class cards still need a full comparison. | Links/use cases revised; source review remains |
+| `docs/UML/tests/FSM_COS.Tests/*.md` | Test/use-case reference | Replaced generic use cases with suite-specific guidance, corrected broken relative source links, and removed repeated boilerplate. Verify documented test counts and coverage statements against current test files. | Links/use cases revised; coverage review remains |
 | `docs/releases/0.1.0-alpha.7.md` | Version-specific release notes | Keep as historical/candidate record; distinguish verified candidate behavior from publication status. | Review next |
 | `docs/releases/0.1.0-alpha.6.md` | Prior release history | Preserve only as accurate history; do not duplicate current instructions or imply it is current. | Review next |
 | `SECURITY.md` | Security contract and report guidance | Keep the actionable threat model and enforced limits; verify every numeric limit and claim against implementation/tests. | Review next |
@@ -84,6 +84,10 @@ The package workflow passed on pre-audit-register-refresh candidate `056adc64500
 ## Package metadata
 
 The package description and tags in `src/FSM_COS/FSM_COS.csproj` now identify FSM_COS as the Compute Operating System for MicroBundle runtime composition rather than a generic platform-neutral library. This metadata change passed the public-package compatibility job on candidate `056adc64500a9a5d01552b4b760558d5b0657bbe`.
+
+## Package metadata
+
+`src/FSM_COS/FSM_COS.csproj` now describes FSM_COS as a Compute Operating System for MicroBundle runtime composition and adds search tags for that purpose. This passed package compatibility on candidate `056adc64500a9a5d01552b4b760558d5b0657bbe`; the latest package workflow result at `da9078d7cf95243083cb0b078fd97239a1a8ab9c` also passed, while CodeQL was still running at the time of this audit.
 
 ## Sample, code, and visual evidence
 
