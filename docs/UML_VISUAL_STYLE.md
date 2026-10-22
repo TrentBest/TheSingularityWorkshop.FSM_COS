@@ -59,6 +59,43 @@ A Workshop class diagram is **not a conventional UML sheet rearranged with diffe
 
 The canonical file pattern is `[TypeName]UML.md` for the focused class-diagram page, alongside its SVG and source/type companion. A repository's UML index links these pages by the question a consumer is trying to answer. A type companion remains useful for its purpose, public contract, and UML class card; it does not replace the focused diagram/use-case page.
 
+## Target-centered neighborhood layout
+
+The focal type is the center of the composition—not simply one box in a conventional all-types UML layout.
+
+- **Above the target:** place verified users/consumers, labeled with the actual relationship (constructs, calls, contains, implements, inherits, or another source-supported relation).
+- **Center:** show the selected target type as the visual anchor, with declaration kind and name.
+- **Below the target:** show types/declarations the target uses, including meaningful signature and member-type dependencies.
+- **Right side:** show relevant package, assembly, project, and framework references. Distinguish direct references from transitive, inferred, and unresolved references.
+- **On card edges:** show colored type-conduit stubs. Matching ends share a stable type identity/color; the receiving stub is rotated 180 degrees. Keep a visible label and accessible cue so color is never the only signal.
+
+This arrangement answers who relies on a type, what it relies on, which data types appear at its boundaries, and which external packages are involved. It is semantic, not decorative: every relationship must be supported by source/tests or explicitly marked as an authored concept. Declare scan scope; absence from a partial scan does not prove absence of a consumer.
+
+## Recursive detail and interaction
+
+A data card is the same entity at multiple levels:
+
+1. **Collapsed:** declaration kind and name (for example, interface IResolver or record BundleIdentity).
+2. **Contract:** relevant members, signatures, property/field types, parameters, return values, and modifiers.
+3. **Declaration/AST:** syntax-tree structure, nested declarations, and member structure when compiler-backed source analysis provides it.
+4. **Implementation:** method bodies or deeper details only when the underlying source model provides them.
+
+When the output platform supports input, collapsed cards should be clickable and keyboard-operable to reveal the next supported level, and collapsible again. Preserve stable identity, relationship context, focus visibility, and accessible names. On static platforms, link to the deeper type page/source instead. Never describe a static image as interactive, reflection as a complete AST, or source structure as a runtime trace.
+
+The renderer-neutral model should carry source identity/span, declaration kind, relationship kind, type identities, analysis scope, and provenance; SVG is a rendering, not the only semantic store. Use compiler-backed syntax/semantic analysis for AST and symbol relationships, reflection only for runtime-visible metadata, authored text for human use cases, and captured runs for runtime observations.
+
+## Per-type documentation contract
+
+For each in-scope source file, document each declared type in a companion Markdown page where practical. A source file containing multiple types must identify the target of each page. Each type page explains what the type is, why it exists, its responsibilities and non-goals, a compact data card, important members, source-backed relationships, external package references, examples/tests, limitations, and links to source and tests.
+
+Provide a companion <TypeName>UML.md with the wider target-centered diagram and a **Use cases** section. A use case records actor/consumer, goal, trigger/preconditions, success outcome, important alternatives/failures, and evidence/status. AST or reflection cannot independently infer user intent; use cases need human/LLM-authored direction grounded in product and source. The compact card belongs in the main type page; the companion UML page supplies the wider neighborhood.
+
+## Provenance and verification gate
+
+Every source-derived diagram identifies target and scope (file/project/solution), source revision/input, generation path, analysis method (syntax-only, compiler-backed, reflection-derived, or manually authored), unresolved relationships, and regeneration path. Keep links to source locations when possible.
+
+A release-quality gate inventories in-scope files/types, checks required type and UML pages, validates links/metadata, regenerates diagrams, and detects missing/stale output. If only fixtures or a staging proof are automated, say so. Do not claim repository-wide generation until CI verifies repository-wide coverage.
+
 ## What this means for FSM_COS
 
 Use living pictures to teach the real composition contract: a host requests root MicroBundles; a catalog resolves the bundles; FSM_COS validates the reachable graph and loads dependencies before dependents; bounded arbitration determines convergence; a successful `RuntimeAssembly` returns control to the host.
