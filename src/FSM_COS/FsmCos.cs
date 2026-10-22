@@ -63,8 +63,36 @@ public sealed class FsmCos : IFsmCos
 
     public RuntimeAssembly Execute(
         RuntimeManifest manifest,
+        IMicroBundleConfigurationSource? configurationSource = null) =>
+        ExecuteCore(manifest, configurationSource, onStageChanged: null);
+
+    /// <summary>
+    /// Attempts composition and returns the phase and original exception when composition fails.
+    /// This does not change the behavior of <see cref="Execute"/>; it is an opt-in alternative
+    /// for hosts that want to report composition failures without parsing exception messages.
+    /// </summary>
+    public RuntimeCompositionResult TryExecute(
+        RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource = null)
     {
+        var phase = RuntimeCompositionPhase.RequestValidation;
+        try
+        {
+            var assembly = ExecuteCore(manifest, configurationSource, next => phase = next);
+            return RuntimeCompositionResult.Success(assembly);
+        }
+        catch (Exception exception)
+        {
+            return RuntimeCompositionResult.Failed(phase, exception);
+        }
+    }
+
+    private RuntimeAssembly ExecuteCore(
+        RuntimeManifest manifest,
+        IMicroBundleConfigurationSource? configurationSource,
+        Action<RuntimeCompositionPhase>? onStageChanged)
+    {
+        onStageChanged?.Invoke(RuntimeCompositionPhase.RequestValidation);
         ArgumentNullException.ThrowIfNull(manifest);
         ArgumentNullException.ThrowIfNull(manifest.Bundles);
 
@@ -126,6 +154,7 @@ public sealed class FsmCos : IFsmCos
             requestedVersions[entry.BundleId] = entry.Version;
         }
 
+        onStageChanged?.Invoke(RuntimeCompositionPhase.DependencyResolution);
         var requestedRoots = new Dictionary<ulong, IMicroBundle>();
         foreach (var (bundleId, version) in requestedVersions)
         {
@@ -148,6 +177,7 @@ public sealed class FsmCos : IFsmCos
         if (manifest.Schedule is not null)
             ValidateScheduleAgainstResolvedGraph(manifest, resolvedBundles, dependencyRequestsById);
 
+        onStageChanged?.Invoke(RuntimeCompositionPhase.BundleLoading);
         var loaded = new List<IMicroBundle>();
         var loadedIds = new HashSet<ulong>();
         var loading = new HashSet<ulong>();
@@ -168,6 +198,7 @@ public sealed class FsmCos : IFsmCos
                 ref totalConfigurationBytes);
         }
 
+        onStageChanged?.Invoke(RuntimeCompositionPhase.Arbitration);
         var arbitrationContext = new ArbitrationContext(
             manifest.RuntimeId,
             loaded,
