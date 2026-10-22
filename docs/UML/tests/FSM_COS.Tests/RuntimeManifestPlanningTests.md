@@ -2,7 +2,7 @@
 
 # RuntimeManifestPlanningTests
 
-**Source:** [`tests/FSM_COS.Tests/RuntimeManifestPlanningTests.cs`](../../../tests/FSM_COS.Tests/RuntimeManifestPlanningTests.cs)  
+**Source:** [`tests/FSM_COS.Tests/RuntimeManifestPlanningTests.cs`](../../../../tests/FSM_COS.Tests/RuntimeManifestPlanningTests.cs)  
 **Source baseline:** `6c43f39a2be1465360abb03ed27d577da42c1ab1`  
 **Source file blob:** `8f4f1f8ee010f8a3b8bc7b68582998a57bccc940`  
 **Authorship:** manually authored against current `development`; not generated from reflection or GUI.SVG.

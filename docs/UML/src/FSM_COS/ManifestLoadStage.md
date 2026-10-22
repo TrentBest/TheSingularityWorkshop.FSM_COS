@@ -2,7 +2,7 @@
 
 # ManifestLoadStage
 
-**Source:** [`src/FSM_COS/ManifestLoadStage.cs`](../../../src/FSM_COS/ManifestLoadStage.cs)  
+**Source:** [`src/FSM_COS/ManifestLoadStage.cs`](../../../../src/FSM_COS/ManifestLoadStage.cs)  
 **Source baseline:** `30e437100d1f3b49d07111e87f76cb4811ba8465`  
 **Source file blob:** `e7313fb890ac15cc1f61648056edb885ac856a0f`  
 **Authorship:** manually authored against current `development`; not GUI.SVG-generated.

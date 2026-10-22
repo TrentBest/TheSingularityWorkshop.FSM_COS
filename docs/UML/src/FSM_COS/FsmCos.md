@@ -2,8 +2,8 @@
 
 # FsmCos
 
-**Source:** [`src/FSM_COS/FsmCos.cs`](../../../src/FSM_COS/FsmCos.cs)  
-**Interface:** [`IFsmCos.cs`](../../../src/FSM_COS/IFsmCos.cs)  
+**Source:** [`src/FSM_COS/FsmCos.cs`](../../../../src/FSM_COS/FsmCos.cs)  
+**Interface:** [`IFsmCos.cs`](../../../../src/FSM_COS/IFsmCos.cs)  
 **Source baseline:** `326a021498156f2bb7dc7a31219d6118d3427e37`  
 **Source file blob:** `42b016f84c75ea6e599259d5b02ee8aede95a895`  
 **Authorship:** manually authored and checked against the current `development` source; not GUI.SVG-generated.

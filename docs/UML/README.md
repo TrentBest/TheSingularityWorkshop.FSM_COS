@@ -50,8 +50,12 @@ These references summarize selected test scenarios. The test source is authorita
 
 The two SVG class diagrams focus on `FsmCos` and `RuntimeManifestSchedule`. The remaining types have source-linked companions, but do not yet have individual SVG class diagrams. The schedule and load-plan types describe metadata and state transitions; they do not by themselves implement repository localization, background loading, or promotion of deferred bundles into a running `RuntimeAssembly`. See [Staged Manifest Loading](../STAGED_MANIFEST_LOADING.md) for that boundary.
 
-
 ---
+
+## 🔗 Resources & Support
+
+- [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) · [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
+- [GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

@@ -2,7 +2,7 @@
 
 # IMicroBundleCatalog
 
-**Source:** [`src/FSM_COS/IMicroBundleCatalog.cs`](../../../src/FSM_COS/IMicroBundleCatalog.cs)  
+**Source:** [`src/FSM_COS/IMicroBundleCatalog.cs`](../../../../src/FSM_COS/IMicroBundleCatalog.cs)  
 **Source baseline:** `30e437100d1f3b49d07111e87f76cb4811ba8465`  
 **Source file blob:** `54925e70584fa414abc7c86669f8beb738004d6d`  
 **Authorship:** manually authored against current `development`; not GUI.SVG-generated.

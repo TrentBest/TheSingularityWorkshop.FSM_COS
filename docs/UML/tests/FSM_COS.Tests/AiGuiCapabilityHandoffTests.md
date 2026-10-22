@@ -2,7 +2,7 @@
 
 # AiGuiCapabilityHandoffTests
 
-**Source:** [`tests/FSM_COS.Tests/AiGuiCapabilityHandoffTests.cs`](../../../tests/FSM_COS.Tests/AiGuiCapabilityHandoffTests.cs)  
+**Source:** [`tests/FSM_COS.Tests/AiGuiCapabilityHandoffTests.cs`](../../../../tests/FSM_COS.Tests/AiGuiCapabilityHandoffTests.cs)  
 **Source baseline:** `6c43f39a2be1465360abb03ed27d577da42c1ab1`  
 **Source file blob:** `b28a6df5b7b5c4a7f8a6dc9ad9cf192b78c21f99`  
 **Authorship:** manually authored against current `development`; not generated from reflection or GUI.SVG.

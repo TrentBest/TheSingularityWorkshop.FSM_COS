@@ -2,7 +2,7 @@
 
 # IFsmCos
 
-**Source:** [`src/FSM_COS/IFsmCos.cs`](../../../src/FSM_COS/IFsmCos.cs)  
+**Source:** [`src/FSM_COS/IFsmCos.cs`](../../../../src/FSM_COS/IFsmCos.cs)  
 **Source baseline:** `30e437100d1f3b49d07111e87f76cb4811ba8465`  
 **Source file blob:** `6b3d18419609e364d00918b8ef632e443c93a31f`  
 **Authorship:** manually authored against current `development`; not GUI.SVG-generated.

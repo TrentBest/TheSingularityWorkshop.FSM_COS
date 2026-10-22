@@ -2,7 +2,7 @@
 
 # IMicroBundleConfigurationSource
 
-**Source:** [`src/FSM_COS/IMicroBundleConfigurationSource.cs`](../../../src/FSM_COS/IMicroBundleConfigurationSource.cs)  
+**Source:** [`src/FSM_COS/IMicroBundleConfigurationSource.cs`](../../../../src/FSM_COS/IMicroBundleConfigurationSource.cs)  
 **Source baseline:** `30e437100d1f3b49d07111e87f76cb4811ba8465`  
 **Source file blob:** `eaad15c340817391e41bfb3d5e6dc9028e193e5a`  
 **Authorship:** manually authored against current `development`; not GUI.SVG-generated.

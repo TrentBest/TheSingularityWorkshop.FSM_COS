@@ -2,7 +2,7 @@
 
 # MicroBundleReference
 
-**Source:** [`src/FSM_COS/MicroBundleReference.cs`](../../../src/FSM_COS/MicroBundleReference.cs)  
+**Source:** [`src/FSM_COS/MicroBundleReference.cs`](../../../../src/FSM_COS/MicroBundleReference.cs)  
 **Source baseline:** `342c6fe71aee5ae9089547348c140a612e083248`  
 **Source file blob:** `931905da936669cb1fdad47f0fef8015f0e4d451`  
 **Authorship:** manually authored against current `development`; not GUI.SVG-generated.

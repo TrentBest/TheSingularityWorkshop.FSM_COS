@@ -2,7 +2,7 @@
 
 # ArbitrationContext
 
-**Source:** [`src/FSM_COS/ArbitrationContext.cs`](../../../src/FSM_COS/ArbitrationContext.cs)  
+**Source:** [`src/FSM_COS/ArbitrationContext.cs`](../../../../src/FSM_COS/ArbitrationContext.cs)  
 **Source baseline:** `30e437100d1f3b49d07111e87f76cb4811ba8465`  
 **Source file blob:** `e74a4d177f894de85cd2a34c4df00a182b973c07`  
 **Authorship:** manually authored against current `development`; not GUI.SVG-generated.

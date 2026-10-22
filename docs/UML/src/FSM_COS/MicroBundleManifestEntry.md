@@ -2,7 +2,7 @@
 
 # MicroBundleManifestEntry
 
-**Source:** [`src/FSM_COS/MicroBundleManifestEntry.cs`](../../../src/FSM_COS/MicroBundleManifestEntry.cs)  
+**Source:** [`src/FSM_COS/MicroBundleManifestEntry.cs`](../../../../src/FSM_COS/MicroBundleManifestEntry.cs)  
 **Source baseline:** `30e437100d1f3b49d07111e87f76cb4811ba8465`  
 **Source file blob:** `f53611126fde9a3eacb5f596d6fa13fc4e61ce6e`  
 **Authorship:** manually authored against current `development`; not GUI.SVG-generated.

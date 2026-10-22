@@ -2,7 +2,7 @@
 
 # RuntimeManifestDependency
 
-**Source:** [`src/FSM_COS/RuntimeManifestDependency.cs`](../../../src/FSM_COS/RuntimeManifestDependency.cs)  
+**Source:** [`src/FSM_COS/RuntimeManifestDependency.cs`](../../../../src/FSM_COS/RuntimeManifestDependency.cs)  
 **Source baseline:** `342c6fe71aee5ae9089547348c140a612e083248`  
 **Source file blob:** `2ad81443708f5ef9e4df7f96a6cc477ffb059778`  
 **Authorship:** manually authored against current `development`; not GUI.SVG-generated.

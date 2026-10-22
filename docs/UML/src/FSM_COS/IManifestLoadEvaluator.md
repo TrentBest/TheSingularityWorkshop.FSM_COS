@@ -2,7 +2,7 @@
 
 # IManifestLoadEvaluator
 
-**Source:** [`src/FSM_COS/IManifestLoadEvaluator.cs`](../../../src/FSM_COS/IManifestLoadEvaluator.cs)  
+**Source:** [`src/FSM_COS/IManifestLoadEvaluator.cs`](../../../../src/FSM_COS/IManifestLoadEvaluator.cs)  
 **Source baseline:** `30e437100d1f3b49d07111e87f76cb4811ba8465`  
 **Source file blob:** `735a28a7ec2180330f20d600152f83c3f391c519`  
 **Authorship:** manually authored against current `development`; not GUI.SVG-generated.

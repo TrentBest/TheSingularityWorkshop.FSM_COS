@@ -2,7 +2,7 @@
 
 # RuntimeManifestEntry
 
-**Source:** [`src/FSM_COS/RuntimeManifestEntry.cs`](../../../src/FSM_COS/RuntimeManifestEntry.cs)  
+**Source:** [`src/FSM_COS/RuntimeManifestEntry.cs`](../../../../src/FSM_COS/RuntimeManifestEntry.cs)  
 **Source baseline:** `342c6fe71aee5ae9089547348c140a612e083248`  
 **Source file blob:** `acd95c2ce7ff7f10ce4696d3ff3c11dec70837ad`  
 **Authorship:** manually authored against current `development`; not GUI.SVG-generated.

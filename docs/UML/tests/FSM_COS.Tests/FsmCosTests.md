@@ -2,7 +2,7 @@
 
 # FsmCosTests
 
-**Source:** [`tests/FSM_COS.Tests/FsmCosTests.cs`](../../../tests/FSM_COS.Tests/FsmCosTests.cs)  
+**Source:** [`tests/FSM_COS.Tests/FsmCosTests.cs`](../../../../tests/FSM_COS.Tests/FsmCosTests.cs)  
 **Source baseline:** `6c43f39a2be1465360abb03ed27d577da42c1ab1`  
 **Source file blob:** `6ee7f5e2b5feb0286f08fb8403b92f17edc31447`  
 **Authorship:** manually authored against current `development`; not generated from reflection or GUI.SVG.

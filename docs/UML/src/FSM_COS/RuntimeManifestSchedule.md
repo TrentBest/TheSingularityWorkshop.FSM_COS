@@ -2,7 +2,7 @@
 
 # RuntimeManifestSchedule
 
-**Source:** [`src/FSM_COS/RuntimeManifestSchedule.cs`](../../../src/FSM_COS/RuntimeManifestSchedule.cs)  
+**Source:** [`src/FSM_COS/RuntimeManifestSchedule.cs`](../../../../src/FSM_COS/RuntimeManifestSchedule.cs)  
 **Source baseline:** `bf1ce2194eb9a5e5e3667d1fe3d23ff7e7ff71d3`  
 **Source file blob:** `28f1c71f6a1f85eb177147740c4a15a1052d5cd8`  
 **Authorship:** manually authored against current `development`; not GUI.SVG-generated.

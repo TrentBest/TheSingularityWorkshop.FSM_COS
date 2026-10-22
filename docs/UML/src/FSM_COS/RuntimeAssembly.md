@@ -2,7 +2,7 @@
 
 # RuntimeAssembly
 
-**Source:** [`src/FSM_COS/RuntimeAssembly.cs`](../../../src/FSM_COS/RuntimeAssembly.cs)  
+**Source:** [`src/FSM_COS/RuntimeAssembly.cs`](../../../../src/FSM_COS/RuntimeAssembly.cs)  
 **Source baseline:** `9a5d9b72c42f1221e800926b09640d6e00f751ac`  
 **Source file blob:** `6ef0c80aacce694fc513a7afaea76309d79fe6a5`  
 **Authorship:** manually authored and checked against current `development`; not GUI.SVG-generated.

@@ -2,7 +2,7 @@
 
 # RuntimeManifestLoadPlan
 
-**Source:** [`src/FSM_COS/RuntimeManifestLoadPlan.cs`](../../../src/FSM_COS/RuntimeManifestLoadPlan.cs)  
+**Source:** [`src/FSM_COS/RuntimeManifestLoadPlan.cs`](../../../../src/FSM_COS/RuntimeManifestLoadPlan.cs)  
 **Source baseline:** `bf1ce2194eb9a5e5e3667d1fe3d23ff7e7ff71d3`  
 **Source file blob:** `484a0882e792bc75e9e766b5368691fba561d618`  
 **Authorship:** manually authored against current `development`; not GUI.SVG-generated.
