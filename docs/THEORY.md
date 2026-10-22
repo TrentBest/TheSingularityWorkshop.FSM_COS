@@ -480,13 +480,13 @@ The composition algorithm owns **what it needs**.
 
 The surrounding system owns **how that need is fulfilled**.
 
-That allows the same composition engine to evolve from an in-memory alpha catalog toward richer delivery infrastructure without rewriting the composition model.
+That allows the same composition engine to work with different catalog implementations without embedding artifact delivery infrastructure in the composition algorithm.
 
 ---
 
-## 13. Determinism is a goal of composition
+## 13. Determinism in composition
 
-A useful long-term property is:
+The intended invariant is:
 
 > **The same semantic request, resolved against the same compatible catalog and bundle versions, should produce the same composition.**
 
