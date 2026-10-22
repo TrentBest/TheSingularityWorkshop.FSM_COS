@@ -39,7 +39,8 @@ FSM_COS is the Compute Operating System layer that composes requested MicroBundl
 
 - [Gallery](docs/GALLERY.md) — source-backed diagrams and visual walkthroughs.
 - [UML index](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/README.md) — public API and source-derived type diagrams.
-- [Living UML visual style](docs/UML_VISUAL_STYLE.md) — diagram conventions, data-card layout, and accessibility guidance.
+- [Documentation Standard](DOCUMENTATION_STANDARD.md) — shared teaching, evidence, per-type documentation, and recursive target-centered UML requirements.
+- [Living UML visual style](docs/UML_VISUAL_STYLE.md) — target-centered diagram layout, recursive data cards, type conduits, and accessibility guidance.
 
 ## I want release and security information
 
