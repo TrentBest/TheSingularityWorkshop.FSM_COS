@@ -68,10 +68,19 @@ public sealed class RuntimeAssembly
 {
     public ulong RuntimeId { get; }
     public IReadOnlyList<IMicroBundle> Bundles { get; }
+    public IReadOnlyList<IMicroBundle> LoadedBundles { get; }
     public int ArbitrationRounds { get; }
     public SemanticIntent? Intent { get; }
+
+    public bool TryGetBundle(ulong bundleId, out IMicroBundle? bundle);
+    public bool TryGetBundle<TBundle>(ulong bundleId, out TBundle? bundle)
+        where TBundle : class, IMicroBundle;
+    public bool TryGetBundle<TBundle>(out TBundle? bundle)
+        where TBundle : class, IMicroBundle;
 }
 ```
+
+The assembly exposes both `Bundles` and the compatibility alias `LoadedBundles`; both return the same read-only snapshot. The `TryGetBundle` overloads locate an already loaded bundle by ID, by ID plus expected CLR type, or by expected CLR type alone. They do not load bundles or resolve provider declarations.
 
 The assembly records:
 
