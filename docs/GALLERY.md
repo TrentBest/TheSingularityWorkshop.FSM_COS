@@ -13,7 +13,7 @@ FSM_COS turns a declared request into a dependency-ordered composition. These ex
 
 A manifest names the capabilities the host wants. Dependencies add the prerequisites those capabilities need. FSM_COS validates and loads the complete composition, then returns a `RuntimeAssembly` to the host.
 
-**Build this flow into your application:** [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) · [Run the minimal consumer](../samples/FSM_COS.MinimalConsumer/Program.md).
+**Build this flow into your application:** [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) · [Run the minimal consumer](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md).
 
 ## 01 — Runtime composition at a glance
 
