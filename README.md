@@ -1,6 +1,6 @@
 ![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
 
-# ✳️ 00 The Singularity Workshop — FSM_COS
+# FSM_COS — The Compute Operating System for Composable Runtime Systems
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![NuGet version](https://img.shields.io/nuget/v/TheSingularityWorkshop.FSM_COS?style=flat-square&logo=nuget&logoColor=white)](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS)
@@ -9,68 +9,66 @@
 [![Code Coverage](https://codecov.io/gh/TrentBest/TheSingularityWorkshop.FSM_COS/graph/badge.svg)](https://codecov.io/gh/TrentBest/TheSingularityWorkshop.FSM_COS)
 
 <p align="center">
-  <img src="docs/assets/fsm-cos-overview.svg" alt="A runtime manifest enters FSM_COS; the kernel resolves dependencies and composes MicroBundles into a RuntimeAssembly for a host." width="1000">
+  <img src="docs/assets/fsm-cos-overview.svg" alt="A runtime manifest requests capabilities; FSM_COS resolves dependencies and assembles MicroBundles into a RuntimeAssembly for a host." width="1000">
 </p>
 
-*If a picture is worth a thousand words, then what is a living picture worth?* FSM_COS uses source-backed diagrams to explain dependency closure, preflight validation, failure boundaries, and the host handoff.
+**FSM_COS is a Compute Operating System (COS): it turns a declared request for computation into an assembled runtime that a host can use.** It resolves the requested MicroBundles, discovers their dependencies, loads them in dependency order, gives the composition a bounded arbitration phase, and returns a `RuntimeAssembly`.
 
-**[Gallery](docs/GALLERY.md)** — a visual index of composition, validation, arbitration, and host handoff.
+The **FSM** in FSM_COS identifies its foundation in [FSM_API](https://github.com/TrentBest/FSM_API), which supplies finite-state-machine and state/context primitives used by the Workshop ecosystem. FSM_COS builds on that foundation for a different job: **composition**. It is not the process scheduler, application loop, GUI, or finished application.
 
-**[Learn FSM_COS by following one request](docs/LEARNING_GUIDE.md)** — a picture-led walkthrough with a runnable example and a small experiment.
+**[Run the minimal consumer](#-04-see-it-work)** · **[Why use FSM_COS?](#-02-why-use-a-compute-operating-system)** · **[Browse the living Gallery](docs/GALLERY.md)** · **[Read the consumer guide](docs/CONSUMING_MICROBUNDLES.md)**
 
-**[Minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md)** — source, UML class card, use cases, and reproduction notes.
+## 🟦 01 — What does FSM_COS do?
 
-FSM_COS is The Singularity Workshop's **runtime composition kernel**. It takes a request for capabilities, resolves the MicroBundles and dependencies needed to satisfy it, and hands the assembled result to a host.
-
-## 🟦 01 — What is FSM_COS?
-
-Think of a runtime manifest as an order: it says which capabilities are wanted. FSM_COS works out what else must be present for that order to make sense, loads the composition, and gives its bundles a bounded chance to reconcile their composition state. It hands the result to the host only if that arbitration process reports convergence.
-
-The result is a `RuntimeAssembly`—a handoff to another system, not a finished application.
-
-**In one line:** the manifest says what is requested; FSM_COS assembles what must exist together; the host decides what happens next.
-
-## 🟣 02 — Why does it exist?
-
-Without a distinct composition layer, each host can end up owning its own dependency logic and capability wiring. That makes reusable behavior harder to share and encourages application-specific concerns to leak into lower-level libraries.
-
-FSM_COS gives that work a focused home. A browser app, desktop program, service, simulation, or headless tool can supply its own catalog and decide how to use the resulting assembly. The kernel does not require a particular interface or application type.
-
-This is an architectural boundary, not a promise that every capability is automatically portable. Compatibility still depends on the contracts, dependencies, and abilities of the host.
-
-## 🩵 03 — How does it work?
+A runtime manifest says which capabilities and versions a host wants. A host-supplied catalog makes those MicroBundles available for resolution. FSM_COS works out the required dependency closure, validates the composition, loads prerequisites before dependents, and runs bounded arbitration. If composition succeeds, the host receives a `RuntimeAssembly`.
 
 ```text
-Runtime Manifest
-      │ requested MicroBundles and versions
-      ▼
-   FSM_COS
-      ├── resolve roots and exact versions
-      ├── preflight the full dependency closure
-      ├── validate identities, requests, and cycles
-      ├── load dependencies first (iterative DFS)
-      └── arbitrate toward convergence
-      ▼
-RuntimeAssembly
-      │ handoff
-      ▼
-Host / application / experience
+Host / authoring system
+        │
+        │ RuntimeManifest + catalog (+ optional configuration)
+        ▼
+     FSM_COS
+        ├─ resolve requested MicroBundles
+        ├─ discover and validate dependencies
+        ├─ load prerequisites before dependents
+        ├─ arbitrate within a configured bound
+        ▼
+  RuntimeAssembly
+        │
+        ▼
+Host executes, presents, or integrates the result
 ```
 
-Each part has a clear owner:
+A MicroBundle is a domain-defined unit of capability or behavior. The MicroBundle contract belongs to [MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain); FSM_COS consumes that contract and defines how the requested pieces are composed. A `RuntimeAssembly` is the result of composition—not a promise that every bundle is compatible, an application is running, or a user interface has appeared.
 
-- **MicroBundleDomain** defines the MicroBundle contract.
-- **The host or repository** supplies a catalog that can find the requested bundles.
-- **FSM_COS** resolves dependencies, loads the composition, and runs bounded arbitration.
-- **The host** owns application lifecycle, execution, user interface, and presentation.
+## 🟣 02 — Why use a Compute Operating System?
 
-FSM_COS is not a GUI, engine, artifact repository, transport layer, or application loop. For the exact contracts and responsibility boundaries, see [Architecture](docs/ARCHITECTURE.md) and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md). Security scope, explicit trust assumptions, and the adversarial verification matrix are documented in [Security](SECURITY.md).
+Use FSM_COS when an application needs to assemble different combinations of reusable capabilities without making every host reimplement dependency resolution and composition rules.
 
-Alpha.7 exposes read-only snapshots for assembly and plan collections: callers cannot mutate the collection structure through those public views. This does **not** make the `MicroBundle` objects inside those collections immutable; their behavior remains owned by their domain contracts.
+- **Describe the desired computation.** Supply a manifest of requested MicroBundles and versions instead of hard-wiring every composition into one host.
+- **Resolve prerequisites centrally.** FSM_COS discovers the dependency closure and loads dependencies before the bundles that require them.
+- **Reject incomplete compositions.** Missing dependencies, invalid relationships, cycles, and failed convergence stop the handoff instead of yielding a successful assembly.
+- **Give capabilities a bounded reconciliation phase.** Bundles can reconcile composition state through the domain contract, but FSM_COS does not claim this proves arbitrary semantic compatibility.
+- **Keep the host in control.** A website, desktop app, service, simulation, or headless process can supply its own catalog and decide what to do with the result.
+- **Keep infrastructure replaceable.** Artifact storage, retrieval, UI, execution lifecycle, and platform integration remain outside the composition kernel.
 
-## 🟢 04 — See it in a minute
+The payoff is a reusable composition layer between **what a runtime requests** and **how a host runs it**. FSM_COS is useful when that boundary is valuable; it is not a requirement for every small application.
 
-The repository includes a tiny runnable consumer that demonstrates the package's actual purpose: assembling a requested bundle and its dependency. You need Git and the **.NET 8 SDK**.
+## 🩵 03 — Where FSM_COS fits
+
+| Component | Responsibility |
+|---|---|
+| [FSM_API](https://github.com/TrentBest/FSM_API) | Finite-state-machine and state/context primitives used by the Workshop ecosystem. |
+| [MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain) | Defines the MicroBundle domain contract consumed by FSM_COS. |
+| **FSM_COS** | Resolves, validates, loads, and arbitrates a requested MicroBundle composition; returns `RuntimeAssembly`. |
+| Host / application | Supplies the catalog and optional configuration source; owns execution, lifecycle, UI, and presentation. |
+| [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) | Handles representation/serialization concerns; it is not the composition kernel. |
+
+FSM_COS does not automatically download artifacts, verify artifact content hashes, activate deferred bundles in a running assembly, schedule the application, or render an experience. Those are distinct responsibilities, and the current alpha contract should not be mistaken for planned future capabilities. See [Architecture](docs/ARCHITECTURE.md), [Runtime Boundary](docs/RUNTIME_BOUNDARY.md), and [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md) for the exact implementation boundaries.
+
+## 🟢 04 — See it work
+
+You need Git and the **.NET 8 SDK**. Run the repository's minimal consumer:
 
 ```bash
 git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git
@@ -78,35 +76,41 @@ cd TheSingularityWorkshop.FSM_COS
 dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
 ```
 
-**What should happen?** The sample loads bundle `2` (the data-source prerequisite) before bundle `1` (the report), then prints `Assembly order: 2 -> 1`. The sample defines its own in-memory catalog and two tiny MicroBundles; those are example code, not extra types supplied by FSM_COS.
+The sample requests a report MicroBundle that depends on a data-source MicroBundle. Its in-memory catalog supplies both. FSM_COS discovers the prerequisite and composes it first.
 
-This is a source-repository example and references the local FSM_COS project so it can be verified before a release is published. For the exact published package status, check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS). To build your own host, start with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md), which explains the catalog, manifest, configuration, and bundle contracts.
+Expected final line:
 
-The package targets **.NET 8** and is versioned `0.1.0-alpha.7`.
+```text
+Assembly order: 2 -> 1
+```
 
-## 🟪 05 — Documentation
+That output is a small, concrete proof of the central behavior: the manifest requests the report, but the assembled runtime includes its prerequisite first. The sample defines its own catalog and example MicroBundles; they are not built-in types supplied by FSM_COS. For a line-by-line explanation, see the [minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md).
 
-- **Start here:** [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) and [Learn by Following One Request](docs/LEARNING_GUIDE.md)
-- **Understand the runtime:** [Architecture](docs/ARCHITECTURE.md), [Runtime Manifest](docs/RUNTIME_MANIFEST.md), [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md), [Arbitration](docs/ARBITRATION.md), and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md).
-- **Build a consumer:** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) explains the catalog, manifest, configuration, and bundle contracts.
-- **Integrate a host:** [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) describes the browser-host integration boundary and what a host must supply; FSM_COS does not ship a WebPage adapter.
-- **Explore the examples:** [Gallery](docs/GALLERY.md) and the [minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md).
-- **Find a topic:** [Documentation Index](DOCUMENTATION_INDEX.md).
+The project currently targets **.NET 8** and declares version **0.1.0-alpha.7**. A project version is not proof that the same version is available on the public feed; the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) is authoritative for published versions. To understand the package contract, continue with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md).
+
+## 🟪 05 — Choose your next step
+
+- **New here?** [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) — the problem, model, and terminology in plain language.
+- **Build a consumer:** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) — provide a catalog, manifest, configuration source, and MicroBundles.
+- **Understand the implementation:** [Architecture](docs/ARCHITECTURE.md), [Runtime Manifest](docs/RUNTIME_MANIFEST.md), [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md), and [Arbitration](docs/ARBITRATION.md).
+- **Understand current limits:** [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) and [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md).
+- **See the system visually:** [Gallery](docs/GALLERY.md) — source-backed diagrams with links to the underlying contracts.
+- **Find any guide:** [Documentation Index](DOCUMENTATION_INDEX.md).
+- **Review security assumptions:** [Security](SECURITY.md).
 
 ---
 
 ## 🔗 Resources & Support
 
-### 📦 Project & Code
-
-- **FSM_COS:** [Source code](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
+### Project & code
+- **FSM_COS:** [Source code](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) · [NuGet](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS)
 - **FSM_API:** [Source code](https://github.com/TrentBest/FSM_API)
+- **MicroBundleDomain:** [Source code](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain)
 - **FSM_Serialization:** [Source code](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)
 - **WebPage:** [Source code](https://github.com/TrentBest/WebPage)
 - **The Singularity Workshop:** [GitHub profile](https://github.com/TrentBest) · [Coder Legion profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop)
 
-### 💖 Support The Singularity Workshop
-
+### Support The Singularity Workshop
 - [Patreon](https://www.patreon.com/c/TheSingularityWorkshop)
 - [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
 - [Coder Legion community](https://coderlegion.com/)
