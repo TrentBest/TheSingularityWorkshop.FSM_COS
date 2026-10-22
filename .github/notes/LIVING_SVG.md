@@ -1,3 +1,5 @@
+> **Internal documentation-engineering note.** This describes the current diagram artifact and verification boundaries, not an end-user FSM_COS feature.
+
 # Living SVG: From Contract Map to Living Picture
 
 **Status:** first animated, source-backed contract diagram. It is not a live runtime trace, an interactive application, or proof of browser/assistive-technology verification.

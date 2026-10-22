@@ -1,8 +1,10 @@
+> **Internal architecture proposal — not part of the current FSM_COS product contract.** The future-facing ideas below are retained for review; they must not be treated as implemented functionality.
+
 # AI Composition with FSM_COS
 
 ## Purpose
 
-![AI composition responsibility stack for domain concepts, ProtocolAi, GrammarAi, exchange context, and provider adaptation](assets/ai-composition.svg)
+![AI composition responsibility stack for domain concepts, ProtocolAi, GrammarAi, exchange context, and provider adaptation](../../docs/assets/ai-composition.svg)
 
 *This is an architectural map, not a chronological pipeline or proof that every depicted layer is implemented. The status qualifications below and in the diagram must remain explicit.*
 
@@ -280,7 +282,7 @@ host
     +-- provider transport
 ```
 
-The source-level proof is limited to the composition contracts and test path; it does not establish that the visible WebPage experience is fully driven by `RuntimeAssembly`. See [WebPage Integration](WEBPAGE_INTEGRATION.md) for that explicit boundary.
+The source-level proof is limited to the composition contracts and test path; it does not establish that the visible WebPage experience is fully driven by `RuntimeAssembly`. See [WebPage Integration](../../docs/WEBPAGE_INTEGRATION.md) for that explicit boundary.
 
 The architectural point is that **FSM_COS does not need to reference the AI or GUI packages to compose them**.
 
