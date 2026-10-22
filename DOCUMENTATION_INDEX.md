@@ -1,10 +1,11 @@
 # FSM_COS Documentation
 
-This index links to the current product guides and development instructions.
+Choose a path based on what you want to do. These guides explain the public behavior and show how to try it.
 
 ## Get started
 
 - [Project overview](README.md) — purpose, architecture at a glance, and a runnable consumer.
+- [Learn FSM_COS by Following One Request](docs/LEARNING_GUIDE.md) — a picture-led walkthrough of dependency resolution, load order, arbitration, and the host handoff.
 - [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) — introduction to runtime composition.
 - [Minimal consumer](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md) — working example with a local catalog and two MicroBundles.
 - [Gallery](docs/GALLERY.md) — diagrams of the composition and handoff flow.
