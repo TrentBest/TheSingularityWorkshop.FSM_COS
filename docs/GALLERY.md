@@ -5,7 +5,7 @@
 
 **The manifest says what is requested; FSM_COS composes what must exist together; the host decides what happens next.**
 
-This Gallery is the short visual index. Each exhibit links to its own deep dive for the contract, recipe, and evidence. These diagrams explain source-backed composition behavior; the crane animation is an illustration, not live telemetry.
+This Gallery is the short visual index. Each exhibit links to its own deep dive for the contract, recipe, and evidence. These diagrams explain source-backed composition behavior. The overview's moving flow dashes and breathing kernel, like the crane animation, are visual explanations—not live telemetry—and the overview honors reduced-motion preferences.
 
 ## 01 — Runtime composition at a glance
 
