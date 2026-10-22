@@ -1,184 +1,99 @@
 <!-- The Singularity Workshop moniker -->
-<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop — animated workshop moniker" width="720" /></a></p>
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
 
-# FSM_COS Domain
+# FSM_COS Domain and Ownership
 
-> **FSM_COS owns the composition of computation. It does not own the application that consumes the result.**
+**FSM_COS owns the composition of computation. It does not own the application that consumes the result.**
 
-This is the domain map for this package. Concepts owned by neighboring packages are named only to explain the boundary across which FSM_COS consumes them.
+This page defines the domain boundary of FSM_COS. It is not the implementation walkthrough; see [Architecture](ARCHITECTURE.md) for how the contracts cooperate and [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) for how to use them.
 
-## What FSM_COS owns
+## The domain problem
+
+A host asks for a computation by naming root MicroBundles and versions. Those roots may depend on other MicroBundles. FSM_COS must resolve the reachable dependency closure, validate that it is coherent, load prerequisites before dependents, give the composition a bounded arbitration phase, and return a `RuntimeAssembly` only when composition succeeds.
 
 ![FSM_COS domain map showing composition responsibilities and neighboring system boundaries](assets/fsm-cos-domain-map.svg)
 
-*Use this map to orient the domain; the explicit ownership and non-ownership lists below define the contract in words.*
+The word **system** means the computation being assembled, not a particular application category. The same composition boundary can serve a website, desktop program, service, simulation, or headless host. Those are possible consumers, not built-in FSM_COS application types.
 
+## What FSM_COS owns
 
-FSM_COS owns the operational problem of taking a computation request and producing a stable assembled computation.
+- the runtime composition request contract (`RuntimeManifest`);
+- root MicroBundle selection by identity and requested version;
+- dependency-closure resolution and validation;
+- composition-time loading and optional configuration delivery;
+- bounded arbitration and convergence handling;
+- the `RuntimeAssembly` result and handoff boundary.
 
-- runtime composition requests;
-- MicroBundle root selection and requested versions;
-- dependency closure;
-- composition-time loading;
-- optional configuration delivery;
-- arbitration rounds;
-- convergence;
-- the RuntimeAssembly handoff.
+The kernel owns the algorithm that composes the requested set. It does not own the domain meaning of every bundle.
 
-The kernel is deliberately **platform-neutral and application-neutral**.
+## What FSM_COS consumes
 
-## What computation platform means
+| Contract or input | Owner | How FSM_COS uses it |
+|---|---|---|
+| Finite-state-machine and state/context primitives | [FSM_API](https://github.com/TrentBest/FSM_API) | Supplies foundational state/context types used by the runtime model. FSM_COS does not become the FSM_API process scheduler. |
+| MicroBundle identity and runtime contract | [MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain) | Provides the domain-owned MicroBundle contract that FSM_COS resolves, loads, and arbitrates. |
+| Optional semantic intent | [FSM_UserIO](https://github.com/TrentBest/FSM_UserIO) | Carries a platform-neutral intent value through the composition boundary when supplied. |
+| Catalog / resolver | Host or repository integration | Makes the requested MicroBundle instances available by identity and version. |
+| Configuration source | Host or repository integration | Supplies optional configuration bytes for a particular runtime, bundle, and version. |
 
-FSM_COS is common operational machinery that can sit beneath many kinds of digital systems.
-
-```text
-                computation request
-                       |
-                       v
-                    FSM_COS
-                       |
-          +------------+------------+
-          v            v            v
-       WebApp       AnyApp      DistributedApp
-          |            |            |
-          +------------+------------+
-                       v
-              any digital system
-```
-
-Those are examples, not special cases. FSM_COS does not contain a browser model, desktop model, Unity model, renderer model, spreadsheet model, game model, business-application model, or distributed-systems product model.
-
-## The domain seam
-
-FSM_COS consumes neighboring contracts rather than redefining neighboring domains.
-
-```text
-FSM_API ───────── state/context primitive ─────────────┐
-MicroBundleDomain ─ MicroBundle runtime contract ──────┤
-FSM_UserIO ──────── optional SemanticIntent value ─────┤
-catalog / resolver ─ resolved MicroBundles ────────────┤
-configuration source ─ optional configuration bytes ──┤
-                                                       ▼
-                                                     FSM_COS
-                                                       │
-                                                       ▼
-                                                 RuntimeAssembly
-```
-
-FSM_COS does not define what a MicroBundle is. It consumes the runtime contract it needs to resolve, load, and arbitrate one.
-
-Likewise, the repository/catalog owns artifact location and delivery. FSM_COS consumes the resolver boundary; it does not become the repository.
+The catalog and configuration source are injected boundaries. FSM_COS does not require a specific database, blob store, network protocol, artifact repository, or editor.
 
 ## Composition lifecycle
 
 ```text
 RuntimeManifest
-      | MicroBundle IDs + requested versions
-      v
-catalog / resolver
-      | resolved MicroBundles
-      v
-dependency closure
-      v
-Load()
-      v
-Arbitrate()
-      |
-      +-- changed -> next round
-      |
-      +-- stable
-             v
-      RuntimeAssembly
+      │
+      ▼
+host-supplied catalog
+      │
+      ▼
+resolve + validate dependency closure
+      │
+      ▼
+load prerequisites before dependents
+      │
+      ▼
+bounded arbitration
+      │
+      ├── no convergence / invalid composition → fail
+      ▼
+RuntimeAssembly
+      │
+      ▼
+host-owned execution and presentation
 ```
 
-The result is deliberately a handoff object. FSM_COS does not continue by becoming the user's application.
+Configuration is separate from the manifest. The manifest says **which roots and versions are requested**; the configuration source optionally provides bytes; each MicroBundle interprets its own configuration. FSM_COS does not read configuration files or impose a serialization format.
 
-## Configuration boundary
+## What remains outside the domain
 
-Configuration is separate from the manifest.
+FSM_COS does not own:
 
-```text
-Manifest
-  = which MicroBundles + requested versions
+- locating or downloading artifacts independently of the supplied catalog;
+- verifying the actual artifact bytes represented by a content hash;
+- converting arbitrary libraries into MicroBundles;
+- running an application's main loop or scheduling its processes;
+- GUI rendering, browser/desktop/Unity lifecycle, or user interaction policy;
+- storage, networking, credential management, or platform permissions;
+- in-place replacement, deferred activation, or retirement of a running assembly.
 
-Configuration source
-  = optional configuration for a particular MicroBundle
+A host can combine FSM_COS with systems that provide those capabilities. Their existence elsewhere in the Workshop ecosystem does not mean they are implemented inside this package.
 
-FSM_COS
-  = delivers available configuration and performs composition
+## The design invariant
 
-MicroBundle
-  = interprets its own configuration
-```
+**The manifest says what is requested. FSM_COS assembles what must exist together. The host decides what happens next.**
 
-If configuration is absent, the MicroBundle receives no external configuration and uses its defaults.
+Keep this boundary intact when adding integrations: FSM_COS should consume neighboring contracts rather than absorbing their domains.
 
-FSM_COS does not prescribe whether configuration comes from a file, blob, repository artifact, generated resource, or another application-owned mechanism.
+## Related documents
 
-## What FSM_COS does not own
-
-- MicroBundle definition and domain meaning;
-- MicroBundle artifact storage;
-- REST transport;
-- serialization formats;
-- GUI semantics or rendering;
-- browser lifecycle;
-- desktop lifecycle;
-- Unity lifecycle;
-- Experience semantics;
-- application-specific scheduling;
-- application configuration frameworks;
-- databases or Warehouse infrastructure;
-- credentials and provider sessions;
-- networking protocols;
-- product-specific behavior.
-
-These can participate in a composition. They do not redefine the composition kernel.
-
-## Developer use
-
-A developer supplies a catalog, manifest, and optional configuration source appropriate to their system, then uses the kernel without adopting a particular application framework. The [Minimal Consumer sample](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.cs) provides a complete source-repository example.
-
-The snippet below is schematic: `MyCatalog` and `MyConfigurationSource` are placeholders for implementations supplied by your application, not types included in FSM_COS.
-
-```csharp
-var catalog = new MyCatalog();
-var configuration = new MyConfigurationSource();
-var cos = new FsmCos(catalog);
-
-var assembly = cos.Execute(manifest, configuration);
-```
-
-The developer remains free to decide where MicroBundles come from, how configuration is stored, how the assembly is executed, how it is exposed, whether there is a UI, and whether execution is local, remote, distributed, interactive, or headless.
-
-FSM_COS supplies the composition machinery, not those application decisions.
-
-## Documentation rule
-
-If a concept requires a long explanation of its own domain, that explanation belongs in the package that owns the concept.
-
-FSM_COS should instead explain:
-
-1. what contract it consumes;
-2. why it consumes it;
-3. what FSM_COS does with it;
-4. what crosses the boundary;
-5. what remains outside FSM_COS.
-
-This keeps package documentation useful without turning every README into an encyclopedia of the entire Workshop.
+- [Architecture](ARCHITECTURE.md) — principal types and execution path.
+- [Runtime Boundary](RUNTIME_BOUNDARY.md) — explicit integration and non-feature boundaries.
+- [Runtime Manifest](RUNTIME_MANIFEST.md) — request contract.
+- [RuntimeAssembly](RUNTIME_ASSEMBLY.md) — successful handoff contract.
+- [FSM_COS Theory](THEORY.md) — rationale for composition as a distinct operation.
 
 ---
-
-<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
-
----
-
-## 🔗 Resources & Support
-
-- **Project:** [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
-- **Workshop projects:** [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
-- **Connect:** [GitHub](https://github.com/TrentBest) · [Coder Legion profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Coder Legion community](https://coderlegion.com/)
-- **Support:** [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
