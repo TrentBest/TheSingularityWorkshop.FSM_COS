@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="920" viewBox="0 0 1200 920" role="img" aria-labelledby="title desc">
+<title id="title">FsmCos consumer-first recursive data-card diagram</title>
+<desc id="desc">The host application sits above the centered FsmCos focal type and calls Execute downward. A host-supplied catalog and manifest/configuration inputs connect to FsmCos from the sides. RuntimeAssembly is returned below to the host. Namespace ownership encloses the FsmCos type card. The diagram describes source-backed contracts, not a runtime trace.</desc>
+<defs><style>
+.bg{fill:#f7faff}.ns{fill:#fff;stroke:#1769e0;stroke-width:7}.nshead{fill:#e6f0ff}.nslabel{font:700 19px system-ui,sans-serif;fill:#114ba6}.title{font:700 23px system-ui,sans-serif;fill:#142943}.body{font:16px ui-monospace,Consolas,monospace;fill:#193653}.small{font:15px system-ui,sans-serif;fill:#405873}.pill{font:700 14px system-ui,sans-serif;fill:#fff;letter-spacing:.4px}.card{stroke-width:3;rx:14}.consumer{fill:#fff3d9;stroke:#bd7900}.focal{fill:#e8f7ef;stroke:#238653}.input{fill:#f0e9ff;stroke:#7752c7}.collab{fill:#e4f5ff;stroke:#087ca7}.edge{fill:none;stroke:#425b78;stroke-width:3.5}.edgeLabel{font:700 14px system-ui,sans-serif;fill:#354f6c}.legend{font:14px system-ui,sans-serif;fill:#405873}
+</style><marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto"><path d="M0 0 L11 5.5 L0 11z" fill="#425b78"/></marker></defs>
+<rect class="bg" width="1200" height="920"/>
+<!-- Consumer is deliberately above the focal type. -->
+<rect x="395" y="30" width="410" height="112" class="card consumer"/>
+<rect x="395" y="30" width="410" height="34" rx="12" fill="#bd7900"/>
+<text x="417" y="53" class="pill">CONSUMER / CALLER</text>
+<text x="417" y="88" class="title">Host application</text>
+<text x="417" y="116" class="small">Requests a composition and owns execution</text>
+<path d="M600 142 V222" class="edge" marker-end="url(#arrow)"/>
+<text x="617" y="184" class="edgeLabel">calls Execute(...)</text>
+<!-- Namespace owns the focal type. -->
+<rect x="250" y="220" width="700" height="395" rx="18" class="ns"/>
+<path d="M254 242 Q254 224 272 224 H928 Q946 224 946 242 V272 H254Z" class="nshead"/>
+<text x="278" y="247" class="nslabel">NAMESPACE / OWNERSHIP CARD</text>
+<text x="278" y="266" class="small">TheSingularityWorkshop.FSM_COS</text>
+<rect x="365" y="300" width="470" height="260" class="card focal"/>
+<rect x="365" y="300" width="470" height="42" rx="12" fill="#238653"/>
+<text x="387" y="327" class="pill">FOCAL TYPE · public sealed class</text>
+<text x="387" y="379" class="title">FsmCos : IFsmCos</text>
+<line x1="387" y1="396" x2="813" y2="396" stroke="#9ccbb0" stroke-width="1.5"/>
+<text x="387" y="426" class="body">Execute(RuntimeManifest,</text>
+<text x="387" y="451" class="body">  IMicroBundleConfigurationSource?)</text>
+<text x="387" y="479" class="body">→ RuntimeAssembly</text>
+<line x1="387" y1="496" x2="813" y2="496" stroke="#9ccbb0" stroke-width="1.5"/>
+<text x="387" y="522" class="small">Resolves · validates · loads dependency-first</text>
+<text x="387" y="544" class="small">Runs bounded arbitration · returns assembly</text>
+<!-- Side cards are collaborators/inputs, not owned children. -->
+<rect x="25" y="315" width="205" height="160" class="card collab"/>
+<rect x="25" y="315" width="205" height="35" rx="12" fill="#087ca7"/>
+<text x="43" y="338" class="pill">HOST SUPPLIES</text>
+<text x="43" y="379" class="title" style="font-size:18px">IMicroBundle</text>
+<text x="43" y="402" class="title" style="font-size:18px">Catalog</text>
+<text x="43" y="433" class="small">Resolves requested</text>
+<text x="43" y="453" class="small">bundle identities</text>
+<path d="M230 397 H365" class="edge" marker-end="url(#arrow)"/>
+<text x="297" y="382" text-anchor="middle" class="edgeLabel">uses</text>
+<rect x="970" y="285" width="205" height="132" class="card input"/>
+<rect x="970" y="285" width="205" height="35" rx="12" fill="#7752c7"/>
+<text x="988" y="308" class="pill">REQUEST INPUT</text>
+<text x="988" y="351" class="title" style="font-size:19px">RuntimeManifest</text>
+<text x="988" y="379" class="small">Requested roots</text>
+<text x="988" y="399" class="small">and versions</text>
+<path d="M970 351 H835" class="edge" marker-end="url(#arrow)"/>
+<text x="902" y="336" text-anchor="middle" class="edgeLabel">accepts</text>
+<rect x="970" y="445" width="205" height="132" class="card collab"/>
+<rect x="970" y="445" width="205" height="35" rx="12" fill="#087ca7"/>
+<text x="988" y="468" class="pill">OPTIONAL INPUT</text>
+<text x="988" y="510" class="title" style="font-size:17px">Configuration</text>
+<text x="988" y="533" class="title" style="font-size:17px">source</text>
+<text x="988" y="558" class="small">Per-bundle settings</text>
+<path d="M970 505 H835" class="edge" marker-end="url(#arrow)"/>
+<text x="902" y="490" text-anchor="middle" class="edgeLabel">optional</text>
+<!-- Result flows down to the caller. -->
+<path d="M600 615 V690" class="edge" marker-end="url(#arrow)"/>
+<text x="617" y="657" class="edgeLabel">returns on success</text>
+<rect x="395" y="690" width="410" height="105" class="card focal"/>
+<rect x="395" y="690" width="410" height="34" rx="12" fill="#238653"/>
+<text x="417" y="713" class="pill">COMPOSITION RESULT</text>
+<text x="417" y="752" class="title">RuntimeAssembly</text>
+<text x="417" y="777" class="small">Read-only result handed back to the host</text>
+<text x="35" y="858" class="legend">Reading order: consumer ↓ focal type → supplied collaborators / inputs ↓ composition result.</text>
+<text x="35" y="882" class="legend">Source-grounded structure; manually authored SVG; not a runtime trace or generated source model.</text>
+</svg>
