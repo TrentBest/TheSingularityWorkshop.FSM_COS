@@ -97,16 +97,15 @@ That output is a small, concrete proof of the central behavior: the manifest req
 
 The project currently targets **.NET 8** and declares version **0.1.0-alpha.7**. A project version is not proof that the same version is available on the public feed; the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) is authoritative for published versions. To understand the package contract, continue with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md).
 
-## 🟪 05 — Choose your next step
+## 🟪 05 — Create your next thing
 
-- **New here?** [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) — the problem, model, and terminology in plain language.
-- **Build a consumer:** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) — provide a catalog, manifest, configuration source, and MicroBundles.
-- **Understand the implementation:** [Architecture](docs/ARCHITECTURE.md), [Runtime Manifest](docs/RUNTIME_MANIFEST.md), [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md), and [Arbitration](docs/ARBITRATION.md).
-- **Understand current limits:** [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) and [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md).
-- **See the system visually:** [Gallery](docs/GALLERY.md) — source-backed diagrams with links to the underlying contracts.
-- **Find any guide:** [Documentation Index](DOCUMENTATION_INDEX.md).
-- **Choose another Workshop project:** [Repository guide](docs/WORKSHOP_REPOSITORIES.md).
-- **Review security assumptions:** [Security](SECURITY.md).
+You do not need to read the whole documentation set before building.
+
+- **Make it work:** [Run and adapt the minimal consumer](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md).
+- **Build your own composition:** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md).
+- **See what the kernel does:** [Living Gallery](docs/GALLERY.md).
+- **Check a specific contract or boundary:** use the [documentation index](DOCUMENTATION_INDEX.md) to open the relevant reference when you need it.
+- **Check release and trust limits:** [Alpha.7 candidate notes](docs/releases/0.1.0-alpha.7.md) · [Security](SECURITY.md).
 
 ---
 
