@@ -1915,4 +1915,37 @@ public sealed class FsmCosTests
         Assert.Single(assembly.Bundles);
         Assert.Same(bundle, assembly.Bundles[0]);
     }
+    [Fact]
+    public void TryExecute_returns_assembly_on_success()
+    {
+        var result = new FsmCos(new TestCatalog(new TestBundle(1)))
+            .TryExecute(new RuntimeManifest(42, new[] { Entry(1) }));
+        Assert.True(result.Succeeded);
+        Assert.NotNull(result.Assembly);
+        Assert.Null(result.FailurePhase);
+        Assert.Null(result.Exception);
+        Assert.Equal((ulong)42, result.Assembly!.RuntimeId);
+    }
+
+    [Fact]
+    public void TryExecute_reports_dependency_resolution_phase_and_original_exception()
+    {
+        var result = new FsmCos(new TestCatalog())
+            .TryExecute(new RuntimeManifest(42, new[] { Entry(404) }));
+        Assert.False(result.Succeeded);
+        Assert.Null(result.Assembly);
+        Assert.Equal(RuntimeCompositionPhase.DependencyResolution, result.FailurePhase);
+        Assert.IsType<InvalidOperationException>(result.Exception);
+        Assert.Contains("could not be resolved", result.Exception!.Message);
+    }
+
+    [Fact]
+    public void TryExecute_reports_request_validation_phase_for_null_manifest()
+    {
+        var result = new FsmCos(new TestCatalog()).TryExecute(null!);
+        Assert.False(result.Succeeded);
+        Assert.Equal(RuntimeCompositionPhase.RequestValidation, result.FailurePhase);
+        Assert.IsType<ArgumentNullException>(result.Exception);
+    }
+
 }
