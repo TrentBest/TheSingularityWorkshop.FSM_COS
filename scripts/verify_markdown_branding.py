@@ -28,12 +28,14 @@ for path in markdown_files:
     if text.count(FOOTER_MARKER) != 1:
         errors.append(f"{relative}: expected exactly one Workshop footer marker.")
     footer = text.split(FOOTER_MARKER, 1)[-1].strip()
-    if AVATAR not in footer:
-        errors.append(f"{relative}: static Workshop avatar is missing from the document footer.")
-    if ".svg" in footer.lower():
-        errors.append(f"{relative}: footer must not use an SVG avatar.")
-    if "Because state shouldn't be a mess." in footer or "Resources & Support" in footer:
-        errors.append(f"{relative}: footer must be the avatar alone; keep prose/links in the document body.")
+    expected_footer = (
+        f'<p align="center"><img src="{AVATAR}" '
+        'alt="The Singularity Workshop avatar" width="200" /></p>'
+    )
+    if footer != expected_footer:
+        errors.append(
+            f"{relative}: footer must contain only the canonical static avatar paragraph."
+        )
 
 if errors:
     print("Markdown branding validation failed:")
