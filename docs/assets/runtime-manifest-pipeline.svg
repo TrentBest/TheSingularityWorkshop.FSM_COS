@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620" role="img" aria-labelledby="pipeline-title pipeline-desc">
 <title id="pipeline-title">Runtime manifest publication pipeline</title>
-<desc id="pipeline-desc">Conceptual pipeline from rich authoring through validation, dependency closure, and baking to a compact runtime manifest. This is a design-level publication flow; not every authoring and baking stage is implemented in FSM_COS. Per-bundle configuration travels separately.</desc>
-<defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#080c13"/><stop offset="1" stop-color="#111c2b"/></linearGradient></defs>
+<desc id="pipeline-desc">Conceptual pipeline from rich authoring through validation, dependency closure, and baking to a compact runtime manifest. Moving dashes illustrate information flow; they are not live telemetry. This is a design-level publication flow; not every authoring and baking stage is implemented in FSM_COS. Per-bundle configuration travels separately. Animation respects prefers-reduced-motion.</desc>
+<defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#080c13"/><stop offset="1" stop-color="#111c2b"/></linearGradient><style>.flow{stroke-dasharray:8 10;animation:manifest-flow 2.8s linear infinite}.stage{transform-box:fill-box;transform-origin:center;animation:stage-breathe 4.5s ease-in-out infinite}.stage:nth-of-type(2){animation-delay:.35s}.stage:nth-of-type(3){animation-delay:.7s}.stage:nth-of-type(4){animation-delay:1.05s}.stage:nth-of-type(5){animation-delay:1.4s}@keyframes manifest-flow{to{stroke-dashoffset:-36}}@keyframes stage-breathe{0%,100%{stroke-opacity:.7}50%{stroke-opacity:1}}@media(prefers-reduced-motion:reduce){.flow,.stage{animation:none}}</style></defs>
 <rect width="1400" height="620" rx="26" fill="url(#bg)"/>
 <g font-family="Arial,Helvetica,sans-serif">
 <text x="70" y="70" fill="#fff" font-size="34" font-weight="700" letter-spacing="3">FROM INTENT TO RUNTIME REQUEST</text>
 <text x="72" y="101" fill="#76cfff" font-size="15" letter-spacing="2">RUNTIME MANIFEST PUBLICATION PIPELINE</text>
-<g stroke="#31465b" stroke-width="2" fill="#101925">
+<g class="stage" stroke="#31465b" stroke-width="2" fill="#101925">
 <rect x="70" y="190" width="210" height="150" rx="18"/><rect x="350" y="190" width="210" height="150" rx="18"/>
 <rect x="630" y="190" width="210" height="150" rx="18"/><rect x="910" y="190" width="210" height="150" rx="18"/>
 <rect x="1190" y="190" width="140" height="150" rx="18" fill="#102b36" stroke="#4fb8e8"/>
@@ -14,7 +14,7 @@
 <g fill="#ffb84d">
 <circle cx="280" cy="265" r="5"/><circle cx="560" cy="265" r="5"/><circle cx="840" cy="265" r="5"/><circle cx="1120" cy="265" r="5"/>
 </g>
-<g stroke="#76cfff" stroke-width="2"><path d="M285 265h60"/><path d="M565 265h60"/><path d="M845 265h60"/><path d="M1125 265h60"/></g>
+<g class="flow" stroke="#76cfff" stroke-width="3" stroke-linecap="round"><path d="M285 265h60"/><path d="M565 265h60"/><path d="M845 265h60"/><path d="M1125 265h60"/></g>
 <g fill="#fff" text-anchor="middle">
 <text x="175" y="235" font-size="20" font-weight="700">Authoring</text><text x="175" y="267" font-size="14" fill="#9eb1c4">rich editor model</text><text x="175" y="292" font-size="14" fill="#9eb1c4">names • ontology • variants</text>
 <text x="455" y="235" font-size="20" font-weight="700">Validation</text><text x="455" y="267" font-size="14" fill="#9eb1c4">validate relationships</text><text x="455" y="292" font-size="14" fill="#9eb1c4">reject invalid composition</text>
