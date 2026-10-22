@@ -61,7 +61,7 @@ cd TheSingularityWorkshop.FSM_COS
 dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
 ```
 
-The sample supplies its own in-memory `IMicroBundleCatalog` and two example MicroBundles. They are example code, not built-in FSM_COS bundle implementations. Read the [complete sample recipe](../samples/FSM_COS.MinimalConsumer/Program.md) for its source, type references, and reproduction notes.
+The sample supplies its own in-memory `IMicroBundleCatalog` and two example MicroBundles. They are example code, not built-in FSM_COS bundle implementations. Read the [complete sample recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md) for its source, type references, and reproduction notes.
 
 ## Change the request
 
