@@ -54,23 +54,23 @@ This does not require every host to render or execute the result identically. It
 
 A published manifest is an immutable, versioned request snapshot. A newer manifest is a new request; it does not mutate an already assembled Experience. The current FSM_COS package does not poll or stream updated manifests, switch a running composition to new bundle versions, or retire old bundle instances. Host-owned refresh and side-by-side replacement are outside the current package contract.
 
-## Manifest and the Warehouse
+## Manifest and artifact resolution
 
-The Warehouse can eventually provide the data needed to resolve a manifest, but that does not make the Warehouse part of the manifest contract.
+The manifest describes what is requested; it does not locate or deliver artifacts. A host-supplied catalog resolves the requested MicroBundle identities and versions, while an optional configuration source supplies per-bundle configuration.
 
-    Manifest
-       │
-       ▼
- Catalog / resolver ───── Configuration source
-       │                         │
-       ▼                         ▼
- MicroBundle artifact       optional config
-       │                         │
-       └──────────┬──────────────┘
-                  ▼
-               FSM_COS
+    RuntimeManifest
+         │
+         ▼
+    Catalog / resolver ───── Configuration source
+         │                         │
+         ▼                         ▼
+    MicroBundle instance       optional config
+         │                         │
+         └──────────┬──────────────┘
+                    ▼
+                 FSM_COS
 
-The manifest requests. The resolver locates. The Warehouse delivers. FSM_COS assembles.
+Artifact storage and delivery remain outside the FSM_COS package.
 
 ## Manifest and Experiences
 
