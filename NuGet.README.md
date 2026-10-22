@@ -6,7 +6,7 @@
 
 **FSM_COS turns a declared request for computation into an assembled runtime.** It resolves requested MicroBundles and their dependencies, loads them in dependency order, runs bounded arbitration, and returns a `RuntimeAssembly` to the host.
 
-The **FSM** name reflects the Workshop's [FSM_API](https://github.com/TrentBest/FSM_API) foundation. FSM_COS uses state/context primitives in a composition system; it is not itself the application scheduler or user-facing application.
+FSM_COS **directly depends on [FSM_API](https://github.com/TrentBest/FSM_API)** for finite-state-machine and state/context primitives. FSM_COS uses that foundation for runtime composition; it is not itself the application scheduler or user-facing application.
 
 ## Why use it?
 

@@ -14,7 +14,7 @@
 
 **When every host must hard-code how capabilities fit together, reuse becomes another source of complexity. FSM_COS gives the host one composition boundary for resolving dependencies and assembling the requested runtime.**
 
-The **FSM** in FSM_COS identifies its foundation in [FSM_API](https://github.com/TrentBest/FSM_API), which supplies finite-state-machine and state/context primitives used by the Workshop ecosystem. FSM_COS builds on that foundation for a different job: **composition**. It is not the process scheduler, application loop, GUI, or finished application.
+FSM_COS **directly depends on [FSM_API](https://github.com/TrentBest/FSM_API)** for finite-state-machine and state/context primitives used by the Workshop runtime model. The COS layer has a different job: **composition**. FSM_COS does not schedule every process, run the application loop, render the GUI, or become the finished application.
 
 **[Run the minimal consumer](#-04-see-it-work)** · **[Why use FSM_COS?](#-01-why-use-a-compute-operating-system)** · **[Browse the living Gallery](docs/GALLERY.md)** · **[Read the consumer guide](docs/CONSUMING_MICROBUNDLES.md)**
 

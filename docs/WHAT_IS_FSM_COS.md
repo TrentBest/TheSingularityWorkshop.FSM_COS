@@ -7,7 +7,7 @@ FSM_COS is The Singularity Workshop's **Compute Operating System for assembling 
 
 “Operating system” here describes the **runtime composition layer** of the Workshop architecture. FSM_COS is not a general-purpose desktop operating system, a hardware kernel, or the application's execution loop. Its job is to turn a composition request into a validated, assembled result at a well-defined boundary.
 
-The **FSM** in its name points to the [FSM_API](https://github.com/TrentBest/FSM_API) foundation: FSM_COS consumes finite-state-machine/state-context primitives as part of the wider Workshop runtime model. Its own responsibility is composition, not scheduling every process or running the finished experience.
+FSM_COS **directly depends on [FSM_API](https://github.com/TrentBest/FSM_API)** for finite-state-machine and state/context primitives in the Workshop runtime model. Its own responsibility is composition, not scheduling every process or running the finished experience.
 
 ## The problem it solves
 
