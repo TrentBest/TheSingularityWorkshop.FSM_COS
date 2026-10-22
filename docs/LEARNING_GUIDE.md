@@ -27,7 +27,7 @@ The composition process has four important stages.
 
 ### 1. Describe what you want
 
-A \`RuntimeManifest\` identifies the runtime and the root MicroBundles requested by the host. A root request includes a bundle ID and version.
+A `RuntimeManifest` identifies the runtime and the root MicroBundles requested by the host. A root request includes a bundle ID and version.
 
 Think of this as an order: it names the requested capability, not every item needed to fulfill it.
 
@@ -49,23 +49,23 @@ After loading, FSM_COS runs bounded **arbitration** rounds. Each participating M
 
 If the composition does not converge within the configured bound, FSM_COS fails rather than returning it as a successful assembly.
 
-When composition succeeds, FSM_COS returns a \`RuntimeAssembly\`. The host decides what to do with it: execute application behavior, show a screen, expose an endpoint, or use it in another host-specific way. FSM_COS does not create or run that experience itself.
+When composition succeeds, FSM_COS returns a `RuntimeAssembly`. The host decides what to do with it: execute application behavior, show a screen, expose an endpoint, or use it in another host-specific way. FSM_COS does not create or run that experience itself.
 
 ## Try the example
 
 You need Git and the .NET 8 SDK. From a terminal, run:
 
-\`\`\`bash
+```bash
 git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git
 cd TheSingularityWorkshop.FSM_COS
 dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
-\`\`\`
+```
 
-The sample defines a tiny in-memory catalog, a data-source bundle (ID \`2\`), and a report bundle (ID \`1\`) that depends on it. The expected final line is:
+The sample defines a tiny in-memory catalog, a data-source bundle (ID `2`), and a report bundle (ID `1`) that depends on it. The expected final line is:
 
-\`\`\`text
+```text
 Assembly order: 2 -> 1
-\`\`\`
+```
 
 Read that line from left to right: the prerequisite was loaded first, then the requested report. The sample's catalog and bundles are teaching examples supplied by the sample program, not built-in FSM_COS types.
 
@@ -73,11 +73,11 @@ For the full walkthrough, see the [minimal consumer recipe](../samples/FSM_COS.M
 
 ## Change the question
 
-If you are comfortable editing the sample, find the \`RuntimeManifest\` in \`samples/FSM_COS.MinimalConsumer/Program.cs\`.
+If you are comfortable editing the sample, find the `RuntimeManifest` in `samples/FSM_COS.MinimalConsumer/Program.cs`.
 
-1. Run the sample unchanged and note the order \`2 -> 1\`.
-2. Change the requested root from \`reportBundle.Id\` to \`dataBundle.Id\`.
-3. Run it again. The assembly should now contain only bundle \`2\`, because the request no longer asks for the report.
+1. Run the sample unchanged and note the order `2 -> 1`.
+2. Change the requested root from `reportBundle.Id` to `dataBundle.Id`.
+3. Run it again. The assembly should now contain only bundle `2`, because the request no longer asks for the report.
 4. Restore the original line.
 
 You have changed **what the host requested**, not the dependency algorithm. FSM_COS composes the graph reachable from the new root.
