@@ -371,7 +371,7 @@ That does not require every host to render or execute the result identically.
 
 It means the composition request remains meaningful when moved between hosts.
 
-A newer manifest is a new versioned request, not an in-place update to an active `RuntimeAssembly`. Manifest retrieval/refresh, developer notification and consent, side-by-side replacement, and retirement of an older generation are not implemented by the current kernel; see the [Domain Completion Roadmap](DOMAIN_COMPLETION_ROADMAP.md) for the planned lifecycle and ownership boundaries.
+A newer manifest is a new versioned request, not an in-place update to an active `RuntimeAssembly`. The current kernel does not retrieve or refresh manifests, obtain developer consent for side-by-side replacement, switch a running composition to a new generation, or retire an older generation. Those lifecycle decisions belong to a future host/runtime contract and are not part of the current API.
 
 ## Related documents
 
@@ -380,7 +380,6 @@ A newer manifest is a new versioned request, not an in-place update to an active
 - [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md)
 - [RuntimeAssembly](RUNTIME_ASSEMBLY.md)
 - [Arbitration and Convergence](ARBITRATION.md)
-- [Development](DEVELOPMENT.md)
 
 ---
 
