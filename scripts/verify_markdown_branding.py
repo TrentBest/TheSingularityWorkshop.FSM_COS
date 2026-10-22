@@ -5,7 +5,10 @@ from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-MONIKER = "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg"
+MONIKER_URLS = (
+    "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg",
+    "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg",
+)
 AVATAR = "https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png"
 FOOTER_MARKER = "<!-- THE SINGULARITY WORKSHOP FOOTER -->"
 EXCLUDED_PARTS = {".git", "bin", "obj", "_dependencies", "TestResults", "artifacts"}
@@ -20,7 +23,7 @@ for path in markdown_files:
     text = path.read_text(encoding="utf-8")
     lines = text.splitlines()
     first_lines = "\n".join(lines[:8])
-    if MONIKER not in first_lines:
+    if not any(moniker in first_lines for moniker in MONIKER_URLS):
         errors.append(f"{relative}: Workshop moniker SVG is missing from the document header.")
     if text.count(FOOTER_MARKER) != 1:
         errors.append(f"{relative}: expected exactly one Workshop footer marker.")
