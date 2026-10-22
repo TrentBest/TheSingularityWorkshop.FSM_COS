@@ -70,10 +70,9 @@ The host supplies the catalog and optional configuration source. The host also o
 ---
 
 <p align="center">
-  <a href="https://github.com/TrentBest/WebPage" aria-label="Visit The Singularity Workshop">
-    <img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="112" />
-  </a><br />
   <strong>The Singularity Workshop</strong><br />
-  <em>If a picture is worth a thousand words, what is a living picture worth?</em><br />
   <a href="https://github.com/TrentBest">GitHub</a> · <a href="https://coderlegion.com/">Coder Legion</a> · <a href="https://www.patreon.com/c/TheSingularityWorkshop">Patreon</a> · <a href="https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J">PayPal</a>
 </p>
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
