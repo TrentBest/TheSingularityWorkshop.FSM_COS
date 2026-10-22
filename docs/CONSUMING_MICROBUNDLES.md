@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop — animated workshop moniker" width="720" /></a></p>
+
 # Consuming MicroBundles
 
 > This document is about **using MicroBundles with FSM_COS**, not defining the MicroBundle domain. The authoritative MicroBundle contract and domain model live in MicroBundleDomain.
@@ -12,7 +15,7 @@ This document is intentionally narrow. It explains what an FSM_COS consumer supp
 
 ![Dependency closure: root A depends on B and D, B depends on C, and depth-first composition loads C, B, D, then A](assets/dependency-resolution.svg)
 
-*Verified against `FsmCos.Execute` and its load pass: FSM_COS resolves the complete dependency closure, validates identities/declarations and cycles before any `Load`, then uses the same resolved objects for iterative dependency-first loading. Already-loaded IDs are skipped. The catalog supplies resolution; FSM_COS owns traversal and load order. The A → B,D → C graph is illustrative, not a fixed runtime.*
+*The picture shows the rule: FSM_COS checks the reachable dependency graph before loading, then loads each prerequisite before the bundle that needs it. The catalog finds the bundles; FSM_COS determines the dependency traversal and load order. The A → B,D → C graph is an example, not a fixed runtime.*
 
 
 ```text
@@ -418,3 +421,15 @@ This is the intended documentation boundary:
 ---
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
+
+---
+
+## 🔗 Resources & Support
+
+- **Project:** [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
+- **Workshop projects:** [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
+- **Connect:** [GitHub](https://github.com/TrentBest) · [Coder Legion profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Coder Legion community](https://coderlegion.com/)
+- **Support:** [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

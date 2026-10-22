@@ -1,10 +1,18 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center">
+  <a href="https://github.com/TrentBest">
+    <img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop — animated workshop moniker" width="720" />
+  </a>
+</p>
+
 # FSM_COS Documentation
 
-This index links to the current product guides and development instructions.
+Choose a path based on what you want to do. These guides explain the public behavior and show how to try it.
 
 ## Get started
 
 - [Project overview](README.md) — purpose, architecture at a glance, and a runnable consumer.
+- [Learn FSM_COS by Following One Request](docs/LEARNING_GUIDE.md) — a picture-led walkthrough of dependency resolution, load order, arbitration, and the host handoff.
 - [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) — introduction to runtime composition.
 - [Minimal consumer](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md) — working example with a local catalog and two MicroBundles.
 - [Gallery](docs/GALLERY.md) — diagrams of the composition and handoff flow.
@@ -21,8 +29,25 @@ This index links to the current product guides and development instructions.
 - [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) — responsibilities owned by the host and adjacent packages.
 - [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — browser-host integration.
 
-## Reference
+## Visual and type reference
+
+- [Living UML visual style](docs/UML_VISUAL_STYLE.md) — the shared Workshop data-card palette, nesting, accessibility, and rules for honest living images.
+- [GUI canonical data-card standard](https://github.com/TrentBest/TheSingularityWorkshop.GUI/blob/development/docs/DATA_CARDS_AND_UML.md) — full design rationale and cross-renderer contract.
+- [Public API UML](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/README.md) — source-to-type diagrams and class cards.
+
+## Release and safety reference
 
 - [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) — version-specific API and behavior changes.
 - [Security](SECURITY.md) — threat model, resource limits, trust assumptions, and security verification.
-- [Public API UML](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/README.md) — source-to-type diagrams and class cards.
+
+---
+
+## 🔗 Resources & Support
+
+- **Project:** [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
+- **Workshop projects:** [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
+- **Connect:** [GitHub](https://github.com/TrentBest) · [Coder Legion profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Coder Legion community](https://coderlegion.com/)
+- **Support:** [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

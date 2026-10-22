@@ -1,8 +1,11 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop — animated workshop moniker" width="720" /></a></p>
+
 # FSM_COS Gallery
 
 **The manifest says what is requested; FSM_COS composes what must exist together; the host decides what happens next.**
 
-This Gallery is the short visual index. Each exhibit links to its own deep dive for the contract, recipe, and evidence. These diagrams explain source-backed composition behavior; the crane animation is an illustration, not live telemetry.
+This Gallery is the short visual index. Each exhibit links to its own deep dive for the contract, recipe, and evidence. These diagrams explain source-backed composition behavior. Moving flow lines, breathing highlights, and the crane's cable signal are visual explanations—not live telemetry. Every animated exhibit honors reduced-motion preferences.
 
 ## 01 — Runtime composition at a glance
 
@@ -70,3 +73,15 @@ This Gallery is the short visual index. Each exhibit links to its own deep dive 
 ---
 
 [Documentation index](../DOCUMENTATION_INDEX.md)
+
+---
+
+## 🔗 Resources & Support
+
+- **Project:** [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
+- **Workshop projects:** [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
+- **Connect:** [GitHub](https://github.com/TrentBest) · [Coder Legion profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Coder Legion community](https://coderlegion.com/)
+- **Support:** [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

@@ -1,3 +1,10 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center">
+  <a href="https://github.com/TrentBest">
+    <img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop — animated workshop moniker" width="720" />
+  </a>
+</p>
+
 # Arbitration and Convergence
 
 > **Arbitration gives a composition a bounded runtime reconciliation step; it does not automatically prove semantic compatibility.**
@@ -6,7 +13,7 @@ See [FSM_COS Theory](THEORY.md#8-arbitration-is-composition-negotiation) for the
 
 ![Arbitration convergence: loaded bundles participate in complete rounds until a round reports no changes or the configured maximum is exhausted](assets/arbitration-convergence.svg)
 
-*Implementation note: the successful round is recorded as a zero-based index in `RuntimeAssembly.ArbitrationRounds` (`0` means the first round converged). If every allowed round reports changes, `FsmCos.Execute` throws instead of returning an unstable assembly.*
+*A successful assembly records the zero-based index of the round that converged in `RuntimeAssembly.ArbitrationRounds`: `0` means the first round was stable. If every allowed round reports changes, FSM_COS reports failure instead of handing the host an assembly that did not converge.*
 
 
 ## UML class diagram: arbitration participants
@@ -515,3 +522,15 @@ FSM_COS is one layer in a deliberately troublesome ecosystem:
 - **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
+
+---
+
+## 🔗 Resources & Support
+
+- **Project:** [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
+- **Workshop projects:** [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
+- **Connect:** [GitHub](https://github.com/TrentBest) · [Coder Legion profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Coder Legion community](https://coderlegion.com/)
+- **Support:** [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
