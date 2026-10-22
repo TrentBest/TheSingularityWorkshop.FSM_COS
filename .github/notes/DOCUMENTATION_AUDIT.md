@@ -31,12 +31,12 @@ Every public document should answer the question appropriate to its role, use th
 
 | Artifact | Decision | Result |
 |---|---|---|
-| `README.md` | Rewrite the front door around the Compute Operating System definition, why to use it, ecosystem responsibilities, and a concrete runnable example. | Rewritten on `development`; commit `82f58ce5aab0efffa1a9674004bf3de95347dc76`. |
-| `NuGet.README.md` | Make the package page answer what the library does, why to use it, how to run the example, and how to check real publication status. | Rewritten on `development`; commit `9dead24a8505f7b8f9224944ee5b1c1aa65814bb`. |
-| `docs/WHAT_IS_FSM_COS.md` | Replace the introductory explanation with a direct product definition, use cases, contract boundaries, and runnable proof. | Rewritten on `development`; commit `9d54a27f377f8a9c90c1e9b4c615bb267405db68`. |
-| `DOCUMENTATION_INDEX.md` | Organize links by reader goal instead of a flat topic inventory. | Rewritten on `development`; commit `483b0f0005d1c78c9095000df19c9e123c38f05f`. |
+| `README.md` | Rewrite the front door around the Compute Operating System definition, why to use it, ecosystem responsibilities, and a concrete runnable example. | Rewritten and subsequently sharpened to lead with the user problem/payoff; linked repository guide is included in the NuGet package. |
+| `NuGet.README.md` | Make the package page answer what the library does, why to use it, how to run the example, and how to check real publication status. | Rewritten and aligned to canonical footer; package link verification passed on the candidate above. |
+| `docs/WHAT_IS_FSM_COS.md` | Replace the introductory explanation with a direct product definition, use cases, contract boundaries, and runnable proof. | Rewritten and aligned to canonical footer; verify in the full document pass. |
+| `DOCUMENTATION_INDEX.md` | Organize links by reader goal instead of a flat topic inventory; keep internal branch history out of the public index. | Rewritten and iterated on `development`; latest package-local links were validated by the passing package workflow above. |
 
-These are content edits, not a verified release. CI caught package-local links to source-only pages and the repository-wide branding contract; fixes have been applied, but the newest exact-head workflow must pass before this pass is considered verified.
+The package workflow passed on pre-audit-register-refresh candidate `056adc64500a9a5d01552b4b760558d5b0657bbe`: build-and-test, source integration, and public-package compatibility succeeded; `publish_nuget` was skipped. This note update creates a new commit, so verify the new exact head again before making any release-readiness claim.
 
 ## Public documentation inventory and disposition
 
@@ -47,16 +47,16 @@ These are content edits, not a verified release. CI caught package-local links t
 | `DOCUMENTATION_INDEX.md` | Reader navigation | Keep task-oriented; every link must resolve and the index must not expose internal planning as a user guide. | Rewritten; verify |
 | `docs/WHAT_IS_FSM_COS.md` | Beginner-level concept and use cases | Keep only as a deeper plain-language introduction; eliminate repetition with README/learning guide during next pass. | Rewritten; compare |
 | `docs/LEARNING_GUIDE.md` | One end-to-end mental model | Follow one real request from manifest to dependency-first order, bounded arbitration, and host handoff; compare every claim against the runnable sample. | Rewritten; verify |
-| `docs/CONSUMING_MICROBUNDLES.md` | Consumer implementation recipe | High-value public guide; validate code signatures, steps, failure modes, and output against current source/tests. | Review next |
-| `docs/ARCHITECTURE.md` | Implementation map | Keep the source-derived relationships and runtime flow; remove repeated theory and ensure diagrams don't overstate staged loading. | Review next |
+| `docs/CONSUMING_MICROBUNDLES.md` | Consumer implementation recipe | Preserve the actionable catalog/configuration examples and troubleshooting table; remove duplicated domain statements and repeated headings. | Edited for concision; contract review remains |
+| `docs/ARCHITECTURE.md` | Implementation map | Keep source-derived relationships and runtime flow; generic resource/footer boilerplate has been removed. Validate signatures and staged-loading claims against source. | Boilerplate pruned; verify claims |
 | `docs/DOMAIN.md` | Responsibility and ownership reference | Keep as the ownership map, not another algorithm walkthrough; link to external contracts and avoid duplicating Architecture. | Rewritten; verify |
-| `docs/RUNTIME_MANIFEST.md` | Manifest contract | Keep as an exact reference; prominently distinguish roots from optional planning metadata and clarify what is actually validated. | Review next |
-| `docs/RUNTIME_ASSEMBLY.md` | Result/handoff contract | Keep if it explains public result semantics, snapshot behavior, and host responsibilities not already obvious in API docs. | Review next |
-| `docs/ARBITRATION.md` | Convergence contract | Keep the exact round semantics, failure conditions, and limits; trim introductory repetition. | Review next |
+| `docs/RUNTIME_MANIFEST.md` | Manifest contract | Keep as an exact reference; distinguish roots from optional planning metadata and what is actually validated. Generic footer boilerplate has been removed. | Boilerplate pruned; verify contract |
+| `docs/RUNTIME_ASSEMBLY.md` | Result/handoff contract | Keep result semantics, snapshot behavior, and host responsibilities; remove repeated ecosystem/resource footer. | Boilerplate pruned; verify contract |
+| `docs/ARBITRATION.md` | Convergence contract | Keep exact round semantics, failure conditions, and limits; generic footer boilerplate has been removed. | Boilerplate pruned; verify claims |
 | `docs/RUNTIME_BOUNDARY.md` | Kernel-versus-host responsibilities | Keep as the concise integration/non-feature checklist; Domain owns conceptual responsibilities and Architecture owns the algorithm. | Rewritten; verify |
-| `docs/STAGED_MANIFEST_LOADING.md` | Current planning metadata and non-features | Keep only if this feature surface exists publicly; name it so readers do not mistake metadata for active deferred loading. | Review next |
-| `docs/MANIFEST_THEORY.md` | Why the manifest is a published request | Merge into the canonical theory or Runtime Manifest reference if it adds no distinct insight. | Review next |
-| `docs/THEORY.md` | Architectural rationale | Keep the unique, durable design rationale; move implementation detail to contract references and label future ideas. | Review next |
+| `docs/STAGED_MANIFEST_LOADING.md` | Current planning metadata and non-features | Keep only as a precise statement of available metadata and explicit non-features; generic footer boilerplate has been removed. | Boilerplate pruned; verify claims |
+| `docs/MANIFEST_THEORY.md` | Why the manifest is a published request | Retain the distinct authoring-to-publication rationale for now; compare against Runtime Manifest to determine whether it earns a separate page. Generic footer boilerplate has been removed. | Boilerplate pruned; consolidation decision open |
+| `docs/THEORY.md` | Architectural rationale | Keep durable composition rationale and distinguish intended authoring context from implemented runtime behavior. Generic footer boilerplate has been removed; theory still needs a redundancy and source-truth pass. | Boilerplate pruned; deep review remains |
 | `docs/WEBPAGE_INTEGRATION.md` | Host integration example/boundary | Keep only as a useful host recipe; make the absence of a shipped WebPage adapter clear without making the page mostly disclaimers. | Review next |
 | `docs/GALLERY.md` | Visual tour | Organize exhibits as a consumer journey; each image must teach a distinct concept and link to its authoritative explanation. Source-only sample links must work from the NuGet package too. | Expanded; verify |
 | `docs/WORKSHOP_REPOSITORIES.md` | Workshop project discovery | A user-facing index of repositories grouped by what someone wants to build. Verify every repository URL and one-line product description against live repositories; it is included in the NuGet package because the README links to it locally. | Added; verify links and package inclusion |
@@ -80,6 +80,10 @@ These are content edits, not a verified release. CI caught package-local links t
 | `.github/DEVELOPMENT.md` | Internal contributor instructions. Keep only current commands and repository conventions; remove instructions that assume missing sibling repositories or obsolete workflows. |
 | `.github/release-readiness/0.1.0-alpha.7.md` | Release governance evidence, not product documentation. Preserve the exact-candidate rule; refresh every gate against one exact SHA before making a readiness claim. |
 | `.github/notes/BRANCH_RECONCILIATION.md` | Historical/maintainer artifact, not a public user guide; retained under maintainer notes rather than the public documentation path. |
+
+## Package metadata
+
+The package description and tags in `src/FSM_COS/FSM_COS.csproj` now identify FSM_COS as the Compute Operating System for MicroBundle runtime composition rather than a generic platform-neutral library. This metadata change passed the public-package compatibility job on candidate `056adc64500a9a5d01552b4b760558d5b0657bbe`.
 
 ## Sample, code, and visual evidence
 
