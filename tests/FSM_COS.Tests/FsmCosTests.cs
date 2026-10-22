@@ -342,13 +342,18 @@ public sealed class FsmCosTests
     }
 
     [Fact]
-    public void Execute_does_not_rollback_already_loaded_dependencies_when_a_dependent_load_fails()
+    public void Execute_compensates_load_attempts_in_reverse_order_when_a_dependent_load_fails()
     {
-        var dependency = new TestBundle(2);
+        var compensationOrder = new List<ulong>();
+        var dependency = new TestBundle(2)
+        {
+            RollbackAction = () => compensationOrder.Add(2)
+        };
         var expected = new InvalidOperationException("dependent load failed");
         var root = new TestBundle(1, new MicroBundleDependencyRequest(2, Array.Empty<byte>()))
         {
-            LoadException = expected
+            LoadException = expected,
+            RollbackAction = () => compensationOrder.Add(1)
         };
 
         var actual = Assert.Throws<InvalidOperationException>(() =>
@@ -358,8 +363,30 @@ public sealed class FsmCosTests
         Assert.Same(expected, actual);
         Assert.Equal(1, dependency.LoadCalls);
         Assert.Equal(1, root.LoadCalls);
+        Assert.Equal(new ulong[] { 1, 2 }, compensationOrder);
+        Assert.Equal(1, dependency.RollbackCalls);
+        Assert.Equal(1, root.RollbackCalls);
         Assert.Equal(0, dependency.ArbitrationCalls);
         Assert.Equal(0, root.ArbitrationCalls);
+    }
+
+    [Fact]
+    public void Execute_preserves_composition_and_compensation_errors_when_rollback_fails()
+    {
+        var compositionFailure = new InvalidOperationException("dependent load failed");
+        var compensationFailure = new InvalidOperationException("rollback failed");
+        var root = new TestBundle(1)
+        {
+            LoadException = compositionFailure,
+            RollbackException = compensationFailure
+        };
+
+        var aggregate = Assert.Throws<AggregateException>(() =>
+            new FsmCos(new TestCatalog(root)).Execute(
+                new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Same(compositionFailure, aggregate.InnerExceptions[0]);
+        Assert.Same(compensationFailure, aggregate.InnerExceptions[1]);
     }
 
     [Fact]
@@ -1760,6 +1787,14 @@ public sealed class FsmCosTests
 
         public void Load(IMicroBundleLoadContext context) { }
 
+        public void RollbackLoad(IMicroBundleLoadContext context)
+        {
+            RollbackCalls++;
+            RollbackAction?.Invoke();
+            if (RollbackException is not null)
+                throw RollbackException;
+        }
+
         public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex)
         {
             ArbitrationCalls++;
@@ -1792,7 +1827,7 @@ public sealed class FsmCosTests
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-    private sealed class TestBundle : TheSingularityWorkshop.MicroBundleDomain.IMicroBundle
+    private sealed class TestBundle : TheSingularityWorkshop.MicroBundleDomain.IMicroBundle, IMicroBundleRollback
     {
         private readonly IReadOnlyList<MicroBundleDependencyRequest> _dependencies;
 
@@ -1818,6 +1853,9 @@ public sealed class FsmCosTests
         public int LoadCalls { get; private set; }
         public Exception? LoadException { get; set; }
         public Action? LoadAction { get; set; }
+        public Action? RollbackAction { get; set; }
+        public Exception? RollbackException { get; set; }
+        public int RollbackCalls { get; private set; }
         public Exception? ArbitrationException { get; set; }
         public int ChangesRemaining { get; set; }
         public int ArbitrationCalls { get; private set; }

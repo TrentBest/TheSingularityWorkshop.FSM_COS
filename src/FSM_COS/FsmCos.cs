@@ -183,47 +183,84 @@ public sealed class FsmCos : IFsmCos
 
         onStageChanged?.Invoke(RuntimeCompositionPhase.BundleLoading);
         var loaded = new List<IMicroBundle>();
+        var attempted = new List<IMicroBundle>();
         var loadedIds = new HashSet<ulong>();
         var loading = new HashSet<ulong>();
         var loadContext = new MicroBundleLoadContext(manifest.RuntimeId);
 
-        foreach (var entry in manifest.Bundles)
+        try
         {
-            LoadRoot(
-                entry,
-                resolvedBundles,
-                dependencyRequestsById,
-                loaded,
-                loadedIds,
-                loading,
-                loadContext,
-                configurationSource,
+            foreach (var entry in manifest.Bundles)
+            {
+                LoadRoot(
+                    entry,
+                    resolvedBundles,
+                    dependencyRequestsById,
+                    loaded,
+                    attempted,
+                    loadedIds,
+                    loading,
+                    loadContext,
+                    configurationSource,
+                    manifest.RuntimeId,
+                    ref totalConfigurationBytes);
+            }
+
+            onStageChanged?.Invoke(RuntimeCompositionPhase.Arbitration);
+            var arbitrationContext = new ArbitrationContext(
                 manifest.RuntimeId,
-                ref totalConfigurationBytes);
+                loaded,
+                manifest.ExperienceContext);
+
+            var rounds = 0;
+            for (; rounds < _maximumArbitrationRounds; rounds++)
+            {
+                var changed = false;
+                foreach (var bundle in loaded)
+                    changed |= bundle.Arbitrate(arbitrationContext, rounds);
+
+                if (!changed)
+                    break;
+            }
+
+            if (rounds == _maximumArbitrationRounds)
+                throw new InvalidOperationException(
+                    $"FSM_COS arbitration did not converge within {_maximumArbitrationRounds} rounds.");
+
+            return new RuntimeAssembly(manifest.RuntimeId, loaded, rounds, manifest.Intent);
         }
-
-        onStageChanged?.Invoke(RuntimeCompositionPhase.Arbitration);
-        var arbitrationContext = new ArbitrationContext(
-            manifest.RuntimeId,
-            loaded,
-            manifest.ExperienceContext);
-
-        var rounds = 0;
-        for (; rounds < _maximumArbitrationRounds; rounds++)
+#pragma warning disable CA1031 // Composition callbacks are untrusted extension points; compensate and preserve the failure.
+        catch (Exception compositionException)
+#pragma warning restore CA1031
         {
-            var changed = false;
-            foreach (var bundle in loaded)
-                changed |= bundle.Arbitrate(arbitrationContext, rounds);
+            var compensationExceptions = new List<Exception>();
+            for (var index = attempted.Count - 1; index >= 0; index--)
+            {
+                if (attempted[index] is not IMicroBundleRollback rollback)
+                    continue;
 
-            if (!changed)
-                break;
+                try
+                {
+                    rollback.RollbackLoad(loadContext);
+                }
+#pragma warning disable CA1031 // Continue compensating remaining bundles if one rollback callback fails.
+                catch (Exception compensationException)
+#pragma warning restore CA1031
+                {
+                    compensationExceptions.Add(compensationException);
+                }
+            }
+
+            if (compensationExceptions.Count > 0)
+            {
+                compensationExceptions.Insert(0, compositionException);
+                throw new AggregateException(
+                    "FSM_COS composition failed and one or more MicroBundles also failed during compensation.",
+                    compensationExceptions);
+            }
+
+            throw;
         }
-
-        if (rounds == _maximumArbitrationRounds)
-            throw new InvalidOperationException(
-                $"FSM_COS arbitration did not converge within {_maximumArbitrationRounds} rounds.");
-
-        return new RuntimeAssembly(manifest.RuntimeId, loaded, rounds, manifest.Intent);
     }
 
     private static void ValidateScheduleAgainstResolvedGraph(
@@ -399,6 +436,7 @@ public sealed class FsmCos : IFsmCos
         Dictionary<ulong, IMicroBundle> resolvedBundles,
         Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById,
         List<IMicroBundle> loaded,
+        List<IMicroBundle> attempted,
         HashSet<ulong> loadedIds,
         HashSet<ulong> loading,
         MicroBundleLoadContext loadContext,
@@ -463,6 +501,7 @@ public sealed class FsmCos : IFsmCos
                 continue;
             }
 
+            attempted.Add(bundle);
             bundle.Load(loadContext);
             loaded.Add(bundle);
             loadedIds.Add(bundle.Id);

@@ -38,6 +38,10 @@ FSM_COS validates the complete reachable dependency graph before bundle loading 
 
 This result is diagnostic information, not a transaction, sandbox, or rollback mechanism.
 
+## Failure compensation
+
+During load or arbitration failure, FSM_COS invokes `IMicroBundleRollback.RollbackLoad` for attempted bundles that implement the optional contract, in reverse attempt order. This includes a bundle whose `Load` itself threw, because it may have created partial side effects. This is best-effort compensation, not a transaction: bundles that do not implement the optional contract cannot be undone, and arbitrary external effects may be irreversible. If compensation callbacks fail, `Execute` throws an `AggregateException` containing the original composition failure first and then compensation failures; `TryExecute` returns that aggregate as its exception.
+
 ## Compatibility
 
 TryExecute is additive. Existing callers can continue to use Execute and retain its exception behavior. Both methods share the same composition pipeline and resource limits.
