@@ -86,9 +86,9 @@ When a manifest or bundle configuration becomes bytes, the reusable byte-oriente
 
 See [FSM_COS Theory — Composition is not serialization](THEORY.md#14-composition-is-not-serialization) and [FSM_Serialization Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md).
 
-## Warehouse boundary
+## Artifact-resolution boundary
 
-A Warehouse may eventually provide the catalog or resolver used by FSM_COS.
+The host supplies the catalog or resolver used by FSM_COS. That implementation may use any storage or delivery mechanism, but the kernel does not require or include a particular repository.
 
 That relationship is:
 
