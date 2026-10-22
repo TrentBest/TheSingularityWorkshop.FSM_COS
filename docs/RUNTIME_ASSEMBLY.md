@@ -137,7 +137,7 @@ It says:
 
 > **The requested composition was assembled and reached a stable arbitration result.**
 
-The assembly is a stable handoff snapshot, not a live update manager. The current API does not provide in-place replacement, unload/dispose, generation reference tracking, or automatic retirement. The host owns those lifecycle decisions; the planned side-by-side generation and lease-based retirement design is recorded in the [Domain Completion Roadmap](DOMAIN_COMPLETION_ROADMAP.md).
+The assembly is a stable handoff snapshot, not a live update manager. The current API does not provide in-place replacement, unload/dispose, generation reference tracking, or automatic retirement. The host owns those lifecycle decisions; they are outside the current FSM_COS contract.
 
 ## Why this boundary matters
 
