@@ -15,7 +15,7 @@ FSM_COS is the Compute Operating System layer that composes requested MicroBundl
 - [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) — the problem it solves, the composition model, current behavior, and limits.
 - [Learn by Following One Request](docs/LEARNING_GUIDE.md) — a picture-led walkthrough of dependency resolution, load order, arbitration, and handoff.
 - [Gallery](docs/GALLERY.md) — visual overview with links to consumer guides.
-- [Workshop repository guide](docs/WORKSHOP_REPOSITORIES.md) — choose the right library or application by its purpose.
+- [Workshop repository guide](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/WORKSHOP_REPOSITORIES.md) — choose the right library or application by its purpose.
 
 ## I want to build a consumer
 
