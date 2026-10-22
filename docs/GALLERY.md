@@ -3,13 +3,19 @@
 
 # FSM_COS Gallery
 
-**The manifest says what is requested; FSM_COS composes what must exist together; the host decides what happens next.**
+**Describe the capability. Resolve its prerequisites. Assemble the runtime. Hand it back to the host.**
 
-This Gallery is the short visual index. Each exhibit links to its own deep dive for the contract, recipe, and evidence. These diagrams explain source-backed composition behavior. Moving flow lines, breathing highlights, and the crane's cable signal are visual explanations—not live telemetry. Every animated exhibit honors reduced-motion preferences.
+FSM_COS turns a declared request into a dependency-ordered composition. These exhibits show the journey from requested capability to `RuntimeAssembly`, with each visual linked to a guide for using the corresponding contract. Animated elements explain the flow; they are not live runtime telemetry.
 
-## 01 — Runtime composition at a glance
+## Start here — from request to runtime
 
 ![FSM_COS runtime composition overview](assets/fsm-cos-overview.svg)
+
+A manifest names the capabilities the host wants. Dependencies add the prerequisites those capabilities need. FSM_COS validates and loads the complete composition, then returns a `RuntimeAssembly` to the host.
+
+**Build this flow into your application:** [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) · [Run the minimal consumer](../samples/FSM_COS.MinimalConsumer/Program.md).
+
+## 01 — Runtime composition at a glance
 
 **See:** how a manifest request becomes a dependency-closed runtime assembly.
 
@@ -63,12 +69,12 @@ This Gallery is the short visual index. Each exhibit links to its own deep dive 
 
 **Deep dive:** [Architecture](ARCHITECTURE.md) · [Runtime Boundary](RUNTIME_BOUNDARY.md).
 
-## Gallery evidence rules
+## Choose your next step
 
-- A diagram describes a contract only to the extent supported by source and tests.
-- Conceptual metaphors must remain labeled as illustrations.
-- Do not call animation live execution unless a real runtime data/control loop drives it.
-- Keep this page short; use the linked documents for complete explanations, implementation details, and reproduction steps.
+- **Understand the problem and model:** [What Is FSM_COS?](WHAT_IS_FSM_COS.md).
+- **Use the composition API:** [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md).
+- **Inspect runtime boundaries:** [RuntimeAssembly](RUNTIME_ASSEMBLY.md) and [Runtime Boundary](RUNTIME_BOUNDARY.md).
+- **Explore related projects:** [The Singularity Workshop repository guide](WORKSHOP_REPOSITORIES.md).
 
 ---
 
