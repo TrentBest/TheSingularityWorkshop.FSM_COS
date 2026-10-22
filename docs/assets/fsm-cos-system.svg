@@ -55,7 +55,7 @@
   <text x="24" y="45" fill="#f2f7fa" font-family="monospace" font-size="20">HOST</text>
   <text x="24" y="76" fill="#8da6b8" font-family="monospace" font-size="13">receives RuntimeAssembly</text>
   <text x="24" y="122" fill="#63e6ff" font-family="monospace" font-size="13">WebForge</text>
-  <text x="24" y="148" fill="#63e6ff" font-family="monospace" font-size="13">Unity</text>
+  <text x="24" y="148" fill="#63e6ff" font-family="monospace" font-size="13">AnyApp</text>
   <text x="24" y="174" fill="#63e6ff" font-family="monospace" font-size="13">Desktop</text>
   <text x="24" y="200" fill="#63e6ff" font-family="monospace" font-size="13">other domains</text>
 </g>
