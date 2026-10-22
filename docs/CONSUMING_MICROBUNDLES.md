@@ -3,13 +3,7 @@
 
 # Consuming MicroBundles
 
-> This document is about **using MicroBundles with FSM_COS**, not defining the MicroBundle domain. The authoritative MicroBundle contract and domain model live in MicroBundleDomain.
-
-> **FSM_COS does not define the MicroBundle domain. It defines how a developer composes MicroBundles into a runtime.**
-
-The authoritative MicroBundle contract is supplied by **TheSingularityWorkshop.MicroBundleDomain**.
-
-This document is intentionally narrow. It explains what an FSM_COS consumer supplies, what FSM_COS does with it, and how a developer can choose the surrounding infrastructure.
+> **Purpose:** build a consumer that composes MicroBundles with FSM_COS. The MicroBundle contract itself belongs to [MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain); this guide covers the inputs your host supplies and the composition behavior FSM_COS provides.
 
 ## The boundary
 
@@ -208,11 +202,7 @@ stable assembly
 
 For the complete domain contract, use the MicroBundleDomain package documentation rather than duplicating it here.
 
-## Dependency consumption
-
-FSM_COS consumes dependencies as relationships exposed by the domain-owned contract. It resolves those relationships, loads the reachable closure, deduplicates repeated identities, and rejects missing or cyclic composition. The semantics of what a dependency means inside a MicroBundle remain the MicroBundle domain's responsibility.
-
-## Dependencies
+## MicroBundle dependency graph
 
 A root MicroBundle can declare dependencies through the domain contract.
 
@@ -343,7 +333,7 @@ FSM_COS stops at the assembly boundary.
 
 The host decides what the assembly means operationally.
 
-## Different developers, same kernel
+## One composition algorithm, different catalogs
 
 The same FSM_COS package can support very different environments.
 
@@ -380,25 +370,9 @@ The composition algorithm does not need to change because the delivery mechanism
 
 That is the point of the boundary.
 
-## What FSM_COS does not consume
+## Direct package dependencies
 
-FSM_COS deliberately does not require:
-
-- a GUI framework;
-- a browser;
-- Unity;
-- a specific repository;
-- a specific serialization format;
-- a specific configuration file format;
-- an application scheduler;
-- a particular host;
-- a particular rendering engine.
-
-Those systems may feed the composition boundary through contracts, but they do not become part of the composition kernel.
-
-## Dependency consumption summary
-
-FSM_COS currently has three direct package dependencies, each with a distinct responsibility:
+FSM_COS currently has three direct package dependencies, each with a distinct responsibility. The host can choose its UI, repository, serialization format, configuration storage, scheduler, and rendering engine without making those systems part of the composition kernel.
 
 | Package | FSM_COS consumes | FSM_COS does not define |
 |---|---|---|
