@@ -20,7 +20,7 @@ The **FSM** in FSM_COS identifies its foundation in [FSM_API](https://github.com
 
 ## 🟣 01 — Why use a Compute Operating System?
 
-Software becomes difficult to compose when every host must know which capabilities belong together, which prerequisites they require, and the order in which those pieces must be prepared. Each new combination adds more special cases to the application that consumes it.
+That cost grows as applications add combinations, versions, and prerequisites. Each host otherwise has to duplicate dependency knowledge or invent its own rules for ordering and validation.
 
 **FSM_COS moves that composition problem into a reusable runtime boundary.** A host declares the capabilities it wants; FSM_COS resolves the required MicroBundles, checks the composition, loads prerequisites before dependents, and returns a `RuntimeAssembly` for the host to use.
 
