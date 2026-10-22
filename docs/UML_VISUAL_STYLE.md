@@ -43,6 +43,22 @@ These are semantic colors, not decoration. Keep text high contrast, and **never 
 - If an SVG is a conceptual illustration, label it as such. If it is generated from source, identify the source/revision or generation path. If it is a runtime trace, identify the captured run. Never imply that a static illustration proves execution.
 - Keep an accessible textual explanation beside each important image. The image should add understanding, not make essential facts inaccessible to screen readers or plain-text readers.
 
+## Workshop class-diagram composition (required layout)
+
+A Workshop class diagram is **not a conventional UML sheet rearranged with different colors**. It is a recursive, reader-oriented map of one focal type and the people/systems that use it.
+
+1. **Center the focal type.** The named class, interface, or record being explained is the visual anchor. Its public contract is immediately legible; internal helpers are secondary.
+2. **Put consumers above the focal type.** Show the host, caller, authoring system, or other real user of the contract in cards above it. Connect each consumer downward to the entry point it invokes or supplies. Label the interaction in plain language (for example, “calls Execute” or “supplies catalog”); do not use unlabeled lines.
+3. **Put collaborators and results below or to the sides.** Inputs, collaborators, outputs, and dependencies should be positioned by their role in the focal type's story, not scattered to imitate a textbook UML layout. Keep the focal type visually dominant.
+4. **Preserve recursive ownership inside cards.** A namespace contains its types; a type contains member groups; member groups contain members; expandable details remain nested under their owner. Relationships between independently owned cards are connectors, not false containment.
+5. **Use an explicit consumer/use-case section beside every class reference.** Describe who uses the type, what they are trying to accomplish, the entry point they use, what the type needs from them, and what they receive. Keep this goal-oriented section separate from source-structure facts. Include at least one realistic success path and relevant failure/boundary behavior.
+6. **Show actual users, not generic UML stick figures.** Use labeled cards such as “Host application,” “WebApp,” “Authoring tool,” or “Test harness” only when the repository or example supports that role. If the caller is not known, label it “Consumer / host” rather than inventing a product.
+7. **Distinguish structural facts from interactions.** The class card records declarations and source-backed relationships. Downward consumer connectors describe who calls or provides something; they do not imply ownership. Time-ordered execution belongs in a sequence/flow view, lifecycle belongs in a state view, and goals belong in the use-case text.
+8. **Keep the diagram recursive and navigable.** Use the same layout rules at each zoom level. A reader should be able to start at the consumer, follow downward into the focal type, then follow collaborators or results without having to decode a web of crossing lines.
+9. **Link each view to its companion and source.** Every class diagram page names the focal type, states its purpose, links the relevant source and tests, embeds the SVG, and includes a “Use cases” section. Mark manual diagrams as manually authored; do not imply automatic source generation.
+
+The canonical file pattern is `[TypeName]UML.md` for the focused class-diagram page, alongside its SVG and source/type companion. A repository's UML index links these pages by the question a consumer is trying to answer. A type companion remains useful for its purpose, public contract, and UML class card; it does not replace the focused diagram/use-case page.
+
 ## What this means for FSM_COS
 
 Use living pictures to teach the real composition contract: a host requests root MicroBundles; a catalog resolves the bundles; FSM_COS validates the reachable graph and loads dependencies before dependents; bounded arbitration determines convergence; a successful `RuntimeAssembly` returns control to the host.
