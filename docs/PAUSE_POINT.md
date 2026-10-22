@@ -30,3 +30,7 @@ FSM_COS resolves a host-supplied catalog, validates the reachable dependency clo
 ## Resume instructions
 
 Read this file, [Branch Reconciliation](BRANCH_RECONCILIATION.md), [Architecture](ARCHITECTURE.md), [Composition Failures](COMPOSITION_FAILURES.md), [Runtime Manifest](RUNTIME_MANIFEST.md), [RuntimeAssembly](RUNTIME_ASSEMBLY.md), [Arbitration](ARBITRATION.md), [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md), and [Staged Manifest Loading](STAGED_MANIFEST_LOADING.md). Re-check live branch heads and CI before relying on this checkpoint.
+
+---
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
