@@ -44,19 +44,14 @@ classDiagram
 
 ## Use cases
 
-1. Represent and validate published identity or dependency metadata.
-2. Keep artifact resolution and runtime policy at the appropriate repository or composition boundary.
+1. Pair a published `MicroBundleReference` with its intended `ManifestLoadStage`.
+2. Validate a published entry before composition and scheduling decisions.
+3. Do not interpret an entry's stage as proof that its artifact has been localized or loaded.
 
-## Verification status
 
-Source-reviewed against the recorded baseline. Mermaid rendering, automated link checking, and exact-HEAD CI have not been verified.
+
 
 ---
-
-## 🔗 Resources & Support
-
-- [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) · [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
-- [GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

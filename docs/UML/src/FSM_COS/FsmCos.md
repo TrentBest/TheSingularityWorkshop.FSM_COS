@@ -66,16 +66,9 @@ The diagram abbreviates parameter and nullable annotations for readability. For 
 2. A host supplies optional configuration for a particular runtime and resolved bundle version.
 3. A test injects a catalog and deliberately small resource limits to verify rejection of pathological inputs.
 
-## Verification status
 
-This companion is source-reviewed against the baseline recorded above. Its Mermaid rendering, automated link checking, and inclusion in the package's generated documentation artifacts have **not** been verified yet.
 
 ---
-
-## 🔗 Resources & Support
-
-- [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) · [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
-- [GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

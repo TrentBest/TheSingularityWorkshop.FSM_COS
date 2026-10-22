@@ -42,20 +42,14 @@ The diagram abbreviates nullable annotations and generic constraints. The C# sou
 
 ## Use cases
 
-1. A host inspects the assembled runtime and its arbitration count.
-2. A host resolves a bundle by identity or expected type.
-3. Tests verify that failed composition does not yield a successful assembly.
+1. Retrieve an already composed MicroBundle by ID or a host-known bundle type.
+2. Inspect the runtime identity and converged arbitration-round index when diagnosing composition.
+3. Treat the collection views as read-only snapshots; the assembly is not a live replacement or retirement manager.
 
-## Verification status
 
-Source-reviewed against the recorded baseline. Mermaid rendering, automated link checks, and inclusion in generated package documentation remain unverified.
+
 
 ---
-
-## 🔗 Resources & Support
-
-- [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) · [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
-- [GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

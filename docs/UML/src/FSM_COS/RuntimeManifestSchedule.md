@@ -41,20 +41,14 @@ classDiagram
 
 ## Use cases
 
-1. Validate and snapshot published dependency metadata before a host attempts composition.
-2. Inspect dependency entries and query whether prerequisites are loaded.
-3. Test invalid identity, dependency, and transition inputs within documented resource bounds.
+1. Validate a published schedule's entries and dependency edges before composition.
+2. Query which dependencies belong to an entry or whether the host reports them ready.
+3. Use schedule validation as a consistency check, not as a replacement for the FSM_API process scheduler or a deferred-loading engine.
 
-## Verification status
 
-Source-reviewed against the recorded baseline. Mermaid rendering, automated link checking, and exact-HEAD CI have not been verified.
+
 
 ---
-
-## 🔗 Resources & Support
-
-- [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) · [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
-- [GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

@@ -43,20 +43,14 @@ classDiagram
 
 ## Use cases
 
-1. Track localization and load-state transitions for a bounded set of published entries.
-2. Evaluate localized entries for promotion against experience policy and optional dependency readiness.
-3. Test invalid identity, dependency, and transition inputs within documented resource bounds.
+1. Track a host-reported manifest entry from `Published` through `Localized` to `Loaded`.
+2. Inspect or update plan state when the host has performed the corresponding operation.
+3. Do not treat the plan as an artifact downloader or a method that calls `IMicroBundle.Load`.
 
-## Verification status
 
-Source-reviewed against the recorded baseline. Mermaid rendering, automated link checking, and exact-HEAD CI have not been verified.
+
 
 ---
-
-## 🔗 Resources & Support
-
-- [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) · [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
-- [GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
