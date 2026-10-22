@@ -87,7 +87,7 @@ The package targets **.NET 8** and is versioned `0.1.0-alpha.7`.
 - **Start here:** [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md)
 - **Understand the runtime:** [Architecture](docs/ARCHITECTURE.md), [Runtime Manifest](docs/RUNTIME_MANIFEST.md), [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md), [Arbitration](docs/ARBITRATION.md), and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md).
 - **Build a consumer:** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) explains the catalog, manifest, configuration, and bundle contracts.
-- **Integrate a host:** [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) describes the browser-host adapter.
+- **Integrate a host:** [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) describes the browser-host integration boundary and what a host must supply; FSM_COS does not ship a WebPage adapter.
 - **Explore the examples:** [Gallery](docs/GALLERY.md) and the [minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md).
 - **Find a topic:** [Documentation Index](DOCUMENTATION_INDEX.md).
 ---
