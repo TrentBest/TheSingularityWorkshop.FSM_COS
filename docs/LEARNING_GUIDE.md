@@ -69,7 +69,7 @@ Assembly order: 2 -> 1
 
 Read that line from left to right: the prerequisite was loaded first, then the requested report. The sample's catalog and bundles are teaching examples supplied by the sample program, not built-in FSM_COS types.
 
-For the full walkthrough, see the [minimal consumer recipe](../samples/FSM_COS.MinimalConsumer/Program.md).
+For the full walkthrough, see the [minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md).
 
 ## Change the question
 
