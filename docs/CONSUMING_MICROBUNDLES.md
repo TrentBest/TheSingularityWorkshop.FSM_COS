@@ -12,7 +12,7 @@ This document is intentionally narrow. It explains what an FSM_COS consumer supp
 
 ![Dependency closure: root A depends on B and D, B depends on C, and depth-first composition loads C, B, D, then A](assets/dependency-resolution.svg)
 
-*Verified against `FsmCos.Execute` and its load pass: FSM_COS resolves the complete dependency closure, validates identities/declarations and cycles before any `Load`, then uses the same resolved objects for iterative dependency-first loading. Already-loaded IDs are skipped. The catalog supplies resolution; FSM_COS owns traversal and load order. The A → B,D → C graph is illustrative, not a fixed runtime.*
+*The picture shows the rule: FSM_COS checks the reachable dependency graph before loading, then loads each prerequisite before the bundle that needs it. The catalog finds the bundles; FSM_COS determines the dependency traversal and load order. The A → B,D → C graph is an example, not a fixed runtime.*
 
 
 ```text
