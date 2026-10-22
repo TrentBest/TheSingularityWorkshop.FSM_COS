@@ -9,7 +9,7 @@
 | Branch | Role | Action |
 |---|---|---|
 | `master` | Published/release line | Preserve. Its release workflow and package compatibility protections must not be overwritten casually. |
-| `development` | Active integration and documentation line | Preserve. Current audit head before this ledger commit: `732690a2b37ac23971b3f9aea1cc595fd68c0a7f`. |
+| `development` | Active integration and documentation line | Preserve. Current development head at the end of this audit: `11b266f5971392577d1eb685035745be05bc3eb6`. |
 
 ## Surplus branch inventory
 
@@ -21,7 +21,7 @@ There were three branches in the branch-search result: `master`, `development`, 
 
 ## Do not conflate branch cleanup with release integration
 
-Draft PR #35 (`development` → `master`) remains open and must stay draft while the two release histories are reconciled. The latest comparison reported **843 commits ahead and 48 behind** for `development` relative to `master`. This is a substantial divergence, not a routine merge. Master has release workflow, public-package compatibility, release-history, and documentation changes that must be preserved deliberately. In particular, retain the master-only publication safety guard; do not publish from this cleanup.
+Draft PR #35 (`development` → `master`) remains open and must stay draft while the two release histories are reconciled. The latest comparison reported **844 commits ahead and 48 behind** for `development` relative to `master`. This is a substantial divergence, not a routine merge. Master has release workflow, public-package compatibility, release-history, and documentation changes that must be preserved deliberately. In particular, retain the master-only publication safety guard; do not publish from this cleanup.
 
 The last candidate-specific green CI evidence recorded in PR #35 was for `6dabffc5d9be6c282b7ca47d2f2dd4ad1b8fe04e`, not the current development head. It is historical evidence only, not proof that the current head passed those gates.
 
