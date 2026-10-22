@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # Documentation Standard
 
 This is the shared documentation standard for The Singularity Workshop repositories. The goal is to **edify, not mystify**: explain the human problem, why the design exists, the actual technical boundary, how to try the technology, and how to verify claims.
@@ -74,3 +77,6 @@ Use contrast for priority, repetition for recognition, proximity for ownership, 
 - [ ] Diagram scope, provenance, unresolved relationships, regeneration path, and stale checks are accurate.
 - [ ] Examples, links, and verification instructions match the target branch.
 - [ ] No publication, deployment, or release operation is implied by documentation-only work.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
