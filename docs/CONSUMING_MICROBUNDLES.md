@@ -414,7 +414,6 @@ This is the intended documentation boundary:
 - [RuntimeAssembly](RUNTIME_ASSEMBLY.md)
 - [Arbitration and Convergence](ARBITRATION.md)
 - [Runtime Boundary](RUNTIME_BOUNDARY.md)
-- [Development](DEVELOPMENT.md)
 
 ---
 
