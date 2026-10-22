@@ -200,29 +200,31 @@ RuntimeAssembly
        ├── AnyApp → desktop/local experience
        └── other hosts → their own manifestation
 
-## Current development boundary
+## Runtime boundary
 
-The active development line is refining the manifest/configuration boundary while preserving the small composition kernel:
+The current alpha performs a synchronous composition pass:
 
 ```text
 Manifest (bundle + version)
         ↓
-resolver / catalog
+host-supplied catalog / resolver
         ↓
-configuration source (optional)
+optional configuration source
         ↓
-dependency closure
+dependency closure and preflight validation
         ↓
-Load()
+Load() in dependency-first order
         ↓
-Arbitrate() until stable
+bounded Arbitrate() rounds
         ↓
 RuntimeAssembly
 ```
 
-File I/O, repository transport, serialization, host lifecycle, and presentation remain outside the kernel.
+The kernel validates the reachable dependency graph before calling bundle load code. It then loads dependencies before dependents and returns a `RuntimeAssembly` only when a complete arbitration round reports no changes.
 
-Execution scheduling, resource allocation, Warehouse integration, and host lifecycle belong to later layers when their contracts are sufficiently clear.
+This package does not localize artifact bytes, verify content hashes, load independent bundles in parallel, or replace an active experience in a running application. The schedule and load-plan types carry validated metadata and state; they do not implement those execution and lifecycle behaviors.
+
+The integrating system supplies the catalog and any configuration source, and owns artifact delivery, serialization, application-specific lifecycle, and presentation. FSM_COS owns the composition pass described above.
 
 ---
 
@@ -234,6 +236,5 @@ FSM_COS is one layer in a deliberately troublesome ecosystem:
 - **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
 - **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
 - **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
