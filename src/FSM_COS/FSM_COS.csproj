@@ -11,8 +11,8 @@
     <PackageProjectUrl>https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS</PackageProjectUrl>
     <RepositoryUrl>https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Description>Platform-neutral computation composition kernel for resolving, loading, arbitrating, and assembling MicroBundle-based computation.</Description>
-    <PackageTags>FSM;runtime;composition;microbundle;experience</PackageTags>
+    <Description>Compute Operating System for composing MicroBundle-based computation: resolves and validates requested capabilities and dependencies, loads in dependency order, arbitrates to convergence, and returns a RuntimeAssembly to the host.</Description>
+    <PackageTags>FSM;compute-operating-system;runtime-composition;microbundle;experience</PackageTags>
     <PackageReadmeFile>NuGet.README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
