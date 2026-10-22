@@ -1,105 +1,48 @@
-# Source-to-UML Map
+# FSM_COS Type and UML Reference
 
-This folder is the source-grounded index for FSM_COS type diagrams. It is deliberately an inventory first, not a claim that every type already has a generated diagram.
+This reference connects the public runtime model to its source companions and the UML diagrams currently maintained for FSM_COS. The companions and diagrams are manually authored; they are not automatically generated from the C# source. For exact signatures and behavior, the linked source and tests remain authoritative.
 
-## Evidence snapshot
+## Composition entry point
 
-- Repository: `TrentBest/TheSingularityWorkshop.FSM_COS`
-- Branch inspected: `development` (the current working branch, not the published line)
-- Source subtree inspected: `src/FSM_COS/`
-- Source tree commit at the time of this update: `e1eeb62147091801332d0b7ef97259b0fb60e4c8`
-- Inspection scope: the complete Git tree returned for the project source directory; it contained 16 C# files and one project file.
-- Verification boundary: this is a GitHub source-tree inventory. It is not a build, test run, generator run, browser rendering check, or package inspection.
+| Type | Responsibility | Reference |
+|---|---|---|
+| `FsmCos` | Resolves and validates the dependency closure, loads bundles in dependency order, and arbitrates toward convergence. | [Class diagram](ClassDiagram/FsmCos.svg) · [Class reference](ClassDiagram/FsmCos.md) · [Source](../../src/FSM_COS/FsmCos.cs) |
+| `IFsmCos` | Public composition entry-point contract. | [Type companion](src/FSM_COS/IFsmCos.md) · [Source](../../src/FSM_COS/IFsmCos.cs) |
+| `ArbitrationContext` | Context passed to MicroBundle arbitration. | [Type companion](src/FSM_COS/ArbitrationContext.md) · [Source](../../src/FSM_COS/ArbitrationContext.cs) |
+| `IMicroBundleCatalog` | Consumer-owned resolver for requested MicroBundles. | [Type companion](src/FSM_COS/IMicroBundleCatalog.md) · [Source](../../src/FSM_COS/IMicroBundleCatalog.cs) |
+| `IMicroBundleConfigurationSource` | Optional source of per-bundle configuration. | [Type companion](src/FSM_COS/IMicroBundleConfigurationSource.md) · [Source](../../src/FSM_COS/IMicroBundleConfigurationSource.cs) |
 
-Because development is live, this inventory must be refreshed whenever source changes. A diagram is not current merely because it exists.
+## Manifest and staged-load model
 
-## Reading the status labels
+| Type | Responsibility | Reference |
+|---|---|---|
+| `RuntimeManifest` | Request for MicroBundle identities and versions. | [Type companion](src/FSM_COS/RuntimeManifest.md) · [Source](../../src/FSM_COS/RuntimeManifest.cs) |
+| `MicroBundleManifestEntry` | Versioned identity for a requested manifest root. | [Type companion](src/FSM_COS/MicroBundleManifestEntry.md) · [Source](../../src/FSM_COS/MicroBundleManifestEntry.cs) |
+| `MicroBundleReference` | Published MicroBundle identity, including version and content hash. | [Type companion](src/FSM_COS/MicroBundleReference.md) · [Source](../../src/FSM_COS/MicroBundleReference.cs) |
+| `RuntimeManifestEntry` | Published identity and intended load stage for one capability. | [Type companion](src/FSM_COS/RuntimeManifestEntry.md) · [Source](../../src/FSM_COS/RuntimeManifestEntry.cs) |
+| `RuntimeManifestDependency` | Dependency edge between published bundle identities. | [Type companion](src/FSM_COS/RuntimeManifestDependency.md) · [Source](../../src/FSM_COS/RuntimeManifestDependency.cs) |
+| `RuntimeManifestSchedule` | Validated dependency graph and dependency-readiness metadata. | [Class diagram](ClassDiagram/RuntimeManifestSchedule.svg) · [Class reference](ClassDiagram/RuntimeManifestSchedule.md) · [Source](../../src/FSM_COS/RuntimeManifestSchedule.cs) |
+| `RuntimeManifestLoadPlan` | Tracks published entries through host-reported localization and loading states. | [Type companion](src/FSM_COS/RuntimeManifestLoadPlan.md) · [Source](../../src/FSM_COS/RuntimeManifestLoadPlan.cs) |
+| `MicroBundleRuntimeState` | State values used by the runtime manifest load plan. | [Source](../../src/FSM_COS/RuntimeManifestLoadPlan.cs) |
+| `ManifestLoadStage` | Declares the intended stage for a manifest entry. | [Type companion](src/FSM_COS/ManifestLoadStage.md) · [Source](../../src/FSM_COS/ManifestLoadStage.cs) |
+| `IManifestLoadEvaluator` | Lets the host/experience decide whether a deferred entry is wanted. | [Type companion](src/FSM_COS/IManifestLoadEvaluator.md) · [Source](../../src/FSM_COS/IManifestLoadEvaluator.cs) |
+| `MicroBundleLoadContext` | Context supplied when a MicroBundle is loaded. | [Type companion](src/FSM_COS/MicroBundleLoadContext.md) · [Source](../../src/FSM_COS/MicroBundleLoadContext.cs) |
 
-- **Inventory confirmed** — file and declared type were observed in the source tree/content at the evidence snapshot above.
-- **Diagram not yet inventoried here** — this index does not yet assert a matching UML artifact exists or is correct.
-- **Needs source review** — relationships, visibility, and behavior should be checked against the implementation before drawing connectors.
-- **Generated/manual** — record this only after the artifact's production method is known; do not infer it from appearance.
+## Composition result
 
-## Source-file to declared-type inventory
-
-| Source file | Declared type(s) observed | Primary responsibility (summary) | UML status in this index |
-|---|---|---|---|
-| [FsmCos.cs](../../src/FSM_COS/FsmCos.cs) | `FsmCos`, nested `LoadFrame` | Composition orchestration and internal load traversal | [Class diagram](ClassDiagram/FsmCos.svg) and [detail](ClassDiagram/FsmCos.md) added; source review documented, visual/browser validation pending |
-| [IFsmCos.cs](../../src/FSM_COS/IFsmCos.cs) | `IFsmCos` | Public composition entry-point abstraction | Diagram not yet inventoried here |
-| [ArbitrationContext.cs](../../src/FSM_COS/ArbitrationContext.cs) | `ArbitrationContext` | Context passed through arbitration | Diagram not yet inventoried here |
-| [IManifestLoadEvaluator.cs](../../src/FSM_COS/IManifestLoadEvaluator.cs) | `IManifestLoadEvaluator` | Experience-owned decision boundary for promoting deferred manifest entries | Diagram not yet inventoried here |
-| [IMicroBundleCatalog.cs](../../src/FSM_COS/IMicroBundleCatalog.cs) | `IMicroBundleCatalog` | Consumer-owned MicroBundle resolution boundary | Diagram not yet inventoried here |
-| [IMicroBundleConfigurationSource.cs](../../src/FSM_COS/IMicroBundleConfigurationSource.cs) | `IMicroBundleConfigurationSource` | Optional per-bundle configuration source | Diagram not yet inventoried here |
-| [ManifestLoadStage.cs](../../src/FSM_COS/ManifestLoadStage.cs) | `ManifestLoadStage` | Intended entry stage for a manifest entry | Diagram not yet inventoried here |
-| [MicroBundleLoadContext.cs](../../src/FSM_COS/MicroBundleLoadContext.cs) | `MicroBundleLoadContext` | Context supplied during bundle loading | Diagram not yet inventoried here |
-| [MicroBundleManifestEntry.cs](../../src/FSM_COS/MicroBundleManifestEntry.cs) | `MicroBundleManifestEntry` | Versioned manifest root identity | Diagram not yet inventoried here |
-| [MicroBundleReference.cs](../../src/FSM_COS/MicroBundleReference.cs) | `MicroBundleReference` | Immutable published artifact identity | Diagram not yet inventoried here |
-| [RuntimeAssembly.cs](../../src/FSM_COS/RuntimeAssembly.cs) | `RuntimeAssembly` | Stable result of runtime composition | Diagram not yet inventoried here |
-| [RuntimeManifest.cs](../../src/FSM_COS/RuntimeManifest.cs) | `RuntimeManifest` | Machine-oriented request for bundle identities and versions | Diagram not yet inventoried here |
-| [RuntimeManifestDependency.cs](../../src/FSM_COS/RuntimeManifestDependency.cs) | `RuntimeManifestDependency` | Published dependency edge between bundle IDs | Diagram not yet inventoried here |
-| [RuntimeManifestEntry.cs](../../src/FSM_COS/RuntimeManifestEntry.cs) | `RuntimeManifestEntry` | Immutable identity and intended stage for a runtime capability | Diagram not yet inventoried here |
-| [RuntimeManifestLoadPlan.cs](../../src/FSM_COS/RuntimeManifestLoadPlan.cs) | `RuntimeManifestLoadPlan`, `MicroBundleRuntimeState` | Availability/composition state tracking | Diagram not yet inventoried here; two declared types in one file |
-| [RuntimeManifestSchedule.cs](../../src/FSM_COS/RuntimeManifestSchedule.cs) | `RuntimeManifestSchedule` | Publish-time dependency analysis for a runtime manifest | Diagram not yet inventoried here |
-
-The inventory intentionally records multiple declared types in a single source file where observed. It does not assume one file equals one class. It also does not infer inheritance, associations, or call relationships from names alone.
-
-## Diagram conventions
-
-The intended visual language is:
-
-- **Thick blue outer border:** namespace/data card, labelled with the fully qualified namespace.
-- **Colorful, readable type cards:** distinguish classes, interfaces, structs/records, and enums by a documented legend; color is not a substitute for labels.
-- **Source-derived members only:** show signatures that exist in the reviewed source; omit imagined members.
-- **Grounded relationships only:** every connector must be supported by declarations or implementation. A visual proximity is not a relationship.
-- **No decorative connector rails masquerading as dependencies:** any stub or continuation rail must be labelled as such.
-- **Accessible fallback:** include a text explanation and source links; never make color the sole way to distinguish type kinds or states.
-
-## First detailed diagram: FsmCos
-
-The first manually authored, source-grounded class view is [FsmCos.svg](ClassDiagram/FsmCos.svg), with its explanatory [detail page](ClassDiagram/FsmCos.md). It covers the public composition contract, catalog field, manifest/configuration inputs, result type, and private nested traversal frame. Its connector legend distinguishes implementation/field relationships from method input/output flow. The diagram is not generator-produced, and SVG rendering/accessibility checks have not yet been run.
-
-## Second detailed diagram: manifest schedule and load plan
-
-[RuntimeManifestSchedule.svg](ClassDiagram/RuntimeManifestSchedule.svg) and its [detail page](ClassDiagram/RuntimeManifestSchedule.md) document the distinction between publish-time dependency analysis and host-reported runtime availability. Related records and the Experience-owned deferred-load evaluator are included. The diagram is manually authored; SVG rendering/accessibility checks and build/test verification remain pending.
-
-## Coverage still required
-
-This file does not yet provide a full AST diagram set, per-type class diagrams, collaboration diagrams, or use-case diagrams. Those should be added in separate, reviewable assets after each diagram's source relationships have been checked. The next useful slice is `FsmCos` plus its directly consumed contracts, followed by manifest/load-plan types.
-
-Before calling this automated or release-grade, add checks for source-file inventory, declared-type inventory (including nested/partial types), stale source revisions, missing/orphan diagrams, SVG/XML validity, accessible text, and generated-diff review. No such automation is claimed by this index.
-
-
-## Current source companion
-
-- [FsmCos](src/FSM_COS/FsmCos.md) — source-reviewed companion for current development baseline `326a021498156f2bb7dc7a31219d6118d3427e37`; diagram rendering and link checks remain unverified.
-
-- [RuntimeManifest](src/FSM_COS/RuntimeManifest.md) — source-reviewed companion for the current development baseline.
-- [RuntimeAssembly](src/FSM_COS/RuntimeAssembly.md) — source-reviewed companion for the current development baseline.
-
-- [RuntimeManifestSchedule](src/FSM_COS/RuntimeManifestSchedule.md) — current-source dependency schedule contract.
-- [RuntimeManifestLoadPlan](src/FSM_COS/RuntimeManifestLoadPlan.md) — current-source localization/composition state tracker.
-- [RuntimeManifestEntry](src/FSM_COS/RuntimeManifestEntry.md) — current-source companion documenting the type's identity and responsibility boundaries.
-- [MicroBundleReference](src/FSM_COS/MicroBundleReference.md) — current-source companion documenting the type's identity and responsibility boundaries.
-- [RuntimeManifestDependency](src/FSM_COS/RuntimeManifestDependency.md) — current-source companion documenting the type's identity and responsibility boundaries.
-
-- [IManifestLoadEvaluator](src/FSM_COS/IManifestLoadEvaluator.md) — current-source companion for the composition contract.
-- [IMicroBundleCatalog](src/FSM_COS/IMicroBundleCatalog.md) — current-source companion for the composition contract.
-- [IMicroBundleConfigurationSource](src/FSM_COS/IMicroBundleConfigurationSource.md) — current-source companion for the composition contract.
-- [ManifestLoadStage](src/FSM_COS/ManifestLoadStage.md) — current-source companion for the composition contract.
-- [MicroBundleManifestEntry](src/FSM_COS/MicroBundleManifestEntry.md) — current-source companion for the composition contract.
-- [MicroBundleLoadContext](src/FSM_COS/MicroBundleLoadContext.md) — current-source companion for the composition contract.
-- [IFsmCos](src/FSM_COS/IFsmCos.md) — current-source companion for the composition contract.
-- [ArbitrationContext](src/FSM_COS/ArbitrationContext.md) — current-source companion for the composition contract.
+| Type | Responsibility | Reference |
+|---|---|---|
+| `RuntimeAssembly` | Read-only snapshot of the composed bundle order and arbitration result handed to the host. | [Type companion](src/FSM_COS/RuntimeAssembly.md) · [Source](../../src/FSM_COS/RuntimeAssembly.cs) |
 
 ## Test companions
 
-- [AiGuiCapabilityHandoffTests](tests/FSM_COS.Tests/AiGuiCapabilityHandoffTests.md) — current-source companion for 3 focused test cases / facts.
-- [FsmCosTests](tests/FSM_COS.Tests/FsmCosTests.md) — current-source companion for 86 focused test cases / facts.
-- [RuntimeManifestPlanningTests](tests/FSM_COS.Tests/RuntimeManifestPlanningTests.md) — current-source companion for 33 focused test cases / facts.
-- [SnapshotIsolationTests](tests/FSM_COS.Tests/SnapshotIsolationTests.md) — current-source companion for 3 focused test cases / facts.
+These references summarize selected test scenarios. The test source is authoritative for the complete current test set.
 
+- [FsmCosTests](tests/FSM_COS.Tests/FsmCosTests.md) — composition, dependency resolution, failure handling, limits, and arbitration.
+- [RuntimeManifestPlanningTests](tests/FSM_COS.Tests/RuntimeManifestPlanningTests.md) — manifest validation, dependency schedules, staged-load state, and promotion evaluation.
+- [SnapshotIsolationTests](tests/FSM_COS.Tests/SnapshotIsolationTests.md) — defensive snapshots and read-only collection behavior.
+- [AiGuiCapabilityHandoffTests](tests/FSM_COS.Tests/AiGuiCapabilityHandoffTests.md) — proof that AI/GUI capabilities can be composed without adding AI or GUI package dependencies to the FSM_COS core.
 
-## Sample companions
+## Scope of the diagrams
 
-- [Minimal consumer Program](../../samples/FSM_COS.MinimalConsumer/Program.md) — sample-specific UML card, use cases, and dependency-closure recipe.
-- [Documentation visual generator Program](../../samples/DocumentationVisuals/Program.md) — sample-specific UML card, generation path, and verification boundaries.
+The two SVG class diagrams focus on `FsmCos` and `RuntimeManifestSchedule`. The remaining types have source-linked companions, but do not yet have individual SVG class diagrams. The schedule and load-plan types describe metadata and state transitions; they do not by themselves implement repository localization, background loading, or promotion of deferred bundles into a running `RuntimeAssembly`. See [Staged Manifest Loading](../STAGED_MANIFEST_LOADING.md) for that boundary.
