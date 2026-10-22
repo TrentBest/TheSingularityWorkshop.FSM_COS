@@ -36,29 +36,29 @@ Every public document should answer the question appropriate to its role, use th
 | `docs/WHAT_IS_FSM_COS.md` | Replace the introductory explanation with a direct product definition, use cases, contract boundaries, and runnable proof. | Rewritten on `development`; commit `9d54a27f377f8a9c90c1e9b4c615bb267405db68`. |
 | `DOCUMENTATION_INDEX.md` | Organize links by reader goal instead of a flat topic inventory. | Rewritten on `development`; commit `483b0f0005d1c78c9095000df19c9e123c38f05f`. |
 
-These are content edits, not a verified release. They still need local-link, Markdown, package-rendering, and source-claim checks.
+These are content edits, not a verified release. CI caught package-local links to source-only pages and the repository-wide branding contract; fixes have been applied, but the newest exact-head workflow must pass before this pass is considered verified.
 
 ## Public documentation inventory and disposition
 
 | Path | Intended role | Audit decision / next action | Status |
 |---|---|---|---|
-| `README.md` | First-contact product explanation | Keep as the concise front door; validate every claim and link against source and package state. | Rewritten; verify |
+| `README.md` | First-contact product explanation | Lead with the user problem and payoff, then define the composition contract and show it working. Keep the front door concise; validate every claim and link against source and package state. | Rewritten and iterated; verify |
 | `NuGet.README.md` | Package consumer landing page | Keep shorter than the repository README; ensure it renders correctly in NuGet and never implies unpublished versions are available. | Rewritten; verify |
 | `DOCUMENTATION_INDEX.md` | Reader navigation | Keep task-oriented; every link must resolve and the index must not expose internal planning as a user guide. | Rewritten; verify |
 | `docs/WHAT_IS_FSM_COS.md` | Beginner-level concept and use cases | Keep only as a deeper plain-language introduction; eliminate repetition with README/learning guide during next pass. | Rewritten; compare |
-| `docs/LEARNING_GUIDE.md` | One end-to-end mental model | Keep if it teaches by following one real example; compare against sample and remove repeated conceptual paragraphs. | Review next |
+| `docs/LEARNING_GUIDE.md` | One end-to-end mental model | Follow one real request from manifest to dependency-first order, bounded arbitration, and host handoff; compare every claim against the runnable sample. | Rewritten; verify |
 | `docs/CONSUMING_MICROBUNDLES.md` | Consumer implementation recipe | High-value public guide; validate code signatures, steps, failure modes, and output against current source/tests. | Review next |
 | `docs/ARCHITECTURE.md` | Implementation map | Keep the source-derived relationships and runtime flow; remove repeated theory and ensure diagrams don't overstate staged loading. | Review next |
-| `docs/DOMAIN.md` | Responsibility and ownership reference | Keep only the domain boundaries unique to this page; link to the external MicroBundleDomain contract rather than restating it. | Review next |
+| `docs/DOMAIN.md` | Responsibility and ownership reference | Keep as the ownership map, not another algorithm walkthrough; link to external contracts and avoid duplicating Architecture. | Rewritten; verify |
 | `docs/RUNTIME_MANIFEST.md` | Manifest contract | Keep as an exact reference; prominently distinguish roots from optional planning metadata and clarify what is actually validated. | Review next |
 | `docs/RUNTIME_ASSEMBLY.md` | Result/handoff contract | Keep if it explains public result semantics, snapshot behavior, and host responsibilities not already obvious in API docs. | Review next |
 | `docs/ARBITRATION.md` | Convergence contract | Keep the exact round semantics, failure conditions, and limits; trim introductory repetition. | Review next |
-| `docs/RUNTIME_BOUNDARY.md` | Kernel-versus-host responsibilities | Candidate for consolidation with Architecture/Domain if it repeats the same lists without a distinct reader task. | Review next |
+| `docs/RUNTIME_BOUNDARY.md` | Kernel-versus-host responsibilities | Keep as the concise integration/non-feature checklist; Domain owns conceptual responsibilities and Architecture owns the algorithm. | Rewritten; verify |
 | `docs/STAGED_MANIFEST_LOADING.md` | Current planning metadata and non-features | Keep only if this feature surface exists publicly; name it so readers do not mistake metadata for active deferred loading. | Review next |
 | `docs/MANIFEST_THEORY.md` | Why the manifest is a published request | Merge into the canonical theory or Runtime Manifest reference if it adds no distinct insight. | Review next |
 | `docs/THEORY.md` | Architectural rationale | Keep the unique, durable design rationale; move implementation detail to contract references and label future ideas. | Review next |
 | `docs/WEBPAGE_INTEGRATION.md` | Host integration example/boundary | Keep only as a useful host recipe; make the absence of a shipped WebPage adapter clear without making the page mostly disclaimers. | Review next |
-| `docs/GALLERY.md` | Visual tour | Keep concise; each exhibit must add meaning, link to its authoritative explanation, and distinguish concept art from live evidence. | Review next |
+| `docs/GALLERY.md` | Visual tour | Organize exhibits as a consumer journey; each image must teach a distinct concept and link to its authoritative explanation. Source-only sample links must work from the NuGet package too. | Expanded; verify |
 | `docs/UML_VISUAL_STYLE.md` | Diagram authoring standard | Maintainer-facing standard, not a required end-user read; decide whether this belongs under internal notes or a cross-repo docs standard. | Review next |
 | `docs/UML/README.md` | Type/source navigation | Keep if it materially improves source navigation; verify every companion path and label manually maintained material honestly. | Review next |
 | `docs/UML/ClassDiagram/*.md` | Focused class cards/use cases | Keep one canonical card per meaningful public class; validate class names, members, relationships, and use cases against source. | Review next |
@@ -67,7 +67,7 @@ These are content edits, not a verified release. They still need local-link, Mar
 | `docs/releases/0.1.0-alpha.7.md` | Version-specific release notes | Keep as historical/candidate record; distinguish verified candidate behavior from publication status. | Review next |
 | `docs/releases/0.1.0-alpha.6.md` | Prior release history | Preserve only as accurate history; do not duplicate current instructions or imply it is current. | Review next |
 | `SECURITY.md` | Security contract and report guidance | Keep the actionable threat model and enforced limits; verify every numeric limit and claim against implementation/tests. | Review next |
-| `docs/BRANCH_RECONCILIATION.md` | Sith/maintainer branch ledger | Not end-user documentation. Move to `.github/notes/` after verifying the latest ledger and update links before deleting the public-path copy. | Relocate |
+| `.github/notes/BRANCH_RECONCILIATION.md` | Sith/maintainer branch ledger | Maintainer-only history; moved out of the public documentation tree and retained in notes. | Relocated; verify live refs before acting |
 | `docs/assets/*.svg`, `*.gif` | Visual explanations | Audit each against source and accessible alt text; remove duplicates/stale art, keep only diagrams that teach a distinct concept. | Review next |
 
 ## Internal notes and other design artifacts
@@ -78,7 +78,7 @@ These are content edits, not a verified release. They still need local-link, Mar
 | `.github/notes/LIVING_SVG.md` | Retain as maintainer evidence for diagram generation and animation boundaries; verify pinned source/workflow claims and keep out of the end-user journey. |
 | `.github/DEVELOPMENT.md` | Internal contributor instructions. Keep only current commands and repository conventions; remove instructions that assume missing sibling repositories or obsolete workflows. |
 | `.github/release-readiness/0.1.0-alpha.7.md` | Release governance evidence, not product documentation. Preserve the exact-candidate rule; refresh every gate against one exact SHA before making a readiness claim. |
-| `docs/BRANCH_RECONCILIATION.md` | Historical/maintainer artifact, not a public user guide; relocation above preserves the work while fixing its audience. |
+| `.github/notes/BRANCH_RECONCILIATION.md` | Historical/maintainer artifact, not a public user guide; retained under maintainer notes rather than the public documentation path. |
 
 ## Sample, code, and visual evidence
 
