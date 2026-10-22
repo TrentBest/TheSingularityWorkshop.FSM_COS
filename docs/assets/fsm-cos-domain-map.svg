@@ -1,17 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 860" role="img" aria-labelledby="title desc">
   <title id="title">FSM_COS domain and completion boundary</title>
-  <desc id="desc">Solid blue blocks show the current composition kernel lifecycle. Grey blocks are owned by external domains or the host. Dashed amber blocks list known deferred capabilities.</desc>
+  <desc id="desc">Solid blue blocks show the current composition kernel lifecycle. Grey blocks are owned by external domains or the host. Dashed amber blocks list known deferred capabilities. Moving connector dashes are illustrative, not live runtime telemetry; animation is disabled when reduced motion is preferred.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07101a"/><stop offset="1" stop-color="#172337"/></linearGradient>
     <linearGradient id="kernel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#103b50"/><stop offset="1" stop-color="#174a67"/></linearGradient>
     <filter id="glow"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#76cfff"/></marker>
   </defs>
+  <style>
+    .handoff-flow { stroke-dasharray: 8 7; animation: handoff-flow 2.4s linear infinite; }
+    @keyframes handoff-flow { to { stroke-dashoffset: -30; } }
+    @media (prefers-reduced-motion: reduce) {
+      .handoff-flow { animation: none; stroke-dasharray: none; }
+    }
+  </style>
   <rect width="1440" height="860" rx="26" fill="url(#bg)"/>
   <g font-family="Arial,Helvetica,sans-serif">
     <text x="58" y="62" fill="#f1f7ff" font-size="30" font-weight="700" letter-spacing="3">FSM_COS / DOMAIN MAP</text>
     <text x="60" y="92" fill="#76cfff" font-size="15" letter-spacing="2">WHAT THE KERNEL OWNS — AND WHAT IT DOES NOT CLAIM YET</text>
-    <g fill="none" stroke="#76cfff" stroke-width="3" marker-end="url(#arrow)">
+    <g class="handoff-flow" fill="none" stroke="#76cfff" stroke-width="3" marker-end="url(#arrow)">
       <path d="M245 208H292"/><path d="M492 208H539"/><path d="M739 208H786"/><path d="M986 208H1033"/><path d="M1233 208H1270"/>
     </g>
     <g stroke-width="2">
