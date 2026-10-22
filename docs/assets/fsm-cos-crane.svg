@@ -1,11 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620" role="img" aria-labelledby="asset-title asset-desc">
 <title id="asset-title">FSM_COS assembly crane</title>
-<desc id="asset-desc">Visual metaphor for FSM_COS assembling validated MicroBundles into a runtime assembly while leaving execution and lifecycle to the host.</desc>
+<desc id="asset-desc">Animated visual metaphor for FSM_COS assembling validated MicroBundles into a runtime assembly while leaving execution and lifecycle to the host. The moving cable signal and gently breathing load are illustrative, not live runtime telemetry. Animation respects reduced-motion preferences.</desc>
 <defs>
 <linearGradient id="bg" x1="0" x2="1"><stop stop-color="#05080d"/><stop offset="1" stop-color="#121b28"/></linearGradient>
 <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#202a35"/><stop offset=".5" stop-color="#080c12"/><stop offset="1" stop-color="#303c48"/></linearGradient>
 <linearGradient id="amber" x1="0" x2="1"><stop stop-color="#6d3a08"/><stop offset=".5" stop-color="#ffc04d"/><stop offset="1" stop-color="#7b4209"/></linearGradient>
 <filter id="glow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<style>
+.crane-flow{animation:crane-lift-flow 2.8s linear infinite}
+.crane-load{transform-box:fill-box;transform-origin:center;animation:crane-load-breathe 3.6s ease-in-out infinite}
+@keyframes crane-lift-flow{to{stroke-dashoffset:-40}}
+@keyframes crane-load-breathe{0%,100%{opacity:.86}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.crane-flow,.crane-load{animation:none}}
+</style>
 </defs>
 <rect width="1400" height="620" rx="28" fill="url(#bg)"/>
 <g font-family="Arial,Helvetica,sans-serif">
@@ -14,12 +21,13 @@
 <path d="M120 490V145M120 145H850M170 490H70M850 145V205" stroke="url(#metal)" stroke-width="30" stroke-linecap="round"/>
 <path d="M160 180H810" stroke="#53616d" stroke-width="5"/>
 <path d="M815 180V315" stroke="#9aa7b2" stroke-width="5"/>
+<path class="crane-flow" d="M815 184V309" fill="none" stroke="#76cfff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="7 13" opacity=".9"/>
 <path d="M815 315l-22 38M815 315l22 38" stroke="#9aa7b2" stroke-width="5"/>
 <rect x="735" y="355" width="160" height="115" rx="16" fill="url(#metal)" stroke="#5e7180" stroke-width="3"/>
 <rect x="758" y="377" width="114" height="70" rx="10" fill="#0b2630" stroke="#76cfff" stroke-width="2"/>
 <path d="M770 400h90M770 420h70" stroke="#76cfff" stroke-width="3"/>
 <path d="M815 470v28" stroke="#9aa7b2" stroke-width="5"/>
-<path d="M760 498h110l-18 48H778z" fill="url(#amber)" stroke="#ffc04d" stroke-width="3" filter="url(#glow)"/>
+<path class="crane-load" d="M760 498h110l-18 48H778z" fill="url(#amber)" stroke="#ffc04d" stroke-width="3" filter="url(#glow)"/>
 <path d="M785 514h60M795 529h40" stroke="#ffe2a3" stroke-width="3"/>
 <g fill="#fff">
 <text x="930" y="225" font-size="23" font-weight="700">REQUEST</text>
