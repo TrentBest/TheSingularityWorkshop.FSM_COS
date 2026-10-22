@@ -92,23 +92,6 @@ The package targets **.NET 8** and is versioned `0.1.0-alpha.7`.
 - **Integrate a host:** [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) describes the browser-host integration boundary and what a host must supply; FSM_COS does not ship a WebPage adapter.
 - **Explore the examples:** [Gallery](docs/GALLERY.md) and the [minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md).
 - **Find a topic:** [Documentation Index](DOCUMENTATION_INDEX.md).
----
-<p align="center">
-  <a href="https://github.com/TrentBest/WebPage" aria-label="Visit The Singularity Workshop">
-    <img src="https://raw.githubusercontent.com/TrentBest/WebPage/development/TheSingularityWorkshop/wwwroot/Images/TheSingularityWorkshopLivingAvatar.svg" alt="The Singularity Workshop living avatar — a digital vortex of information converging on its central eye" width="112" />
-  </a><br />
-  <strong>The Singularity Workshop</strong><br />
-  <em>If a picture is worth a thousand words, what is a living picture worth?</em><br />
-  <a href="https://github.com/TrentBest">GitHub</a> ·
-  <a href="https://coderlegion.com/">Coder Legion</a> ·
-  <a href="https://www.patreon.com/c/TheSingularityWorkshop">Patreon</a> ·
-  <a href="https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J">PayPal</a><br />
-  <a href="https://github.com/TrentBest/FSM_API">FSM_API</a> ·
-  <a href="https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization">FSM_Serialization</a> ·
-  <a href="https://github.com/TrentBest/WebPage">WebPage</a><br />
-  <strong>Because state shouldn't be a mess.</strong><br />
-  <em>And because static boundaries are invitations to cause trouble.</em>
-</p>
 
 ---
 
@@ -128,3 +111,20 @@ The package targets **.NET 8** and is versioned `0.1.0-alpha.7`.
 - [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
 - [Coder Legion community](https://coderlegion.com/)
 
+---
+<p align="center">
+  <a href="https://github.com/TrentBest/WebPage" aria-label="Visit The Singularity Workshop">
+    <img src="https://raw.githubusercontent.com/TrentBest/WebPage/development/TheSingularityWorkshop/wwwroot/Images/TheSingularityWorkshopLivingAvatar.svg" alt="The Singularity Workshop living avatar — a digital vortex of information converging on its central eye" width="112" />
+  </a><br />
+  <strong>The Singularity Workshop</strong><br />
+  <em>If a picture is worth a thousand words, what is a living picture worth?</em><br />
+  <a href="https://github.com/TrentBest">GitHub</a> ·
+  <a href="https://coderlegion.com/">Coder Legion</a> ·
+  <a href="https://www.patreon.com/c/TheSingularityWorkshop">Patreon</a> ·
+  <a href="https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J">PayPal</a><br />
+  <a href="https://github.com/TrentBest/FSM_API">FSM_API</a> ·
+  <a href="https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization">FSM_Serialization</a> ·
+  <a href="https://github.com/TrentBest/WebPage">WebPage</a><br />
+  <strong>Because state shouldn't be a mess.</strong><br />
+  <em>And because static boundaries are invitations to cause trouble.</em>
+</p>
