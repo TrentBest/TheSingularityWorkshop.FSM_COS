@@ -18,7 +18,29 @@ The **FSM** in FSM_COS identifies its foundation in [FSM_API](https://github.com
 
 **[Run the minimal consumer](#-04-see-it-work)** · **[Why use FSM_COS?](#-02-why-use-a-compute-operating-system)** · **[Browse the living Gallery](docs/GALLERY.md)** · **[Read the consumer guide](docs/CONSUMING_MICROBUNDLES.md)**
 
-## 🟦 01 — What does FSM_COS do?
+## 🟣 01 — Why use a Compute Operating System?
+
+Software becomes difficult to compose when every host must know which capabilities belong together, which prerequisites they require, and the order in which those pieces must be prepared. Each new combination adds more special cases to the application that consumes it.
+
+**FSM_COS moves that composition problem into a reusable runtime boundary.** A host declares the capabilities it wants; FSM_COS resolves the required MicroBundles, checks the composition, loads prerequisites before dependents, and returns a `RuntimeAssembly` for the host to use.
+
+<p align="center">
+  <img src="docs/assets/dependency-resolution.svg" alt="A requested MicroBundle expands into its dependencies, which are resolved before the requested capability is assembled." width="100%">
+</p>
+
+That separation gives an application a few important advantages:
+
+- **Compose from intent.** Describe the requested capabilities and versions instead of embedding every combination in host-specific code.
+- **Resolve dependencies once.** Share one dependency-resolution and load-order contract across websites, desktop applications, services, simulations, and headless hosts.
+- **Fail before handoff.** Missing dependencies, invalid relationships, cycles, or failed bounded arbitration prevent a successful assembly.
+- **Keep execution where it belongs.** FSM_COS assembles the runtime; the host owns application behavior, scheduling, user interface, lifecycle, and presentation.
+- **Choose the boundary deliberately.** FSM_COS is useful when runtime composition is a real problem—not an extra requirement for every small application.
+
+The key distinction is simple: **the manifest says what is wanted, FSM_COS assembles what must exist together, and the host decides what happens next.**
+
+**Explore the Workshop:** [Find The Singularity Workshop packages on NuGet](https://www.nuget.org/packages?q=TheSingularityWorkshop) · [Browse the Workshop repository guide](docs/WORKSHOP_REPOSITORIES.md)
+
+## 🟦 02 — What does FSM_COS do?
 
 A runtime manifest says which capabilities and versions a host wants. A host-supplied catalog makes those MicroBundles available for resolution. FSM_COS works out the required dependency closure, validates the composition, loads prerequisites before dependents, and runs bounded arbitration. If composition succeeds, the host receives a `RuntimeAssembly`.
 
@@ -41,19 +63,6 @@ Host executes, presents, or integrates the result
 
 A MicroBundle is a domain-defined unit of capability or behavior. The MicroBundle contract belongs to [MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain); FSM_COS consumes that contract and defines how the requested pieces are composed. A `RuntimeAssembly` is the result of composition—not a promise that every bundle is compatible, an application is running, or a user interface has appeared.
 
-## 🟣 02 — Why use a Compute Operating System?
-
-Use FSM_COS when an application needs to assemble different combinations of reusable capabilities without making every host reimplement dependency resolution and composition rules.
-
-- **Describe the desired computation.** Supply a manifest of requested MicroBundles and versions instead of hard-wiring every composition into one host.
-- **Resolve prerequisites centrally.** FSM_COS discovers the dependency closure and loads dependencies before the bundles that require them.
-- **Reject incomplete compositions.** Missing dependencies, invalid relationships, cycles, and failed convergence stop the handoff instead of yielding a successful assembly.
-- **Give capabilities a bounded reconciliation phase.** Bundles can reconcile composition state through the domain contract, but FSM_COS does not claim this proves arbitrary semantic compatibility.
-- **Keep the host in control.** A website, desktop app, service, simulation, or headless process can supply its own catalog and decide what to do with the result.
-- **Keep infrastructure replaceable.** Artifact storage, retrieval, UI, execution lifecycle, and platform integration remain outside the composition kernel.
-
-The payoff is a reusable composition layer between **what a runtime requests** and **how a host runs it**. FSM_COS is useful when that boundary is valuable; it is not a requirement for every small application.
-
 ## 🩵 03 — Where FSM_COS fits
 
 | Component | Responsibility |
@@ -64,7 +73,7 @@ The payoff is a reusable composition layer between **what a runtime requests** a
 | Host / application | Supplies the catalog and optional configuration source; owns execution, lifecycle, UI, and presentation. |
 | [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) | Handles representation/serialization concerns; it is not the composition kernel. |
 
-FSM_COS does not automatically download artifacts, verify artifact content hashes, activate deferred bundles in a running assembly, schedule the application, or render an experience. Those are distinct responsibilities, and the current alpha contract should not be mistaken for planned future capabilities. See [Architecture](docs/ARCHITECTURE.md), [Runtime Boundary](docs/RUNTIME_BOUNDARY.md), and [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md) for the exact implementation boundaries.
+FSM_COS does not download artifacts, verify artifact content hashes, activate deferred bundles in a running assembly, schedule the application, or render an experience. Those responsibilities belong to the artifact provider and host. See [Architecture](docs/ARCHITECTURE.md), [Runtime Boundary](docs/RUNTIME_BOUNDARY.md), and [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md) for the exact implementation boundaries.
 
 ## 🟢 04 — See it work
 
