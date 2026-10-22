@@ -1,6 +1,9 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # NuGet Publication Runbook
 
-This is the Workshop's reference note for NuGet publication. The same safety pattern is used across the NuGet-facing repositories.
+This is the Workshop's reference note for NuGet publication. The same safety pattern is used across the NuGet-facing repositories. For FSM_COS alpha.7, `development` is the release candidate and source of truth; `master` is the previous release baseline and is intended to be replaced with the verified candidate. Branch replacement is not package publication authorization.
 
 ## Safe default
 
@@ -12,7 +15,7 @@ Every NuGet publishing job ends its condition with:
 && false
 ```
 
-That final `false` is an intentional hard gate. It remains in `master` after a release.
+That final `false` is an intentional hard gate. It remains in the release workflow after a release. The gate must remain closed on both `development` and `master` unless the owner explicitly authorizes a specific NuGet publication.
 
 The workflows may still:
 
@@ -31,7 +34,7 @@ When a package is ready to publish:
 
 1. Confirm the package version in the project metadata.
 2. Confirm build, tests, coverage, and packaging are clean.
-3. On `master`, change **only the final publication gate** from:
+3. Obtain the owner's explicit approval for the exact package/version and publication attempt. Without that approval, stop here; do not change the gate. For an approved release, change **only the final publication gate** from:
    ```yaml
    && false
    ```
@@ -166,16 +169,16 @@ That architectural distinction is independent of the package-publication mechani
 
 If an AI agent is asked to publish one of the Workshop's NuGet packages:
 
-1. Inspect the repository's current workflow on `master`.
+1. Inspect the current workflow on the verified `development` candidate and confirm its SHA.
 2. Confirm the package version and intended release.
 3. Confirm the publication job is currently hard-gated by `&& false`.
 4. Do not publish while that gate is false.
 5. For an authorized release, change only that final `false` to `true`.
 6. Push the release commit and monitor the verification/publication jobs.
 7. Confirm the exact package/version result.
-8. Restore the final gate to `&& false`.
+8. Restore the final gate to `&& false` immediately after the authorized publication.
 9. Push the restoration commit.
-10. Leave `master` safe for ordinary future development.
+10. Leave the workflow hard-gated on `development` and `master`. The verified branch replacement is a separate operation and does not itself publish a package.
 
 **Never leave `master` with NuGet publication enabled after a release.**
 
@@ -188,3 +191,8 @@ If an AI agent is asked to publish one of the Workshop's NuGet packages:
 - Current state: **publication hard-gated**
 
 The release-specific trigger that was used for alpha.5 is historical. Future releases should use the explicit temporary gate pattern above rather than leaving a release-specific publishing condition permanently enabled.
+
+
+---
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
