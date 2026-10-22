@@ -12,9 +12,11 @@
   <img src="docs/assets/fsm-cos-overview.svg" alt="A runtime manifest enters FSM_COS; the kernel resolves dependencies and composes MicroBundles into a RuntimeAssembly for a host." width="1000">
 </p>
 
-*If a picture is worth a thousand words, then what is a living picture worth?* FSM_COS uses source-backed diagrams to explain dependency closure, preflight validation, failure boundaries, and the host handoff. 
+*If a picture is worth a thousand words, then what is a living picture worth?* FSM_COS uses source-backed diagrams to explain dependency closure, preflight validation, failure boundaries, and the host handoff.
 
 **[Gallery](docs/GALLERY.md)** — a visual index of composition, validation, arbitration, and host handoff.
+
+**[Learn FSM_COS by following one request](docs/LEARNING_GUIDE.md)** — a picture-led walkthrough with a runnable example and a small experiment.
 
 **[Minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md)** — source, UML class card, use cases, and reproduction notes.
 
@@ -81,10 +83,10 @@ dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csp
 This is a source-repository example and references the local FSM_COS project so it can be verified before a release is published. For the exact published package status, check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS). To build your own host, start with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md), which explains the catalog, manifest, configuration, and bundle contracts.
 
 The package targets **.NET 8** and is versioned `0.1.0-alpha.7`.
-  
+
 ## 🟪 05 — Documentation
 
-- **Start here:** [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md)
+- **Start here:** [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) and [Learn by Following One Request](docs/LEARNING_GUIDE.md)
 - **Understand the runtime:** [Architecture](docs/ARCHITECTURE.md), [Runtime Manifest](docs/RUNTIME_MANIFEST.md), [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md), [Arbitration](docs/ARBITRATION.md), and [Runtime Boundary](docs/RUNTIME_BOUNDARY.md).
 - **Build a consumer:** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) explains the catalog, manifest, configuration, and bundle contracts.
 - **Integrate a host:** [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) describes the browser-host integration boundary and what a host must supply; FSM_COS does not ship a WebPage adapter.
