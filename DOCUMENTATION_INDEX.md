@@ -25,9 +25,4 @@ This index links to the current product guides and development instructions.
 
 - [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) — version-specific API and behavior changes.
 - [Security](SECURITY.md) — threat model, resource limits, trust assumptions, and security verification.
-- [Development](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/DEVELOPMENT.md) — build, test, and CI instructions.
 - [Public API UML](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/README.md) — source-to-type diagrams and class cards.
-
-## Repository verification
-
-The implementation and tests define runtime behavior. The focused contract guides explain those contracts; examples demonstrate usage. Release evidence is valid only for the exact commit and package artifact that were tested.
