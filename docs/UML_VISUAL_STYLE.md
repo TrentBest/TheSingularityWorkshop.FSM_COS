@@ -6,7 +6,9 @@ The canonical design rationale and broader interaction contract live in the GUI 
 
 ## The visual language
 
-Use a **recursive, nested data-card composition**, not a flat pile of boxes. Every card has a complete, visibly thick border, a distinct header and body, readable dark text, and children nested inside the thing that owns them. A namespace contains its types; a type contains member groups; a member may reveal its signature details. The hierarchy should communicate ownership even when the image is viewed quickly.
+Use a **recursive, nested data-card composition**, not a flat pile of boxes. Every card has a complete, visibly thick border, a distinct header and body, readable dark text, and children nested inside the thing that owns them. The hierarchy should communicate ownership even when the image is viewed quickly.
+
+**Keep static structure separate from dynamic behavior.** Nested cards show declarations and ownership: namespaces contain types, types contain members, and members can contain signature details. They do not, by themselves, show what executes first or how state changes over time. Use sequence/flow diagrams for interactions, state diagrams for lifecycle, and runtime traces only when backed by an actual captured run.
 
 | Element | Border / fill direction | What it means |
 | --- | --- | --- |
@@ -47,6 +49,7 @@ Do not draw FSM_COS as if it owns the host's UI, application lifecycle, catalog 
 ## Adoption checklist for every repository
 
 - [ ] Namespace/type/member cards use the shared semantic palette and nested containment.
+- [ ] Static declaration structure is visually distinct from runtime behavior and time-ordered interactions.
 - [ ] Diagram labels and relationships are grounded in source or explicitly marked as authored concepts.
 - [ ] A reader-facing caption explains what the image teaches.
 - [ ] SVGs have a title and description, readable contrast, and a text equivalent.
