@@ -18,8 +18,6 @@
 
 **[Minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md)** — source, UML class card, use cases, and reproduction notes.
 
-**[Visual generator recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/DocumentationVisuals/Program.md)** — how the preflight SVG is generated and verified.
-
 FSM_COS is The Singularity Workshop's **runtime composition kernel**. It takes a request for capabilities, resolves the MicroBundles and dependencies needed to satisfy it, and hands the assembled result to a host.
 
 ## 🟦 01 — What is FSM_COS?
@@ -91,7 +89,6 @@ The package targets **.NET 8** and is versioned `0.1.0-alpha.7`.
 - **Build a consumer:** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) explains the catalog, manifest, configuration, and bundle contracts.
 - **Integrate a host:** [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) describes the browser-host adapter.
 - **Explore the examples:** [Gallery](docs/GALLERY.md) and the [minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md).
-- **Build and test from source:** [Development](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/DEVELOPMENT.md).
 - **Find a topic:** [Documentation Index](DOCUMENTATION_INDEX.md).
 ---
 <p align="center">
