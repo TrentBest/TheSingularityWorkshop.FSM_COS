@@ -128,15 +128,3 @@ The package targets **.NET 8** and is versioned `0.1.0-alpha.7`.
 - [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
 - [Coder Legion community](https://coderlegion.com/)
 
-<!-- THE SINGULARITY WORKSHOP FOOTER -->
-<p align="center">
-  <a href="https://github.com/TrentBest" aria-label="The Singularity Workshop on GitHub">
-    <img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar and brand image" width="200" />
-  </a>
-</p>
-
-<p align="center">
-  <em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br />
-  <strong>Because state shouldn't be a mess.</strong><br />
-  <em>And because static boundaries are invitations to cause trouble.</em>
-</p>
