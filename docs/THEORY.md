@@ -38,7 +38,7 @@ For the architectural rationale behind this boundary, see this document together
 
 FSM_COS is intentionally **not an application type**. It does not assume that the computation being assembled is a WebPage, WebApp, desktop application, distributed service, game, spreadsheet, simulation, or any other particular product form.
 
-The engineering abstraction is the computation and the common operational work required to assemble it. A host may later turn that computation into any of those things, or into something with no presentation layer at all.
+The engineering abstraction is the computation and the common operational work required to assemble it. A host can manifest that computation as any of those things, or keep it headless with no presentation layer at all.
 
 The name **FSM_COS** is intentionally broader than “bundle loader.”
 
@@ -293,7 +293,7 @@ It does **not** mean:
 - an Experience has started;
 - a GUI has rendered;
 - a browser has opened;
-- a Unity scene has loaded;
+- a host-specific scene or environment has loaded;
 - a desktop application has entered its lifecycle;
 - a process has begun scheduling;
 - a user has encountered anything.
@@ -307,7 +307,7 @@ This distinction is what lets the same composition travel to different hosts.
                   │
        ┌──────────┼──────────┐
        ▼          ▼          ▼
-     browser    Unity     desktop
+     browser    native host     desktop
 ```
 
 FSM_COS stops at the handoff.
@@ -403,7 +403,7 @@ The same semantic request can be assembled for multiple hosts:
                  RuntimeAssembly
                  /        |        \
                 /         |         \
-           WebPage       Unity     Desktop
+           WebPage       AnyApp     Desktop
               │            │          │
            browser       scene      native host
 ```
@@ -425,7 +425,7 @@ FSM_COS does not own:
 - application lifecycle;
 - GUI rendering;
 - browser lifecycle;
-- Unity scene/object lifecycle;
+- host-specific scene and object lifecycle;
 - desktop lifecycle;
 - Warehouse persistence;
 - storage policy;
@@ -469,7 +469,7 @@ IMicroBundleCatalog
 │ in-memory registry          │
 │ generated catalog           │
 │ cache                       │
-│ Warehouse-backed resolver   │
+│ repository-backed catalog   │
 │ domain-specific resolver    │
 └─────────────────────────────┘
 ```
@@ -708,6 +708,6 @@ FSM_COS is one layer in a deliberately troublesome ecosystem:
 - **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
 - **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
 - **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
+- Host integrations provide platform-specific manifestation outside the FSM_COS composition kernel.
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
