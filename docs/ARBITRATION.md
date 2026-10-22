@@ -1,3 +1,10 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center">
+  <a href="https://github.com/TrentBest">
+    <img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop — animated workshop moniker" width="720" />
+  </a>
+</p>
+
 # Arbitration and Convergence
 
 > **Arbitration gives a composition a bounded runtime reconciliation step; it does not automatically prove semantic compatibility.**
@@ -515,3 +522,25 @@ FSM_COS is one layer in a deliberately troublesome ecosystem:
 - **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
 
 <p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
+
+---
+
+## 🔗 Resources & Support
+
+- **Project:** [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
+- **Workshop projects:** [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
+- **Connect:** [GitHub](https://github.com/TrentBest) · [Coder Legion profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Coder Legion community](https://coderlegion.com/)
+- **Support:** [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center">
+  <a href="https://github.com/TrentBest" aria-label="The Singularity Workshop on GitHub">
+    <img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar and brand image" width="200" />
+  </a>
+</p>
+
+<p align="center">
+  <em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br />
+  <strong>Because state shouldn't be a mess.</strong><br />
+  <em>And because static boundaries are invitations to cause trouble.</em>
+</p>

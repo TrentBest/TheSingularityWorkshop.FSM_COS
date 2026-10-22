@@ -109,3 +109,34 @@ The package targets **.NET 8** and is versioned `0.1.0-alpha.7`.
   <strong>Because state shouldn't be a mess.</strong><br />
   <em>And because static boundaries are invitations to cause trouble.</em>
 </p>
+
+---
+
+## 🔗 Resources & Support
+
+### 📦 Project & Code
+
+- **FSM_COS:** [Source code](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
+- **FSM_API:** [Source code](https://github.com/TrentBest/FSM_API)
+- **FSM_Serialization:** [Source code](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)
+- **WebPage:** [Source code](https://github.com/TrentBest/WebPage)
+- **The Singularity Workshop:** [GitHub profile](https://github.com/TrentBest) · [Coder Legion profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop)
+
+### 💖 Support The Singularity Workshop
+
+- [Patreon](https://www.patreon.com/c/TheSingularityWorkshop)
+- [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
+- [Coder Legion community](https://coderlegion.com/)
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center">
+  <a href="https://github.com/TrentBest" aria-label="The Singularity Workshop on GitHub">
+    <img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar and brand image" width="200" />
+  </a>
+</p>
+
+<p align="center">
+  <em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br />
+  <strong>Because state shouldn't be a mess.</strong><br />
+  <em>And because static boundaries are invitations to cause trouble.</em>
+</p>

@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # Host Integration Boundary: WebPage
 
 FSM_COS is a platform-neutral composition library. It does not ship a WebPage-specific catalog, Blazor adapter, application lifecycle manager, or rendering component. A WebPage host can consume FSM_COS by implementing the host-owned contracts and deciding how to use the resulting `RuntimeAssembly`.
@@ -33,3 +36,14 @@ A source project's declared version does not prove that the same version is publ
 The current kernel performs synchronous composition. It does not perform repository localization, verify artifact content hashes, continue loading in the background, promote deferred bundles into an already-running assembly, refresh a running manifest, replace bundle generations, or manage host lifecycle and retirement.
 
 These limits apply to FSM_COS itself. A host may implement additional behavior around the returned assembly, but must define and test that behavior as a host-owned contract rather than assuming FSM_COS supplies it.
+
+---
+
+## 🔗 Resources & Support
+
+- [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) · [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
+- [GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar and brand image" width="200" /></a></p>
+<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br /><strong>Because state shouldn't be a mess.</strong><br /><em>And because static boundaries are invitations to cause trouble.</em></p>
