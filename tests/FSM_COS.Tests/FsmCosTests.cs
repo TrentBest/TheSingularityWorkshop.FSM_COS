@@ -1787,21 +1787,6 @@ public sealed class FsmCosTests
 
         public void Load(IMicroBundleLoadContext context) { }
 
-        public void RollbackLoad(IMicroBundleLoadContext context)
-        {
-            RollbackCalls++;
-            RollbackAction?.Invoke();
-            if (RollbackException is not null)
-                throw RollbackException;
-        }
-
-        public void RollbackLoad(IMicroBundleLoadContext context)
-        {
-            RollbackCalls++;
-            RollbackAction?.Invoke();
-            if (RollbackException is not null)
-                throw RollbackException;
-        }
 
         public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex)
         {
@@ -1880,6 +1865,14 @@ public sealed class FsmCosTests
                 ? value
                 : ReadOnlyMemory<byte>.Empty;
             LoadAction?.Invoke();
+        }
+
+        public void RollbackLoad(IMicroBundleLoadContext context)
+        {
+            RollbackCalls++;
+            RollbackAction?.Invoke();
+            if (RollbackException is not null)
+                throw RollbackException;
         }
 
         public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex)
