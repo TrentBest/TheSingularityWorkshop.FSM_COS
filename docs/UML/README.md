@@ -9,7 +9,7 @@ This reference connects the public runtime model to its source companions and th
 
 | Type | Responsibility | Reference |
 |---|---|---|
-| `FsmCos` | Resolves and validates the dependency closure, loads bundles in dependency order, and arbitrates toward convergence. | [Class diagram](ClassDiagram/FsmCos.svg) · [Class reference](ClassDiagram/FsmCos.md) · [Source](../../src/FSM_COS/FsmCos.cs) |
+| `FsmCos` | Resolves and validates the dependency closure, loads bundles in dependency order, and arbitrates toward convergence. | [Consumer-first UML + use cases](ClassDiagram/FsmCosUML.md) · [Diagram SVG](ClassDiagram/FsmCosUML.svg) · [Source-detail view](ClassDiagram/FsmCos.md) · [Source](../../src/FSM_COS/FsmCos.cs) |
 | `IFsmCos` | Public composition entry-point contract. | [Type companion](src/FSM_COS/IFsmCos.md) · [Source](../../src/FSM_COS/IFsmCos.cs) |
 | `ArbitrationContext` | Context passed to MicroBundle arbitration. | [Type companion](src/FSM_COS/ArbitrationContext.md) · [Source](../../src/FSM_COS/ArbitrationContext.cs) |
 | `IMicroBundleCatalog` | Consumer-owned resolver for requested MicroBundles. | [Type companion](src/FSM_COS/IMicroBundleCatalog.md) · [Source](../../src/FSM_COS/IMicroBundleCatalog.cs) |
@@ -48,7 +48,7 @@ These references summarize selected test scenarios. The test source is authorita
 
 ## Scope of the diagrams
 
-The two SVG class diagrams focus on `FsmCos` and `RuntimeManifestSchedule`. The remaining types have source-linked companions, but do not yet have individual SVG class diagrams. The schedule and load-plan types describe metadata and state transitions; they do not by themselves implement repository localization, background loading, or promotion of deferred bundles into a running `RuntimeAssembly`. See [Staged Manifest Loading](../STAGED_MANIFEST_LOADING.md) for that boundary.
+The consumer-first `FsmCosUML` view puts the host above the focal type, labels its supplied collaborators, and shows `RuntimeAssembly` below; its companion includes consumer use cases. The earlier `FsmCos.svg` and `RuntimeManifestSchedule.svg` remain source-detail diagrams with their own references. The remaining types have source-linked companions, but do not yet have individual SVG class diagrams. The schedule and load-plan types describe metadata and state transitions; they do not by themselves implement repository localization, background loading, or promotion of deferred bundles into a running `RuntimeAssembly`. See [Staged Manifest Loading](../STAGED_MANIFEST_LOADING.md) for that boundary.
 
 ---
 
