@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # FSM_COS Documentation Audit — Working Decision Register
 
 **Purpose:** Rebuild the documentation around the product a developer is trying to understand and use. This is a maintainer working note, not product documentation and not a claim that the audit is complete.
@@ -97,3 +100,8 @@ These are content edits, not a verified release. They still need local-link, Mar
 7. **Release claims:** only after checks on one exact candidate SHA, update the release-readiness ledger. No percentage should be inferred from prose quality or historical CI.
 
 **Non-negotiable:** this register is not permission to publish, merge PR #35, or delete branches. The documentation pass is on `development`; integration governance remains a separate owner-reviewed decision.
+
+---
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
