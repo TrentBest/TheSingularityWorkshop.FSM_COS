@@ -81,7 +81,11 @@ public sealed class FsmCos : IFsmCos
             var assembly = ExecuteCore(manifest, configurationSource, next => phase = next);
             return RuntimeCompositionResult.Success(assembly);
         }
+        // The result API deliberately preserves exceptions from catalog, configuration,
+        // bundle-loading, and arbitration callbacks without requiring consumers to parse messages.
+#pragma warning disable CA1031 // Broad capture is the explicit TryExecute contract; Execute remains exception-based.
         catch (Exception exception)
+#pragma warning restore CA1031
         {
             return RuntimeCompositionResult.Failed(phase, exception);
         }

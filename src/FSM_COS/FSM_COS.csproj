@@ -56,6 +56,7 @@
     <None Include="../../docs/RUNTIME_BOUNDARY.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/RUNTIME_MANIFEST.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/STAGED_MANIFEST_LOADING.md" Pack="true" PackagePath="docs/" />
+    <None Include="../../docs/COMPOSITION_FAILURES.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/WEBPAGE_INTEGRATION.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/GALLERY.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/WORKSHOP_REPOSITORIES.md" Pack="true" PackagePath="docs/" />
