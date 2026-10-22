@@ -96,3 +96,8 @@ FSM_COS does not download artifacts, verify artifact bytes from content hashes, 
 - **Understand convergence:** [Arbitration](ARBITRATION.md).
 - **Explore the visuals:** [Gallery](GALLERY.md).
 - **Browse all guides:** [Documentation Index](../DOCUMENTATION_INDEX.md).
+
+---
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
