@@ -1,7 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760" role="img" aria-labelledby="asset-title asset-desc">
 <title id="asset-title">FSM_COS runtime boundary</title>
-<desc id="asset-desc">Diagram distinguishing the composition kernel from external bundle definitions, infrastructure, and host-owned runtime behavior.</desc>
-<defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#070b12"/><stop offset="1" stop-color="#111827"/></linearGradient></defs>
+<desc id="asset-desc">Diagram distinguishing the composition kernel from external bundle definitions, infrastructure, and host-owned runtime behavior. The moving handoff trace is illustrative, not live telemetry, and respects reduced-motion preferences.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" x2="1"><stop stop-color="#070b12"/><stop offset="1" stop-color="#111827"/></linearGradient>
+  <style>
+    @keyframes handoff-flow { to { stroke-dashoffset: -30; } }
+    @keyframes assembly-breathe { 0%,100% { stroke-opacity: .7; } 50% { stroke-opacity: 1; } }
+    .handoff-flow { stroke-dasharray: 8 7; animation: handoff-flow 3s linear infinite; }
+    .assembly-frame { animation: assembly-breathe 4s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      .handoff-flow, .assembly-frame { animation: none !important; }
+      .handoff-flow { stroke-dasharray: none !important; }
+    }
+  </style>
+</defs>
 <rect width="1400" height="760" rx="26" fill="url(#bg)"/>
 <g font-family="Arial,Helvetica,sans-serif">
 <text x="70" y="70" fill="#fff" font-size="34" font-weight="700" letter-spacing="3">THE RUNTIME BOUNDARY</text>
@@ -14,8 +26,9 @@
 <text x="115" y="270">✓ resolve MicroBundles</text><text x="115" y="308">✓ dependency closure</text><text x="115" y="346">✓ carry configuration</text><text x="115" y="384">✓ ordered Load()</text><text x="115" y="422">✓ arbitration / convergence</text><text x="115" y="460">✓ detect composition errors</text><text x="115" y="498">✓ return RuntimeAssembly</text>
 <text x="875" y="270">✓ execute the assembled runtime</text><text x="875" y="308">✓ render GUI</text><text x="875" y="346">✓ browser / desktop / Unity lifecycle</text><text x="875" y="384">✓ networking and presentation</text><text x="875" y="422">✓ start and encounter Experiences</text><text x="875" y="460">✓ host-specific policy</text><text x="875" y="498">✓ resource / platform integration</text>
 </g>
-<path d="M570 400H830" stroke="#fff" stroke-width="3"/><path d="M810 390l20 10-20 10z" fill="#fff"/>
-<rect x="570" y="345" width="260" height="110" rx="18" fill="#102b36" stroke="#76cfff"/>
+<path class="handoff-flow" d="M570 400H830" fill="none" stroke="#fff" stroke-width="3"/>
+<path d="M810 390l20 10-20 10z" fill="#fff"/>
+<rect class="assembly-frame" x="570" y="345" width="260" height="110" rx="18" fill="#102b36" stroke="#76cfff" stroke-width="2"/>
 <text x="700" y="385" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">RuntimeAssembly</text>
 <text x="700" y="414" text-anchor="middle" fill="#9eb1c4" font-size="14">handoff object</text>
 <text x="700" y="436" text-anchor="middle" fill="#9eb1c4" font-size="14">stable composition</text>
