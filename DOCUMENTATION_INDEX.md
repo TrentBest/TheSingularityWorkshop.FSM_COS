@@ -7,46 +7,55 @@
 
 # FSM_COS Documentation
 
-Choose a path based on what you want to do. These guides explain the public behavior and show how to try it.
+FSM_COS is the Compute Operating System layer that composes requested MicroBundles into a `RuntimeAssembly` for a host. Use this index to move from the product idea to a working consumer, then into the contracts you need.
 
-## Get started
+## I want to understand the product
 
-- [Project overview](README.md) — purpose, architecture at a glance, and a runnable consumer.
-- [Learn FSM_COS by Following One Request](docs/LEARNING_GUIDE.md) — a picture-led walkthrough of dependency resolution, load order, arbitration, and the host handoff.
-- [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) — introduction to runtime composition.
-- [Minimal consumer](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md) — working example with a local catalog and two MicroBundles.
-- [Gallery](docs/GALLERY.md) — diagrams of the composition and handoff flow.
+- [README](README.md) — the product definition, why to use it, its place in the Workshop ecosystem, and a runnable example.
+- [What Is FSM_COS?](docs/WHAT_IS_FSM_COS.md) — the problem it solves, the composition model, current behavior, and limits.
+- [Learn by Following One Request](docs/LEARNING_GUIDE.md) — a picture-led walkthrough of dependency resolution, load order, arbitration, and handoff.
+- [Gallery](docs/GALLERY.md) — visual overview with links to implementation-level explanations.
 
-## Use FSM_COS
+## I want to build a consumer
 
-- [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) — catalog, manifest, configuration, dependency resolution, loading, and consumer errors.
-- [Architecture](docs/ARCHITECTURE.md) — runtime flow and responsibility boundaries.
-- [Domain](docs/DOMAIN.md) — kernel ownership and the MicroBundle contract boundary.
-- [Runtime Manifest](docs/RUNTIME_MANIFEST.md) — request structure and version selection.
-- [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md) — load-plan and schedule metadata.
-- [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) — successful composition result and host handoff.
+- [Minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md) — runnable sample, source notes, and expected output.
+- [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md) — implement a catalog, provide a manifest and optional configuration, and understand failure behavior.
+- [Runtime Manifest](docs/RUNTIME_MANIFEST.md) — the composition request and version selection.
+- [RuntimeAssembly](docs/RUNTIME_ASSEMBLY.md) — the successful composition result and host handoff.
 - [Arbitration](docs/ARBITRATION.md) — bounded reconciliation and convergence behavior.
-- [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) — responsibilities owned by the host and adjacent packages.
-- [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — browser-host integration.
 
-## Visual and type reference
+## I want to understand the implementation
 
-- [Living UML visual style](docs/UML_VISUAL_STYLE.md) — the shared Workshop data-card palette, nesting, accessibility, and rules for honest living images.
-- [GUI canonical data-card standard](https://github.com/TrentBest/TheSingularityWorkshop.GUI/blob/development/docs/DATA_CARDS_AND_UML.md) — full design rationale and cross-renderer contract.
-- [Public API UML](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/README.md) — source-to-type diagrams and class cards.
+- [Architecture](docs/ARCHITECTURE.md) — principal contracts, runtime flow, and responsibility boundaries.
+- [Domain](docs/DOMAIN.md) — FSM_COS ownership versus the external MicroBundleDomain contract.
+- [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) — what the kernel owns and what remains with the host.
+- [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md) — current planning metadata and explicit limits; this is not a complete deferred-loading implementation.
+- [FSM_COS Theory](docs/THEORY.md) — the deeper architectural rationale.
+- [Runtime Manifest Theory](docs/MANIFEST_THEORY.md) — why the published request differs from the richer authoring model.
+- [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — browser-host integration boundary and current responsibilities.
 
-## Release and safety reference
+## I want to inspect the visuals and types
 
-- [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) — version-specific API and behavior changes.
-- [Security](SECURITY.md) — threat model, resource limits, trust assumptions, and security verification.
+- [Gallery](docs/GALLERY.md) — source-backed diagrams and visual walkthroughs.
+- [UML index](docs/UML/README.md) — public API and source-derived type diagrams.
+- [Living UML visual style](docs/UML_VISUAL_STYLE.md) — diagram conventions, data-card layout, and accessibility guidance.
+
+## I want release and security information
+
+- [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) — version-specific behavior and API notes.
+- [Security](SECURITY.md) — threat model, trust assumptions, resource limits, and verification guidance.
+- [Branch reconciliation ledger](docs/BRANCH_RECONCILIATION.md) — development-branch governance and preservation notes (maintainer-facing).
 
 ---
 
-## 🔗 Resources & Support
+## Resources & support
 
-- **Project:** [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
-- **Workshop projects:** [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
-- **Connect:** [GitHub](https://github.com/TrentBest) · [Coder Legion profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Coder Legion community](https://coderlegion.com/)
+- **FSM_COS:** [Source](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) · [NuGet](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS)
+- **FSM_API:** [Source](https://github.com/TrentBest/FSM_API)
+- **MicroBundleDomain:** [Source](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain)
+- **FSM_Serialization:** [Source](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)
+- **WebPage:** [Source](https://github.com/TrentBest/WebPage)
+- **Workshop community:** [GitHub profile](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/)
 - **Support:** [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
