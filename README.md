@@ -16,7 +16,7 @@
 
 The **FSM** in FSM_COS identifies its foundation in [FSM_API](https://github.com/TrentBest/FSM_API), which supplies finite-state-machine and state/context primitives used by the Workshop ecosystem. FSM_COS builds on that foundation for a different job: **composition**. It is not the process scheduler, application loop, GUI, or finished application.
 
-**[Run the minimal consumer](#-04-see-it-work)** · **[Why use FSM_COS?](#-02-why-use-a-compute-operating-system)** · **[Browse the living Gallery](docs/GALLERY.md)** · **[Read the consumer guide](docs/CONSUMING_MICROBUNDLES.md)**
+**[Run the minimal consumer](#-04-see-it-work)** · **[Why use FSM_COS?](#-01-why-use-a-compute-operating-system)** · **[Browse the living Gallery](docs/GALLERY.md)** · **[Read the consumer guide](docs/CONSUMING_MICROBUNDLES.md)**
 
 ## 🟣 01 — Why use a Compute Operating System?
 
