@@ -105,6 +105,7 @@ The project currently targets **.NET 8** and declares version **0.1.0-alpha.7**.
 - **Understand current limits:** [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) and [Staged Manifest Loading](docs/STAGED_MANIFEST_LOADING.md).
 - **See the system visually:** [Gallery](docs/GALLERY.md) — source-backed diagrams with links to the underlying contracts.
 - **Find any guide:** [Documentation Index](DOCUMENTATION_INDEX.md).
+- **Choose another Workshop project:** [Repository guide](docs/WORKSHOP_REPOSITORIES.md).
 - **Review security assumptions:** [Security](SECURITY.md).
 
 ---
@@ -117,7 +118,7 @@ The project currently targets **.NET 8** and declares version **0.1.0-alpha.7**.
 - **MicroBundleDomain:** [Source code](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain)
 - **FSM_Serialization:** [Source code](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)
 - **WebPage:** [Source code](https://github.com/TrentBest/WebPage)
-- **The Singularity Workshop:** [GitHub profile](https://github.com/TrentBest) · [Coder Legion profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop)
+- **The Singularity Workshop:** [Repository guide](docs/WORKSHOP_REPOSITORIES.md) · [GitHub profile](https://github.com/TrentBest) · [Coder Legion profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop)
 
 ### Support The Singularity Workshop
 - [Patreon](https://www.patreon.com/c/TheSingularityWorkshop)
