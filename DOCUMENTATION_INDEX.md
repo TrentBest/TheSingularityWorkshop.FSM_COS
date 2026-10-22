@@ -22,8 +22,13 @@ Choose a path based on what you want to do. These guides explain the public beha
 - [Runtime Boundary](docs/RUNTIME_BOUNDARY.md) — responsibilities owned by the host and adjacent packages.
 - [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — browser-host integration.
 
-## Reference
+## Visual and type reference
+
+- [Living UML visual style](docs/UML_VISUAL_STYLE.md) — the shared Workshop data-card palette, nesting, accessibility, and rules for honest living images.
+- [GUI canonical data-card standard](https://github.com/TrentBest/TheSingularityWorkshop.GUI/blob/development/docs/DATA_CARDS_AND_UML.md) — full design rationale and cross-renderer contract.
+- [Public API UML](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/README.md) — source-to-type diagrams and class cards.
+
+## Release and safety reference
 
 - [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) — version-specific API and behavior changes.
 - [Security](SECURITY.md) — threat model, resource limits, trust assumptions, and security verification.
-- [Public API UML](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/README.md) — source-to-type diagrams and class cards.
