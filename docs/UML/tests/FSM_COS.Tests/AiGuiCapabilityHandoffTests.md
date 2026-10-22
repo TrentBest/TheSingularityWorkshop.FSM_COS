@@ -40,20 +40,14 @@ classDiagram
 
 ## Use cases
 
-1. Read the tests as executable evidence of the stated contracts and failure boundaries.
-2. Use the test names as navigation to the precise assertion in the linked source file.
-3. Re-run the test project on the exact commit before treating the evidence as current CI validation.
+1. Verify the core FSM_COS assembly does not acquire direct ProtocolAi, GrammarAi, or GUI package references.
+2. Exercise those capabilities as catalog-resolved MicroBundles to prove integration can happen at the composition boundary.
+3. Check that GrammarAi can depend on ProtocolAi vocabulary without copying ownership into FSM_COS.
 
-## Verification status
 
-The test source was inspected and the documented `[Fact]` count was counted from the linked file. Mermaid rendering, automated links, and exact-HEAD CI are not yet verified by this companion.
+
 
 ---
-
-## 🔗 Resources & Support
-
-- [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) · [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
-- [GitHub](https://github.com/TrentBest) · [Coder Legion](https://coderlegion.com/) · [Profile](https://coderlegion.com/user/The%2BSingularity%2BWorkshop) · [Patreon](https://www.patreon.com/c/TheSingularityWorkshop) · [PayPal](https://www.paypal.com/donate/?hosted_button_id=3Z7263LCQMV9J)
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
