@@ -34,9 +34,9 @@ The phase tells the host where composition stopped; it does not guarantee a root
 
 ## Side-effect boundary
 
-FSM_COS validates the complete reachable dependency graph before bundle loading begins. Once loading starts, bundle code and host-supplied callbacks can produce side effects. A failed result does not roll those effects back. A failure during arbitration likewise cannot undo mutations already performed by bundle code.
+FSM_COS validates the complete reachable dependency graph before bundle loading begins. Once loading starts, bundle code and host-supplied callbacks can produce side effects. A failed result does not guarantee those effects are undone. If a bundle implements `IMicroBundleRollback`, FSM_COS attempts compensation in reverse load-attempt order after a load or arbitration failure. A failure during arbitration can still leave irreversible external effects.
 
-This result is diagnostic information, not a transaction, sandbox, or rollback mechanism.
+The result is diagnostic information, not a transaction or sandbox. Compensation is opt-in and best-effort, not atomic rollback.
 
 ## Failure compensation
 

@@ -54,7 +54,7 @@ FSM_COS consumes the FSM_API state/context foundation; that does not make it the
 - A catalog is a resolution boundary, not necessarily a downloader.
 - A content-hash field is metadata; this package does not fetch and verify artifact bytes from it.
 - A successful load does not prove arbitrary bundles are semantically compatible.
-- Bounded arbitration provides a defined convergence step, not a sandbox or rollback of arbitrary side effects.
+- Bounded arbitration provides a defined convergence step, not a sandbox or transactional rollback. On failed loading or arbitration, FSM_COS can invoke the optional `IMicroBundleRollback` compensation contract in reverse attempt order; bundles without it and irreversible external effects cannot be undone.
 - A `RuntimeAssembly` is a successful composition handoff, not a running application or live-update manager.
 - Planning metadata for staged loading does not activate deferred loading in the current composition path.
 
