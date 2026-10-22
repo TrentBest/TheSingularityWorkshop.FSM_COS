@@ -138,7 +138,7 @@ Read [Architecture](ARCHITECTURE.md), then [Runtime Manifest](RUNTIME_MANIFEST.m
 <details>
 <summary><strong>I want to write code that uses FSM_COS</strong></summary>
 
-Follow [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md), then use [Development](DEVELOPMENT.md) to build and test the repository. The code examples and tests are the place to verify exact signatures and behavior.
+Follow [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) to build a consumer. Exact signatures and runtime behavior are defined by the public source and tested contracts.
 </details>
 
 <details>
