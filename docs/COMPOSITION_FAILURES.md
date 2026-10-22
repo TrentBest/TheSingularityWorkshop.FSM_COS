@@ -45,4 +45,5 @@ TryExecute is additive. Existing callers can continue to use Execute and retain 
 See [Architecture](ARCHITECTURE.md), [Runtime Boundary](RUNTIME_BOUNDARY.md), [Arbitration and Convergence](ARBITRATION.md), and [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) for the wider domain.
 
 ---
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

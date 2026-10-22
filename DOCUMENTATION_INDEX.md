@@ -58,10 +58,11 @@ Use these when changing FSM_COS itself, reviewing the design, or working on docu
 - **FSM_Serialization:** [Source](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)
 - **WebPage:** [Source](https://github.com/TrentBest/WebPage)
 
-<!-- THE SINGULARITY WORKSHOP FOOTER -->
-<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
 
 
 ## Diagnosing composition
 
 - [Composition Outcomes and Failure Diagnostics](docs/COMPOSITION_FAILURES.md) — phase-aware results for hosts that need to report failures without parsing exception messages.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
