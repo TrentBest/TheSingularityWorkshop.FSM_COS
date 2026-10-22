@@ -118,7 +118,7 @@ Identifies the runtime being assembled and supplies versioned root MicroBundle e
 A manifest entry identifies a requested MicroBundle and its requested version. Configuration is intentionally not part of the manifest. A separate configuration source may provide per-MicroBundle configuration at runtime.
 
 ### IMicroBundleCatalog
-Resolves a bundle identity to the IMicroBundle required for installation. The catalog is supplied by the host, so future Warehouse-backed or generated resolvers do not require a different composition algorithm.
+Resolves a bundle identity to the `IMicroBundle` required for installation. The catalog is supplied by the host, so the host can change its resolution implementation without changing FSM_COS's composition algorithm.
 
 ### IMicroBundle
 Consumes the domain-owned `MicroBundleDescriptor` for identity/version/providers, while retaining composition-specific dependency configuration, Load, and Arbitrate behavior. FSM_COS does not redefine MicroBundle domain metadata. It does not expose a GUI, web server, or host lifecycle contract.
