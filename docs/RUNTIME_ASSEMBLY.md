@@ -120,7 +120,7 @@ A loaded bundle's `MicroBundleDescriptor.Providers` advertises provider IDs. The
 
 Therefore the host or a separately authored integration MicroBundle must explicitly resolve and invoke providers. It should validate the expected semantic contract and compatibility before invocation; matching strings alone are not proof of compatibility. Keep domain-specific policy—such as Physics contact evidence to a Gestures recovery recommendation—outside this composition kernel.
 
-See [MicroBundleDomain's Provider Resolution Contract](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/blob/development/docs/PROVIDER_RESOLUTION_CONTRACT.md) for the current descriptor boundary and the minimum checks proposed before standardizing a resolver.
+The provider descriptor and provider-resolution semantics belong to [MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain); FSM_COS does not define or invoke a provider merely because its ID appears in a descriptor.
 
 ## What the assembly does not promise
 
