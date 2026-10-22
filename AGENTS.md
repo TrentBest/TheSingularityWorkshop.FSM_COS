@@ -1,19 +1,23 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # Repository Instructions for AI Agents
+
 
 ## Branch policy — mandatory
 
 The permanent branch model for this repository is exactly:
 
-- `master` — stable, reviewed, release-ready history.
-- `development` — active integration and verification.
+- `development` — the source of truth for active work and the next release candidate.
+- `master` — the previously released baseline until the owner-authorized release operation replaces it with the approved `development` candidate.
 
-Do not create additional persistent branches for features, documentation, experiments, release preparation, or agent handoffs. Work directly on `development` unless the owner explicitly authorizes a short-lived exploratory branch. Any explicitly authorized temporary branch must be reconciled and retired promptly; the normal target remains exactly two branches.
+Do not create additional persistent branches for features, documentation, experiments, release preparation, or agent handoffs. Work directly on `development` unless the owner explicitly authorizes a short-lived exploratory branch. The release owner may direct replacement of `master` with the verified `development` candidate; this does not authorize NuGet publication. Any explicitly authorized temporary branch must be reconciled and retired promptly; the normal target remains exactly two branches.
 
 This rule applies to every contributor and every LLM/agent. A task-specific branch is not permission to abandon the two-branch policy.
 
 ## Integration before cleanup
 
-Preserve and extend useful work. Never delete or recommend deleting a branch merely because its name looks old, its history diverged, or its work appears superseded.
+Preserve and extend useful work. Never delete or recommend deleting a branch merely because its name looks old, its history diverged, or its work appears superseded. For release preparation, however, do not treat legacy `master` as a source to merge into `development`: `development` is authoritative for the next release, and the release operation replaces the old `master` tree after verification.
 
 For every noncanonical branch:
 1. Compare its commits and file changes against `development`.
@@ -38,3 +42,8 @@ If the work is ambiguous or changes architectural direction, present the evidenc
 ## Before starting a task
 
 Read `docs/PAUSE_POINT.md`, `docs/BRANCH_RECONCILIATION.md`, and the relevant working-task or architecture documents. Check the current branch heads and working CI status rather than relying on a prior session summary.
+
+
+---
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
