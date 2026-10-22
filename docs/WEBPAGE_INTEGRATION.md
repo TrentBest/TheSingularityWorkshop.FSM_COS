@@ -1,221 +1,35 @@
-# WebPage Integration
+# Host Integration Boundary: WebPage
 
-## Purpose
+FSM_COS is a platform-neutral composition library. It does not ship a WebPage-specific catalog, Blazor adapter, application lifecycle manager, or rendering component. A WebPage host can consume FSM_COS by implementing the host-owned contracts and deciding how to use the resulting `RuntimeAssembly`.
 
-![WebPage and FSM_COS composition boundary](assets/fsm-cos-overview.svg)
+## Responsibility boundary
 
-WebPage is the first concrete host for FSM_COS. The relationship is intentionally asymmetric:
+- **WebPage / host** — owns the application lifecycle, user interface, routing, permissions, execution, and presentation.
+- **Catalog / resolver** — locates and returns the MicroBundle instances requested by identity and version.
+- **Configuration source** — optionally supplies per-bundle configuration.
+- **FSM_COS** — validates the request and dependency closure, loads dependencies before dependents, runs bounded arbitration, and returns a `RuntimeAssembly` only after convergence.
+- **MicroBundleDomain** — defines the MicroBundle contract and the domain behavior of each bundle.
 
-- **FSM_COS** composes a runtime.
-- **WebPage** supplies the bundles available to that runtime and decides how the assembled result is manifested.
-- **TheSingularityWorkshop.GUI** constructs the semantic GUI.
-- **Blazor** is the browser manifestation layer.
-- **Experiences** are what the user encounters; they are not owned by the composition kernel.
+FSM_COS does not discover artifacts by itself. A host-supplied `IMicroBundleCatalog` is the resolution boundary; the package contains no built-in Warehouse-backed or WebPage-specific resolver.
 
-The browser should therefore not become a dependency of FSM_COS.
+## Host integration sequence
 
-## Package boundary
+1. Implement `IMicroBundleCatalog` for the host's source of MicroBundles.
+2. Construct a `RuntimeManifest` with the requested root identities and versions.
+3. Supply an optional `IMicroBundleConfigurationSource` when the host has external configuration.
+4. Call `FsmCos.Execute`.
+5. Use the returned `RuntimeAssembly` according to the host's own lifecycle and presentation rules.
 
-WebPage consumes the published package. Use a version that is actually available from NuGet. The source project currently declares `0.1.0-alpha.7`; a source declaration does not establish publication status, so verify the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) before selecting a version:
+The [minimal consumer sample](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.cs) demonstrates the current dependency-first composition path with an in-memory catalog. It is a source-repository sample, not a built-in WebPage integration.
 
-~~~xml
-<PackageReference Include="TheSingularityWorkshop.FSM_COS" Version="x.y.z" />
-~~~
+## Package dependencies
 
-The alpha.7 source candidate targets .NET 8 and directly references FSM_API 1.0.13, MicroBundleDomain 1.0.1, and FSM_UserIO 0.1.0-alpha.1. FSM_UserIO supplies the `SemanticIntent` type exposed as an optional value on `RuntimeManifest` and carried through to `RuntimeAssembly`; NuGet consumers must restore that dependency even when they do not supply an intent. This does not mean every composition requires a non-null intent; confirm host-specific assumptions against that host's source and tests. Keep the dependency decision visible for future minimization rather than implying the package has only two direct dependencies. The kernel itself remains platform-neutral.
+The source candidate `0.1.0-alpha.7` targets .NET 8 and declares direct dependencies on FSM_API 1.0.13, MicroBundleDomain 1.0.1, and FSM_UserIO 0.1.0-alpha.1. FSM_UserIO supplies the optional `SemanticIntent` value exposed by `RuntimeManifest` and carried to `RuntimeAssembly`; consumers must restore that dependency even when they do not supply an intent.
 
-A browser-specific adapter is **not** required merely to execute FsmCos.Execute(). An adapter becomes necessary at the point where the assembled result must interact with a host-specific lifecycle or rendering system.
+A source project's declared version does not prove that the same version is published. Check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) before selecting a package version.
 
-## Composition flow
+## Current limits
 
-The first vertical slice should look like:
+The current kernel performs synchronous composition. It does not perform repository localization, verify artifact content hashes, continue loading in the background, promote deferred bundles into an already-running assembly, refresh a running manifest, replace bundle generations, or manage host lifecycle and retirement.
 
-~~~text
-                WebPage
-                   │
-                   │ RuntimeManifest
-                   ▼
-              FsmCos.Execute()
-                   │
-                   ▼
-          IMicroBundleCatalog
-                   │
-        ┌──────────┼──────────┐
-        ▼          ▼          ▼
-      FSM_API    GUI       Experience
-     bundles    bundles      bundles
-                   │
-                   ▼
-             RuntimeAssembly
-                   │
-                   ▼
-          WebPage host bridge
-                   │
-                   ▼
-          GUI / Blazor browser
-~~~
-
-The important point is that FsmCos does not need to know which of those bundles represents a page, a GUI, an FSM, or an Experience.
-
-## WebPage catalog
-
-WebPage should own an IMicroBundleCatalog implementation.
-
-A minimal catalog can begin as an in-memory registry:
-
-~~~csharp
-public sealed class WebPageMicroBundleCatalog : IMicroBundleCatalog
-{
-    private readonly IReadOnlyDictionary<ulong, IMicroBundle> _bundles;
-
-    public WebPageMicroBundleCatalog(IEnumerable<IMicroBundle> bundles)
-    {
-        _bundles = bundles.ToDictionary(bundle => bundle.Id);
-    }
-
-    public bool TryResolve(
-        ulong bundleId,
-        string version,
-        out IMicroBundle? bundle)
-    {
-        if (_bundles.TryGetValue(bundleId, out var candidate) &&
-            string.Equals(candidate.Descriptor.Version, version, StringComparison.Ordinal))
-        {
-            bundle = candidate;
-            return true;
-        }
-
-        bundle = null;
-        return false;
-    }
-
-    public bool TryResolve(ulong bundleId, out IMicroBundle? bundle) =>
-        _bundles.TryGetValue(bundleId, out bundle);
-}
-~~~
-
-This is deliberately a WebPage concern. A later catalog can resolve bundles from generated manifests, Warehouse-backed delivery, or another source without changing FsmCos.
-
-## First host integration
-
-The first WebPage integration should not attempt to make FSM_COS responsible for rendering.
-
-Instead:
-
-1. Construct the WebPage catalog.
-2. Construct FsmCos with that catalog.
-3. Create a RuntimeManifest.
-4. Execute the manifest.
-5. Inspect the resulting RuntimeAssembly.
-6. Pass the assembled semantic components into the existing GUI/Experience host.
-7. Let the host drive browser lifecycle and presentation.
-
-Conceptually:
-
-~~~csharp
-var catalog = new WebPageMicroBundleCatalog(bundles);
-var cos = new FsmCos(catalog);
-
-var assembly = cos.Execute(manifest);
-
-// Host-specific work begins here.
-return webPageHost.Manifest(assembly);
-~~~
-
-Manifest above is intentionally a host operation, not an FSM_COS API.
-
-## What the first manifest should prove
-
-The first WebPage manifest should be small enough to test the architecture rather than the entire Workshop.
-
-A useful proving slice is:
-
-~~~text
-WebPage Runtime
-├── FSM/API capability
-├── GUI capability
-└── one Experience capability
-~~~
-
-The test should establish that:
-
-- the manifest identifies the runtime;
-- dependencies are discovered by FSM_COS;
-- dependencies load before dependents;
-- configuration reaches the owning bundle;
-- arbitration converges;
-- RuntimeAssembly contains the expected bundles;
-- WebPage can consume the assembly without adding browser concerns to FSM_COS.
-
-## Platform adapters
-
-Do not create FSM_COS.Blazor, FSM_COS.Unity, FSM_COS.Windows, or similar packages just because the hosts exist.
-
-Those packages would only be justified when a reusable **host contract** has emerged that belongs to more than one consuming application.
-
-For now the cleaner boundary is:
-
-~~~text
-FSM_COS
-  │
-  ▼
-RuntimeAssembly
-  │
-  ├── WebPage host bridge → Blazor
-  ├── Unity host bridge   → Unity
-  └── Desktop host bridge → desktop runtime
-~~~
-
-The host bridge may be application-specific initially. Reusable adapters can be extracted later when their contract is proven.
-
-## Future Warehouse integration
-
-FSM_COS already has the correct abstraction point for eventual Warehouse participation:
-
-~~~text
-RuntimeManifest
-      ↓
-   FsmCos
-      ↓
-IMicroBundleCatalog
-      ↓
- Warehouse-backed resolver
-      ↓
- MicroBundle
-~~~
-
-The Warehouse does not become part of the FSM_COS package. It supplies or backs the catalog/resolution boundary.
-
-## Current limitation
-
-`0.1.0-alpha.7` is a composition kernel, not a complete runtime-host framework. Package-workflow and WebPage source-level integration results are evidence only for the exact commits they tested; an earlier pass does not prove a later source change. Those checks do not establish that the visible WebPage experience is fully driven by `RuntimeAssembly`. Check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) for actual publication status.
-
-The next meaningful evolution is therefore not adding platform APIs to FSM_COS. It is proving the complete handoff:
-
-~~~text
-manifest
-   ↓
-composition
-   ↓
-RuntimeAssembly
-   ↓
-host manifestation
-   ↓
-observable WebPage
-~~~
-
-Once that slice works, the boundary can be evaluated from real usage instead of speculation.
-
----
-
-## 🔗 The Singularity Workshop
-
-FSM_COS is one layer in a deliberately troublesome ecosystem:
-
-- **[FSM_API](https://github.com/TrentBest/FSM_API)** — behavior and state.
-- **[FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)** — composition and runtime assembly.
-- **[FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization)** — representation and the byte boundary.
-- **[WebPage](https://github.com/TrentBest/WebPage)** — browser manifestation and proving ground.
-- **[FSM_API_Unity](https://github.com/TrentBest/FSM_API_Unity)** — Unity manifestation.
-
-<p align="center"><em>The Singularity Workshop — Tools for the curious, the bold, and the systemically inclined.</em><br><strong>Because state shouldn't be a mess.</strong><br><em>And because static boundaries are invitations to cause trouble.</em></p>
+These limits apply to FSM_COS itself. A host may implement additional behavior around the returned assembly, but must define and test that behavior as a host-owned contract rather than assuming FSM_COS supplies it.
