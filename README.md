@@ -12,7 +12,7 @@
   <img src="docs/assets/fsm-cos-overview.svg" alt="A runtime manifest requests capabilities; FSM_COS resolves dependencies and assembles MicroBundles into a RuntimeAssembly for a host." width="1000">
 </p>
 
-**FSM_COS is a Compute Operating System (COS): it turns a declared request for computation into an assembled runtime that a host can use.** It resolves the requested MicroBundles, discovers their dependencies, loads them in dependency order, gives the composition a bounded arbitration phase, and returns a `RuntimeAssembly`.
+**When every host must hard-code how capabilities fit together, reuse becomes another source of complexity. FSM_COS gives the host one composition boundary for resolving dependencies and assembling the requested runtime.**
 
 The **FSM** in FSM_COS identifies its foundation in [FSM_API](https://github.com/TrentBest/FSM_API), which supplies finite-state-machine and state/context primitives used by the Workshop ecosystem. FSM_COS builds on that foundation for a different job: **composition**. It is not the process scheduler, application loop, GUI, or finished application.
 
