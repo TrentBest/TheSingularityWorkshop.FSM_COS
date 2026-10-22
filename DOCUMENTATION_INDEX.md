@@ -44,9 +44,9 @@ Use these when changing FSM_COS itself, reviewing the design, or working on docu
 - [FSM_COS Theory](docs/THEORY.md) — deeper composition rationale.
 - [Runtime Manifest Theory](docs/MANIFEST_THEORY.md) — the boundary between a rich authoring model and the published request.
 - [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — browser-host integration responsibilities.
-- [UML index](docs/UML/README.md) — source-derived public type diagrams.
-- [Living UML visual style](docs/UML_VISUAL_STYLE.md) — diagram conventions.
-- [Documentation Standard](DOCUMENTATION_STANDARD.md) — shared documentation and evidence rules for Workshop repositories.
+- [UML index](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/README.md) — source-derived public type diagrams (maintainer reference).
+- [Living UML visual style](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML_VISUAL_STYLE.md) — diagram conventions (maintainer reference).
+- [Documentation Standard](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md) — shared documentation and evidence rules for Workshop repositories (maintainer reference).
 
 ---
 
