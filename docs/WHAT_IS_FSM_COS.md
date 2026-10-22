@@ -110,3 +110,8 @@ The sample's catalog and bundles are example implementations, not built-in FSM_C
 - [Arbitration](ARBITRATION.md) — understand the bounded reconciliation step.
 - [Gallery](GALLERY.md) — view source-backed diagrams.
 - [Documentation index](../DOCUMENTATION_INDEX.md) — browse the full documentation set.
+
+---
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
