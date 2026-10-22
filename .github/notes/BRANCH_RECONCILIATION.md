@@ -7,38 +7,48 @@
 
 **Policy:** the intended persistent branches are exactly `master` and `development`. Preserve useful work before branch removal. Do not force-reset or merge divergent histories merely to make branch counts look tidy. Branch deletion is an owner action after reviewing this ledger.
 
-**Audit date:** 2026-10-22 (21:04 UTC). Live branch refs and both comparison directions were queried for this refresh.
+**Audit date:** 2026-10-22 (21:10 UTC). Live branch refs, both comparison directions, and current release workflow evidence were queried.
 
 ## Persistent branches
 
-| Branch | Role | Action |
-|---|---|---|
-| `master` | Published/release line | Preserve. Its release workflow and package compatibility protections must not be overwritten casually. |
-| `development` | Active integration and documentation line | Preserve. The documentation revision is being made here; verify the live head before candidate-specific CI or release claims. |
+| Branch | Observed head | Role | Action |
+|---|---|---|---|
+| `master` | `732690a2b37ac23971b3f9aea1cc595fd68c0a7f` | Published/release line | Preserve. Its release workflow and public-package compatibility protections must not be overwritten casually. |
+| `development` | `75e6b169affbb4c16ce993ff0d90012cbcc1e54c` | Active integration and documentation line | Preserve. This is the current validated development candidate; its CI evidence is recorded below and does not authorize merge or publication. |
 
-## Surplus branch inventory
+The live branch inventory returned **exactly two branches: `master` and `development`**. The previously tracked `work/alpha7-educational-docs` branch is no longer present in the live branch listing. No branch deletion was performed by this audit.
 
-| Branch | Evidence | Reconciliation decision |
-|---|---|---|
-| `work/alpha7-educational-docs` | PR #36 is merged into `development` at `afd422b6e5d713776125bbce1427caa2875b7e2c`. A fresh comparison used `work/alpha7-educational-docs` as base and `development` as head; GitHub reported `ahead_by=67`, `behind_by=0`, `merge_base=33456c23d94e147741f27554d6328b19a58532f8`. Reverse comparison confirms `development` is 67 commits ahead and the surplus branch is 0 commits ahead. PR #36 is closed and merged at `afd422b6e5d713776125bbce1427caa2875b7e2c`; its head was `33456c23d94e147741f27554d6328b19a58532f8`. The branch has no unique commits or unmerged work. | **Safe for owner-reviewed manual deletion**, provided a fresh comparison still agrees. No cherry-pick or merge was indicated by that comparison. |
+## Current divergence and release integration
 
-The fresh branch inventory contains exactly `master`, `development`, and `work/alpha7-educational-docs`. The educational docs are already merged into `development`; the remaining exception is only the stale branch ref. Re-query before owner deletion because this inventory is time-sensitive.
+Draft PR #35 (`development` → `master`) remains open and should remain draft while the histories are reconciled. The current comparison reports **904 commits ahead and 48 behind** for development relative to master. This is substantial divergence, not a routine merge. The merge base is `e9c9968b9cdbec0478e77d9f89b4e74a0e404d3d`.
 
-## Do not conflate branch cleanup with release integration
+The current `master` head is `732690a2b37ac23971b3f9aea1cc595fd68c0a7f`; the current `development` head is `75e6b169affbb4c16ce993ff0d90012cbcc1e54c`. Reconcile source/API/test differences, master-only public-dependency compatibility checks, release history, repository documentation, and workflow configuration deliberately. Preserve the master-only publication safeguard. Do not force-reset either persistent branch.
 
-Draft PR #35 (`development` → `master`) remains open and should remain draft while the two release histories are reconciled. The fresh comparison observed **888 commits ahead and 48 behind** for development relative to master. That is substantial divergence, not a routine merge. Master has release workflow, public-package compatibility, release-history, and documentation changes that must be preserved deliberately. In particular, retain the master-only publication safety guard; do not publish as part of documentation cleanup.
+## Current candidate evidence (development HEAD)
 
-The current development head at audit time was `8dbe9207d811678aac4d2efd54d9d7e87eeea802`; package workflow and CodeQL were green on that exact head. This is not release certification and does not resolve the separate master/development history divergence. The last recorded candidate-specific CodeQL/package evidence in PR #35 remains historical and must not be treated as current-head certification. It is historical evidence only, not proof that the current head passed those gates. The documentation commits must be verified on their own exact candidate SHA.
+Candidate SHA: `75e6b169affbb4c16ce993ff0d90012cbcc1e54c`.
+
+- Pack-and-publish workflow [39854327909](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39854327909): build/test, public-package compatibility, and source-integration jobs succeeded; `publish_nuget` was skipped.
+- CodeQL [39854327925](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39854327925): succeeded on the same SHA.
+- Primary package artifact: `fsm-cos-nuget-package`, 127,994-byte artifact ZIP, SHA-256 `bf00c1e6864eb511642bca732d4b2921606fd1b61676f4a49f4aac03ced02d55`. Contained `TheSingularityWorkshop.FSM_COS.0.1.0-alpha.7.nupkg`, SHA-256 `69b762b3170b3f04c95dcdf7f745319fa034c0b1281dd6954f4d4692fb423b9f`.
+- Public-feed compatibility package artifact: `fsm-cos-nuget-package-public-feed`, SHA-256 `b1c831ae767a079b48ce2b463959f87c9cde5567597cc7579a9656f1722c0692`. Contained the same package ID/version, SHA-256 `ddf8054d56ad9b411465064e180cb3b7e9b8fed4c1482677069d39e785bf4a7c`.
+- Inspected both .nupkg archives: package ID `TheSingularityWorkshop.FSM_COS`, version `0.1.0-alpha.7`, .NET 8 assembly and XML docs present, package README and license present, expected three public dependencies present, alpha.7 release notes and consumer docs/assets included, and internal release-readiness/branch-ledger notes excluded.
+- The package workflow run at the immediately preceding source candidate `8dbe9207d811678aac4d2efd54d9d7e87eeea802` also passed all three validation jobs and CodeQL, with publication skipped. The current `75e6...` run is the fresher evidence and its package artifact was inspected directly.
+
+This is strong evidence for the current **development** candidate, not certification of a final **master** release commit. Hosted rendering and browser accessibility-tree, keyboard, and screen-reader behavior remain unverified unless independently checked. A final master candidate must be selected and checked against its exact SHA after branch-history and workflow reconciliation.
 
 ## Owner checklist
 
-- [x] Recheck live branches and confirm `work/alpha7-educational-docs` is fully reconciled: PR #36 merged; 67 commits behind development; zero unique commits.
-- [ ] Owner: remove the stale `work/alpha7-educational-docs` branch in GitHub manually; fresh comparison confirms it has no unique commits.
-- [ ] Keep `master` and `development`; do not force-push either as part of branch cleanup.
-- [ ] Reconcile PR #35 and master-only release safeguards as a separate, evidence-driven task.
-- [ ] Do not publish a package without explicit owner authorization.
+- [x] Confirm the live persistent branch inventory is exactly `master` and `development`.
+- [x] Refresh divergence numbers from live refs: development 904 ahead / 48 behind master.
+- [x] Re-run pack/test, public-package compatibility, source integration, and CodeQL on the same current development SHA.
+- [x] Inspect both current-head NuGet artifacts and record package metadata and hashes.
+- [ ] Reconcile the 904-ahead / 48-behind histories and preserve all master-only release safeguards.
+- [ ] Verify hosted SVG rendering and applicable browser accessibility behavior.
+- [ ] Select the exact final master candidate and repeat all applicable gates and package inspection on that SHA.
+- [ ] Obtain explicit owner authorization before publication.
 
-This ledger records observed state, not an automatic branch-deletion action or release-readiness certification.
+This ledger records observed state, not merge approval or release authorization.
 
 ---
 
