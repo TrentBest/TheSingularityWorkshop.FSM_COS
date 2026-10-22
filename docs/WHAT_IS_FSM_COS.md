@@ -46,9 +46,9 @@ FSM_COS is worth using when you need one or more of these properties:
 
 - **Combinations are selected at runtime.** Different manifests can request different roots without requiring a separate hard-wired host for every combination.
 - **Dependencies matter.** A requested capability can bring in the prerequisites it declares.
-- **Hosts should share composition rules.** A website, desktop app, service, simulation, or headless process can use the same composition algorithm while retaining its own execution model.
+- **Hosts share composition rules.** A website, desktop app, service, simulation, or headless process can use the same composition algorithm while retaining its own execution model.
 - **Failures must stop the handoff.** Missing dependencies, invalid dependency relationships, cycles, and failure to converge are treated as composition failures.
-- **Composition should remain separate from infrastructure.** The catalog may use in-memory objects, local resources, or a repository integration supplied by the host; FSM_COS does not dictate that implementation.
+- **Composition stays separate from infrastructure.** The catalog may use in-memory objects, local resources, or a repository integration supplied by the host; FSM_COS does not dictate that implementation.
 
 FSM_COS is not mandatory for every program. It earns its place when reusable capabilities need to be assembled consistently across different runtime requests or hosts.
 
