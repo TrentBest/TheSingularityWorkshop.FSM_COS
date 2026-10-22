@@ -44,7 +44,6 @@ FSM_COS is the Compute Operating System layer that composes requested MicroBundl
 
 - [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) — version-specific behavior and API notes.
 - [Security](SECURITY.md) — threat model, trust assumptions, resource limits, and verification guidance.
-- [Branch reconciliation ledger](docs/BRANCH_RECONCILIATION.md) — development-branch governance and preservation notes (maintainer-facing).
 
 ---
 
