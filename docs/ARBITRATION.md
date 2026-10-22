@@ -6,7 +6,7 @@ See [FSM_COS Theory](THEORY.md#8-arbitration-is-composition-negotiation) for the
 
 ![Arbitration convergence: loaded bundles participate in complete rounds until a round reports no changes or the configured maximum is exhausted](assets/arbitration-convergence.svg)
 
-*Implementation note: the successful round is recorded as a zero-based index in `RuntimeAssembly.ArbitrationRounds` (`0` means the first round converged). If every allowed round reports changes, `FsmCos.Execute` throws instead of returning an unstable assembly.*
+*A successful assembly records the zero-based index of the round that converged in `RuntimeAssembly.ArbitrationRounds`: `0` means the first round was stable. If every allowed round reports changes, FSM_COS reports failure instead of handing the host an assembly that did not converge.*
 
 
 ## UML class diagram: arbitration participants
