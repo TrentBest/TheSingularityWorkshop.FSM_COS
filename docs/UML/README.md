@@ -18,6 +18,11 @@ This reference connects the public runtime model to its source companions and th
 
 The standard defines the intended coverage model. This index is still a manually maintained reference: do not infer complete source coverage, automatic generation, or CI stale-output enforcement from the existence of these documents.
 
+## Workflow diagrams and use cases
+
+- [SEQ-FSMCOS-001 — Runtime composition sequence](SequenceDiagrams/FsmCos-Execute.md) — source-reviewed ordinary composition path, failure compensation, and static complexity notes.
+- [UC-FSMCOS-001 — Compose a runtime](UseCases/User%20Goals/UC-FSMCOS-001-Compose-Runtime.md) — host goal, success path, failure paths, boundaries, and test evidence.
+
 ## Composition entry point
 
 | Type | Responsibility | Reference |
