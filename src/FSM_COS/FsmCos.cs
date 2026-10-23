@@ -215,9 +215,8 @@ public sealed class FsmCos : IFsmCos
                     throw new InvalidOperationException(
                         $"Published arbitration round {rounds} is outside the configured bound of {_maximumArbitrationRounds}.");
 
-                // A pre-resolved manifest is accepted only when every bundle can restore
-                // its effective configuration exactly; otherwise the runtime must arbitrate.
-                _ = CaptureResolvedConfigurations(loaded, loadContext, requireAll: true);
+                // The common result-capture step below verifies that every bundle
+                // restored its published configuration exactly.
             }
             else
             {
