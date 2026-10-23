@@ -5,6 +5,14 @@
 
 This reference connects the public runtime model to its source companions and the UML diagrams currently maintained for FSM_COS. The companions and diagrams are manually authored; they are not automatically generated from the C# source. For exact signatures and behavior, the linked source and tests remain authoritative.
 
+## UML standards and coverage
+
+- [Comprehensive UML Standard](Standard/README.md) — the focused specification for each UML/documentation view, including sequence complexity analysis and MicroBundle/manifest inventories.
+- [Living UML Visual Style](../UML_VISUAL_STYLE.md) — recursive data-card appearance, target-centered layout, provenance, and FSM_COS-specific boundaries.
+- [Shared Documentation Standard](../../DOCUMENTATION_STANDARD.md) — cross-repository policy and evidence requirements.
+
+The standard defines the intended coverage model. This index is still a manually maintained reference: do not infer complete source coverage, automatic generation, or CI stale-output enforcement from the existence of these documents.
+
 ## Composition entry point
 
 | Type | Responsibility | Reference |
