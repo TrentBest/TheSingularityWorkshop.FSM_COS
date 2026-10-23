@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # UML and Source Documentation Coverage Inventory
 
 **Repository:** TheSingularityWorkshop.FSM_COS  
@@ -74,3 +77,6 @@ The core project defines **contracts and manifest/data types** used to describe,
 5. Report separate source, relationship, use-case, MicroBundle, and freshness coverage metrics.
 
 This inventory is deliberately honest about partial coverage. It is not a statement that the full standard is already satisfied.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # UML Standard Reconciliation Plan
 
 **Repository:** TheSingularityWorkshop.FSM_COS  
@@ -81,3 +84,6 @@ For each workflow, link a consumer-facing use case to its contract, source, test
 ## Reporting rules
 
 Every status update must state the assessed branch/commit where known, what was actually inspected or tested, the remaining critical gaps, and a grounded progress percentage. If coverage has not been measured, say **unverified** rather than inventing a percentage. Do not merge to `master`, publish packages, delete branches, or weaken required checks as part of this documentation effort.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

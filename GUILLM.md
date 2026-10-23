@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # GUILLM.md — GUI / FSM_COS UML Coordination
 
 **Purpose:** Define the FSM_COS consumer requirements for GUI.SVG living UML work and keep the documentation gate tied to source, generated output, and verifiable CI evidence.
@@ -68,3 +71,5 @@ The FSM_COS UML index currently describes a limited set of consumer-first SVG di
 
 No merge, publication, master-branch change, branch deletion, or weakening of required checks is authorized by this document.
 
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
