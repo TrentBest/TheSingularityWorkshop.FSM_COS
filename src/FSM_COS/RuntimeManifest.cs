@@ -12,8 +12,10 @@ namespace TheSingularityWorkshop.FSM_COS;
 /// <param name="LoadPlan">Optional published identity/stage metadata; does not itself localize or load bundles.</param>
 /// <param name="Schedule">Optional publish-time dependency plan, distinct from FSM_API process scheduling.</param>
 /// <param name="Intent">Optional semantic intent supplied by the host for the assembled runtime.</param>
+#if WORKSHOP_USE_REPOSITORY_SOURCES
 /// <param name="ArbitrationResolved">True only when publication has captured each bundle's resolved configuration and runtime arbitration must be skipped.</param>
 /// <param name="PublishedArbitrationRounds">Zero-based convergence round recorded by publication when arbitration is resolved.</param>
+#endif
 public sealed record RuntimeManifest(
     ulong RuntimeId,
     IReadOnlyList<MicroBundleManifestEntry> Bundles,
