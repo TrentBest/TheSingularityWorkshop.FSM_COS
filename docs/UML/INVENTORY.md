@@ -3,7 +3,7 @@
 **Repository:** TheSingularityWorkshop.FSM_COS  
 **Branch assessed:** `development`  
 **Assessment basis:** GitHub source-tree and documentation-tree inventory; source pages are source-checked, not compiler-generated.  
-**Status:** Initial manual inventory. This is not yet a CI-enforced or automatically regenerated report. The implementation sequence is tracked in the [UML standard reconciliation plan](RECONCILIATION_PLAN.md).
+**Status:** Manual coverage inventory with a new CI-enforced file-level companion-presence check. The report itself is not automatically regenerated; compiler-backed declaration coverage and diagram freshness enforcement remain unimplemented. The implementation sequence is tracked in the [UML standard reconciliation plan](RECONCILIATION_PLAN.md).
 
 ## Coverage summary
 
@@ -34,7 +34,7 @@ The existing documentation includes a separate class-diagram area and several SV
 | Requirement/test traceability | **Partial / manual** | Existing tests/docs must be linked per workflow; no complete automated mapping verified. |
 | Decision/constraint records | **Partial / manual** | Architecture and boundary docs exist; cross-links from each relevant diagram remain to be audited. |
 | Complexity/performance evidence | **Planned / source-checked where stated** | No repository-wide static complexity analyzer or generated benchmark correlation is claimed. |
-| Generated/stale-output CI gate | **Not implemented / not verified** | No claim of repository-wide diagram generation or freshness enforcement. |
+| UML file-level companion CI gate | **Implemented; workflow execution pending** | `scripts/verify_uml_file_coverage.py` checks every `src/FSM_COS/**/*.cs` file has a source companion and UML-neighborhood page. This is file-level presence only, not compiler-backed declaration coverage. |
 
 ## Source declaration inventory
 
