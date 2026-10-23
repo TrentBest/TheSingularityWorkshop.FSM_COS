@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # SEQ-FSMCOS-002 — Compose a published, pre-resolved runtime
 
 **Evidence type:** Manual sequence diagram reviewed against `FsmCos.cs`, `RuntimeManifest.cs`, and `RuntimeManifestEntry.cs` on `development`.  
@@ -87,3 +90,6 @@ This path restores a published plan; it does not fetch or localize artifact byte
 - [RuntimeManifestEntry.cs](../../src/FSM_COS/RuntimeManifestEntry.cs) — published identity and stage entry.
 - [FsmCosTests.cs](../../tests/FSM_COS.Tests/FsmCosTests.cs) — source of composition and validation tests; this documentation change did not run tests.
 - [Reconciliation plan](../RECONCILIATION_PLAN.md) — broader coverage and automation gates.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

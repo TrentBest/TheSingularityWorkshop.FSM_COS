@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # Sequence Diagrams
 
 Manually authored sequence diagrams for source-reviewed FSM_COS workflows. These are not generated call graphs or runtime traces.
@@ -9,3 +12,6 @@ Manually authored sequence diagrams for source-reviewed FSM_COS workflows. These
 | [SEQ-FSMCOS-003](RuntimeExperienceHost-Selection.md) | Prepare, select, and retire runtime experiences | Compose/register separation, retained selections, duplicate IDs, removal semantics, complexity notes | Source-reviewed against host, registry, assembly, and test source; tests not run for this documentation change |
 
 Coverage is intentionally partial. SEQ-FSMCOS-003 now covers host experience selection and registry retention; other important workflows still need focused diagrams. The published/pre-resolved diagram applies only when `WORKSHOP_USE_REPOSITORY_SOURCES` is enabled; none of these diagrams is generated or freshness-checked by CI.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

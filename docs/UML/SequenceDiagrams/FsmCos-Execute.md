@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # Sequence: Compose a Runtime from a Manifest
 
 **ID:** SEQ-FSMCOS-001  
@@ -95,3 +98,6 @@ These are algorithm-shape estimates from source, not measured timing or hard wal
 - [FsmCosTests.cs](../../../tests/FSM_COS.Tests/FsmCosTests.cs) — composition, failure, rollback, bounds, arbitration, and TryExecute behavior.
 
 **Verification state:** Source files inspected on `development`; tests were not run for this documentation change. Diagram freshness is not automated.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
