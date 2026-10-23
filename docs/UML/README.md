@@ -8,6 +8,7 @@ This reference connects the public runtime model to its source companions and th
 ## UML standards and coverage
 
 - [UML coverage inventory](INVENTORY.md) — manual source/type inventory, current view status, and explicit remaining gaps.
+- [UML standard reconciliation plan](RECONCILIATION_PLAN.md) — phased implementation, preservation/migration policy, core workflow priorities, and evidence gates.
 
 - [Actionable artifact catalog](Standard/ARTIFACT_CATALOG.md) — concrete view inventory, coverage expectations, evidence states, and completion gate.
 
