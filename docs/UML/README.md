@@ -18,11 +18,12 @@ This reference connects the public runtime model to its source companions and th
 
 The standard defines the intended coverage model. This index is still a manually maintained reference: do not infer complete source coverage, automatic generation, or CI stale-output enforcement from the existence of these documents.
 
-## Workflow diagrams and use cases
+## Workflow diagrams, lifecycle, and use cases
 
 - [SEQ-FSMCOS-001 — Runtime composition sequence](SequenceDiagrams/FsmCos-Execute.md) — source-reviewed ordinary composition path, failure compensation, and static complexity notes.
 - [SEQ-FSMCOS-002 — Published/pre-resolved composition](SequenceDiagrams/FsmCos-Published-PreResolved.md) — conditional flat-set restore path, dependency-order checks, configuration verification, and recorded arbitration round.
 - [SEQ-FSMCOS-003 — Runtime experience selection](SequenceDiagrams/RuntimeExperienceHost-Selection.md) — compose-before-activation, registry retention, failed selection, removal, and lifecycle boundaries.
+- [STATE-FSMCOS-001 — Runtime experience registry](StateLifecycle/RuntimeExperienceRegistry.md) — registry membership and host-selected identity states, invariants, rejected transitions, synchronization, and ownership boundaries.
 - [UC-FSMCOS-001 — Compose a runtime](UseCases/User%20Goals/UC-FSMCOS-001-Compose-Runtime.md) — host goal, success path, failure paths, boundaries, and test evidence.
 - [UC-FSMCOS-002 — Manage runtime experiences](UseCases/User%20Goals/UC-FSMCOS-002-Manage-Runtime-Experiences.md) — prepare and retain a replacement before selecting it, plus failure/removal boundaries.
 
@@ -76,7 +77,7 @@ These references summarize selected test scenarios. The test source is authorita
 
 ## Scope and known gaps
 
-The consumer-first `FsmCosUML` view puts the host above the focal type, labels its supplied collaborators, and shows `RuntimeAssembly` below. The consumer-first `RuntimeManifestScheduleUML` view places the publisher above the focal type, shows graph inputs at the sides, and connects to the downstream load plan. Both focused companions include consumer use cases. Four previously undocumented source files now have type pages and UML neighborhoods. The wider standard is **not yet fully applied**: individual UML companions for all declarations, sequence/activity/state/data-lineage coverage, comprehensive test traceability, and generated freshness/coverage checks remain open. Three manually authored sequence diagrams now cover ordinary composition, the conditional published/pre-resolved path, and runtime experience selection/retention. Two human-authored user-goal use cases cover composition and experience switching. No tests or CI were run for these documentation changes. There are no claims of automated diagram generation or CI enforcement. The schedule and load-plan types describe metadata and state transitions; they do not by themselves implement repository localization, background loading, or promotion of deferred bundles into a running `RuntimeAssembly`. See [Staged Manifest Loading](../STAGED_MANIFEST_LOADING.md) for that boundary.
+The consumer-first `FsmCosUML` view puts the host above the focal type, labels its supplied collaborators, and shows `RuntimeAssembly` below. The consumer-first `RuntimeManifestScheduleUML` view places the publisher above the focal type, shows graph inputs at the sides, and connects to the downstream load plan. Both focused companions include consumer use cases. Four previously undocumented source files now have type pages and UML neighborhoods. The wider standard is **not yet fully applied**: individual UML companions for all declarations, sequence/activity/state/data-lineage coverage, comprehensive test traceability, and generated freshness/coverage checks remain open. Three manually authored sequence diagrams now cover ordinary composition, the conditional published/pre-resolved path, and runtime experience selection/retention. One manually authored lifecycle diagram now covers registry membership and selection metadata. Two human-authored user-goal use cases cover composition and experience switching. No tests or CI were run for these documentation changes. There are no claims of automated diagram generation or CI enforcement. The schedule and load-plan types describe metadata and state transitions; they do not by themselves implement repository localization, background loading, or promotion of deferred bundles into a running `RuntimeAssembly`. See [Staged Manifest Loading](../STAGED_MANIFEST_LOADING.md) for that boundary.
 
 ---
 
