@@ -75,7 +75,7 @@ Let (n) be the number of retained runtime assemblies and (b) the number of bundl
 
 ## Evidence and limits
 
-- Source: [RuntimeExperienceHost.cs](../../src/FSM_COS/RuntimeExperienceHost.cs), [RuntimeExperienceRegistry.cs](../../src/FSM_COS/RuntimeExperienceRegistry.cs), [RuntimeAssembly.cs](../../src/FSM_COS/RuntimeAssembly.cs).
+- Source: [RuntimeExperienceHost.cs](../../../src/FSM_COS/RuntimeExperienceHost.cs), [RuntimeExperienceRegistry.cs](../../src/FSM_COS/RuntimeExperienceRegistry.cs), [RuntimeAssembly.cs](../../src/FSM_COS/RuntimeAssembly.cs).
 - Tests: [RuntimeExperienceRegistryTests.cs](../../../tests/FSM_COS.Tests/RuntimeExperienceRegistryTests.cs) covers switching while retaining entries, duplicate IDs, failed activation preserving selection, active removal, read-only snapshots, replacement preparation, and duplicate-host registration.
 - Tests were inspected as source; they were **not run** for this documentation change.
 - This sequence does not claim concurrent stress-test coverage, automatic diagram generation, stale-output enforcement, or runtime-captured behavior.
