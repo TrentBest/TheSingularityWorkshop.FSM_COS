@@ -190,41 +190,20 @@ public sealed class FsmCos : IFsmCos
 
         try
         {
-            if (manifest.LoadingMode == RuntimeLoadingMode.Sequential)
+            foreach (var entry in manifest.Bundles)
             {
-                foreach (var entry in manifest.Bundles)
-                {
-                    LoadRoot(
-                        entry,
-                        resolvedBundles,
-                        dependencyRequestsById,
-                        loaded,
-                        attempted,
-                        loadedIds,
-                        loading,
-                        loadContext,
-                        configurationSource,
-                        manifest.RuntimeId,
-                        ref totalConfigurationBytes);
-                }
-            }
-            else if (manifest.LoadingMode == RuntimeLoadingMode.Parallel)
-            {
-                ArgumentOutOfRangeException.ThrowIfLessThan(manifest.MaxDegreeOfParallelism, 1);
-                LoadParallelSafeBundles(
-                    manifest,
+                LoadRoot(
+                    entry,
                     resolvedBundles,
                     dependencyRequestsById,
                     loaded,
                     attempted,
                     loadedIds,
+                    loading,
                     loadContext,
                     configurationSource,
+                    manifest.RuntimeId,
                     ref totalConfigurationBytes);
-            }
-            else
-            {
-                throw new InvalidOperationException($"Unknown runtime loading mode '{manifest.LoadingMode}'.");
             }
 
             onStageChanged?.Invoke(RuntimeCompositionPhase.Arbitration);
@@ -528,135 +507,6 @@ public sealed class FsmCos : IFsmCos
             loadedIds.Add(bundle.Id);
             loading.Remove(bundle.Id);
             stack.Pop();
-        }
-    }
-
-    private void LoadParallelSafeBundles(
-        RuntimeManifest manifest,
-        Dictionary<ulong, IMicroBundle> resolvedBundles,
-        Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById,
-        List<IMicroBundle> loaded,
-        List<IMicroBundle> attempted,
-        HashSet<ulong> loadedIds,
-        MicroBundleLoadContext loadContext,
-        IMicroBundleConfigurationSource? configurationSource,
-        ref long totalConfigurationBytes)
-    {
-        // Plan the full dependency-first order and snapshot every bundle's configuration
-        // before invoking any Load callback. The configuration dictionary is read-only
-        // during parallel execution, avoiding concurrent writes while bundles read it.
-        var order = new List<IMicroBundle>(resolvedBundles.Count);
-        var planned = new HashSet<ulong>();
-        foreach (var entry in manifest.Bundles)
-        {
-            if (planned.Contains(entry.BundleId))
-                continue;
-
-            var stack = new Stack<LoadFrame>();
-            stack.Push(new LoadFrame(resolvedBundles[entry.BundleId], ReadOnlyMemory<byte>.Empty));
-            while (stack.Count > 0)
-            {
-                var frame = stack.Peek();
-                var bundle = frame.Bundle;
-
-                if (!frame.Entered)
-                {
-                    if (!planned.Add(bundle.Id))
-                    {
-                        stack.Pop();
-                        continue;
-                    }
-
-                    var configuration = frame.DependencyConfiguration;
-                    if (configurationSource is not null &&
-                        configurationSource.TryGetConfiguration(
-                            manifest.RuntimeId,
-                            bundle.Id,
-                            bundle.Descriptor.Version,
-                            out var externalConfiguration))
-                    {
-                        configuration = SnapshotConfiguration(
-                            externalConfiguration,
-                            ref totalConfigurationBytes,
-                            $"configuration provider for MicroBundle {bundle.Id}");
-                    }
-
-                    loadContext.SetConfiguration(bundle.Id, configuration);
-                    frame.Entered = true;
-                }
-
-                var dependencies = dependencyRequestsById[bundle.Id];
-                if (frame.NextDependencyIndex < dependencies.Length)
-                {
-                    var dependency = dependencies[frame.NextDependencyIndex++];
-                    if (!planned.Contains(dependency.BundleId))
-                        stack.Push(new LoadFrame(
-                            resolvedBundles[dependency.BundleId],
-                            dependency.Configuration));
-                    continue;
-                }
-
-                order.Add(bundle);
-                stack.Pop();
-            }
-        }
-
-        var remaining = new HashSet<ulong>(order.Select(bundle => bundle.Id));
-        var options = new ParallelOptions { MaxDegreeOfParallelism = manifest.MaxDegreeOfParallelism };
-        while (remaining.Count > 0)
-        {
-            var ready = order.Where(bundle =>
-                    remaining.Contains(bundle.Id) &&
-                    dependencyRequestsById[bundle.Id].All(dependency => loadedIds.Contains(dependency.BundleId)))
-                .ToArray();
-            if (ready.Length == 0)
-                throw new InvalidOperationException("Parallel MicroBundle loading could not find a dependency-ready bundle.");
-
-            // Unmarked bundles are always loaded alone. A safe bundle may share a wave
-            // with every other dependency-ready safe bundle, even when an unmarked bundle
-            // appears between them in manifest order; the unmarked bundle waits for its
-            // own serial wave. Preserve relative order inside each selected wave.
-            IMicroBundle[] wave;
-            if (ready[0] is not IParallelLoadSafeMicroBundle { SupportsParallelLoad: true })
-            {
-                wave = new[] { ready[0] };
-            }
-            else
-            {
-                wave = ready
-                    .Where(bundle => bundle is IParallelLoadSafeMicroBundle { SupportsParallelLoad: true })
-                    .ToArray();
-            }
-
-            var attemptedThisWave = new System.Collections.Concurrent.ConcurrentDictionary<ulong, IMicroBundle>();
-            try
-            {
-                Parallel.ForEach(wave, options, bundle =>
-                {
-                    attemptedThisWave.TryAdd(bundle.Id, bundle);
-                    bundle.Load(loadContext);
-                });
-            }
-            catch
-            {
-                // Restore deterministic reverse-topological compensation order for the
-                // existing outer failure handler, independent of thread completion order.
-                foreach (var bundle in wave)
-                {
-                    if (attemptedThisWave.ContainsKey(bundle.Id))
-                        attempted.Add(bundle);
-                }
-
-                throw;
-            }
-
-            foreach (var bundle in wave)
-            {
-                attempted.Add(bundle);
-                loaded.Add(bundle);
-                loadedIds.Add(bundle.Id);
-                remaining.Remove(bundle.Id);
-            }
         }
     }
 
