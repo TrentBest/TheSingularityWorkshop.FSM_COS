@@ -612,8 +612,10 @@ public sealed class FsmCos : IFsmCos
             if (ready.Length == 0)
                 throw new InvalidOperationException("Parallel MicroBundle loading could not find a dependency-ready bundle.");
 
-            // An unmarked bundle is always loaded alone. If the first ready bundle is
-            // parallel-safe, only other ready, explicitly safe bundles may join its wave.
+            // Unmarked bundles are always loaded alone. A safe bundle may share a wave
+            // with every other dependency-ready safe bundle, even when an unmarked bundle
+            // appears between them in manifest order; the unmarked bundle waits for its
+            // own serial wave. Preserve relative order inside each selected wave.
             IMicroBundle[] wave;
             if (ready[0] is not IParallelLoadSafeMicroBundle { SupportsParallelLoad: true })
             {
@@ -622,10 +624,8 @@ public sealed class FsmCos : IFsmCos
             else
             {
                 wave = ready
-                    .TakeWhile(bundle => bundle is IParallelLoadSafeMicroBundle { SupportsParallelLoad: true })
+                    .Where(bundle => bundle is IParallelLoadSafeMicroBundle { SupportsParallelLoad: true })
                     .ToArray();
-                if (wave.Length == 0)
-                    wave = new[] { ready[0] };
             }
 
             var attemptedThisWave = new System.Collections.Concurrent.ConcurrentDictionary<ulong, IMicroBundle>();
