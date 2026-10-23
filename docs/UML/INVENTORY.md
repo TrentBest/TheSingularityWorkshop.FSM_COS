@@ -3,7 +3,7 @@
 **Repository:** TheSingularityWorkshop.FSM_COS  
 **Branch assessed:** `development`  
 **Assessment basis:** GitHub source-tree and documentation-tree inventory; source pages are source-checked, not compiler-generated.  
-**Status:** Initial manual inventory. This is not yet a CI-enforced or automatically regenerated report.
+**Status:** Initial manual inventory. This is not yet a CI-enforced or automatically regenerated report. The implementation sequence is tracked in the [UML standard reconciliation plan](RECONCILIATION_PLAN.md).
 
 ## Coverage summary
 
