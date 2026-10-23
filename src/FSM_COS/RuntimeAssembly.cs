@@ -18,16 +18,21 @@ public sealed class RuntimeAssembly
         ulong runtimeId,
         IReadOnlyList<IMicroBundle> bundles,
         int arbitrationRounds,
-        SemanticIntent? intent,
-        IReadOnlyDictionary<ulong, ReadOnlyMemory<byte>>? resolvedConfigurations = null)
+        SemanticIntent? intent
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+        , IReadOnlyDictionary<ulong, ReadOnlyMemory<byte>>? resolvedConfigurations = null
+#endif
+        )
     {
         RuntimeId = runtimeId;
         Bundles = Array.AsReadOnly(bundles.ToArray());
         ArbitrationRounds = arbitrationRounds;
         Intent = intent;
+#if WORKSHOP_USE_REPOSITORY_SOURCES
         ResolvedConfigurations = new ReadOnlyDictionary<ulong, ReadOnlyMemory<byte>>(
             (resolvedConfigurations ?? new Dictionary<ulong, ReadOnlyMemory<byte>>())
                 .ToDictionary(pair => pair.Key, pair => (ReadOnlyMemory<byte>)pair.Value.ToArray()));
+#endif
     }
 
     public ulong RuntimeId { get; }
@@ -38,6 +43,7 @@ public sealed class RuntimeAssembly
     /// <summary>Gets the semantic interaction intent carried by the runtime request, when one was supplied.</summary>
     public SemanticIntent? Intent { get; }
 
+#if WORKSHOP_USE_REPOSITORY_SOURCES
     /// <summary>
     /// Gets the deterministic effective configuration exported by bundles that support
     /// publish-resolved execution. The value can be persisted as a separate per-bundle
@@ -48,6 +54,7 @@ public sealed class RuntimeAssembly
     public bool TryGetResolvedConfiguration(ulong bundleId, out ReadOnlyMemory<byte> configuration) =>
         ResolvedConfigurations.TryGetValue(bundleId, out configuration);
 
+#endif
     public bool TryGetBundle(ulong bundleId, out IMicroBundle? bundle)
     {
         bundle = Bundles.FirstOrDefault(candidate => candidate.Id == bundleId);
