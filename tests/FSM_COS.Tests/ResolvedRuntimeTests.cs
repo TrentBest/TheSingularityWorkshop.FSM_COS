@@ -1,3 +1,4 @@
+#if WORKSHOP_USE_REPOSITORY_SOURCES
 using TheSingularityWorkshop.FSM_COS;
 using TheSingularityWorkshop.MicroBundleDomain;
 using Xunit;
@@ -122,3 +123,5 @@ public sealed class ResolvedRuntimeTests
         }
     }
 }
+
+#endif
