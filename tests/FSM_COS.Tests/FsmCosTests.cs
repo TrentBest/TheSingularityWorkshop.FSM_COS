@@ -2003,6 +2003,39 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Parallel_mode_batches_safe_bundles_across_unmarked_manifest_entries()
+    {
+        var active = 0;
+        var maximumActive = 0;
+        Action load = () =>
+        {
+            var now = Interlocked.Increment(ref active);
+            int observed;
+            do
+            {
+                observed = maximumActive;
+                if (observed >= now) break;
+            } while (Interlocked.CompareExchange(ref maximumActive, now, observed) != observed);
+            Thread.Sleep(60);
+            Interlocked.Decrement(ref active);
+        };
+
+        var firstSafe = new TestBundle(1) { SupportsParallelLoad = true, LoadAction = load };
+        var serialOnly = new TestBundle(2) { LoadAction = load };
+        var secondSafe = new TestBundle(3) { SupportsParallelLoad = true, LoadAction = load };
+
+        var assembly = new FsmCos(new TestCatalog(firstSafe, serialOnly, secondSafe)).Execute(
+            new RuntimeManifest(42, new[] { Entry(1), Entry(2), Entry(3) })
+            {
+                LoadingMode = RuntimeLoadingMode.Parallel,
+                MaxDegreeOfParallelism = 3
+            });
+
+        Assert.True(maximumActive >= 2, $"Expected safe bundles on either side of an unmarked bundle to overlap; observed {maximumActive}.");
+        Assert.Equal(new ulong[] { 1, 2, 3 }, assembly.Bundles.Select(bundle => bundle.Id));
+    }
+
+    [Fact]
     public void Parallel_mode_loads_dependency_before_dependent_and_serializes_unmarked_bundles()
     {
         var active = 0;
