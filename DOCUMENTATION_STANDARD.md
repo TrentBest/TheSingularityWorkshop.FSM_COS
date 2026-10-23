@@ -60,6 +60,54 @@ Build a normalized, renderer-neutral model before rendering SVG or another view.
 
 A release-quality gate inventories in-scope source files/types; verifies required type pages and UML pages; validates links/metadata; regenerates diagrams; and detects missing/stale outputs. State exact scope and method (syntax-only, compiler-backed, reflection-derived, or manual). If automation covers only fixtures/staging, say so. Do not claim repository-wide generation until CI verifies repository-wide coverage.
 
+
+## Comprehensive UML documentation system
+
+UML documentation is a family of complementary views, not a single class-diagram deliverable. Each view answers a different question; do not force all information into one diagram. The normative detailed contracts are maintained as focused documents under [`docs/UML/Standard/`](docs/UML/Standard/README.md). Keep this root standard as the cross-repository policy and keep the FSM_COS visual-specific implementation rules in [Living UML Visual Style](docs/UML_VISUAL_STYLE.md).
+
+### Required documentation inventory
+
+Every repository adopting this standard must inventory applicable view types, mark each as **required**, **not applicable with reason**, **manual**, **source-derived**, **runtime-captured**, or **planned**, and identify coverage gaps. Do not represent a planned generator as an implemented one. For code repositories, assess all of these:
+
+- **Class/type diagrams:** one focused source-linked diagram per declared type in scope, including class, interface, struct, record, enum, delegate, nested and generic declarations.
+- **Class neighborhoods:** one focal type, verified consumers above, the focal type centered, dependencies and results below/around it, and relevant project/package references to the right. Include expandable UML data cards where the medium supports interaction.
+- **Sequence diagrams:** caller-to-callee interactions for important workflows, including alternative/failure paths, with method/source traceability and complexity evidence.
+- **Activity/control-flow diagrams:** branches, loops, early exits, exception paths, validation gates, and convergence conditions for nontrivial algorithms.
+- **State/lifecycle diagrams:** states, transitions, triggers, guards, side effects, terminal states, invalid transitions, and ownership of transitions.
+- **Use cases:** one file per use case, classified under a stable category. Separate user goals from implementation structure.
+- **Architecture/component diagrams:** package/project boundaries, responsibility ownership, allowed dependency direction, external integrations, and the distinction between direct and transitive dependencies.
+- **Deployment/runtime topology:** only where the system actually has deployment/runtime nodes; show process, host, service, storage, trust boundaries, network edges, and configuration ownership without implying an unimplemented topology.
+- **Data models and data flow/lineage:** schemas and object graphs, ownership/mutability, serialization boundaries, transformations, provenance, validation, and where data enters/leaves a subsystem.
+- **MicroBundle and manifest views:** where a repository defines, consumes, publishes, or composes MicroBundles, document each MicroBundle contract and the manifest/dependency/load relationship. Inventory every MicroBundle defined in the repository; distinguish local definitions, external contracts, examples, tests, and unresolved references. Include identity/version, capability purpose, dependencies, inputs/outputs, configuration, lifecycle/load stage, arbitration behavior, failure behavior, compatibility/security assumptions, source/tests, and publication status where applicable.
+- **Requirement/test traceability:** link goals and contracts to tests and evidence. This may be a table or graph rather than a UML notation.
+- **Decision/constraint records:** link architecture decision records and important invariants to affected diagrams and tests; do not hide rationale inside a picture.
+
+A view is not mandatory merely because it is listed. For example, a library may have no deployment topology; mark it not applicable with a reason. The inventory itself is mandatory so omissions are deliberate and visible.
+
+### Analysis provenance and confidence
+
+Every generated or maintained artifact must declare its evidence class: **source-derived** (syntax/semantic model), **reflection-derived** (compiled runtime metadata), **runtime-captured** (trace or observation from a named run), **human-authored** (design intent/use cases), or **conceptual** (illustrative only). Mixed artifacts identify which facts came from which source. Include target revision, scope, tool/version when generated, and unresolved/ambiguous relationships.
+
+Use Roslyn syntax trees and semantic models for C# declaration and source relationships, method bodies, invocation sites, control flow, and source spans. Reflection may enrich compiled type/member metadata and runtime attributes, but cannot reconstruct a complete AST, local variables, method-body control flow, or an authoritative static call graph. Tests and runtime traces can corroborate behavior but must not silently substitute for source structure.
+
+### Complexity and performance analysis
+
+For sequence/control-flow views, include a complexity table when algorithmic cost is relevant. For each hot or nontrivial method record: input-size variables, dominant operations, loops/recursion, collection or graph operations, expected/average and worst-case complexity where defensible, allocations/copies, I/O or blocking boundaries, and evidence confidence. Explicitly flag likely quadratic-or-worse paths (nested input-dependent loops, repeated scans, repeated sorting, or graph traversal without visited-set guarantees) and identify candidate linear paths/optimizations.
+
+Big-O is not a wall-clock upper bound. Do not present a numeric time or memory bound without explicit assumptions about input limits, implementation, runtime, hardware, allocation behavior, and external dependencies. Separate static heuristic from measured benchmark; link benchmark inputs, environment, revision, and results. Where a reliable bound cannot be established, say **unknown / requires measurement**, explain why, and provide a measurement plan instead of inventing precision.
+
+### MicroBundle inventory and evidence
+
+A MicroBundle is a domain-level capability unit, not automatically the same thing as a project, assembly, NuGet package, or deployment unit. The MicroBundle domain contract and the repository's actual implementation determine the meaning. For every locally defined MicroBundle, provide a companion page and index entry; identify its stable identity, versioning rules, purpose, dependencies, inputs/outputs, configuration, state/lifecycle, arbitration/load behavior where applicable, failure modes, trust assumptions, tests, and owning source. Show dependency edges with their provenance. Mark catalog/provider behavior and remote retrieval/content-hash verification as external or planned unless implemented and verified in the target revision.
+
+For FSM_COS specifically, diagrams must preserve this boundary: the host supplies the catalog and owns application execution, lifecycle, UI, and presentation; FSM_COS resolves and validates the requested dependency closure, composes in dependency order, performs bounded arbitration, and returns a `RuntimeAssembly`. Do not imply that a manifest entry alone downloads, verifies, activates, or executes a MicroBundle.
+
+### CI and release gate
+
+The documentation gate should compare the inventory against repository source and known MicroBundle definitions, verify required companions and links, regenerate source-derived artifacts, and fail on stale/missing output within its declared scope. Emit a coverage report with counts and exceptions. Keep generated output deterministic and preserve source spans/stable symbol identities. Treat the following as separate measures: source declaration coverage, relationship coverage, use-case coverage, MicroBundle coverage, and freshness. Passing one does not imply passing the others.
+
+If generation or static analysis is not implemented, the documentation must say so plainly. A folder taxonomy and written standard are not proof of generated diagrams, complete inventories, complexity analysis, or CI enforcement.
+
 ## Visual and editorial quality
 
 Use contrast for priority, repetition for recognition, proximity for ownership, and concrete metaphors for abstract systems. Diagrams need descriptive alt text, explanatory captions, readable labels, and accurate boundaries. Avoid hype as a substitute for evidence. State prerequisites, poor-fit scenarios, maturity, limitations, and performance context honestly.
