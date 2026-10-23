@@ -20,6 +20,12 @@ public sealed record RuntimeManifest(
     RuntimeManifestSchedule? Schedule = null,
     SemanticIntent? Intent = null)
 {
+    /// <summary>Gets or initializes the loading strategy. Sequential loading is the compatibility default.</summary>
+    public RuntimeLoadingMode LoadingMode { get; init; } = RuntimeLoadingMode.Sequential;
+
+    /// <summary>Gets or initializes the maximum parallel bundle loads when <see cref="LoadingMode"/> is Parallel.</summary>
+    public int MaxDegreeOfParallelism { get; init; } = 4;
+
     public static RuntimeManifest Empty(
         ulong runtimeId,
         IStateContext? experienceContext = null,
