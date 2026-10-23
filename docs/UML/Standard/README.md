@@ -2,6 +2,10 @@
 
 This directory decomposes the Workshop's canonical UML/documentation policy into focused, maintainable specifications. The shared policy lives in the repository-root [Documentation Standard](../../../DOCUMENTATION_STANDARD.md); the FSM_COS visual implementation is described by [Living UML Visual Style](../../UML_VISUAL_STYLE.md).
 
+## Cross-repository integration contract
+
+- [GUI / FSM_COS UML coordination](../../../GUILLM.md) — consumer boundary, required source-to-SVG contract, and evidence needed before the UML gate can close.
+
 ## Actionable catalog
 
 - [FSM_COS UML and Living-Documentation Artifact Catalog](ARTIFACT_CATALOG.md) — concrete artifact families, minimum coverage, use-case categories, evidence states, and completion gate. This is the implementation checklist; the focused files below define each view in detail.
