@@ -7,12 +7,12 @@
 
 ## Coverage summary
 
-The current core project contains 19 C# source files plus its project file. The existing `docs/UML/src/FSM_COS/` directory has 16 per-type Markdown pages. The following four source files had no companion page at the time of this audit and are being added:
+The current core project contains 20 C# source files plus its project file. The `docs/UML/src/FSM_COS/` directory now has companion Markdown pages for all 20 source files, including individual UML neighborhood companions for declarations without a dedicated focused SVG. The four initially missing source companions have now been added:
 
-- [IMicroBundleRollback](src/FSM_COS/IMicroBundleRollback.md)
-- [RuntimeCompositionResult](src/FSM_COS/RuntimeCompositionResult.md)
-- [RuntimeExperienceHost](src/FSM_COS/RuntimeExperienceHost.md)
-- [RuntimeExperienceRegistry](src/FSM_COS/RuntimeExperienceRegistry.md)
+- [IMicroBundleRollback](src/FSM_COS/IMicroBundleRollback.md) · [UML](src/FSM_COS/IMicroBundleRollbackUML.md)
+- [RuntimeCompositionResult](src/FSM_COS/RuntimeCompositionResult.md) · [UML](src/FSM_COS/RuntimeCompositionResultUML.md)
+- [RuntimeExperienceHost](src/FSM_COS/RuntimeExperienceHost.md) · [UML](src/FSM_COS/RuntimeExperienceHostUML.md)
+- [RuntimeExperienceRegistry](src/FSM_COS/RuntimeExperienceRegistry.md) · [UML](src/FSM_COS/RuntimeExperienceRegistryUML.md)
 
 The existing documentation includes a separate class-diagram area and several SVGs, but the inventory below distinguishes existing artifacts from the full standard. Existing diagram files are not assumed to meet every new requirement without individual review.
 
@@ -20,9 +20,9 @@ The existing documentation includes a separate class-diagram area and several SV
 
 | View | Status | Notes |
 |---|---|---|
-| Per-type source documentation | **Partial / manual** | Existing pages plus the four additions above; validate all member details against source. |
+| Per-type source documentation | **20/20 files have a companion page; manual** | All 20 current C# source files have a companion page. Keep signatures/member details validated against source as code changes. |
 | Target-centered class neighborhoods | **Partial / manual** | Existing `docs/UML/ClassDiagram/` diagrams; complete consumer/dependency/package coverage is not yet verified. |
-| Companion `TypeNameUML.md` per declaration | **Partial / manual** | New companion pages are added for the four previously undocumented types. Full one-per-type compliance remains open. |
+| Companion `TypeNameUML.md` per declaration | **20/20 source files represented; manual** | Individual UML neighborhood pages now exist for all declared source files; `FsmCos` and `RuntimeManifestSchedule` use the focused `docs/UML/ClassDiagram/*UML.md` companions. Diagrams are authored, not generated. |
 | Sequence diagrams | **Partial / manual** | Need source-linked normal, alternative, and failure paths for key composition workflows. |
 | Activity/control flow | **Partial / manual** | Complex dependency resolution, load, and arbitration branches require systematic coverage. |
 | State/lifecycle | **Partial / manual** | Runtime experience selection and load/rollback lifecycle need explicit views. |
@@ -67,7 +67,7 @@ The core project defines **contracts and manifest/data types** used to describe,
 
 ## Next completion gates
 
-1. Add and validate a companion UML neighborhood for every in-scope declaration.
+1. Review all 20 authored UML neighborhoods against current source and validate links/member relationships; presence does not imply exhaustive caller coverage.
 2. Build source-backed sequence, activity, state, and data-lineage views for composition, failure/rollback, and experience selection.
 3. Reconcile use cases with product intent and link each to source and tests.
 4. Add a deterministic inventory/generation tool and CI freshness/coverage checks.
