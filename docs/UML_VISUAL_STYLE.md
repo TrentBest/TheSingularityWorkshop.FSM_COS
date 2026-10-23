@@ -7,6 +7,10 @@ This page is the FSM_COS-specific supplement to the shared [Documentation Standa
 
 The canonical design rationale and broader interaction contract live in the GUI repository's [UML-Inspired Data Cards](https://github.com/TrentBest/TheSingularityWorkshop.GUI/blob/development/docs/DATA_CARDS_AND_UML.md). This page records the practical rules for FSM_COS documentation and for future Workshop repositories adopting the same style.
 
+## Detailed view specifications
+
+The cross-repository inventory and evidence policy is in the [Documentation Standard](../DOCUMENTATION_STANDARD.md). The per-view specifications are maintained in the [UML Standard index](UML/Standard/README.md): class/type diagrams, class neighborhoods and expandable data cards, sequence/complexity, activity/control flow, state/lifecycle, use cases, architecture/components, deployment topology, data models/lineage, MicroBundles/manifests, and requirement/test/decision traceability. This visual-style page governs how those views should look and how FSM_COS-specific boundaries must be represented; it does not claim that the planned source-analysis generator or CI gate is already implemented.
+
 ## The visual language
 
 Use a **recursive, nested data-card composition**, not a flat pile of boxes. Every card has a complete, visibly thick border, a distinct header and body, readable dark text, and children nested inside the thing that owns them. The hierarchy should communicate ownership even when the image is viewed quickly.
