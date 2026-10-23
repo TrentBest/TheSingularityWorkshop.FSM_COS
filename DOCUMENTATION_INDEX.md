@@ -45,7 +45,7 @@ Use these when changing FSM_COS itself, reviewing the design, or working on docu
 - [Runtime Manifest Theory](docs/MANIFEST_THEORY.md) — the boundary between a rich authoring model and the published request.
 - [WebPage Integration](docs/WEBPAGE_INTEGRATION.md) — browser-host integration responsibilities.
 - [UML index](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/README.md) — source-derived public type diagrams (maintainer reference).
-- [Comprehensive UML Standard](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/Standard/README.md) — per-view requirements, including MicroBundle inventory, complexity analysis, lifecycle, data lineage, deployment, and traceability.
+- [UML coverage inventory](docs/UML/INVENTORY.md) — current manual coverage and remaining gaps.\n- [Comprehensive UML Standard](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML/Standard/README.md) — per-view requirements, including MicroBundle inventory, complexity analysis, lifecycle, data lineage, deployment, and traceability.
 - [Living UML visual style](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/UML_VISUAL_STYLE.md) — diagram conventions (maintainer reference).
 - [Documentation Standard](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md) — shared documentation and evidence rules for Workshop repositories (maintainer reference).
 
