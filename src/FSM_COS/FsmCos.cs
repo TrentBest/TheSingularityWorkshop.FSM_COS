@@ -240,7 +240,10 @@ public sealed class FsmCos : IFsmCos
                 }
             }
 
-            onStageChanged?.Invoke(RuntimeCompositionPhase.Arbitration);
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+            if (!manifest.ArbitrationResolved)
+#endif
+                onStageChanged?.Invoke(RuntimeCompositionPhase.Arbitration);
             int rounds;
 #if WORKSHOP_USE_REPOSITORY_SOURCES
             if (manifest.ArbitrationResolved)
