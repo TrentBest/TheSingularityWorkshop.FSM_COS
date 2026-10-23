@@ -170,13 +170,27 @@ public sealed class FsmCos : IFsmCos
             requestedRoots.Add(bundleId, bundle);
         }
 
-        // Resolve and validate the complete graph before any bundle Load method can have side effects.
-        // Keep the exact resolved objects and dependency snapshots for both validation and loading.
-        var resolvedBundles = ResolveDependencyGraph(
-            requestedRoots,
-            manifest.Schedule is not null,
-            out var dependencyRequestsById,
-            out var totalConfigurationBytes);
+        // Ordinary authoring composition discovers the dependency closure. A published,
+        // pre-resolved manifest already carries the complete flat closure and uses that
+        // list directly rather than recursively discovering dependencies at runtime.
+        Dictionary<ulong, IMicroBundle> resolvedBundles;
+        Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById;
+        long totalConfigurationBytes;
+        if (manifest.ArbitrationResolved)
+        {
+            resolvedBundles = ResolvePublishedFlatSet(
+                requestedRoots,
+                out dependencyRequestsById,
+                out totalConfigurationBytes);
+        }
+        else
+        {
+            resolvedBundles = ResolveDependencyGraph(
+                requestedRoots,
+                manifest.Schedule is not null,
+                out dependencyRequestsById,
+                out totalConfigurationBytes);
+        }
 
         if (manifest.Schedule is not null)
             ValidateScheduleAgainstResolvedGraph(manifest, resolvedBundles, dependencyRequestsById);
@@ -190,20 +204,36 @@ public sealed class FsmCos : IFsmCos
 
         try
         {
-            foreach (var entry in manifest.Bundles)
+            if (manifest.ArbitrationResolved)
             {
-                LoadRoot(
-                    entry,
+                LoadPublishedFlatPlan(
+                    manifest,
                     resolvedBundles,
                     dependencyRequestsById,
                     loaded,
                     attempted,
                     loadedIds,
-                    loading,
                     loadContext,
                     configurationSource,
-                    manifest.RuntimeId,
                     ref totalConfigurationBytes);
+            }
+            else
+            {
+                foreach (var entry in manifest.Bundles)
+                {
+                    LoadRoot(
+                        entry,
+                        resolvedBundles,
+                        dependencyRequestsById,
+                        loaded,
+                        attempted,
+                        loadedIds,
+                        loading,
+                        loadContext,
+                        configurationSource,
+                        manifest.RuntimeId,
+                        ref totalConfigurationBytes);
+                }
             }
 
             onStageChanged?.Invoke(RuntimeCompositionPhase.Arbitration);
@@ -368,6 +398,94 @@ public sealed class FsmCos : IFsmCos
                 "Runtime manifest schedule dependency edges do not match the resolved MicroBundle dependency graph. " +
                 $"Missing edges: [{string.Join(", ", missing.Select(edge => $"{edge.BundleId}->{edge.DependencyId}"))}]; " +
                 $"unexpected edges: [{string.Join(", ", extra.Select(edge => $"{edge.BundleId}->{edge.DependencyId}"))}].");
+        }
+    }
+
+    private Dictionary<ulong, IMicroBundle> ResolvePublishedFlatSet(
+        IReadOnlyDictionary<ulong, IMicroBundle> publishedBundles,
+        out Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById,
+        out long totalConfigurationBytes)
+    {
+        var resolvedBundles = new Dictionary<ulong, IMicroBundle>(publishedBundles.Count);
+        dependencyRequestsById = new Dictionary<ulong, MicroBundleDependencyRequest[]>();
+        totalConfigurationBytes = 0;
+        var dependencyRequestCount = 0;
+
+        foreach (var (bundleId, bundle) in publishedBundles)
+        {
+            ValidateResolvedDescriptorIdentity(bundleId, bundle);
+            var declaredDependencies = bundle.Dependencies;
+            if (declaredDependencies is null)
+                throw new InvalidOperationException($"MicroBundle {bundleId} returned no dependency request list.");
+
+            var dependencySnapshot = SnapshotDependencyRequests(
+                bundleId,
+                declaredDependencies,
+                ref dependencyRequestCount,
+                ref totalConfigurationBytes);
+            ValidateResolvedIdentity(bundleId, bundle, dependencySnapshot);
+            resolvedBundles.Add(bundleId, bundle);
+            dependencyRequestsById.Add(bundleId, dependencySnapshot);
+        }
+
+        foreach (var (bundleId, dependencies) in dependencyRequestsById)
+        {
+            foreach (var dependency in dependencies)
+            {
+                if (!resolvedBundles.ContainsKey(dependency.BundleId))
+                    throw new InvalidOperationException(
+                        $"Pre-resolved manifest is missing dependency MicroBundle {dependency.BundleId} required by MicroBundle {bundleId}.");
+            }
+        }
+
+        return resolvedBundles;
+    }
+
+    private void LoadPublishedFlatPlan(
+        RuntimeManifest manifest,
+        IReadOnlyDictionary<ulong, IMicroBundle> resolvedBundles,
+        IReadOnlyDictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById,
+        List<IMicroBundle> loaded,
+        List<IMicroBundle> attempted,
+        HashSet<ulong> loadedIds,
+        MicroBundleLoadContext loadContext,
+        IMicroBundleConfigurationSource? configurationSource,
+        ref long totalConfigurationBytes)
+    {
+        if (configurationSource is null)
+            throw new InvalidOperationException(
+                "A pre-resolved runtime manifest requires explicit resolved configuration for every MicroBundle.");
+
+        foreach (var entry in manifest.LoadPlan!)
+        {
+            var bundleId = entry.Reference.BundleId;
+            var bundle = resolvedBundles[bundleId];
+
+            foreach (var dependency in dependencyRequestsById[bundleId])
+            {
+                if (!loadedIds.Contains(dependency.BundleId))
+                    throw new InvalidOperationException(
+                        $"Published load order places MicroBundle {bundleId} before prerequisite {dependency.BundleId}.");
+            }
+
+            if (!configurationSource.TryGetConfiguration(
+                    manifest.RuntimeId,
+                    bundleId,
+                    bundle.Descriptor.Version,
+                    out var configuration))
+                throw new InvalidOperationException(
+                    $"Pre-resolved runtime manifest has no resolved configuration for MicroBundle {bundleId}.");
+
+            configuration = SnapshotConfiguration(
+                configuration,
+                ref totalConfigurationBytes,
+                $"published configuration for MicroBundle {bundleId}");
+            loadContext.SetConfiguration(bundleId, configuration);
+
+            attempted.Add(bundle);
+            bundle.Load(loadContext);
+            loaded.Add(bundle);
+            loadedIds.Add(bundleId);
         }
     }
 
