@@ -20,6 +20,10 @@
     <NoWarn>$(NoWarn);CS1591;CA1707</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(WorkshopUseRepositorySources)' == 'true'">
+    <DefineConstants>$(DefineConstants);WORKSHOP_USE_REPOSITORY_SOURCES</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="TheSingularityWorkshop.FSM_API" Version="1.0.13" Condition="'$(WorkshopUseRepositorySources)' != 'true'" />
     <PackageReference Include="TheSingularityWorkshop.FSM_UserIO" Version="0.1.0-alpha.1" Condition="'$(WorkshopUseRepositorySources)' != 'true'" />
