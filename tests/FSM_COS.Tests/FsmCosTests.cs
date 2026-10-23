@@ -1820,7 +1820,7 @@ public sealed class FsmCosTests
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-    private sealed class TestBundle : IParallelLoadSafeMicroBundle, IMicroBundleRollback
+    private sealed class TestBundle : TheSingularityWorkshop.MicroBundleDomain.IMicroBundle, IMicroBundleRollback
     {
         private readonly IReadOnlyList<MicroBundleDependencyRequest> _dependencies;
 
@@ -1844,7 +1844,6 @@ public sealed class FsmCosTests
         public IReadOnlyList<MicroBundleDependencyRequest> Dependencies => _dependencies;
         public ReadOnlyMemory<byte> Configuration { get; private set; }
         public int LoadCalls { get; private set; }
-        public bool SupportsParallelLoad { get; set; }
         public Exception? LoadException { get; set; }
         public Action? LoadAction { get; set; }
         public Action? RollbackAction { get; set; }
@@ -1941,130 +1940,6 @@ public sealed class FsmCosTests
         Assert.Contains("2", exception.Message);
         Assert.Contains("could not be resolved", exception.Message, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(0, root.LoadCalls);
-    }
-
-    [Fact]
-    public void Parallel_loading_is_not_enabled_by_default()
-    {
-        var active = 0;
-        var maximumActive = 0;
-        var first = new TestBundle(1) { SupportsParallelLoad = true };
-        var second = new TestBundle(2) { SupportsParallelLoad = true };
-        Action load = () =>
-        {
-            var now = Interlocked.Increment(ref active);
-            int observed;
-            do
-            {
-                observed = maximumActive;
-                if (observed >= now) break;
-            } while (Interlocked.CompareExchange(ref maximumActive, now, observed) != observed);
-            Thread.Sleep(40);
-            Interlocked.Decrement(ref active);
-        };
-        first.LoadAction = load;
-        second.LoadAction = load;
-
-        new FsmCos(new TestCatalog(first, second)).Execute(
-            new RuntimeManifest(42, new[] { Entry(1), Entry(2) }));
-
-        Assert.Equal(1, maximumActive);
-    }
-
-    [Fact]
-    public void Parallel_mode_runs_independent_explicitly_safe_bundles_concurrently()
-    {
-        var active = 0;
-        var maximumActive = 0;
-        Action load = () =>
-        {
-            var now = Interlocked.Increment(ref active);
-            int observed;
-            do
-            {
-                observed = maximumActive;
-                if (observed >= now) break;
-            } while (Interlocked.CompareExchange(ref maximumActive, now, observed) != observed);
-            Thread.Sleep(80);
-            Interlocked.Decrement(ref active);
-        };
-        var first = new TestBundle(1) { SupportsParallelLoad = true, LoadAction = load };
-        var second = new TestBundle(2) { SupportsParallelLoad = true, LoadAction = load };
-
-        var assembly = new FsmCos(new TestCatalog(first, second)).Execute(
-            new RuntimeManifest(42, new[] { Entry(1), Entry(2) })
-            {
-                LoadingMode = RuntimeLoadingMode.Parallel,
-                MaxDegreeOfParallelism = 2
-            });
-
-        Assert.True(maximumActive >= 2, $"Expected overlapping loads; observed maximum concurrency {maximumActive}.");
-        Assert.Equal(new ulong[] { 1, 2 }, assembly.Bundles.Select(bundle => bundle.Id));
-    }
-
-    [Fact]
-    public void Parallel_mode_batches_safe_bundles_across_unmarked_manifest_entries()
-    {
-        var active = 0;
-        var maximumActive = 0;
-        Action load = () =>
-        {
-            var now = Interlocked.Increment(ref active);
-            int observed;
-            do
-            {
-                observed = maximumActive;
-                if (observed >= now) break;
-            } while (Interlocked.CompareExchange(ref maximumActive, now, observed) != observed);
-            Thread.Sleep(60);
-            Interlocked.Decrement(ref active);
-        };
-
-        var firstSafe = new TestBundle(1) { SupportsParallelLoad = true, LoadAction = load };
-        var serialOnly = new TestBundle(2) { LoadAction = load };
-        var secondSafe = new TestBundle(3) { SupportsParallelLoad = true, LoadAction = load };
-
-        var assembly = new FsmCos(new TestCatalog(firstSafe, serialOnly, secondSafe)).Execute(
-            new RuntimeManifest(42, new[] { Entry(1), Entry(2), Entry(3) })
-            {
-                LoadingMode = RuntimeLoadingMode.Parallel,
-                MaxDegreeOfParallelism = 3
-            });
-
-        Assert.True(maximumActive >= 2, $"Expected safe bundles on either side of an unmarked bundle to overlap; observed {maximumActive}.");
-        Assert.Equal(new ulong[] { 1, 2, 3 }, assembly.Bundles.Select(bundle => bundle.Id));
-    }
-
-    [Fact]
-    public void Parallel_mode_loads_dependency_before_dependent_and_serializes_unmarked_bundles()
-    {
-        var active = 0;
-        var maximumActive = 0;
-        Action load = () =>
-        {
-            var now = Interlocked.Increment(ref active);
-            int observed;
-            do
-            {
-                observed = maximumActive;
-                if (observed >= now) break;
-            } while (Interlocked.CompareExchange(ref maximumActive, now, observed) != observed);
-            Thread.Sleep(30);
-            Interlocked.Decrement(ref active);
-        };
-        var dependency = new TestBundle(2) { SupportsParallelLoad = true, LoadAction = load };
-        var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2)) { LoadAction = load };
-        var independentUnsafe = new TestBundle(3) { LoadAction = load };
-
-        var assembly = new FsmCos(new TestCatalog(root, dependency, independentUnsafe)).Execute(
-            new RuntimeManifest(42, new[] { Entry(1), Entry(3) })
-            {
-                LoadingMode = RuntimeLoadingMode.Parallel,
-                MaxDegreeOfParallelism = 3
-            });
-
-        Assert.Equal(new ulong[] { 2, 1, 3 }, assembly.Bundles.Select(bundle => bundle.Id));
-        Assert.Equal(1, maximumActive);
     }
 
     [Fact]
