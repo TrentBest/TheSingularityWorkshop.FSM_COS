@@ -21,6 +21,7 @@ The standard defines the intended coverage model. This index is still a manually
 ## Workflow diagrams and use cases
 
 - [SEQ-FSMCOS-001 — Runtime composition sequence](SequenceDiagrams/FsmCos-Execute.md) — source-reviewed ordinary composition path, failure compensation, and static complexity notes.
+- [SEQ-FSMCOS-002 — Published/pre-resolved composition](SequenceDiagrams/FsmCos-Published-PreResolved.md) — conditional flat-set restore path, dependency-order checks, configuration verification, and recorded arbitration round.
 - [UC-FSMCOS-001 — Compose a runtime](UseCases/User%20Goals/UC-FSMCOS-001-Compose-Runtime.md) — host goal, success path, failure paths, boundaries, and test evidence.
 
 ## Composition entry point
@@ -73,7 +74,7 @@ These references summarize selected test scenarios. The test source is authorita
 
 ## Scope and known gaps
 
-The consumer-first `FsmCosUML` view puts the host above the focal type, labels its supplied collaborators, and shows `RuntimeAssembly` below. The consumer-first `RuntimeManifestScheduleUML` view places the publisher above the focal type, shows graph inputs at the sides, and connects to the downstream load plan. Both focused companions include consumer use cases. Four previously undocumented source files now have type pages and UML neighborhoods. The wider standard is **not yet fully applied**: individual UML companions for all declarations, sequence/activity/state/data-lineage coverage, comprehensive test traceability, and generated freshness/coverage checks remain open. There are no claims of automated diagram generation or CI enforcement. The schedule and load-plan types describe metadata and state transitions; they do not by themselves implement repository localization, background loading, or promotion of deferred bundles into a running `RuntimeAssembly`. See [Staged Manifest Loading](../STAGED_MANIFEST_LOADING.md) for that boundary.
+The consumer-first `FsmCosUML` view puts the host above the focal type, labels its supplied collaborators, and shows `RuntimeAssembly` below. The consumer-first `RuntimeManifestScheduleUML` view places the publisher above the focal type, shows graph inputs at the sides, and connects to the downstream load plan. Both focused companions include consumer use cases. Four previously undocumented source files now have type pages and UML neighborhoods. The wider standard is **not yet fully applied**: individual UML companions for all declarations, sequence/activity/state/data-lineage coverage, comprehensive test traceability, and generated freshness/coverage checks remain open. Two manually authored sequence diagrams now cover ordinary composition and the conditional published/pre-resolved path; no tests or CI were run for those documentation changes. There are no claims of automated diagram generation or CI enforcement. The schedule and load-plan types describe metadata and state transitions; they do not by themselves implement repository localization, background loading, or promotion of deferred bundles into a running `RuntimeAssembly`. See [Staged Manifest Loading](../STAGED_MANIFEST_LOADING.md) for that boundary.
 
 ---
 
