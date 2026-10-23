@@ -7,6 +7,8 @@ This reference connects the public runtime model to its source companions and th
 
 ## UML standards and coverage
 
+- [Actionable artifact catalog](Standard/ARTIFACT_CATALOG.md) — concrete view inventory, coverage expectations, evidence states, and completion gate.
+
 - [Comprehensive UML Standard](Standard/README.md) — the focused specification for each UML/documentation view, including sequence complexity analysis and MicroBundle/manifest inventories.
 - [Living UML Visual Style](../UML_VISUAL_STYLE.md) — recursive data-card appearance, target-centered layout, provenance, and FSM_COS-specific boundaries.
 - [Shared Documentation Standard](../../DOCUMENTATION_STANDARD.md) — cross-repository policy and evidence requirements.
