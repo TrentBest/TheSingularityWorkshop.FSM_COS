@@ -23,10 +23,10 @@ The existing documentation includes a separate class-diagram area and several SV
 | Per-type source documentation | **20/20 files have a companion page; manual** | All 20 current C# source files have a companion page. Keep signatures/member details validated against source as code changes. |
 | Target-centered class neighborhoods | **Partial / manual** | Existing `docs/UML/ClassDiagram/` diagrams; complete consumer/dependency/package coverage is not yet verified. |
 | Companion `TypeNameUML.md` per declaration | **20/20 source files represented; manual** | Individual UML neighborhood pages now exist for all declared source files; `FsmCos` and `RuntimeManifestSchedule` use the focused `docs/UML/ClassDiagram/*UML.md` companions. Diagrams are authored, not generated. |
-| Sequence diagrams | **Partial / manual** | Added source-reviewed `SEQ-FSMCOS-001` for ordinary runtime composition and `SEQ-FSMCOS-002` for the conditional published/pre-resolved path. Both are manual diagrams; published-path coverage is limited to the `WORKSHOP_USE_REPOSITORY_SOURCES` build condition, and host experience selection/other workflows remain open. |
+| Sequence diagrams | **Partial / manual** | Added source-reviewed `SEQ-FSMCOS-001` for ordinary runtime composition, `SEQ-FSMCOS-002` for the conditional published/pre-resolved path, and `SEQ-FSMCOS-003` for experience composition/registration/selection/removal. All three are manual diagrams; published-path coverage is limited to the `WORKSHOP_USE_REPOSITORY_SOURCES` build condition, and other workflows remain open. |
 | Activity/control flow | **Partial / manual** | Complex dependency resolution, load, and arbitration branches require systematic coverage. |
 | State/lifecycle | **Partial / manual** | Runtime experience selection and load/rollback lifecycle need explicit views. |
-| Use cases | **Partial / human-authored** | Added `UC-FSMCOS-001` under `UseCases/User Goals`; other categories and workflows remain open. |
+| Use cases | **Partial / human-authored** | Added `UC-FSMCOS-001` (compose runtime) and `UC-FSMCOS-002` (prepare/switch runtime experiences) under `UseCases/User Goals`; other categories and workflows remain open. |
 | Architecture/components | **Partial / manual** | Package and host/kernel boundaries are documented conceptually; source/project evidence needs a consolidated view. |
 | Deployment/runtime topology | **Not applicable to core library runtime alone** | The library does not itself define a complete deployment topology. Host-specific deployments belong in integration documentation. |
 | Data models and lineage | **Partial / manual** | Manifest, load-plan, schedule, result, and assembly types have pages; end-to-end data lineage needs a dedicated view. |
@@ -68,7 +68,7 @@ The core project defines **contracts and manifest/data types** used to describe,
 ## Next completion gates
 
 1. Review all 20 authored UML neighborhoods against current source and validate links/member relationships; presence does not imply exhaustive caller coverage.
-2. Extend source-backed sequence, activity, state, and data-lineage views beyond the initial ordinary-composition sequence; cover failure/rollback and experience selection more deeply; the initial published/pre-resolved composition path now has a dedicated sequence diagram.
+2. Extend source-backed sequence, activity, state, and data-lineage views beyond the initial ordinary-composition sequence; cover failure/rollback and remaining host workflows more deeply; ordinary composition, published/pre-resolved composition, and runtime experience selection now have dedicated manual sequence diagrams.
 3. Reconcile use cases with product intent and link each to source and tests.
 4. Add a deterministic inventory/generation tool and CI freshness/coverage checks.
 5. Report separate source, relationship, use-case, MicroBundle, and freshness coverage metrics.
