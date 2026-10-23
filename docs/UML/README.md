@@ -7,6 +7,8 @@ This reference connects the public runtime model to its source companions and th
 
 ## UML standards and coverage
 
+- [UML coverage inventory](INVENTORY.md) — manual source/type inventory, current view status, and explicit remaining gaps.
+
 - [Actionable artifact catalog](Standard/ARTIFACT_CATALOG.md) — concrete view inventory, coverage expectations, evidence states, and completion gate.
 
 - [Comprehensive UML Standard](Standard/README.md) — the focused specification for each UML/documentation view, including sequence complexity analysis and MicroBundle/manifest inventories.
@@ -41,11 +43,18 @@ The standard defines the intended coverage model. This index is still a manually
 | `IManifestLoadEvaluator` | Lets the host/experience decide whether a deferred entry is wanted. | [Type companion](src/FSM_COS/IManifestLoadEvaluator.md) · [Source](../../src/FSM_COS/IManifestLoadEvaluator.cs) |
 | `MicroBundleLoadContext` | Context supplied when a MicroBundle is loaded. | [Type companion](src/FSM_COS/MicroBundleLoadContext.md) · [Source](../../src/FSM_COS/MicroBundleLoadContext.cs) |
 
-## Composition result
+## Composition result and runtime experiences
 
 | Type | Responsibility | Reference |
 |---|---|---|
 | `RuntimeAssembly` | Read-only snapshot of the composed bundle order and arbitration result handed to the host. | [Type companion](src/FSM_COS/RuntimeAssembly.md) · [Source](../../src/FSM_COS/RuntimeAssembly.cs) |
+| `RuntimeCompositionResult` | Non-throwing outcome with an assembly or phase/exception failure details. | [Type companion](src/FSM_COS/RuntimeCompositionResult.md) · [UML neighborhood](src/FSM_COS/RuntimeCompositionResultUML.md) · [Source](../../src/FSM_COS/RuntimeCompositionResult.cs) |
+| `RuntimeExperienceHost` | Coordinates composition, registration, and explicit selection. | [Type companion](src/FSM_COS/RuntimeExperienceHost.md) · [UML neighborhood](src/FSM_COS/RuntimeExperienceHostUML.md) · [Source](../../src/FSM_COS/RuntimeExperienceHost.cs) |
+| `RuntimeExperienceRegistry` | Thread-safe retention and selection metadata for composed assemblies. | [Type companion](src/FSM_COS/RuntimeExperienceRegistry.md) · [UML neighborhood](src/FSM_COS/RuntimeExperienceRegistryUML.md) · [Source](../../src/FSM_COS/RuntimeExperienceRegistry.cs) |
+
+## Optional rollback contract
+
+- `IMicroBundleRollback` — [Type companion](src/FSM_COS/IMicroBundleRollback.md) · [UML neighborhood](src/FSM_COS/IMicroBundleRollbackUML.md) · [Source](../../src/FSM_COS/IMicroBundleRollback.cs)
 
 ## Test companions
 
@@ -56,9 +65,9 @@ These references summarize selected test scenarios. The test source is authorita
 - [SnapshotIsolationTests](tests/FSM_COS.Tests/SnapshotIsolationTests.md) — defensive snapshots and read-only collection behavior.
 - [AiGuiCapabilityHandoffTests](tests/FSM_COS.Tests/AiGuiCapabilityHandoffTests.md) — proof that AI/GUI capabilities can be composed without adding AI or GUI package dependencies to the FSM_COS core.
 
-## Scope of the diagrams
+## Scope and known gaps
 
-The consumer-first `FsmCosUML` view puts the host above the focal type, labels its supplied collaborators, and shows `RuntimeAssembly` below. The consumer-first `RuntimeManifestScheduleUML` view places the publisher above the focal type, shows graph inputs at the sides, and connects to the downstream load plan. Both focused companions include consumer use cases. The earlier `FsmCos.svg` and `RuntimeManifestSchedule.svg` remain source-detail diagrams with their own references. The remaining types have source-linked companions, but do not yet have individual SVG class diagrams. The schedule and load-plan types describe metadata and state transitions; they do not by themselves implement repository localization, background loading, or promotion of deferred bundles into a running `RuntimeAssembly`. See [Staged Manifest Loading](../STAGED_MANIFEST_LOADING.md) for that boundary.
+The consumer-first `FsmCosUML` view puts the host above the focal type, labels its supplied collaborators, and shows `RuntimeAssembly` below. The consumer-first `RuntimeManifestScheduleUML` view places the publisher above the focal type, shows graph inputs at the sides, and connects to the downstream load plan. Both focused companions include consumer use cases. Four previously undocumented source files now have type pages and UML neighborhoods. The wider standard is **not yet fully applied**: individual UML companions for all declarations, sequence/activity/state/data-lineage coverage, comprehensive test traceability, and generated freshness/coverage checks remain open. There are no claims of automated diagram generation or CI enforcement. The schedule and load-plan types describe metadata and state transitions; they do not by themselves implement repository localization, background loading, or promotion of deferred bundles into a running `RuntimeAssembly`. See [Staged Manifest Loading](../STAGED_MANIFEST_LOADING.md) for that boundary.
 
 ---
 
