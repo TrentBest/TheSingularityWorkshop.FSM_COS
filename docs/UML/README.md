@@ -22,32 +22,32 @@ The standard defines the intended coverage model. This index is still a manually
 | Type | Responsibility | Reference |
 |---|---|---|
 | `FsmCos` | Resolves and validates the dependency closure, loads bundles in dependency order, and arbitrates toward convergence. | [Consumer-first UML + use cases](ClassDiagram/FsmCosUML.md) · [Diagram SVG](ClassDiagram/FsmCosUML.svg) · [Source-detail view](ClassDiagram/FsmCos.md) · [Source](../../src/FSM_COS/FsmCos.cs) |
-| `IFsmCos` | Public composition entry-point contract. | [Type companion](src/FSM_COS/IFsmCos.md) · [Source](../../src/FSM_COS/IFsmCos.cs) |
-| `ArbitrationContext` | Context passed to MicroBundle arbitration. | [Type companion](src/FSM_COS/ArbitrationContext.md) · [Source](../../src/FSM_COS/ArbitrationContext.cs) |
-| `IMicroBundleCatalog` | Consumer-owned resolver for requested MicroBundles. | [Type companion](src/FSM_COS/IMicroBundleCatalog.md) · [Source](../../src/FSM_COS/IMicroBundleCatalog.cs) |
-| `IMicroBundleConfigurationSource` | Optional source of per-bundle configuration. | [Type companion](src/FSM_COS/IMicroBundleConfigurationSource.md) · [Source](../../src/FSM_COS/IMicroBundleConfigurationSource.cs) |
+| `IFsmCos` | Public composition entry-point contract. | [Type companion](src/FSM_COS/IFsmCos.md) · [UML neighborhood](src/FSM_COS/IFsmCosUML.md) · [Source](../../src/FSM_COS/IFsmCos.cs) |
+| `ArbitrationContext` | Context passed to MicroBundle arbitration. | [Type companion](src/FSM_COS/ArbitrationContext.md) · [UML neighborhood](src/FSM_COS/ArbitrationContextUML.md) · [Source](../../src/FSM_COS/ArbitrationContext.cs) |
+| `IMicroBundleCatalog` | Consumer-owned resolver for requested MicroBundles. | [Type companion](src/FSM_COS/IMicroBundleCatalog.md) · [UML neighborhood](src/FSM_COS/IMicroBundleCatalogUML.md) · [Source](../../src/FSM_COS/IMicroBundleCatalog.cs) |
+| `IMicroBundleConfigurationSource` | Optional source of per-bundle configuration. | [Type companion](src/FSM_COS/IMicroBundleConfigurationSource.md) · [UML neighborhood](src/FSM_COS/IMicroBundleConfigurationSourceUML.md) · [Source](../../src/FSM_COS/IMicroBundleConfigurationSource.cs) |
 
 ## Manifest and staged-load model
 
 | Type | Responsibility | Reference |
 |---|---|---|
-| `RuntimeManifest` | Request for MicroBundle identities and versions. | [Type companion](src/FSM_COS/RuntimeManifest.md) · [Source](../../src/FSM_COS/RuntimeManifest.cs) |
-| `MicroBundleManifestEntry` | Versioned identity for a requested manifest root. | [Type companion](src/FSM_COS/MicroBundleManifestEntry.md) · [Source](../../src/FSM_COS/MicroBundleManifestEntry.cs) |
-| `MicroBundleReference` | Published MicroBundle identity, including version and content hash. | [Type companion](src/FSM_COS/MicroBundleReference.md) · [Source](../../src/FSM_COS/MicroBundleReference.cs) |
-| `RuntimeManifestEntry` | Published identity and intended load stage for one capability. | [Type companion](src/FSM_COS/RuntimeManifestEntry.md) · [Source](../../src/FSM_COS/RuntimeManifestEntry.cs) |
-| `RuntimeManifestDependency` | Dependency edge between published bundle identities. | [Type companion](src/FSM_COS/RuntimeManifestDependency.md) · [Source](../../src/FSM_COS/RuntimeManifestDependency.cs) |
+| `RuntimeManifest` | Request for MicroBundle identities and versions. | [Type companion](src/FSM_COS/RuntimeManifest.md) · [UML neighborhood](src/FSM_COS/RuntimeManifestUML.md) · [Source](../../src/FSM_COS/RuntimeManifest.cs) |
+| `MicroBundleManifestEntry` | Versioned identity for a requested manifest root. | [Type companion](src/FSM_COS/MicroBundleManifestEntry.md) · [UML neighborhood](src/FSM_COS/MicroBundleManifestEntryUML.md) · [Source](../../src/FSM_COS/MicroBundleManifestEntry.cs) |
+| `MicroBundleReference` | Published MicroBundle identity, including version and content hash. | [Type companion](src/FSM_COS/MicroBundleReference.md) · [UML neighborhood](src/FSM_COS/MicroBundleReferenceUML.md) · [Source](../../src/FSM_COS/MicroBundleReference.cs) |
+| `RuntimeManifestEntry` | Published identity and intended load stage for one capability. | [Type companion](src/FSM_COS/RuntimeManifestEntry.md) · [UML neighborhood](src/FSM_COS/RuntimeManifestEntryUML.md) · [Source](../../src/FSM_COS/RuntimeManifestEntry.cs) |
+| `RuntimeManifestDependency` | Dependency edge between published bundle identities. | [Type companion](src/FSM_COS/RuntimeManifestDependency.md) · [UML neighborhood](src/FSM_COS/RuntimeManifestDependencyUML.md) · [Source](../../src/FSM_COS/RuntimeManifestDependency.cs) |
 | `RuntimeManifestSchedule` | Validated dependency graph and dependency-readiness metadata. | [Consumer-first UML + use cases](ClassDiagram/RuntimeManifestScheduleUML.md) · [Diagram SVG](ClassDiagram/RuntimeManifestScheduleUML.svg) · [Source-detail view](ClassDiagram/RuntimeManifestSchedule.md) · [Source](../../src/FSM_COS/RuntimeManifestSchedule.cs) |
-| `RuntimeManifestLoadPlan` | Tracks published entries through host-reported localization and loading states. | [Type companion](src/FSM_COS/RuntimeManifestLoadPlan.md) · [Source](../../src/FSM_COS/RuntimeManifestLoadPlan.cs) |
+| `RuntimeManifestLoadPlan` | Tracks published entries through host-reported localization and loading states. | [Type companion](src/FSM_COS/RuntimeManifestLoadPlan.md) · [UML neighborhood](src/FSM_COS/RuntimeManifestLoadPlanUML.md) · [Source](../../src/FSM_COS/RuntimeManifestLoadPlan.cs) |
 | `MicroBundleRuntimeState` | State values used by the runtime manifest load plan. | [Source](../../src/FSM_COS/RuntimeManifestLoadPlan.cs) |
-| `ManifestLoadStage` | Declares the intended stage for a manifest entry. | [Type companion](src/FSM_COS/ManifestLoadStage.md) · [Source](../../src/FSM_COS/ManifestLoadStage.cs) |
-| `IManifestLoadEvaluator` | Lets the host/experience decide whether a deferred entry is wanted. | [Type companion](src/FSM_COS/IManifestLoadEvaluator.md) · [Source](../../src/FSM_COS/IManifestLoadEvaluator.cs) |
-| `MicroBundleLoadContext` | Context supplied when a MicroBundle is loaded. | [Type companion](src/FSM_COS/MicroBundleLoadContext.md) · [Source](../../src/FSM_COS/MicroBundleLoadContext.cs) |
+| `ManifestLoadStage` | Declares the intended stage for a manifest entry. | [Type companion](src/FSM_COS/ManifestLoadStage.md) · [UML neighborhood](src/FSM_COS/ManifestLoadStageUML.md) · [Source](../../src/FSM_COS/ManifestLoadStage.cs) |
+| `IManifestLoadEvaluator` | Lets the host/experience decide whether a deferred entry is wanted. | [Type companion](src/FSM_COS/IManifestLoadEvaluator.md) · [UML neighborhood](src/FSM_COS/IManifestLoadEvaluatorUML.md) · [Source](../../src/FSM_COS/IManifestLoadEvaluator.cs) |
+| `MicroBundleLoadContext` | Context supplied when a MicroBundle is loaded. | [Type companion](src/FSM_COS/MicroBundleLoadContext.md) · [UML neighborhood](src/FSM_COS/MicroBundleLoadContextUML.md) · [Source](../../src/FSM_COS/MicroBundleLoadContext.cs) |
 
 ## Composition result and runtime experiences
 
 | Type | Responsibility | Reference |
 |---|---|---|
-| `RuntimeAssembly` | Read-only snapshot of the composed bundle order and arbitration result handed to the host. | [Type companion](src/FSM_COS/RuntimeAssembly.md) · [Source](../../src/FSM_COS/RuntimeAssembly.cs) |
+| `RuntimeAssembly` | Read-only snapshot of the composed bundle order and arbitration result handed to the host. | [Type companion](src/FSM_COS/RuntimeAssembly.md) · [UML neighborhood](src/FSM_COS/RuntimeAssemblyUML.md) · [Source](../../src/FSM_COS/RuntimeAssembly.cs) |
 | `RuntimeCompositionResult` | Non-throwing outcome with an assembly or phase/exception failure details. | [Type companion](src/FSM_COS/RuntimeCompositionResult.md) · [UML neighborhood](src/FSM_COS/RuntimeCompositionResultUML.md) · [Source](../../src/FSM_COS/RuntimeCompositionResult.cs) |
 | `RuntimeExperienceHost` | Coordinates composition, registration, and explicit selection. | [Type companion](src/FSM_COS/RuntimeExperienceHost.md) · [UML neighborhood](src/FSM_COS/RuntimeExperienceHostUML.md) · [Source](../../src/FSM_COS/RuntimeExperienceHost.cs) |
 | `RuntimeExperienceRegistry` | Thread-safe retention and selection metadata for composed assemblies. | [Type companion](src/FSM_COS/RuntimeExperienceRegistry.md) · [UML neighborhood](src/FSM_COS/RuntimeExperienceRegistryUML.md) · [Source](../../src/FSM_COS/RuntimeExperienceRegistry.cs) |
