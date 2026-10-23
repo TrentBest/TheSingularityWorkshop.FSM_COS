@@ -207,27 +207,51 @@ public sealed class FsmCos : IFsmCos
             }
 
             onStageChanged?.Invoke(RuntimeCompositionPhase.Arbitration);
-            var arbitrationContext = new ArbitrationContext(
-                manifest.RuntimeId,
-                loaded,
-                manifest.ExperienceContext);
-
-            var rounds = 0;
-            for (; rounds < _maximumArbitrationRounds; rounds++)
+            int rounds;
+            if (manifest.ArbitrationResolved)
             {
-                var changed = false;
-                foreach (var bundle in loaded)
-                    changed |= bundle.Arbitrate(arbitrationContext, rounds);
+                rounds = manifest.PublishedArbitrationRounds!.Value;
+                if (rounds >= _maximumArbitrationRounds)
+                    throw new InvalidOperationException(
+                        $"Published arbitration round {rounds} is outside the configured bound of {_maximumArbitrationRounds}.");
 
-                if (!changed)
-                    break;
+                // A pre-resolved manifest is accepted only when every bundle can restore
+                // its effective configuration exactly; otherwise the runtime must arbitrate.
+                _ = CaptureResolvedConfigurations(loaded, loadContext, requireAll: true);
+            }
+            else
+            {
+                var arbitrationContext = new ArbitrationContext(
+                    manifest.RuntimeId,
+                    loaded,
+                    manifest.ExperienceContext);
+
+                rounds = 0;
+                for (; rounds < _maximumArbitrationRounds; rounds++)
+                {
+                    var changed = false;
+                    foreach (var bundle in loaded)
+                        changed |= bundle.Arbitrate(arbitrationContext, rounds);
+
+                    if (!changed)
+                        break;
+                }
+
+                if (rounds == _maximumArbitrationRounds)
+                    throw new InvalidOperationException(
+                        $"FSM_COS arbitration did not converge within {_maximumArbitrationRounds} rounds.");
             }
 
-            if (rounds == _maximumArbitrationRounds)
-                throw new InvalidOperationException(
-                    $"FSM_COS arbitration did not converge within {_maximumArbitrationRounds} rounds.");
-
-            return new RuntimeAssembly(manifest.RuntimeId, loaded, rounds, manifest.Intent);
+            var resolvedConfigurations = CaptureResolvedConfigurations(
+                loaded,
+                loadContext,
+                requireAll: manifest.ArbitrationResolved);
+            return new RuntimeAssembly(
+                manifest.RuntimeId,
+                loaded,
+                rounds,
+                manifest.Intent,
+                resolvedConfigurations);
         }
 #pragma warning disable CA1031 // Composition callbacks are untrusted extension points; compensate and preserve the failure.
         catch (Exception compositionException)
@@ -261,6 +285,47 @@ public sealed class FsmCos : IFsmCos
 
             throw;
         }
+    }
+
+    private Dictionary<ulong, ReadOnlyMemory<byte>> CaptureResolvedConfigurations(
+        IReadOnlyList<IMicroBundle> loaded,
+        MicroBundleLoadContext loadContext,
+        bool requireAll)
+    {
+        var result = new Dictionary<ulong, ReadOnlyMemory<byte>>();
+        long totalBytes = 0;
+
+        foreach (var bundle in loaded)
+        {
+            if (bundle is not IMicroBundleResolvedConfiguration exporter)
+            {
+                if (requireAll)
+                    throw new InvalidOperationException(
+                        $"Pre-resolved composition requires MicroBundle {bundle.Id} to implement {nameof(IMicroBundleResolvedConfiguration)}.");
+                continue;
+            }
+
+            var exported = exporter.ExportResolvedConfiguration().ToArray();
+            if (exported.LongLength > _maximumConfigurationBytes - totalBytes)
+                throw new InvalidOperationException(
+                    $"Resolved MicroBundle configurations exceed the configured maximum of {_maximumConfigurationBytes} bytes.");
+            totalBytes += exported.LongLength;
+
+            if (requireAll)
+            {
+                if (!loadContext.TryGetConfiguration(bundle.Id, out var supplied))
+                    throw new InvalidOperationException(
+                        $"Pre-resolved composition requires an explicit resolved configuration for MicroBundle {bundle.Id}.");
+
+                if (!supplied.Span.SequenceEqual(exported))
+                    throw new InvalidOperationException(
+                        $"MicroBundle {bundle.Id} did not restore the exact resolved configuration supplied by the published manifest.");
+            }
+
+            result.Add(bundle.Id, exported);
+        }
+
+        return result;
     }
 
     private static void ValidateScheduleAgainstResolvedGraph(
