@@ -176,6 +176,7 @@ public sealed class FsmCos : IFsmCos
         Dictionary<ulong, IMicroBundle> resolvedBundles;
         Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById;
         long totalConfigurationBytes;
+#if WORKSHOP_USE_REPOSITORY_SOURCES
         if (manifest.ArbitrationResolved)
         {
             resolvedBundles = ResolvePublishedFlatSet(
@@ -184,6 +185,7 @@ public sealed class FsmCos : IFsmCos
                 out totalConfigurationBytes);
         }
         else
+#endif
         {
             resolvedBundles = ResolveDependencyGraph(
                 requestedRoots,
@@ -204,6 +206,7 @@ public sealed class FsmCos : IFsmCos
 
         try
         {
+#if WORKSHOP_USE_REPOSITORY_SOURCES
             if (manifest.ArbitrationResolved)
             {
                 LoadPublishedFlatPlan(
@@ -218,6 +221,7 @@ public sealed class FsmCos : IFsmCos
                     ref totalConfigurationBytes);
             }
             else
+#endif
             {
                 foreach (var entry in manifest.Bundles)
                 {
@@ -238,17 +242,16 @@ public sealed class FsmCos : IFsmCos
 
             onStageChanged?.Invoke(RuntimeCompositionPhase.Arbitration);
             int rounds;
+#if WORKSHOP_USE_REPOSITORY_SOURCES
             if (manifest.ArbitrationResolved)
             {
                 rounds = manifest.PublishedArbitrationRounds!.Value;
                 if (rounds >= _maximumArbitrationRounds)
                     throw new InvalidOperationException(
                         $"Published arbitration round {rounds} is outside the configured bound of {_maximumArbitrationRounds}.");
-
-                // The common result-capture step below verifies that every bundle
-                // restored its published configuration exactly.
             }
             else
+#endif
             {
                 var arbitrationContext = new ArbitrationContext(
                     manifest.RuntimeId,
@@ -271,6 +274,7 @@ public sealed class FsmCos : IFsmCos
                         $"FSM_COS arbitration did not converge within {_maximumArbitrationRounds} rounds.");
             }
 
+#if WORKSHOP_USE_REPOSITORY_SOURCES
             var resolvedConfigurations = CaptureResolvedConfigurations(
                 loaded,
                 loadContext,
@@ -281,6 +285,9 @@ public sealed class FsmCos : IFsmCos
                 rounds,
                 manifest.Intent,
                 resolvedConfigurations);
+#else
+            return new RuntimeAssembly(manifest.RuntimeId, loaded, rounds, manifest.Intent);
+#endif
         }
 #pragma warning disable CA1031 // Composition callbacks are untrusted extension points; compensate and preserve the failure.
         catch (Exception compositionException)
@@ -316,6 +323,7 @@ public sealed class FsmCos : IFsmCos
         }
     }
 
+#if WORKSHOP_USE_REPOSITORY_SOURCES
     private Dictionary<ulong, ReadOnlyMemory<byte>> CaptureResolvedConfigurations(
         IReadOnlyList<IMicroBundle> loaded,
         MicroBundleLoadContext loadContext,
@@ -356,6 +364,8 @@ public sealed class FsmCos : IFsmCos
 
         return result;
     }
+
+#endif
 
     private static void ValidateScheduleAgainstResolvedGraph(
         RuntimeManifest manifest,
@@ -401,6 +411,7 @@ public sealed class FsmCos : IFsmCos
         }
     }
 
+#if WORKSHOP_USE_REPOSITORY_SOURCES
     private Dictionary<ulong, IMicroBundle> ResolvePublishedFlatSet(
         IReadOnlyDictionary<ulong, IMicroBundle> publishedBundles,
         out Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById,
@@ -488,6 +499,8 @@ public sealed class FsmCos : IFsmCos
             loadedIds.Add(bundleId);
         }
     }
+
+#endif
 
     private Dictionary<ulong, IMicroBundle> ResolveDependencyGraph(
         IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots,
