@@ -1,4 +1,5 @@
 using TheSingularityWorkshop.FSM_COS;
+using TheSingularityWorkshop.MicroBundleDomain;
 using Xunit;
 
 namespace FSM_COS.Tests;
@@ -6,7 +7,22 @@ namespace FSM_COS.Tests;
 public sealed class RuntimeExperienceRegistryTests
 {
     private static RuntimeAssembly ComposeEmpty(ulong runtimeId) =>
-        new FsmCos(new TestCatalog()).Execute(RuntimeManifest.Empty(runtimeId));
+        new FsmCos(new EmptyCatalog()).Execute(RuntimeManifest.Empty(runtimeId));
+
+    private sealed class EmptyCatalog : IMicroBundleCatalog
+    {
+        public bool TryResolve(ulong bundleId, out IMicroBundle? bundle)
+        {
+            bundle = null;
+            return false;
+        }
+
+        public bool TryResolve(ulong bundleId, string version, out IMicroBundle? bundle)
+        {
+            bundle = null;
+            return false;
+        }
+    }
 
     [Fact]
     public void Registry_retains_multiple_experiences_and_switches_without_removing_either()
