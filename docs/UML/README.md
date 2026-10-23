@@ -21,8 +21,10 @@ The standard defines the intended coverage model. This index is still a manually
 ## Workflow diagrams and use cases
 
 - [SEQ-FSMCOS-001 — Runtime composition sequence](SequenceDiagrams/FsmCos-Execute.md) — source-reviewed ordinary composition path, failure compensation, and static complexity notes.
-- [SEQ-FSMCOS-002 — Published/pre-resolved composition](SequenceDiagrams/FsmCos-Published-PreResolved.md) — conditional flat-set restore path, dependency-order checks, configuration verification, and recorded arbitration round.\n- [SEQ-FSMCOS-003 — Runtime experience selection](SequenceDiagrams/RuntimeExperienceHost-Selection.md) — compose-before-activation, registry retention, failed selection, removal, and lifecycle boundaries.
-- [UC-FSMCOS-001 — Compose a runtime](UseCases/User%20Goals/UC-FSMCOS-001-Compose-Runtime.md) — host goal, success path, failure paths, boundaries, and test evidence.\n- [UC-FSMCOS-002 — Manage runtime experiences](UseCases/User%20Goals/UC-FSMCOS-002-Manage-Runtime-Experiences.md) — prepare and retain a replacement before selecting it, plus failure/removal boundaries.
+- [SEQ-FSMCOS-002 — Published/pre-resolved composition](SequenceDiagrams/FsmCos-Published-PreResolved.md) — conditional flat-set restore path, dependency-order checks, configuration verification, and recorded arbitration round.
+- [SEQ-FSMCOS-003 — Runtime experience selection](SequenceDiagrams/RuntimeExperienceHost-Selection.md) — compose-before-activation, registry retention, failed selection, removal, and lifecycle boundaries.
+- [UC-FSMCOS-001 — Compose a runtime](UseCases/User%20Goals/UC-FSMCOS-001-Compose-Runtime.md) — host goal, success path, failure paths, boundaries, and test evidence.
+- [UC-FSMCOS-002 — Manage runtime experiences](UseCases/User%20Goals/UC-FSMCOS-002-Manage-Runtime-Experiences.md) — prepare and retain a replacement before selecting it, plus failure/removal boundaries.
 
 ## Composition entry point
 

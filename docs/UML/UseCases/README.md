@@ -4,7 +4,8 @@ Human-authored actor goals grounded in FSM_COS source and tests. Each use case h
 
 ## User Goals
 
-- [UC-FSMCOS-001 — Compose a runtime from requested MicroBundles](User%20Goals/UC-FSMCOS-001-Compose-Runtime.md) — implemented host-facing composition goal, success/failure paths, boundaries, and evidence.\n- [UC-FSMCOS-002 — Prepare and switch runtime experiences](User%20Goals/UC-FSMCOS-002-Manage-Runtime-Experiences.md) — composition-before-selection, duplicate identities, failed activation, removal, and retention boundaries.
+- [UC-FSMCOS-001 — Compose a runtime from requested MicroBundles](User%20Goals/UC-FSMCOS-001-Compose-Runtime.md) — implemented host-facing composition goal, success/failure paths, boundaries, and evidence.
+- [UC-FSMCOS-002 — Prepare and switch runtime experiences](User%20Goals/UC-FSMCOS-002-Manage-Runtime-Experiences.md) — composition-before-selection, duplicate identities, failed activation, removal, and retention boundaries.
 
 ## Coverage status
 
