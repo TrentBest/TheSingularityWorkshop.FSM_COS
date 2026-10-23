@@ -44,8 +44,8 @@
 
 ## Tests and evidence
 
-- [FsmCosTests.cs](../../../tests/FSM_COS.Tests/FsmCosTests.cs) — source of tests for successful composition, dependency-resolution failures, load/arbitration failures, compensation, configured bounds, assembly snapshots, and `TryExecute` phase reporting.
-- [FsmCos source](../../../src/FSM_COS/FsmCos.cs)
+- [FsmCosTests.cs](../../../../tests/FSM_COS.Tests/FsmCosTests.cs) — source of tests for successful composition, dependency-resolution failures, load/arbitration failures, compensation, configured bounds, assembly snapshots, and `TryExecute` phase reporting.
+- [FsmCos source](../../../../src/FSM_COS/FsmCos.cs)
 - [Manifest source](../../../src/FSM_COS/RuntimeManifest.cs)
 - [Composition result source](../../../src/FSM_COS/RuntimeCompositionResult.cs)
 - [Sequence diagram and complexity notes](../../SequenceDiagrams/FsmCos-Execute.md)
