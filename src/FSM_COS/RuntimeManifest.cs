@@ -20,9 +20,13 @@ public sealed record RuntimeManifest(
     IStateContext? ExperienceContext = null,
     IReadOnlyList<RuntimeManifestEntry>? LoadPlan = null,
     RuntimeManifestSchedule? Schedule = null,
+#if WORKSHOP_USE_REPOSITORY_SOURCES
     SemanticIntent? Intent = null,
     bool ArbitrationResolved = false,
     int? PublishedArbitrationRounds = null)
+#else
+    SemanticIntent? Intent = null)
+#endif
 {
     public static RuntimeManifest Empty(
         ulong runtimeId,
@@ -40,6 +44,7 @@ public sealed record RuntimeManifest(
     {
         ArgumentNullException.ThrowIfNull(Bundles);
 
+#if WORKSHOP_USE_REPOSITORY_SOURCES
         if (ArbitrationResolved &&
             (LoadPlan is null || Schedule is null || PublishedArbitrationRounds is null))
             throw new InvalidOperationException(
@@ -52,6 +57,7 @@ public sealed record RuntimeManifest(
         if (PublishedArbitrationRounds < 0)
             throw new InvalidOperationException("PublishedArbitrationRounds cannot be negative.");
 
+#endif
         if (LoadPlan is null && Schedule is null)
             return;
 
@@ -84,6 +90,7 @@ public sealed record RuntimeManifest(
                 $"Runtime manifest load plan contains duplicate MicroBundle ID {duplicateId.Value}.");
 
         var byId = plan.ToDictionary(entry => entry.Reference.BundleId);
+#if WORKSHOP_USE_REPOSITORY_SOURCES
         if (ArbitrationResolved)
         {
             var requestedIds = bundles.Select(entry => entry.BundleId).ToHashSet();
@@ -92,6 +99,7 @@ public sealed record RuntimeManifest(
                     "A pre-resolved runtime manifest must list the complete flattened bundle closure in Bundles and LoadPlan.");
         }
 
+#endif
         foreach (var requested in bundles)
         {
             if (!byId.TryGetValue(requested.BundleId, out var planned))
