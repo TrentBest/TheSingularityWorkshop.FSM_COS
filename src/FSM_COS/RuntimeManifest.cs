@@ -12,13 +12,17 @@ namespace TheSingularityWorkshop.FSM_COS;
 /// <param name="LoadPlan">Optional published identity/stage metadata; does not itself localize or load bundles.</param>
 /// <param name="Schedule">Optional publish-time dependency plan, distinct from FSM_API process scheduling.</param>
 /// <param name="Intent">Optional semantic intent supplied by the host for the assembled runtime.</param>
+/// <param name="ArbitrationResolved">True only when publication has captured each bundle's resolved configuration and runtime arbitration must be skipped.</param>
+/// <param name="PublishedArbitrationRounds">Zero-based convergence round recorded by publication when arbitration is resolved.</param>
 public sealed record RuntimeManifest(
     ulong RuntimeId,
     IReadOnlyList<MicroBundleManifestEntry> Bundles,
     IStateContext? ExperienceContext = null,
     IReadOnlyList<RuntimeManifestEntry>? LoadPlan = null,
     RuntimeManifestSchedule? Schedule = null,
-    SemanticIntent? Intent = null)
+    SemanticIntent? Intent = null,
+    bool ArbitrationResolved = false,
+    int? PublishedArbitrationRounds = null)
 {
     public static RuntimeManifest Empty(
         ulong runtimeId,
@@ -35,6 +39,18 @@ public sealed record RuntimeManifest(
     public void ValidateStagedPlan()
     {
         ArgumentNullException.ThrowIfNull(Bundles);
+
+        if (ArbitrationResolved &&
+            (LoadPlan is null || Schedule is null || PublishedArbitrationRounds is null))
+            throw new InvalidOperationException(
+                "A pre-resolved runtime manifest must include a published load plan, dependency schedule, and convergence round.");
+
+        if (!ArbitrationResolved && PublishedArbitrationRounds is not null)
+            throw new InvalidOperationException(
+                "PublishedArbitrationRounds is valid only when ArbitrationResolved is true.");
+
+        if (PublishedArbitrationRounds < 0)
+            throw new InvalidOperationException("PublishedArbitrationRounds cannot be negative.");
 
         if (LoadPlan is null && Schedule is null)
             return;
@@ -68,6 +84,14 @@ public sealed record RuntimeManifest(
                 $"Runtime manifest load plan contains duplicate MicroBundle ID {duplicateId.Value}.");
 
         var byId = plan.ToDictionary(entry => entry.Reference.BundleId);
+        if (ArbitrationResolved)
+        {
+            var requestedIds = bundles.Select(entry => entry.BundleId).ToHashSet();
+            if (!requestedIds.SetEquals(byId.Keys))
+                throw new InvalidOperationException(
+                    "A pre-resolved runtime manifest must list the complete flattened bundle closure in Bundles and LoadPlan.");
+        }
+
         foreach (var requested in bundles)
         {
             if (!byId.TryGetValue(requested.BundleId, out var planned))
