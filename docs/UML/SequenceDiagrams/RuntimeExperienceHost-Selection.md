@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # SEQ-FSMCOS-003 — Prepare, select, and retire runtime experiences
 
 **Scope:** Source-reviewed sequence for `RuntimeExperienceHost` and `RuntimeExperienceRegistry`. This is a manually authored contract diagram, not a generated call graph or runtime trace.
@@ -79,3 +82,6 @@ Let (n) be the number of retained runtime assemblies and (b) the number of bundl
 - Tests: [RuntimeExperienceRegistryTests.cs](../../../tests/FSM_COS.Tests/RuntimeExperienceRegistryTests.cs) covers switching while retaining entries, duplicate IDs, failed activation preserving selection, active removal, read-only snapshots, replacement preparation, and duplicate-host registration.
 - Tests were inspected as source; they were **not run** for this documentation change.
 - This sequence does not claim concurrent stress-test coverage, automatic diagram generation, stale-output enforcement, or runtime-captured behavior.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
