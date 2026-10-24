@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # Activity and Control-Flow Diagrams
 
 ## Purpose
@@ -13,3 +16,6 @@ A control-flow diagram is not a sequence diagram: it focuses on a single algorit
 - Loop bounds and termination assumptions are documented.
 - Complexity annotations point to the operation that contributes the cost.
 - Generated and conditional code scope is declared.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

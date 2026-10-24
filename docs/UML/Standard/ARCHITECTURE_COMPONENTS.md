@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # Architecture and Component Diagrams
 
 ## Purpose
@@ -12,3 +15,6 @@ Do not turn a planned package, optional integration, or external responsibility 
 - Dependency arrows are directional and evidence-backed.
 - External systems and unknown relationships are labeled.
 - Architecture decisions/invariants link to relevant tests or records.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

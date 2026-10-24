@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # UC-FSMCOS-002 — Prepare and switch runtime experiences
 
 **Category:** User Goals  
@@ -55,3 +58,6 @@ As an application host, I want to compose and retain a replacement runtime exper
 - Tests: [RuntimeExperienceRegistryTests.cs](../../../../tests/FSM_COS.Tests/RuntimeExperienceRegistryTests.cs).
 
 The linked tests exercise multi-experience retention and switching, duplicate identity, failed activation, removal of the active experience, immutable membership snapshots, and composing a replacement before activation. They were reviewed as source, not executed as part of this documentation change.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
