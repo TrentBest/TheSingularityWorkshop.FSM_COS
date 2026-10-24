@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # RuntimeCompositionResult
 
 **Purpose.** Non-throwing composition outcome that reports success or preserves failure phase and exception.
@@ -32,3 +35,6 @@ Construction and `Success`/`Failed` factories are private/internal implementatio
 - Source: [RuntimeCompositionResult.cs](../../../../src/FSM_COS/RuntimeCompositionResult.cs)
 - Provenance: source-checked against `development`; manually authored documentation.
 - Related standard: [class diagrams](../../Standard/CLASS_DIAGRAMS.md), [sequence and complexity](../../Standard/SEQUENCE_DIAGRAMS_AND_COMPLEXITY.md).
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
