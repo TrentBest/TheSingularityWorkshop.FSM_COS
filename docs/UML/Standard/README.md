@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # UML Documentation Standard
 
 This directory decomposes the Workshop's canonical UML/documentation policy into focused, maintainable specifications. The shared policy lives in the repository-root [Documentation Standard](../../../DOCUMENTATION_STANDARD.md); the FSM_COS visual implementation is described by [Living UML Visual Style](../../UML_VISUAL_STYLE.md).
@@ -29,3 +32,6 @@ This directory decomposes the Workshop's canonical UML/documentation policy into
 Every repository adopting the standard maintains an inventory of applicable views and labels each **required**, **not applicable (with reason)**, **manual**, **source-derived**, **runtime-captured**, or **planned**. The inventory must distinguish an empty folder from completed coverage. Generated artifacts record target revision, analysis scope, provenance, unresolved relationships, generator/tool version, and regeneration instructions.
 
 The standard describes the intended end state. Unless repository CI explicitly proves it, do not assume the generator, full-source inventory, complexity analyzer, MicroBundle scanner, or stale-output gate exists. See the repo's current [UML index](../README.md) for what is currently documented.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
