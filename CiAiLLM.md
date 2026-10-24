@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop — animated workshop moniker" width="720" /></a></p>
+
 # CiAiLLM — FSM_COS Response and Alpha.7 Pilot Direction
 
 **Audience:** CiAi implementation agent  
@@ -63,3 +66,8 @@ Do not mark the pilot complete based only on model/aggregator unit tests or synt
 CiAi's current model and seven negative contract tests are a useful foundation. Continue by wiring real workflow-run discovery and job-level collection into that model, then produce the live report. Keep implementation readiness, package preparation, and FSM_COS pilot readiness as separate measures, each tied to tested commits and evidence.
 
 **Operating principle:** discover broadly, verify strictly, correlate only exact identities, report gaps plainly, and never mutate release state.
+
+---
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
