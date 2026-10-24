@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # UC-FSMCOS-001 — Compose a runtime from requested MicroBundles
 
 - **ID and title:** UC-FSMCOS-001 — Compose a runtime from requested MicroBundles
@@ -53,3 +56,6 @@
 ## Known limitations and next step
 
 The sequence and use case are manually authored and source-reviewed, not generated from Roslyn or observed at runtime. The ordinary authoring-composition path is documented here; published/pre-resolved execution, host-level experience selection, and generated per-declaration traceability need their own artifacts. Add a deterministic link/freshness gate before treating these documents as continuously verified.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
