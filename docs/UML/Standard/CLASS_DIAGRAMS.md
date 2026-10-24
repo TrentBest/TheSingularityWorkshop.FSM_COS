@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # Class and Type Diagrams
 
 ## Purpose
@@ -20,3 +23,6 @@ Prefer Roslyn syntax and semantic models for declaration identity, signatures, s
 - Missing/external/unresolved relationships visible, not fabricated.
 - Per-type companion and diagram indexes report gaps.
 - Manual/conceptual diagrams are explicitly labeled as such.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

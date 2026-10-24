@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # FSM_COS UML and Living-Documentation Artifact Catalog
 
 This is the actionable inventory for the FSM_COS UML documentation system. It translates the focused view specifications in this directory into concrete artifacts, coverage rules, and evidence labels. The catalog is a target checklist—not a claim that every artifact or generator already exists.
@@ -94,3 +97,5 @@ For generated artifacts record target revision, source scope, declaration identi
 
 The current [UML index](../README.md) identifies manually maintained type companions and a limited set of consumer-first SVG diagrams. It explicitly states that most declarations do not yet have individual SVG class diagrams and that full-source generation/stale-output enforcement is not established by the documents alone. Treat this as a coverage gap to reconcile against the inventory, not as completed automation.
 
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
