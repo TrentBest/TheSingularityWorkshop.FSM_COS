@@ -123,4 +123,53 @@ public sealed class RuntimeExperienceRegistryTests
         Assert.Single(host.Registry.Assemblies);
     }
 
+
+    [Fact]
+    public void ClearActive_clears_selection_without_removing_registered_experiences()
+    {
+        var first = ComposeEmpty(101);
+        var second = ComposeEmpty(202);
+        var registry = new RuntimeExperienceRegistry();
+        Assert.True(registry.TryRegister(first));
+        Assert.True(registry.TryRegister(second));
+        Assert.True(registry.TryActivate(101));
+
+        registry.ClearActive();
+
+        Assert.Null(registry.ActiveRuntimeId);
+        Assert.Equal(2, registry.Assemblies.Count);
+        Assert.Same(first, registry.Assemblies[101]);
+        Assert.Same(second, registry.Assemblies[202]);
+    }
+
+    [Fact]
+    public void Removing_inactive_experience_preserves_active_selection()
+    {
+        var registry = new RuntimeExperienceRegistry();
+        Assert.True(registry.TryRegister(ComposeEmpty(101)));
+        Assert.True(registry.TryRegister(ComposeEmpty(202)));
+        Assert.True(registry.TryActivate(101));
+
+        Assert.True(registry.TryRemove(202));
+
+        Assert.Equal((ulong)101, registry.ActiveRuntimeId);
+        Assert.Single(registry.Assemblies);
+        Assert.True(registry.Assemblies.ContainsKey(101));
+    }
+
+    [Fact]
+    public void Host_rejects_null_composer()
+    {
+        Assert.Throws<ArgumentNullException>(() => new RuntimeExperienceHost(null!));
+    }
+
+    [Fact]
+    public void Host_rejects_null_manifest_before_composition()
+    {
+        var host = new RuntimeExperienceHost(new FsmCos(new EmptyCatalog()));
+
+        Assert.Throws<ArgumentNullException>(() => host.ComposeAndRegister(null!));
+        Assert.Empty(host.Registry.Assemblies);
+    }
+
 }
