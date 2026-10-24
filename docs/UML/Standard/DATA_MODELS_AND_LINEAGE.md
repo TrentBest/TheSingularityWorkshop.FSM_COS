@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # Data Models, Flow, and Lineage
 
 ## Purpose
@@ -12,3 +15,6 @@ For serialized data, distinguish in-memory model, wire/storage representation, a
 - Input/output and transformation edges have provenance.
 - Serialization and compatibility claims link to code/tests.
 - Sensitive data and trust boundaries are identified where relevant.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>

@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # MicroBundles and Manifests
 
 ## Purpose
@@ -32,3 +35,6 @@ The host supplies a catalog and optional configuration and owns application exec
 
 ## Acceptance
 The inventory accounts for every in-repository definition within its declared scan scope; all entries link to source/tests; unresolved identities are visible; local, external, example, and test-only bundles are distinguished; and CI reports coverage without silently treating unknowns as zero.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
