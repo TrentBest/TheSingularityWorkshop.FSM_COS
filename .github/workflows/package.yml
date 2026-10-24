@@ -16,6 +16,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   build-and-test:
@@ -323,3 +324,57 @@ jobs:
 
       - name: Publish package to NuGet.org
         run: dotnet nuget push "./artifacts-public/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
+
+  ciai-observation:
+    name: CiAi read-only commit evidence (advisory)
+    # Observe after the package lanes finish, including when a lane fails.
+    # This is an advisory report, not a release approval or publish permission.
+    if: ${{ always() }}
+    needs: [build-and-test, public-package-compatibility, source-integration]
+    continue-on-error: true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout pinned CiAi observer
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: TrentBest/TheSingularityWorkshop.CiAi
+          ref: 8f1d9dba76254a5c211dbc3072a113c54ebb842d
+          path: _tools/CiAi
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build pinned CiAi observer
+        working-directory: _tools/CiAi
+        run: dotnet build samples/TheSingularityWorkshop.CiAi.ObserveRun/TheSingularityWorkshop.CiAi.ObserveRun.csproj --configuration Release
+
+      - name: Observe this exact FSM_COS commit
+        shell: bash
+        env:
+          CIAI_GITHUB_TOKEN: ${{ github.token }}
+          TARGET_REPOSITORY: ${{ github.repository }}
+          TARGET_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          dotnet run --project _tools/CiAi/samples/TheSingularityWorkshop.CiAi.ObserveRun --configuration Release --no-build -- "$TARGET_REPOSITORY" "$TARGET_SHA" artifacts/commit-observation.json
+          jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" '
+            .schema == "ciai.commit-observation.v1" and
+            (.repository | ascii_downcase) == ($repo | ascii_downcase) and
+            (.headSha | ascii_downcase) == ($sha | ascii_downcase) and
+            .complete == true
+          ' artifacts/commit-observation.json
+
+      - name: Upload CiAi observation report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: ciai-commit-observation
+          path: |
+            artifacts/commit-observation.json
+            artifacts/commit-observation.md
+          if-no-files-found: warn
+          retention-days: 14
