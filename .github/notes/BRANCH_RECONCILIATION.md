@@ -7,48 +7,69 @@
 
 **Policy:** the intended persistent branches are exactly `master` and `development`. Preserve useful work before branch removal. Do not force-reset or merge divergent histories merely to make branch counts look tidy. Branch deletion is an owner action after reviewing this ledger.
 
-**Audit date:** 2026-10-22 (21:10 UTC). Live branch refs, both comparison directions, and current release workflow evidence were queried.
+**Audit date:** 2026-10-24 (03:50 UTC).
 
-## Persistent branches
+## Persistent branches — live snapshot
 
 | Branch | Observed head | Role | Action |
 |---|---|---|---|
-| `master` | `732690a2b37ac23971b3f9aea1cc595fd68c0a7f` | Published/release line | Preserve. Its release workflow and public-package compatibility protections must not be overwritten casually. |
-| `development` | `75e6b169affbb4c16ce993ff0d90012cbcc1e54c` | Active integration and documentation line | Preserve. This is the current validated development candidate; its CI evidence is recorded below and does not authorize merge or publication. |
+| `master` | `2b8619eca6ae8800a02462a4377123fa20603e2f` | Prior release baseline | Preserve until owner-authorized replacement. Preserve publication and public-package compatibility safeguards. |
+| `development` | `8ac88c1e4a7e9e21b0d26bcdfdb245082cf12049` | Active integration / alpha.7 candidate | Preserve as current source of truth. Candidate verification evidence is exact-SHA-specific. |
 
-The live branch inventory returned **exactly two branches: `master` and `development`**. The previously tracked `work/alpha7-educational-docs` branch is no longer present in the live branch listing. No branch deletion was performed by this audit.
+The live branch inventory returned **exactly two branches: `master` and `development`**. No branch deletion, ref movement, merge, or history rewrite was performed.
 
 ## Current divergence and release integration
 
-Draft PR #35 (`development` → `master`) remains open and should remain draft while the histories are reconciled. The current comparison reports **904 commits ahead and 48 behind** for development relative to master. This is substantial divergence, not a routine merge. The merge base is `e9c9968b9cdbec0478e77d9f89b4e74a0e404d3d`.
+Draft PR [#35](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/35) (`development` → `master`) remains open and non-mergeable because the histories diverge. The live comparison reports **1,063 commits ahead and 51 behind** for development relative to master. Merge base: `e9c9968b9cdbec0478e77d9f89b4e74a0e404d3d`.
 
-The current `master` head is `732690a2b37ac23971b3f9aea1cc595fd68c0a7f`; the current `development` head is `75e6b169affbb4c16ce993ff0d90012cbcc1e54c`. Reconcile source/API/test differences, master-only public-dependency compatibility checks, release history, repository documentation, and workflow configuration deliberately. Preserve the master-only publication safeguard. Do not force-reset either persistent branch.
+This is not a routine merge. Do not merge legacy `master` into `development`, force-reset either branch, or delete anything to tidy the branch list. The intended end state is owner-controlled replacement of the old master baseline only after selective reconciliation and exact-candidate verification.
 
-## Current candidate evidence (development HEAD)
+## Exact-SHA candidate evidence
 
-Candidate SHA: `75e6b169affbb4c16ce993ff0d90012cbcc1e54c`.
+Candidate SHA: `8ac88c1e4a7e9e21b0d26bcdfdb245082cf12049`.
 
-- Pack-and-publish workflow [39854327909](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39854327909): build/test, public-package compatibility, and source-integration jobs succeeded; `publish_nuget` was skipped.
-- CodeQL [39854327925](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39854327925): succeeded on the same SHA.
-- Primary package artifact: `fsm-cos-nuget-package`, 127,994-byte artifact ZIP, SHA-256 `bf00c1e6864eb511642bca732d4b2921606fd1b61676f4a49f4aac03ced02d55`. Contained `TheSingularityWorkshop.FSM_COS.0.1.0-alpha.7.nupkg`, SHA-256 `69b762b3170b3f04c95dcdf7f745319fa034c0b1281dd6954f4d4692fb423b9f`.
-- Public-feed compatibility package artifact: `fsm-cos-nuget-package-public-feed`, SHA-256 `b1c831ae767a079b48ce2b463959f87c9cde5567597cc7579a9656f1722c0692`. Contained the same package ID/version, SHA-256 `ddf8054d56ad9b411465064e180cb3b7e9b8fed4c1482677069d39e785bf4a7c`.
-- Inspected both .nupkg archives: package ID `TheSingularityWorkshop.FSM_COS`, version `0.1.0-alpha.7`, .NET 8 assembly and XML docs present, package README and license present, expected three public dependencies present, alpha.7 release notes and consumer docs/assets included, and internal release-readiness/branch-ledger notes excluded.
-- The package workflow run at the immediately preceding source candidate `8dbe9207d811678aac4d2efd54d9d7e87eeea802` also passed all three validation jobs and CodeQL, with publication skipped. The current `75e6...` run is the fresher evidence and its package artifact was inspected directly.
+- Pack/build/test workflow [40059385372](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/40059385372): completed successfully on the exact SHA. Build/test, public-package compatibility, and source-integration jobs succeeded; `publish_nuget` was skipped.
+- Test artifact: **139/139 passed**, zero failed.
+- CodeQL [40059385359](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/40059385359): completed successfully on the same SHA; inspected C# SARIF contained **zero results**.
+- Development-source package artifact SHA-256: `c1f9819c5c1f6badab9ae977e14ab3a9b58e023003f992bc490824acb2a19a36`. This was built with the development source dependency graph.
+- **Public-feed compatibility package artifact SHA-256: `20c3cc23629417632a6b218e5d1ad3a8c5711bd16382a5370edf17e5fdd0ab4d`.** This is the artifact from the public-package compatibility job and is the relevant package candidate for the existing publish workflow.
+- Inspected package: `TheSingularityWorkshop.FSM_COS.0.1.0-alpha.7.nupkg`, 138,245 bytes; net8.0 assembly/XML docs and documentation assets present. Nuspec records repository commit `8ac88c1e4a7e9e21b0d26bcdfdb245082cf12049` and dependencies `FSM_API 1.0.13`, `FSM_UserIO 0.1.0-alpha.1`, and `MicroBundleDomain 1.0.1`.
+- Workflow action references are pinned; publishing remains explicitly hard-gated.
 
-This is strong evidence for the current **development** candidate, not certification of a final **master** release commit. Hosted rendering and browser accessibility-tree, keyboard, and screen-reader behavior remain unverified unless independently checked. A final master candidate must be selected and checked against its exact SHA after branch-history and workflow reconciliation.
+This evidence validates the **development candidate only**. Any reconciliation commit changes the candidate SHA and requires applicable checks to run again. The package artifacts above are not proof that a final `master` candidate has passed.
+
+## Master-only documentation review
+
+The following four documents exist on current `master` and are absent from current `development`. They have been inspected at a high level, but **have not yet been ported**. Each should be selectively harvested only after claims, links, and examples are checked against alpha.7 source and current package metadata.
+
+| Path on master | Initial disposition | Specific review cautions |
+|---|---|---|
+| `docs/COMPUTE_SCALE.md` | Review for selective preservation | Clearly distinguish the current in-process composition boundary from proposed remote/distributed execution; don't imply distributed execution is implemented. |
+| `docs/DEPENDENCIES.md` | Strong candidate to port after version/API verification | Describes FSM_API, FSM_UserIO, MicroBundleDomain, and deliberate non-dependencies; verify current API names and keep optional integration claims explicit. |
+| `docs/ECOSYSTEM_INTEGRATION_MAP.md` | Preserve as a clearly labeled working/architecture document if still useful | Snapshot is dated 2026-10-08 and includes older alpha versions and mismatches; refresh the facts table or clearly retain it as historical, never treat it as current release evidence. |
+| `docs/PERFORMANCE_AND_EFFICIENCY.md` | Review for selective preservation | FSM_API measurements are not FSM_COS benchmarks; keep the energy-efficiency section explicitly hypothetical and label AnyApp footprint figures as historical/approximate. |
+
+Other master-only source, tests, workflow, and documentation changes still require file-level comparison; this four-file review is not a claim that the entire 51-commit master-only side has been exhaustively reconciled. The release workflow and hard-gated publication safeguards must survive the eventual candidate selection.
+
+## Accessibility / host-integration gate
+
+CI verifies source/package structure and generated SVG consistency, but does not by itself prove the hosted browser rendering, accessibility tree, keyboard operation, or screen-reader experience. Determine applicability for the core .NET package versus the consuming host. If host-level behavior is part of the release claim, record browser/device/assistive-technology evidence; otherwise scope the limitation explicitly rather than claiming it passed.
 
 ## Owner checklist
 
 - [x] Confirm the live persistent branch inventory is exactly `master` and `development`.
-- [x] Refresh divergence numbers from live refs: development 904 ahead / 48 behind master.
-- [x] Re-run pack/test, public-package compatibility, source integration, and CodeQL on the same current development SHA.
-- [x] Inspect both current-head NuGet artifacts and record package metadata and hashes.
-- [ ] Reconcile the 904-ahead / 48-behind histories and preserve all master-only release safeguards.
-- [ ] Verify hosted SVG rendering and applicable browser accessibility behavior.
-- [ ] Select the exact final master candidate and repeat all applicable gates and package inspection on that SHA.
-- [ ] Obtain explicit owner authorization before publication.
+- [x] Refresh both branch heads, ahead/behind counts, and merge base.
+- [x] Verify pack/build/test, public-package compatibility, source integration, and CodeQL on one exact development SHA.
+- [x] Inspect test results and both package artifacts; distinguish source-dependency package from public-feed candidate.
+- [x] Identify four master-only documentation candidates and record review cautions.
+- [ ] Inspect remaining master-only commits/files for unique source, tests, docs, and workflow protections.
+- [ ] Selectively port approved useful work to development and update this ledger with each disposition.
+- [ ] Run all required checks on the resulting new exact development SHA.
+- [ ] Verify applicable hosted SVG/accessibility behavior or explicitly scope it out.
+- [ ] Select the final master candidate and repeat applicable verification on that exact SHA.
+- [ ] Obtain explicit owner authorization before any NuGet publication.
 
-This ledger records observed state, not merge approval or release authorization.
+This ledger records observed state, not merge approval, branch replacement approval, or release authorization.
 
 ---
 
