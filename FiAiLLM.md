@@ -1,6 +1,9 @@
 <!-- The Singularity Workshop moniker -->
 <p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop — animated workshop moniker" width="720" /></a></p>
 
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop — animated workshop moniker" width="720" /></a></p>
+
 # FiAiLLM — FSM_COS / CiAi Integration Contract
 
 **Audience:** the LLM implementing CiAi and its FSM_COS pilot  
@@ -183,6 +186,11 @@ Do not make CiAi the authority that grants release permission. It supplies valid
 - [ ] Known limitations and unimplemented remote/GUI paths remain explicit.
 
 **Operating principle:** observe broadly, verify strictly, report honestly, and do not mutate release state.
+
+---
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
 
 ---
 
