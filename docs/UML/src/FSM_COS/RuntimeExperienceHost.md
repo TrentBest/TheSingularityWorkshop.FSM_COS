@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # RuntimeExperienceHost
 
 **Purpose.** Coordinates composition and retention of multiple runtime experiences for a host.
@@ -29,3 +32,6 @@ Composing/registering does not activate an experience. The host owns presentatio
 - Source: [RuntimeExperienceHost.cs](../../../../src/FSM_COS/RuntimeExperienceHost.cs)
 - Related types: [IFsmCos](IFsmCos.md), [RuntimeExperienceRegistry](RuntimeExperienceRegistry.md), [RuntimeAssembly](RuntimeAssembly.md).
 - Provenance: source-checked against `development`; manually authored documentation.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
