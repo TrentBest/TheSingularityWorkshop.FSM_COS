@@ -9,7 +9,7 @@ The canonical design rationale and broader interaction contract live in the GUI 
 
 ## Detailed view specifications
 
-The cross-repository inventory and evidence policy is in the [Documentation Standard](../DOCUMENTATION_STANDARD.md). The per-view specifications are maintained in the [UML Standard index](UML/Standard/README.md): class/type diagrams, class neighborhoods and expandable data cards, sequence/complexity, activity/control flow, state/lifecycle, use cases, architecture/components, deployment topology, data models/lineage, MicroBundles/manifests, and requirement/test/decision traceability. This visual-style page governs how those views should look and how FSM_COS-specific boundaries must be represented; it does not claim that the planned source-analysis generator or CI gate is already implemented.
+The cross-repository inventory and evidence policy is in the [Documentation Standard](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md). The per-view specifications are maintained in the [UML Standard index](UML/Standard/README.md): class/type diagrams, class neighborhoods and expandable data cards, sequence/complexity, activity/control flow, state/lifecycle, use cases, architecture/components, deployment topology, data models/lineage, MicroBundles/manifests, and requirement/test/decision traceability. This visual-style page governs how those views should look and how FSM_COS-specific boundaries must be represented; it does not claim that the planned source-analysis generator or CI gate is already implemented.
 
 ## The visual language
 
