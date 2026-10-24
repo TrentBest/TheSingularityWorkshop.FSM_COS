@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # RuntimeExperienceRegistry
 
 **Purpose.** Thread-safe registry retaining composed runtime assemblies and tracking a host-selected runtime identity.
@@ -31,3 +34,6 @@ Public state and dictionary operations are guarded by a private lock. The `Assem
 - Source: [RuntimeExperienceRegistry.cs](../../../../src/FSM_COS/RuntimeExperienceRegistry.cs)
 - Provenance: source-checked against `development`; manually authored documentation.
 - Related standard: [state/lifecycle](../../Standard/STATE_LIFECYCLE.md), [data models and lineage](../../Standard/DATA_MODELS_AND_LINEAGE.md).
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
