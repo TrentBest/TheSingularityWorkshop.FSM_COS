@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # IMicroBundleRollback — UML neighborhood
 
 **Evidence class:** source-checked structural neighborhood with human-authored use cases. **Target:** `TheSingularityWorkshop.FSM_COS.IMicroBundleRollback`. **Source revision:** `development` at documentation update time. Not generated; runtime call edges are not claimed as verified by this page.
@@ -23,3 +26,6 @@ flowchart TB
 The consumer node represents the documented responsibility, not a fully traced call graph. Confirm invocation sites and exception handling from source before upgrading this diagram to source-derived call-flow evidence.
 
 See [source page](IMicroBundleRollback.md) and [sequence standard](../../Standard/SEQUENCE_DIAGRAMS_AND_COMPLEXITY.md).
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
