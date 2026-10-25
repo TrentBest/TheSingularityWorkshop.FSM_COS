@@ -181,9 +181,6 @@ The integrating system supplies the catalog and any configuration source, and ow
 
 ---
 
-<!-- THE SINGULARITY WORKSHOP FOOTER -->
-<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
-
 ## 03 — How does composition work?
 
 ### Runtime flow
@@ -249,3 +246,6 @@ The smallest runnable proof is the [minimal consumer recipe](../samples/FSM_COS.
 - [Runtime Manifest](RUNTIME_MANIFEST.md) — request contract.
 - [RuntimeAssembly](RUNTIME_ASSEMBLY.md) — result contract.
 - [Runtime Boundary](RUNTIME_BOUNDARY.md) — host responsibilities.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
