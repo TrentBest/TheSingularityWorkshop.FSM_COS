@@ -7,7 +7,9 @@
 
 ![FSM_COS runtime boundary: the composition kernel returns RuntimeAssembly to host-owned execution, rendering, communication, and platform integration.](assets/runtime-boundary.svg)
 
-## The handoff
+## 01 — What is the runtime handoff?
+
+### The handoff
 
 ```text
 RuntimeManifest + host-supplied catalog + optional configuration
@@ -23,7 +25,22 @@ RuntimeManifest + host-supplied catalog + optional configuration
                 host / application / Experience
 ```
 
-## Inside FSM_COS
+## 02 — Why is this boundary important?
+
+### Important non-promises
+
+- A catalog is a resolution boundary, not necessarily a downloader.
+- A content-hash field is metadata; this package does not fetch and verify artifact bytes from it.
+- A successful load does not prove arbitrary bundles are semantically compatible.
+- Bounded arbitration provides a defined convergence step, not a sandbox or transactional rollback. On failed loading or arbitration, FSM_COS can invoke the optional `IMicroBundleRollback` compensation contract in reverse attempt order; bundles without it and irreversible external effects cannot be undone.
+- A `RuntimeAssembly` is a successful composition handoff, not a running application or live-update manager.
+- Planning metadata for staged loading does not activate deferred loading in the current composition path.
+
+For threat assumptions, resource limits, and in-process trust boundaries, read [Security](../SECURITY.md). For exact staged metadata behavior, read [Staged Manifest Loading](STAGED_MANIFEST_LOADING.md).
+
+## 03 — How are responsibilities divided?
+
+### Inside FSM_COS
 
 The current composition path:
 
@@ -35,7 +52,7 @@ The current composition path:
 
 The collection views on the alpha.7 result and plan types are read-only snapshots of collection structure. They do not make the domain-owned MicroBundle instances immutable.
 
-## Outside FSM_COS
+### Outside FSM_COS
 
 | Responsibility | Owner |
 |---|---|
@@ -49,18 +66,13 @@ The collection views on the alpha.7 result and plan types are read-only snapshot
 
 FSM_COS consumes the FSM_API state/context foundation; that does not make it the FSM_API process scheduler. It consumes the MicroBundleDomain contract; that does not make it the owner of the MicroBundle domain.
 
-## Important non-promises
+## 04 — See it in a minute
 
-- A catalog is a resolution boundary, not necessarily a downloader.
-- A content-hash field is metadata; this package does not fetch and verify artifact bytes from it.
-- A successful load does not prove arbitrary bundles are semantically compatible.
-- Bounded arbitration provides a defined convergence step, not a sandbox or transactional rollback. On failed loading or arbitration, FSM_COS can invoke the optional `IMicroBundleRollback` compensation contract in reverse attempt order; bundles without it and irreversible external effects cannot be undone.
-- A `RuntimeAssembly` is a successful composition handoff, not a running application or live-update manager.
-- Planning metadata for staged loading does not activate deferred loading in the current composition path.
+Run the [minimal consumer recipe](../samples/FSM_COS.MinimalConsumer/Program.md) to observe a real dependency-first composition and its expected output. This proves the composition path, not application execution or presentation.
 
-For threat assumptions, resource limits, and in-process trust boundaries, read [Security](../SECURITY.md). For exact staged metadata behavior, read [Staged Manifest Loading](STAGED_MANIFEST_LOADING.md).
+## 05 — Choose your next step
 
-## The invariant
+### The invariant
 
 **Compose the request. Return the assembled result. Leave execution and manifestation to the host.**
 
