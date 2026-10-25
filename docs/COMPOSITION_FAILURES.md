@@ -56,9 +56,6 @@ See [Architecture](ARCHITECTURE.md), [Runtime Boundary](RUNTIME_BOUNDARY.md), [A
 
 ---
 
-<!-- THE SINGULARITY WORKSHOP FOOTER -->
-<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
-
 ## 04 — See it in a minute
 
 Inspect failure-focused cases in [FsmCosTests.cs](../tests/FSM_COS.Tests/FsmCosTests.cs). The test suite is evidence for the checked cases, not a promise that every external side effect can be undone.
@@ -68,3 +65,6 @@ Inspect failure-focused cases in [FsmCosTests.cs](../tests/FSM_COS.Tests/FsmCosT
 - [Architecture](ARCHITECTURE.md) — the complete composition flow.
 - [RuntimeAssembly](RUNTIME_ASSEMBLY.md) — the success/failure handoff boundary.
 - [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) — consumer setup and troubleshooting.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
