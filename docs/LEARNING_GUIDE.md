@@ -7,7 +7,9 @@ This guide follows one real example through the core FSM_COS job: a host request
 
 FSM_COS is the Workshop's **Compute Operating System layer for runtime composition**. It turns a `RuntimeManifest` into a `RuntimeAssembly` by resolving MicroBundles, validating their dependencies, loading prerequisites first, and running bounded arbitration. The host supplies the catalog and decides what to do with the result.
 
-## The problem: the host requests one thing, but needs more
+## 01 — What is the composition problem?
+
+### The problem: the host requests one thing, but needs more
 
 The minimal consumer requests only the report bundle (ID `1`). That report declares a dependency on the data-source bundle (ID `2`). The host should not have to duplicate the dependency algorithm by manually listing every prerequisite in the manifest.
 
@@ -15,7 +17,11 @@ The minimal consumer requests only the report bundle (ID `1`). That report decla
 
 The diagram's A/B/C/D graph is a teaching example. The runnable sample uses two bundles: report `1` and data source `2`.
 
-## Follow the request
+## 02 — Why follow one request?
+
+## 03 — How does a request move through FSM_COS?
+
+### Follow the request
 
 ### 1. The host describes the requested root
 
@@ -51,19 +57,7 @@ After loading, FSM_COS runs bounded arbitration rounds through the MicroBundle c
 
 A successful `RuntimeAssembly` is the composition result. It is not a running application, GUI, or guarantee that arbitrary bundles are semantically compatible.
 
-## Run the example
-
-You need Git and the **.NET 8 SDK**.
-
-```bash
-git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git
-cd TheSingularityWorkshop.FSM_COS
-dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
-```
-
-The sample supplies its own in-memory `IMicroBundleCatalog` and two example MicroBundles. They are example code, not built-in FSM_COS bundle implementations. Read the [complete sample recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md) for its source, type references, and reproduction notes.
-
-## Change the request
+### Change the request
 
 Open `samples/FSM_COS.MinimalConsumer/Program.cs` and find the `RuntimeManifest` constructor.
 
@@ -74,7 +68,7 @@ Open `samples/FSM_COS.MinimalConsumer/Program.cs` and find the `RuntimeManifest`
 
 You changed **what the host requested**, not the dependency algorithm. FSM_COS composes the dependency closure reachable from the manifest roots.
 
-## Keep the responsibilities straight
+### Keep the responsibilities straight
 
 | Part | Responsibility |
 |---|---|
@@ -87,7 +81,23 @@ You changed **what the host requested**, not the dependency algorithm. FSM_COS c
 
 FSM_COS does not download artifacts, verify artifact bytes from content hashes, activate deferred bundles in an existing assembly, or run the host application. The current planning metadata and these limits are explained in [Staged Manifest Loading](STAGED_MANIFEST_LOADING.md).
 
-## Where to go next
+## 04 — See it in a minute
+
+### Run the example
+
+You need Git and the **.NET 8 SDK**.
+
+```bash
+git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git
+cd TheSingularityWorkshop.FSM_COS
+dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
+```
+
+The sample supplies its own in-memory `IMicroBundleCatalog` and two example MicroBundles. They are example code, not built-in FSM_COS bundle implementations. Read the [complete sample recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md) for its source, type references, and reproduction notes.
+
+## 05 — Choose your next step
+
+### Where to go next
 
 - **Build your own consumer:** [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md).
 - **Understand the type relationships:** [Architecture](ARCHITECTURE.md).
