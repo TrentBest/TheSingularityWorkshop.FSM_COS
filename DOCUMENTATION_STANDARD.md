@@ -114,24 +114,54 @@ Use contrast for priority, repetition for recognition, proximity for ownership, 
 
 ## README badge policy
 
-Every repository README should retain a small, intentional badge row near the top, immediately after the identity/moniker area and before the main introduction. Badges are part of the repository's public documentation and visual identity—not disposable decoration. When editing a README, preserve existing badges unless a badge is demonstrably broken, obsolete, or misleading; do not silently remove or replace them as collateral formatting cleanup.
+Every repository README should use the same **small, predictable badge row**, directly below the repository identity/moniker and title, before the opening pitch. The default is five core badges, plus one conditional package badge pair. Badge order is deliberate: health first, then distribution, quality, and legal identity.
 
-Use badges that communicate useful, verifiable project status. Common candidates include:
+### Canonical order
 
-- **CI / build status:** link to the authoritative workflow or check that actually validates the repository.
-- **Latest published package/version:** link to the canonical package registry and show the published version, not an unreleased version.
-- **License:** only when the repository's license is present and the badge agrees with it.
-- **Test coverage, release status, downloads, or documentation:** only when a trustworthy source exists and the displayed metric/status has a clear meaning.
+1. **GitHub Actions / CI status** — first; point to the authoritative workflow that exercises the repository's meaningful validation path. Use the correct default/working branch and workflow filename.
+2. **NuGet version** — for a repository that publishes a NuGet package; point to the exact package ID on nuget.org and show the published version, never a project-file version that has not shipped.
+3. **NuGet downloads** — immediately after the version badge, for that same published package ID.
+4. **Codecov coverage** — when coverage is actually uploaded to Codecov for this repository and the badge is connected to the correct repository. Coverage is a measurement, not proof that the tests are comprehensive.
+5. **Last commit** — a maintenance/activity signal, linked to the repository or commit history. It is not a quality, freshness guarantee, or release-status badge.
+6. **License** — last; use the license actually present in the repository and link to its authoritative text.
 
-### Badge integrity
+This is the Workshop default, not a quota. **Do not manufacture a badge to fill a slot.** If a badge is not applicable or cannot be verified, omit it and report why in the badge audit. Repositories that do not publish NuGet packages omit both NuGet badges. Repositories without a trustworthy coverage upload omit Codecov. Add other badges only when they answer a concrete reader question and have an authoritative source; do not add stars, forks, repository size, language guesses, generic quality scores, or vanity labels just to increase the count.
 
-- Every badge must link to the authoritative destination where appropriate and have meaningful accessible text.
-- Prefer badges that update from their source over hand-maintained status claims.
-- Never add a green/passing badge unless its target genuinely represents the check described; a passing workflow is evidence only for the checks that workflow performs.
-- Do not invent coverage percentages, maturity scores, release claims, download counts, or package versions. If a useful metric cannot be verified, omit that badge until it can be sourced.
-- Avoid badge clutter: keep the row concise and project-relevant. Badges supplement—not replace—the README's explanation, proof, limitations, and release notes.
-- When adding or changing a workflow, package ID, default branch, or release process, verify that dependent badge URLs and labels still resolve and still describe the right thing.
-- Include badge presence and correctness in README review. A documentation-only change must not accidentally erase badges.
+### Presentation
+
+- Keep badges on one compact row when practical; on narrow screens, natural wrapping is fine. Use consistent Markdown badge syntax and a consistent style (Workshop default: flat-square where the provider supports it). Keep the README's animated moniker and title visually distinct from the badge row.
+- Each badge has a meaningful accessible label, an authoritative image/source URL, and an appropriate click-through destination. Prefer dynamic source-backed values over hand-maintained claims.
+- The row's **membership and order are standardized**; individual badge presence is conditional on applicability and verified health. No extra badge is added merely because it is available.
+- Preserve existing valid badges during README edits. Do not silently delete, reorder, or replace them as collateral formatting cleanup. If a badge is broken or inaccurate, remove it from the reader-facing row only after recording it in the audit report; repair it when the correct source is established.
+- When a workflow, package ID, default branch, coverage upload, license, or release process changes, revalidate all dependent badge definitions.
+- A green CI badge means only that the linked workflow passed its own checks. It must not imply broader release readiness, package publication, or behavior that the workflow does not test.
+
+### Badge health reporting (for the Workshop and eventually “The”)
+
+Broken badges should **not remain in a public README**, but discovering one must not erase the evidence that it was broken. Badge audit is a reporting responsibility, not just a visual cleanup.
+
+For each repository, a badge audit should record:
+- repository and default branch;
+- expected badge kind/order and applicability;
+- rendered badge image/source URL and click-through URL;
+- validation time and result (healthy, broken, misconfigured, not-applicable, or unverified);
+- concise failure reason and affected README line/section;
+- remediation recommendation, owner/next action, and issue URL if one is opened.
+
+A healthy badge remains in the README. A confirmed broken or misleading badge is removed or repaired in the same change when safe; the report must preserve the finding and remediation trail. A transient network/provider error is **unverified**, not automatically a broken badge. Never silently suppress failures, and never treat an unreachable badge image as a reason to delete the entire badge row.
+
+The eventual automated audit should compare README badges with repository metadata and actual workflow/package/coverage configuration, validate image and destination links, check the canonical order, and emit machine-readable results plus a human-readable summary. It should distinguish errors from warnings and applicability exceptions. Reports should be consumable by a Workshop-level roll-up and, eventually, “The”; repository-level findings must retain their source repo, evidence, timestamp, and issue/remediation state. Start with read-only reporting and issue creation; do not automatically publish packages, change release gates, or make destructive repository edits.
+
+### Badge review checklist
+
+- [ ] The canonical order is preserved; only applicable, verified badges are displayed.
+- [ ] CI badge identifies the correct workflow and branch.
+- [ ] NuGet badges refer to the exact package ID and published feed.
+- [ ] Codecov badge corresponds to uploaded coverage for this repository.
+- [ ] Last-commit and license badges have correct destinations and claims.
+- [ ] Every broken/misleading badge is repaired or removed from the README **and recorded for follow-up**.
+- [ ] The audit distinguishes confirmed failure from transient/unverified results and records remediation.
+- [ ] README edits and workflow/package/branch changes trigger a badge integrity check.
 
 ## Review checklist
 
