@@ -16,7 +16,7 @@
 
 FSM_COS **directly depends on [FSM_API](https://github.com/TrentBest/FSM_API)** for finite-state-machine and state/context primitives used by the Workshop runtime model. The COS layer has a different job: **composition**. FSM_COS does not schedule every process, run the application loop, render the GUI, or become the finished application.
 
-**[Run the minimal consumer](#-04-see-it-in-a-minute)** · **[Why use FSM_COS?](#-01-why-use-a-compute-operating-system)** · **[Browse the living Gallery](docs/GALLERY.md)** · **[Read the consumer guide](docs/CONSUMING_MICROBUNDLES.md)**
+**[Run the minimal consumer](#-04-see-it-in-a-minute)** · **[Why use FSM_COS?](#-02-why-use-a-compute-operating-system)** · **[Browse the living Gallery](docs/GALLERY.md)** · **[Read the consumer guide](docs/CONSUMING_MICROBUNDLES.md)**
 
 ## 🟦 01 — What does FSM_COS do?
 
