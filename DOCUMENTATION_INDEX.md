@@ -46,7 +46,6 @@ Choose the task you are trying to complete. These are the practical guides and e
 
 **Maintain the implementation**
 - [Architecture](docs/ARCHITECTURE.md) — component boundaries and data flow.
-- [Documentation and implementation audit](docs/IMPLEMENTATION_DOCUMENTATION_MATRIX.md) — public source types mapped to documentation and tests; audit gaps are explicitly tracked.
 - [Documentation standard](DOCUMENTATION_STANDARD.md) — shared Workshop requirements for evidence, accuracy, and type documentation.
 
 ## 04 — See it in a minute
@@ -66,7 +65,7 @@ The minimal consumer demonstrates dependency-first composition. It does **not** 
 - **Need a precise behavior or failure contract:** use the references in section 03.
 - **Need to understand a design decision:** start with [Theory](docs/THEORY.md), then follow its links to the specific contract.
 - **Need a visual explanation:** open the [Gallery](docs/GALLERY.md).
-- **Changing the package:** read [Architecture](docs/ARCHITECTURE.md), the [implementation/documentation matrix](docs/IMPLEMENTATION_DOCUMENTATION_MATRIX.md), and the relevant tests before editing.
+- **Changing the package:** read [Architecture](docs/ARCHITECTURE.md), inspect the relevant source and tests, and check the maintainer audit register before editing.
 - **Evaluating a release candidate:** read [Alpha.7 release notes](docs/releases/0.1.0-alpha.7.md) and the current [release evidence checklist](.github/release-readiness/0.1.0-alpha.7.md). These are snapshots/checklists, not proof that the current HEAD has passed.
 - **Maintaining UML:** start at the [UML index](docs/UML/README.md), then inspect the [coverage inventory](docs/UML/INVENTORY.md) and [reconciliation plan](docs/UML/RECONCILIATION_PLAN.md).
 
