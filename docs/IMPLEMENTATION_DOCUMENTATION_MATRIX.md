@@ -2,6 +2,12 @@
 
 **Status: initial source/test mapping; not yet a completed release audit.** This file is the working bridge between the public explanation and the implementation. Its purpose is to make undocumented behavior, unsupported claims, and untested contracts visible. A row marked as mapped means a likely source/test location has been identified; it does not mean every edge case has been audited.
 
+## Build-mode parity is part of the contract audit
+
+The project has two dependency modes. A normal package build references published FSM_API, FSM_UserIO, and MicroBundleDomain packages; a repository-source build is enabled with `WorkshopUseRepositorySources=true` and defines `WORKSHOP_USE_REPOSITORY_SOURCES`, which conditionally changes parts of the public model (including pre-resolved arbitration/configuration members). These modes must not be treated as identical merely because the same source files compile.
+
+The release audit must compare both modes explicitly: public API shape, dependency versions, package contents, behavior, and consumer examples. Repository-source integration tests alone are insufficient evidence for the public package contract.
+
 ## The product contract
 
 FSM_COS composes a runtime from a versioned request and a host-provided catalog. Its current core path is:
@@ -51,7 +57,7 @@ These are not implied by the existence of related names or planning metadata:
 
 The audit is complete only when every public claim and meaningful contract has been checked against implementation and tests at the same revision.
 
-- [ ] Enumerate all public types and members from the current target framework build.
+- [ ] Enumerate all public types and members from both normal package mode and `WorkshopUseRepositorySources=true` mode; explain any intentional API differences.
 - [ ] Map every public member to one authoritative contract page or explicitly mark it intentionally undocumented.
 - [ ] Verify every behavior claim against source and at least one relevant test, or label the claim source-checked / conceptual.
 - [ ] Audit failure paths, validation, resource limits, exception/result behavior, and rollback/compensation semantics.
