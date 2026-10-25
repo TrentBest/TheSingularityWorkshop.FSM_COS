@@ -15,8 +15,9 @@ See [FSM_COS Theory](THEORY.md#8-arbitration-is-composition-negotiation) for the
 
 *A successful assembly records the zero-based index of the round that converged in `RuntimeAssembly.ArbitrationRounds`: `0` means the first round was stable. If every allowed round reports changes, FSM_COS reports failure instead of handing the host an assembly that did not converge.*
 
+## 01 — What is arbitration in FSM_COS?
 
-## UML class diagram: arbitration participants
+### UML class diagram: arbitration participants
 
 This is a simplified, source-derived overview of the arbitration relationships, not a complete per-type API inventory. Parameter types and nullability are abbreviated; the source and the contract above remain authoritative for exact signatures and failure behavior.
 
@@ -56,7 +57,7 @@ classDiagram
 
 The two interfaces shown as MicroBundleDomain contracts are external to this repository; FSM_COS supplies their concrete context and invokes the domain-owned arbitration callback. A returned assembly means a complete round reported no changes before the configured bound, not that all possible domain compatibility rules have been proven.
 
-## The question arbitration actually answers
+### The question arbitration actually answers
 
 Dependency resolution asks:
 
@@ -90,7 +91,66 @@ The result is not a winner. The result is a **stable relationship between partic
 
 ---
 
-## Why interoperability is normally difficult
+### The contract at the edge
+
+At the end of arbitration, the kernel should be able to say one of two things:
+
+~~~text
+SUCCESS
+The requested composition converged.
+RuntimeAssembly is valid for handoff.
+~~~
+
+or:
+
+~~~text
+FAILURE
+The requested composition did not converge within the safety bound.
+No stable RuntimeAssembly is produced.
+~~~
+
+That is stronger than “all DLLs loaded.”
+
+It is stronger than “all constructors succeeded.”
+
+It is stronger than “the host can probably figure it out.”
+
+It gives the composition boundary an actual semantic completion condition.
+
+---
+
+### The short version
+
+~~~text
+LOAD
+  ↓
+What exists?
+  ↓
+ARBITRATE
+  ↓
+Can what exists live together?
+  ↓
+CONVERGE
+  ↓
+Is the composition stable?
+  ↓
+ASSEMBLE
+  ↓
+HAND OFF
+~~~
+
+> **Arbitration is not a fight for control. It is the mechanism by which independent capabilities discover whether they can become one stable system.**
+
+
+
+---
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
+
+## 02 — Why does arbitration exist?
+
+### Why interoperability is normally difficult
 
 Interoperability is often reduced to questions such as:
 
@@ -140,7 +200,7 @@ Each participant can respond to the composition it finds without requiring one u
 
 ---
 
-## Arbitration changes the interoperability concern
+### Arbitration changes the interoperability concern
 
 Without arbitration, interoperability tends to mean:
 
@@ -160,7 +220,25 @@ This is not merely a second initialization pass. It is the phase in which the co
 
 ---
 
-## Arbitration is not priority arbitration
+### The interoperability thesis
+
+The thesis is:
+
+> **Interoperability is not only the ability to exchange data or invoke APIs. In a compositional runtime, interoperability is the ability of independently defined capabilities to participate in a shared state space and converge without requiring one of them to become the universal owner.**
+
+FSM_COS does not claim that arbitration solves every interoperability problem.
+
+It creates a place where one important class of problem can be addressed:
+
+**composition-level compatibility.**
+
+That is a meaningful architectural boundary.
+
+---
+
+## 03 — How does arbitration work, and what are its limits?
+
+### Arbitration is not priority arbitration
 
 The name can suggest a judge selecting a winner. That is not the model.
 
@@ -193,7 +271,7 @@ Arbitration lets capabilities express consequences instead of demanding ownershi
 
 ---
 
-## The convergence law
+### The convergence law
 
 The alpha contract is deliberately small:
 
@@ -219,7 +297,7 @@ The deeper invariant is:
 
 > **No unstable composition crosses the RuntimeAssembly boundary as if it were stable.**
 
-## What convergence proves—and what it does not
+### What convergence proves—and what it does not
 
 A successful arbitration pass establishes a narrow, observable fact: every loaded bundle participated, and a complete round reported no composition changes before the configured limit was reached.
 
@@ -236,8 +314,178 @@ Those stronger claims depend on the contracts and implementations supplied by th
 
 **Precise guarantee:** FSM_COS does not return an assembly when the arbitration protocol reports continued change through the configured maximum. A returned assembly means the participants reported convergence—not that every possible form of interoperability has been proven.
 
+### Why bounded convergence matters
 
-## Example: a shared capability name is not compatibility
+An open-ended negotiation loop could permit pathological participants:
+
+~~~text
+A changes B
+B changes A
+A changes B
+B changes A
+...
+~~~
+
+Without a bound, the runtime has no principled stopping point.
+
+With a bound:
+
+~~~text
+round 1
+round 2
+...
+round N
+  ├── stable → success
+  └── unstable → failure
+~~~
+
+The host therefore gets a meaningful contract:
+
+- RuntimeAssembly means the composition reached its stable point;
+- failure means the requested composition could not establish that point.
+
+The host does not need to invent its own interpretation of “probably stable enough.”
+
+---
+
+### The strongest participants are boring
+
+A good arbitrator is not an application loop hidden inside a MicroBundle.
+
+A good arbitrator is:
+
+- deterministic;
+- local in responsibility;
+- explicit about what it changed;
+- safe to run again;
+- respectful of the shared composition;
+- independent of the final host where possible.
+
+The ideal shape is effectively:
+
+~~~text
+apply requirement
+    ↓
+already satisfied?
+    ├── yes → no change
+    └── no  → satisfy it → changed
+~~~
+
+That makes convergence legible and testing meaningful.
+
+A second pass over an already-satisfied condition should not manufacture another change simply to keep the system busy.
+
+---
+
+### Structural composition versus behavioral reconciliation
+
+Dependencies are usually represented as a graph:
+
+~~~text
+Experience
+ ├── Navigation
+ │    └── SpatialModel
+ ├── GUI
+ │    └── PresentationModel
+ └── Identity
+      └── VisitorModel
+~~~
+
+The graph establishes **what is installed**.
+
+But Navigation may reveal a spatial interaction point. SpatialModel may expose a constraint that changes presentation. The GUI may reveal that an interaction requires an identity affordance. Identity may then change available presentation state.
+
+The dependency graph establishes structural composition.
+
+Arbitration establishes **behavioral reconciliation**.
+
+That distinction is fundamental.
+
+---
+
+### Arbitration creates an interoperability seam
+
+A traditional integration boundary often looks like:
+
+~~~text
+Provider API → Consumer API
+~~~
+
+FSM_COS adds a third space:
+
+~~~text
+Provider
+    ↓
+shared composition
+    ↑
+Consumer
+~~~
+
+Neither participant has to own the entire application. Both can contribute facts or constraints to the shared composition.
+
+That creates a **negotiation seam**.
+
+This seam becomes particularly valuable when capabilities come from different authors, packages, domains, or future versions of the ecosystem. The composition kernel provides a stable place for them to reconcile without forcing their internal implementations to know about one another.
+
+That is why arbitration can become a major interoperability primitive rather than a minor lifecycle callback.
+
+---
+
+### What arbitration must not become
+
+Arbitration must not become a back door for application infrastructure.
+
+A MicroBundle should not use arbitration to:
+
+- render UI;
+- open a browser;
+- start arbitrary background processes;
+- mutate unrelated host state;
+- perform network orchestration;
+- become an application scheduler;
+- encode every business rule in the composition kernel;
+- secretly implement serialization;
+- establish an undocumented universal priority hierarchy.
+
+If a concern can be handled after RuntimeAssembly, it belongs after RuntimeAssembly.
+
+The boundary is valuable precisely because not everything is allowed to cross it.
+
+---
+
+### Arbitration versus serialization
+
+Serialization answers:
+
+> **How do I represent semantic state as bytes?**
+
+Arbitration answers:
+
+> **Given these semantic participants, have we reached a stable composition?**
+
+Those concerns can touch the same configuration data without being the same problem.
+
+~~~text
+FSM_Serialization
+      ↓ representation
+BundleRequest
+      ↓
+FSM_COS
+      ↓ composition
+Arbitration
+      ↓
+RuntimeAssembly
+~~~
+
+Keeping these boundaries separate means a serialization format can evolve without changing convergence semantics.
+
+See [FSM_Serialization Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md).
+
+---
+
+## 04 — See it in a minute
+
+### Example: a shared capability name is not compatibility
 
 Imagine a tanker MicroBundle and a station MicroBundle both advertise **docking**. That shared word is discovery metadata, not evidence that the operations can safely compose.
 
@@ -273,244 +521,10 @@ The test suite includes a deliberately domain-owned example in `FsmCosTests`: tw
 
 ---
 
-## Why bounded convergence matters
+Run the [minimal consumer recipe](../samples/FSM_COS.MinimalConsumer/Program.md) for the full composition path; use the linked arbitration tests in [FsmCosTests.cs](../tests/FSM_COS.Tests/FsmCosTests.cs) for convergence and failure cases.
 
-An open-ended negotiation loop could permit pathological participants:
+## 05 — Choose your next step
 
-~~~text
-A changes B
-B changes A
-A changes B
-B changes A
-...
-~~~
-
-Without a bound, the runtime has no principled stopping point.
-
-With a bound:
-
-~~~text
-round 1
-round 2
-...
-round N
-  ├── stable → success
-  └── unstable → failure
-~~~
-
-The host therefore gets a meaningful contract:
-
-- RuntimeAssembly means the composition reached its stable point;
-- failure means the requested composition could not establish that point.
-
-The host does not need to invent its own interpretation of “probably stable enough.”
-
----
-
-## The strongest participants are boring
-
-A good arbitrator is not an application loop hidden inside a MicroBundle.
-
-A good arbitrator is:
-
-- deterministic;
-- local in responsibility;
-- explicit about what it changed;
-- safe to run again;
-- respectful of the shared composition;
-- independent of the final host where possible.
-
-The ideal shape is effectively:
-
-~~~text
-apply requirement
-    ↓
-already satisfied?
-    ├── yes → no change
-    └── no  → satisfy it → changed
-~~~
-
-That makes convergence legible and testing meaningful.
-
-A second pass over an already-satisfied condition should not manufacture another change simply to keep the system busy.
-
----
-
-## Structural composition versus behavioral reconciliation
-
-Dependencies are usually represented as a graph:
-
-~~~text
-Experience
- ├── Navigation
- │    └── SpatialModel
- ├── GUI
- │    └── PresentationModel
- └── Identity
-      └── VisitorModel
-~~~
-
-The graph establishes **what is installed**.
-
-But Navigation may reveal a spatial interaction point. SpatialModel may expose a constraint that changes presentation. The GUI may reveal that an interaction requires an identity affordance. Identity may then change available presentation state.
-
-The dependency graph establishes structural composition.
-
-Arbitration establishes **behavioral reconciliation**.
-
-That distinction is fundamental.
-
----
-
-## Arbitration creates an interoperability seam
-
-A traditional integration boundary often looks like:
-
-~~~text
-Provider API → Consumer API
-~~~
-
-FSM_COS adds a third space:
-
-~~~text
-Provider
-    ↓
-shared composition
-    ↑
-Consumer
-~~~
-
-Neither participant has to own the entire application. Both can contribute facts or constraints to the shared composition.
-
-That creates a **negotiation seam**.
-
-This seam becomes particularly valuable when capabilities come from different authors, packages, domains, or future versions of the ecosystem. The composition kernel provides a stable place for them to reconcile without forcing their internal implementations to know about one another.
-
-That is why arbitration can become a major interoperability primitive rather than a minor lifecycle callback.
-
----
-
-## What arbitration must not become
-
-Arbitration must not become a back door for application infrastructure.
-
-A MicroBundle should not use arbitration to:
-
-- render UI;
-- open a browser;
-- start arbitrary background processes;
-- mutate unrelated host state;
-- perform network orchestration;
-- become an application scheduler;
-- encode every business rule in the composition kernel;
-- secretly implement serialization;
-- establish an undocumented universal priority hierarchy.
-
-If a concern can be handled after RuntimeAssembly, it belongs after RuntimeAssembly.
-
-The boundary is valuable precisely because not everything is allowed to cross it.
-
----
-
-## Arbitration versus serialization
-
-Serialization answers:
-
-> **How do I represent semantic state as bytes?**
-
-Arbitration answers:
-
-> **Given these semantic participants, have we reached a stable composition?**
-
-Those concerns can touch the same configuration data without being the same problem.
-
-~~~text
-FSM_Serialization
-      ↓ representation
-BundleRequest
-      ↓
-FSM_COS
-      ↓ composition
-Arbitration
-      ↓
-RuntimeAssembly
-~~~
-
-Keeping these boundaries separate means a serialization format can evolve without changing convergence semantics.
-
-See [FSM_Serialization Theory](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization/blob/master/docs/THEORY.md).
-
----
-
-## The interoperability thesis
-
-The thesis is:
-
-> **Interoperability is not only the ability to exchange data or invoke APIs. In a compositional runtime, interoperability is the ability of independently defined capabilities to participate in a shared state space and converge without requiring one of them to become the universal owner.**
-
-FSM_COS does not claim that arbitration solves every interoperability problem.
-
-It creates a place where one important class of problem can be addressed:
-
-**composition-level compatibility.**
-
-That is a meaningful architectural boundary.
-
----
-
-## The contract at the edge
-
-At the end of arbitration, the kernel should be able to say one of two things:
-
-~~~text
-SUCCESS
-The requested composition converged.
-RuntimeAssembly is valid for handoff.
-~~~
-
-or:
-
-~~~text
-FAILURE
-The requested composition did not converge within the safety bound.
-No stable RuntimeAssembly is produced.
-~~~
-
-That is stronger than “all DLLs loaded.”
-
-It is stronger than “all constructors succeeded.”
-
-It is stronger than “the host can probably figure it out.”
-
-It gives the composition boundary an actual semantic completion condition.
-
----
-
-## The short version
-
-~~~text
-LOAD
-  ↓
-What exists?
-  ↓
-ARBITRATE
-  ↓
-Can what exists live together?
-  ↓
-CONVERGE
-  ↓
-Is the composition stable?
-  ↓
-ASSEMBLE
-  ↓
-HAND OFF
-~~~
-
-> **Arbitration is not a fight for control. It is the mechanism by which independent capabilities discover whether they can become one stable system.**
-
-
-
----
-
-<!-- THE SINGULARITY WORKSHOP FOOTER -->
-<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
+- [Architecture](ARCHITECTURE.md) — where arbitration sits in the full pipeline.
+- [Composition Failures](COMPOSITION_FAILURES.md) — failure phases and compensation.
+- [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) — consumer-side integration.
