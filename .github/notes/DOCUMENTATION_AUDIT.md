@@ -105,12 +105,18 @@ The package workflow passed on `da9078d7cf95243083cb0b078fd97239a1a8ab9c`: build
 
 ## Package metadata
 
-The package description and tags in `src/FSM_COS/FSM_COS.csproj` now identify FSM_COS as the Compute Operating System for MicroBundle runtime composition rather than a generic platform-neutral library. This metadata change passed the public-package compatibility job on candidate `056adc64500a9a5d01552b4b760558d5b0657bbe`.
+`src/FSM_COS/FSM_COS.csproj` describes FSM_COS as a Compute Operating System for MicroBundle runtime composition and includes corresponding search tags. The package-compatibility result recorded for candidate `056adc64500a9a5d01552b4b760558d5b0657bbe` is historical evidence only; it does not establish compatibility for the current `development` HEAD. Likewise, the older `da9078d7cf95243083cb0b078fd97239a1a8ab9c` workflow record is historical and must not be presented as the latest candidate's validation.
 
-## Package metadata
+## Candidate validation checkpoint — 2026-10-25
 
-`src/FSM_COS/FSM_COS.csproj` now describes FSM_COS as a Compute Operating System for MicroBundle runtime composition and adds search tags for that purpose. This passed package compatibility on candidate `056adc64500a9a5d01552b4b760558d5b0657bbe`; the latest package workflow result at `da9078d7cf95243083cb0b078fd97239a1a8ab9c` also passed, while CodeQL was still running at the time of this audit.
+Current `development` HEAD at the time of this checkpoint: `0b404b3fa3ca841aeefa7448a37da4d79558397c`.
 
+- Pack/build/test workflow [40230163420](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/40230163420) failed during .NET SDK setup while retrieving SDK `8.0.427` (HTTP 409); restore, compilation, tests, and package validation did not run, so this is not evidence of a source regression or a successful package candidate.
+- [CodeQL run 40230163428](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/40230163428) completed successfully.
+- [Benchmark evidence run 40230163461](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/40230163461) completed successfully. This does not substitute for build/test validation.
+- Branding and UML file-level companion coverage checks passed in the package workflow, but do not establish source/API parity or diagram correctness.
+
+Re-run or otherwise resolve the SDK setup failure, then validate both the normal package build and `WorkshopUseRepositorySources=true` mode against one exact candidate SHA before updating release readiness. Do not publish or merge based on this checkpoint.
 ## Sample, code, and visual evidence
 
 | Path family | Audit decision |
