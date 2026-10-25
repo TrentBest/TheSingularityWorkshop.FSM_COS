@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../../src/FSM_COS/FSM_COS.csproj" />
+  <Project Path="FSM_COS.Benchmarks.csproj" />
+</Solution>
