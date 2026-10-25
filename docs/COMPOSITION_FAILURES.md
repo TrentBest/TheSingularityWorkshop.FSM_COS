@@ -5,7 +5,9 @@
 
 FSM_COS exposes two composition styles. Execute keeps the existing exception-based contract. TryExecute returns a RuntimeCompositionResult so a host can report failures without parsing exception messages.
 
-## Inspecting a result
+## 01 — What does a composition outcome report?
+
+### Inspecting a result
 
     RuntimeCompositionResult result = cos.TryExecute(manifest);
     if (result.Succeeded)
@@ -21,7 +23,7 @@ FSM_COS exposes two composition styles. Execute keeps the existing exception-bas
 
 A successful result contains an assembly and no failure details. A failed result contains the phase active when composition stopped and the original exception. The exception type, message, and inner details remain available.
 
-## Failure phases
+### Failure phases
 
 | Phase | What was happening | Typical causes |
 |---|---|---|
@@ -32,17 +34,21 @@ A successful result contains an assembly and no failure details. A failed result
 
 The phase tells the host where composition stopped; it does not guarantee a root-cause category. Catalogs and bundle callbacks can throw their own exception types, which TryExecute preserves.
 
-## Side-effect boundary
+## 02 — Why are failures phase-aware?
+
+### Side-effect boundary
 
 FSM_COS validates the complete reachable dependency graph before bundle loading begins. Once loading starts, bundle code and host-supplied callbacks can produce side effects. A failed result does not guarantee those effects are undone. If a bundle implements `IMicroBundleRollback`, FSM_COS attempts compensation in reverse load-attempt order after a load or arbitration failure. A failure during arbitration can still leave irreversible external effects.
 
 The result is diagnostic information, not a transaction or sandbox. Compensation is opt-in and best-effort, not atomic rollback.
 
-## Failure compensation
+## 03 — How are failed compositions handled?
+
+### Failure compensation
 
 During load or arbitration failure, FSM_COS invokes `IMicroBundleRollback.RollbackLoad` for attempted bundles that implement the optional contract, in reverse attempt order. This includes a bundle whose `Load` itself threw, because it may have created partial side effects. This is best-effort compensation, not a transaction: bundles that do not implement the optional contract cannot be undone, and arbitrary external effects may be irreversible. If compensation callbacks fail, `Execute` throws an `AggregateException` containing the original composition failure first and then compensation failures; `TryExecute` returns that aggregate as its exception.
 
-## Compatibility
+### Compatibility
 
 TryExecute is additive. Existing callers can continue to use Execute and retain its exception behavior. Both methods share the same composition pipeline and resource limits.
 
@@ -51,3 +57,13 @@ See [Architecture](ARCHITECTURE.md), [Runtime Boundary](RUNTIME_BOUNDARY.md), [A
 ---
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
+
+## 04 — See it in a minute
+
+Inspect failure-focused cases in [FsmCosTests.cs](../tests/FSM_COS.Tests/FsmCosTests.cs). The test suite is evidence for the checked cases, not a promise that every external side effect can be undone.
+
+## 05 — Choose your next step
+
+- [Architecture](ARCHITECTURE.md) — the complete composition flow.
+- [RuntimeAssembly](RUNTIME_ASSEMBLY.md) — the success/failure handoff boundary.
+- [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) — consumer setup and troubleshooting.
