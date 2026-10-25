@@ -23,8 +23,9 @@ It deliberately does **not** answer:
 
 *Scope note: this is the intended authoring/publication pipeline, not a claim that FSM_COS currently ships those editor, validation, closure-baking, or manifest-publication stages. The implemented contract begins with `RuntimeManifest`; `FsmCos.Execute` validates and composes that request.*
 
+## 01 — What is a RuntimeManifest?
 
-## UML class diagram: manifest and published plan
+### UML class diagram: manifest and published plan
 
 This is a simplified, source-derived UML overview, not a complete per-type API inventory. The manifest's root requests are distinct from optional published identity/stage metadata and dependency edges. The content hash is recorded in MicroBundleReference; this type does not itself fetch or verify artifact bytes. Exact signatures and nullability remain defined by the source and contract sections below.
 
@@ -92,7 +93,7 @@ classDiagram
 
 The schedule is a validated dependency plan. It does not localize artifacts, execute a process schedule, or by itself enable deferred loading. The diagram reflects the current source model, including that the root manifest requests a version while published references also carry ContentHash.
 
-## The contract
+### The contract
 
 The current development contract is intentionally small:
 
@@ -132,42 +133,51 @@ RuntimeManifest
 
 The manifest names **roots**. FSM_COS discovers the dependency closure from those roots.
 
-## Optional intent and published dependency plan
+## 02 — Why separate authoring from the published request?
+
+### Authoring → publication → composition
+
+A rich authoring environment may know far more than the runtime needs:
+
+```text
+rich authoring model
+        │
+        ├── names
+        ├── ontology
+        ├── variants
+        ├── dependencies
+        ├── provenance
+        └── editor metadata
+        │
+        ▼
+     validation
+        │
+        ▼
+MicroBundle IDs + requested versions
+        │
+        ▼
+ Runtime Manifest
+        │
+        ├─────────────── optional configuration source
+        │                                  │
+        ▼                                  ▼
+ Catalog / Resolver ───────────────► FSM_COS
+                                        │
+                                        ▼
+                                 RuntimeAssembly
+```
+
+This is a compression boundary: authoring can be rich without forcing the composition kernel to become an editor.
+
+## 03 — How is the request interpreted?
+
+### Optional intent and published dependency plan
 
 `Intent` carries an optional `FSM_UserIO.SemanticIntent` to the returned `RuntimeAssembly`. It describes application-owned semantic intent; it does not grant device authority or cause an Experience to start.
 
 `LoadPlan` and `Schedule` are optional published metadata. When a schedule is present, FSM_COS resolves the dependency closure before loading and verifies that the scheduled bundle IDs, resolved versions, and dependency edges match the domain-owned MicroBundle declarations. A mismatch fails before any bundle `Load` call. This is a consistency check, not artifact localization or hash verification.
 
-## Example
-
-```csharp
-var manifest = new RuntimeManifest(
-    RuntimeId: 1001,
-    Bundles:
-    [
-        new MicroBundleManifestEntry(10, "1.2.0"),
-        new MicroBundleManifestEntry(20, "3.1.0")
-    ]);
-```
-
-This means:
-
-- runtime `1001` is being assembled;
-- MicroBundle `10` is requested at `1.2.0`;
-- MicroBundle `20` is requested at `3.1.0`;
-- configuration is **not** embedded in the manifest.
-
-The catalog/resolver is responsible for locating a compatible artifact. FSM_COS verifies the resolved root reports the requested version before loading it.
-
-### Conflicting requests for the same root identity
-
-A manifest must not request the same MicroBundle ID at two different versions. For example, requesting bundle `10` at both `1.2.0` and `2.0.0` is ambiguous: one runtime composition cannot silently satisfy both root requests by choosing whichever catalog result happens to load first. FSM_COS detects conflicting versions for the same root ID and fails before loading the composition.
-
-If two parts of an application genuinely require incompatible versions of one capability, model that incompatibility explicitly rather than relying on duplicate IDs in one manifest.
-
-**An explicit root version also remains authoritative when that same MicroBundle is reached through another root's dependency graph.** FSM_COS resolves the distinct root ID/version requests before invoking any MicroBundle `Load` method, then reuses those selected root instances during dependency traversal. If a requested root version cannot be resolved, composition fails before loading begins. When a published schedule is supplied, its dependency-graph validation uses those same selected root instances, so the schedule check and actual composition cannot silently disagree about the version chosen for an explicitly requested root.
-
-## Version is part of the request
+### Version is part of the request
 
 Version belongs in the manifest because the manifest is a publication-level statement of **what composition was requested**.
 
@@ -188,7 +198,7 @@ FSM_COS
 
 The manifest does not need to know whether an artifact came from an in-memory catalog, a repository, Azure Blob, a package cache, or another delivery mechanism.
 
-## Configuration is deliberately outside the manifest
+### Configuration is deliberately outside the manifest
 
 Configuration answers a different question:
 
@@ -253,7 +263,7 @@ MicroBundle loads its defaults
 
 There is no empty “default configuration file” requirement. Absence itself has meaning.
 
-## Configuration format is not an FSM_COS concern
+### Configuration format is not an FSM_COS concern
 
 FSM_COS does not parse JSON, YAML, XML, binary records, generated C#, or any other configuration representation.
 
@@ -269,7 +279,7 @@ FSM_COS
 MicroBundle
 ```
 
-## Roots versus dependencies
+### Roots versus dependencies
 
 Suppose the requested root is:
 
@@ -298,7 +308,7 @@ A dependency's domain-owned `MicroBundleDependencyRequest` may still carry depen
 
 That compatibility detail does **not** move configuration into the manifest.
 
-## What does not belong in a Runtime Manifest?
+### What does not belong in a Runtime Manifest?
 
 A manifest should not quietly become:
 
@@ -330,41 +340,7 @@ RuntimeAssembly
     = what FSM_COS successfully assembled
 ```
 
-## Authoring → publication → composition
-
-A rich authoring environment may know far more than the runtime needs:
-
-```text
-rich authoring model
-        │
-        ├── names
-        ├── ontology
-        ├── variants
-        ├── dependencies
-        ├── provenance
-        └── editor metadata
-        │
-        ▼
-     validation
-        │
-        ▼
-MicroBundle IDs + requested versions
-        │
-        ▼
- Runtime Manifest
-        │
-        ├─────────────── optional configuration source
-        │                                  │
-        ▼                                  ▼
- Catalog / Resolver ───────────────► FSM_COS
-                                        │
-                                        ▼
-                                 RuntimeAssembly
-```
-
-This is a compression boundary: authoring can be rich without forcing the composition kernel to become an editor.
-
-## Stability
+### Stability
 
 A useful long-term property is:
 
@@ -376,7 +352,40 @@ It means the composition request remains meaningful when moved between hosts.
 
 A newer manifest is a new versioned request, not an in-place update to an active `RuntimeAssembly`. The current kernel does not retrieve or refresh manifests, obtain developer consent for side-by-side replacement, switch a running composition to a new generation, or retire an older generation. This package does not define those lifecycle contracts.
 
-## Related documents
+## 04 — See it in a minute
+
+### Example
+
+```csharp
+var manifest = new RuntimeManifest(
+    RuntimeId: 1001,
+    Bundles:
+    [
+        new MicroBundleManifestEntry(10, "1.2.0"),
+        new MicroBundleManifestEntry(20, "3.1.0")
+    ]);
+```
+
+This means:
+
+- runtime `1001` is being assembled;
+- MicroBundle `10` is requested at `1.2.0`;
+- MicroBundle `20` is requested at `3.1.0`;
+- configuration is **not** embedded in the manifest.
+
+The catalog/resolver is responsible for locating a compatible artifact. FSM_COS verifies the resolved root reports the requested version before loading it.
+
+### Conflicting requests for the same root identity
+
+A manifest must not request the same MicroBundle ID at two different versions. For example, requesting bundle `10` at both `1.2.0` and `2.0.0` is ambiguous: one runtime composition cannot silently satisfy both root requests by choosing whichever catalog result happens to load first. FSM_COS detects conflicting versions for the same root ID and fails before loading the composition.
+
+If two parts of an application genuinely require incompatible versions of one capability, model that incompatibility explicitly rather than relying on duplicate IDs in one manifest.
+
+**An explicit root version also remains authoritative when that same MicroBundle is reached through another root's dependency graph.** FSM_COS resolves the distinct root ID/version requests before invoking any MicroBundle `Load` method, then reuses those selected root instances during dependency traversal. If a requested root version cannot be resolved, composition fails before loading begins. When a published schedule is supplied, its dependency-graph validation uses those same selected root instances, so the schedule check and actual composition cannot silently disagree about the version chosen for an explicitly requested root.
+
+## 05 — Choose your next step
+
+### Related documents
 
 - [FSM_COS Architecture](ARCHITECTURE.md)
 - [FSM_COS Theory](THEORY.md)
