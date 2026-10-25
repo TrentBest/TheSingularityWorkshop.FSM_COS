@@ -518,7 +518,7 @@ The test suite includes a deliberately domain-owned example in `FsmCosTests`: tw
 
 ---
 
-Run the [minimal consumer recipe](../samples/FSM_COS.MinimalConsumer/Program.md) for the full composition path; use the linked arbitration tests in [FsmCosTests.cs](../tests/FSM_COS.Tests/FsmCosTests.cs) for convergence and failure cases.
+Run the [minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md) for the full composition path; use the linked arbitration tests in [FsmCosTests.cs](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/tests/FSM_COS.Tests/FsmCosTests.cs) for convergence and failure cases.
 
 ## 05 — Choose your next step
 
