@@ -145,9 +145,6 @@ HAND OFF
 
 ---
 
-<!-- THE SINGULARITY WORKSHOP FOOTER -->
-<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
-
 ## 02 — Why does arbitration exist?
 
 ### Why interoperability is normally difficult
@@ -528,3 +525,6 @@ Run the [minimal consumer recipe](../samples/FSM_COS.MinimalConsumer/Program.md)
 - [Architecture](ARCHITECTURE.md) — where arbitration sits in the full pipeline.
 - [Composition Failures](COMPOSITION_FAILURES.md) — failure phases and compensation.
 - [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) — consumer-side integration.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
