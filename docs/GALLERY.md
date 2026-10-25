@@ -3,11 +3,13 @@
 
 # FSM_COS Gallery
 
+## 01 — What does this gallery show?
+
 **Describe the capability. Resolve its prerequisites. Assemble the runtime. Hand it back to the host.**
 
 FSM_COS turns a declared request into a dependency-ordered composition. These exhibits show the journey from requested capability to `RuntimeAssembly`, with each visual linked to a guide for using the corresponding contract. Animated elements explain the flow; they are not live runtime telemetry.
 
-## Start here — from request to runtime
+### Start here — from request to runtime
 
 ![FSM_COS runtime composition overview](assets/fsm-cos-overview.svg)
 
@@ -15,13 +17,23 @@ A manifest names the capabilities the host wants. Dependencies add the prerequis
 
 **Build this flow into your application:** [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) · [Run the minimal consumer](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md).
 
-## 01 — Runtime composition at a glance
+## 02 — Why is it organized as exhibits?
+
+Each exhibit isolates one composition concept and routes you to the guide that owns its details. The goal is to connect a visual explanation to a real contract or recipe—not to make an animated picture stand in for implementation evidence.
+
+## 03 — How should I use the gallery?
+
+Start with the overview, then choose the exhibit closest to the question you have. Follow its deep-dive link for the contract and recipe. Treat animated diagrams as explanations, not runtime telemetry, unless a specific exhibit says it captures actual execution.
+
+## 04 — See it in a minute
+
+### 01 — Runtime composition at a glance
 
 **See:** how a manifest request becomes a dependency-closed runtime assembly.
 
 **Deep dive:** [What FSM_COS is](WHAT_IS_FSM_COS.md) · [Architecture](ARCHITECTURE.md).
 
-## 02 — Dependency resolution
+### 02 — Dependency resolution
 
 ![Dependency resolution](assets/dependency-resolution.svg)
 
@@ -29,7 +41,7 @@ A manifest names the capabilities the host wants. Dependencies add the prerequis
 
 **Deep dive:** [Domain and composition model](DOMAIN.md) · [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md).
 
-## 03 — Preflight validation and failure boundaries
+### 03 — Preflight validation and failure boundaries
 
 ![FSM_COS preflight](assets/fsm-cos-preflight.svg)
 
@@ -37,7 +49,7 @@ A manifest names the capabilities the host wants. Dependencies add the prerequis
 
 **Deep dive:** [Runtime manifest](RUNTIME_MANIFEST.md) · [Runtime boundary](RUNTIME_BOUNDARY.md).
 
-## 04 — Arbitration and convergence
+### 04 — Arbitration and convergence
 
 ![Arbitration convergence](assets/arbitration-convergence.svg)
 
@@ -45,7 +57,7 @@ A manifest names the capabilities the host wants. Dependencies add the prerequis
 
 **Deep dive:** [Arbitration](ARBITRATION.md).
 
-## 05 — RuntimeAssembly handoff
+### 05 — RuntimeAssembly handoff
 
 ![Runtime assembly handoff](assets/runtime-assembly-handoff.svg)
 
@@ -53,7 +65,7 @@ A manifest names the capabilities the host wants. Dependencies add the prerequis
 
 **Deep dive:** [Runtime assembly](RUNTIME_ASSEMBLY.md) · [WebPage integration](WEBPAGE_INTEGRATION.md).
 
-## 06 — MicroBundle as a composable unit
+### 06 — MicroBundle as a composable unit
 
 ![MicroBundle cartridge](assets/microbundle-cartridge.svg)
 
@@ -61,7 +73,7 @@ A manifest names the capabilities the host wants. Dependencies add the prerequis
 
 **Deep dive:** [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md) · [Theory](THEORY.md).
 
-## 07 — The crane metaphor
+### 07 — The crane metaphor
 
 ![FSM_COS crane illustration](assets/fsm-cos-crane.svg)
 
@@ -69,7 +81,9 @@ A manifest names the capabilities the host wants. Dependencies add the prerequis
 
 **Deep dive:** [Architecture](ARCHITECTURE.md) · [Runtime Boundary](RUNTIME_BOUNDARY.md).
 
-## Choose your next step
+## 05 — Choose your next step
+
+### Choose your next step
 
 - **Understand the problem and model:** [What Is FSM_COS?](WHAT_IS_FSM_COS.md).
 - **Use the composition API:** [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md).
