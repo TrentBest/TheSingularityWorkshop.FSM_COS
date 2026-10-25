@@ -113,6 +113,8 @@ FSM_COS does not read the file or interpret its format.
 
 If no configuration exists, the bundle receives no external configuration and uses its own defaults.
 
+> For a fair comparison between direct workload execution and FSM_COS, see [Workload Benchmarking](WORKLOAD_BENCHMARKING.md): composition, activation, warm-up, and steady-state timing are separate measurements.
+
 ## Minimal composition
 
 Start by running the complete, source-controlled example:
