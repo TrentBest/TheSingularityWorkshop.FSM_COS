@@ -7,7 +7,9 @@ FSM_COS includes contracts for describing a published dependency schedule and tr
 
 ![Manifest planning and load-plan concepts](assets/runtime-manifest-pipeline.svg)
 
-## Responsibilities
+## 01 — What are staged-manifest contracts?
+
+### Responsibilities
 
 - **`RuntimeManifest`** identifies the requested root MicroBundles and their requested versions. It can also carry optional schedule and load-plan metadata.
 - **`RuntimeManifestEntry`** combines a published `MicroBundleReference` with its intended `ManifestLoadStage`.
@@ -17,7 +19,23 @@ FSM_COS includes contracts for describing a published dependency schedule and tr
 
 The schedule is dependency metadata, not the FSM_API process scheduler. The load plan is state tracking, not an artifact repository or execution engine.
 
-## Current composition behavior
+## 02 — Why is staged metadata separate from execution?
+
+### When to use these contracts
+
+Use the schedule to validate and query a published dependency graph before composition. Use the load plan when a host needs an explicit record of localization and loading state. Use `FsmCos.Execute` for the current synchronous composition behavior.
+
+For the request contract, see [Runtime Manifest](RUNTIME_MANIFEST.md). For a runnable consumer and catalog implementation, see [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md).
+
+
+---
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
+
+## 03 — How do current plan and state transitions work?
+
+### Current composition behavior
 
 When `FsmCos.Execute` receives a manifest, it resolves the requested MicroBundles through the host-supplied catalog, validates the reachable dependency closure, and loads dependencies before dependents. If schedule metadata is supplied, FSM_COS checks it against the catalog-resolved graph before calling bundle `Load()` methods. It then runs bounded arbitration and returns a `RuntimeAssembly` only when a complete round reports no changes.
 
@@ -30,7 +48,7 @@ The optional stage labels do **not** change this execution path. In particular, 
 
 These are not current FSM_COS APIs. A host may build lifecycle behavior around the exposed contracts, but must not treat stage metadata alone as implementation of that lifecycle.
 
-## Load-plan state transitions
+### Load-plan state transitions
 
 A new plan starts each entry in `Published`.
 
@@ -41,14 +59,12 @@ A new plan starts each entry in `Published`.
 
 The plan and schedule expose read-only collection snapshots. This protects collection structure, not the mutability of domain-owned `IMicroBundle` objects.
 
-## When to use these contracts
+## 04 — See it in a minute
 
-Use the schedule to validate and query a published dependency graph before composition. Use the load plan when a host needs an explicit record of localization and loading state. Use `FsmCos.Execute` for the current synchronous composition behavior.
+Inspect [RuntimeManifestPlanningTests.cs](../tests/FSM_COS.Tests/RuntimeManifestPlanningTests.cs) to see which plan validation and state-transition behaviors are tested. These tests do not turn plan metadata into a deferred activation engine.
 
-For the request contract, see [Runtime Manifest](RUNTIME_MANIFEST.md). For a runnable consumer and catalog implementation, see [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md).
+## 05 — Choose your next step
 
-
----
-
-<!-- THE SINGULARITY WORKSHOP FOOTER -->
-<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
+- [Runtime Manifest](RUNTIME_MANIFEST.md) — published request contract.
+- [RuntimeAssembly](RUNTIME_ASSEMBLY.md) — successful handoff contract.
+- [Composition Failures](COMPOSITION_FAILURES.md) — phase-aware failure behavior.
