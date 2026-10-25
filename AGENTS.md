@@ -41,7 +41,7 @@ If the work is ambiguous or changes architectural direction, present the evidenc
 
 ## Before starting a task
 
-Read `docs/PAUSE_POINT.md`, `docs/BRANCH_RECONCILIATION.md`, and the relevant working-task or architecture documents. Check the current branch heads and working CI status rather than relying on a prior session summary.
+Read `docs/PAUSE_POINT.md`, `docs/BRANCH_RECONCILIATION.md`, `docs/IMPLEMENTATION_DOCUMENTATION_MATRIX.md`, `.github/notes/DOCUMENTATION_AUDIT.md`, and the relevant working-task or architecture documents. Check the current branch heads and working CI status rather than relying on a prior session summary.
 
 
 ---
