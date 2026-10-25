@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <AssemblyName>FSM_COS.Benchmarks</AssemblyName>
+    <RootNamespace>FSM_COS.Benchmarks</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.15.2" />
+    <ProjectReference Include="../../src/FSM_COS/FSM_COS.csproj" />
+  </ItemGroup>
+</Project>
