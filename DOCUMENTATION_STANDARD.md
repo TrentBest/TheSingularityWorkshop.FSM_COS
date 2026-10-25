@@ -112,9 +112,31 @@ If generation or static analysis is not implemented, the documentation must say 
 
 Use contrast for priority, repetition for recognition, proximity for ownership, and concrete metaphors for abstract systems. Diagrams need descriptive alt text, explanatory captions, readable labels, and accurate boundaries. Avoid hype as a substitute for evidence. State prerequisites, poor-fit scenarios, maturity, limitations, and performance context honestly.
 
+## README badge policy
+
+Every repository README should retain a small, intentional badge row near the top, immediately after the identity/moniker area and before the main introduction. Badges are part of the repository's public documentation and visual identity—not disposable decoration. When editing a README, preserve existing badges unless a badge is demonstrably broken, obsolete, or misleading; do not silently remove or replace them as collateral formatting cleanup.
+
+Use badges that communicate useful, verifiable project status. Common candidates include:
+
+- **CI / build status:** link to the authoritative workflow or check that actually validates the repository.
+- **Latest published package/version:** link to the canonical package registry and show the published version, not an unreleased version.
+- **License:** only when the repository's license is present and the badge agrees with it.
+- **Test coverage, release status, downloads, or documentation:** only when a trustworthy source exists and the displayed metric/status has a clear meaning.
+
+### Badge integrity
+
+- Every badge must link to the authoritative destination where appropriate and have meaningful accessible text.
+- Prefer badges that update from their source over hand-maintained status claims.
+- Never add a green/passing badge unless its target genuinely represents the check described; a passing workflow is evidence only for the checks that workflow performs.
+- Do not invent coverage percentages, maturity scores, release claims, download counts, or package versions. If a useful metric cannot be verified, omit that badge until it can be sourced.
+- Avoid badge clutter: keep the row concise and project-relevant. Badges supplement—not replace—the README's explanation, proof, limitations, and release notes.
+- When adding or changing a workflow, package ID, default branch, or release process, verify that dependent badge URLs and labels still resolve and still describe the right thing.
+- Include badge presence and correctness in README review. A documentation-only change must not accidentally erase badges.
+
 ## Review checklist
 
 - [ ] README follows the shared reader journey where applicable.
+- [ ] README retains a concise, verified badge row; badge links, labels, and claims remain accurate.
 - [ ] A newcomer can find a first proof and a non-coder learning path.
 - [ ] What/why/how, ownership, non-goals, and dependency direction are clear.
 - [ ] Implemented behavior is distinguished from plans and conceptual illustrations.
