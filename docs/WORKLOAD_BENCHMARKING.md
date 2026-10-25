@@ -1,3 +1,5 @@
+![The Singularity Workshop animated moniker](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Renderer/development/docs/assets/moniker.svg)
+
 # Workload Benchmarking: Composition vs. Execution
 
 This guide defines the measurement boundary for comparing a direct FSM_API workload with the same workload prepared as a MicroBundle through FSM_COS. It is an experiment design, not a performance claim.
@@ -67,3 +69,6 @@ The first iteration may use an in-memory catalog. That isolates FSM_COS composit
 - It does not require Azure or a remote server for the first experiment.
 
 The outcome should be a reproducible, use-case-specific estimate of composition cost and steady-state difference, with enough raw evidence to repeat the experiment later.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
