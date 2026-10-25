@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # FSM_COS Implementation-to-Documentation Matrix
 
 **Status: initial source/test mapping; not yet a completed release audit.** This file is the working bridge between the public explanation and the implementation. Its purpose is to make undocumented behavior, unsupported claims, and untested contracts visible. A row marked as mapped means a likely source/test location has been identified; it does not mean every edge case has been audited.
@@ -71,3 +74,6 @@ The audit is complete only when every public claim and meaningful contract has b
 ## Next audit pass
 
 Start with the source of truth, not the current prose: inspect `FsmCos.cs` and every public contract type; then walk the tests by behavior category. Update the matrix only when a source/test location has been verified. Where a contract is missing in the implementation, decide whether to implement it, narrow the public promise, or explicitly defer it.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
