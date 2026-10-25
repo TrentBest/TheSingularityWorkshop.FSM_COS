@@ -16,7 +16,8 @@
 
 | Stable ID | Benchmark method | Measurement boundary | Workload parameters |
 |---|---|---|---|
-| COS-MAN-001 | ManifestBenchmarks.COS_MAN_001_ConstructRuntimeManifest | Allocate a root-entry array and construct a RuntimeManifest; graph entries are prepared outside the timed method | 1, 10, 100, 1,000 roots |
+| COS-MAN-001 | ManifestBenchmarks.COS_MAN_001_BuildRootsAndConstructRuntimeManifest | Allocate the root-entry array and construct a RuntimeManifest in the timed method | 1, 10, 100, 1,000 roots |
+| COS-MAN-002 | ManifestBenchmarks.COS_MAN_002_ConstructRuntimeManifestFromPreparedRoots | Construct a RuntimeManifest from root entries prepared in global setup; isolates the constructor cost | 1, 10, 100, 1,000 roots |
 | COS-CMP-001 | CompositionBenchmarks.COS_CMP_001_ExecuteEmptyManifest | Execute an empty manifest against an empty in-memory catalog; includes the returned RuntimeAssembly | Empty |
 | COS-CMP-002 | CompositionBenchmarks.COS_CMP_002_ComposeIndependentRoots | Execute a manifest with independent root bundles; catalog, bundle instances and manifest are prepared in global setup | 1, 10, 100, 1,000 roots |
 | COS-CMP-003 | DependencyChainBenchmarks.COS_CMP_003_ComposeDependencyChain | Resolve and compose a linear dependency chain from one requested root; setup excluded | 1, 10, 100 bundles |
