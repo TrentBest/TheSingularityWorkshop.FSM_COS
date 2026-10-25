@@ -13,6 +13,20 @@ Teach from experience toward abstraction: show a recognizable problem; use a fam
 
 Keep a focused document set: README for orientation and proof; learning/getting-started guide; theory and architecture; exact API/contracts; runnable tutorials; Gallery.md with a two-sentence overview and links to detailed recipes; per-type documentation; companion per-type UML/use-case pages; and verification/status docs. Prefer one authoritative explanation per topic. Gallery visuals should teach through real output, identify how to reproduce it, and state what they do and do not prove.
 
+### Canonical five-part document shape
+
+The README's five-part journey is a reusable information shape, not a README-only trick. Apply it to major public guides and package documentation so readers learn where to find each kind of answer:
+
+1. **01 — What:** define the subject, scope, vocabulary, and contract in plain language.
+2. **02 — Why:** explain the problem, motivation, trade-offs, and when the subject is or is not useful.
+3. **03 — How:** describe the real process, API, ownership, and steps needed to use or change it.
+4. **04 — See it in a minute:** provide the smallest meaningful example, diagram, output, test, or reproducible verification path.
+5. **05 — Choose your next step:** link to the single authoritative deeper guide, exact reference, related task, or maintainer procedure.
+
+Keep the five roles and their order stable; tailor the visible heading wording to the document's subject. Do not pad a document merely to fill a section: say briefly when a role is not applicable and route the reader to the canonical source. A contract reference may put its precise normative rules inside **How**; a tutorial may put prerequisites and expected output in **See it**; a Gallery uses the same roles to orient, explain the purpose of the exhibits, show how to reproduce them, and route to recipes. Avoid creating multiple authoritative homes for the same fact.
+
+This five-part shape applies to substantive public guides, not blindly to every artifact. Generated UML/type cards, machine-readable reports, release evidence checklists, changelogs, security reporting instructions, and internal audit ledgers keep the format appropriate to their job, while still stating scope, evidence, limitations, and next action where relevant.
+
 ## Accuracy and evidence
 
 Source is authoritative for implementation claims. Separate implemented behavior, current development state, intended architecture, and future work. Label examples as **Verified** (built/run against a named version/commit), **Source-checked** (checked but not executed), or **Conceptual** (illustrative, not runnable). Diagrams must be identified as source-derived, authored conceptual models, or captured runtime observations. Record target identity, source/revision, analysis scope, generation path, unresolved relationships, and regeneration/check instructions where applicable. A green CI badge is not an explanation of what was tested. Never imply that a static picture proves runtime behavior or that fixture-level generation proves repository-wide automation.
