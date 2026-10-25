@@ -13,8 +13,9 @@
 
 It is the point where composition ends and host-specific execution can begin.
 
+## 01 — What is RuntimeAssembly?
 
-## UML class diagram: assembly handoff
+### UML class diagram: assembly handoff
 
 This is a simplified, source-derived overview of the handoff relationships, not a complete per-type API inventory. Method signatures are abbreviated for legibility; consult the source and contract sections below for exact generic overloads, parameter types, and nullability.
 
@@ -59,7 +60,7 @@ RuntimeAssembly is a snapshot of the loaded MicroBundle references and the conve
 
 It is the point where composition ends and host-specific execution can begin.
 
-## The alpha contract
+### The alpha contract
 
 The current implementation exposes:
 
@@ -91,7 +92,7 @@ The assembly records:
 
 It does not become a host, renderer, scheduler, or Experience.
 
-## The handoff
+### The handoff
 
 The flow is intentionally simple:
 
@@ -112,7 +113,29 @@ RuntimeAssembly
 
 The assembly is therefore a **semantic handoff**, not a platform-specific object.
 
-## What the host can do
+## 02 — Why is the handoff deliberately narrow?
+
+### Why this boundary matters
+
+If FSM_COS returned a host-specific runtime object, the composition kernel would quickly accumulate platform dependencies.
+
+Instead:
+
+```text
+composition semantics
+        ↓
+RuntimeAssembly
+        ↓
+host semantics
+        ↓
+observable experience
+```
+
+That separation is what allows a single composition request to be consumed by different manifestations.
+
+## 03 — How should a host use the result?
+
+### What the host can do
 
 Once it receives the assembly, the host can:
 
@@ -134,7 +157,7 @@ Therefore the host or a separately authored integration MicroBundle must explici
 
 The provider descriptor and provider-resolution semantics belong to [MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain); FSM_COS does not define or invoke a provider merely because its ID appears in a descriptor.
 
-## What the assembly does not promise
+### What the assembly does not promise
 
 A RuntimeAssembly does not promise:
 
@@ -151,25 +174,13 @@ It says:
 
 The assembly is a stable handoff snapshot, not a live update manager. The current API does not provide in-place replacement, unload/dispose, generation reference tracking, or automatic retirement. The host owns those lifecycle decisions; they are outside the current FSM_COS contract.
 
-## Why this boundary matters
+## 04 — See it in a minute
 
-If FSM_COS returned a host-specific runtime object, the composition kernel would quickly accumulate platform dependencies.
+Run the [minimal consumer recipe](../samples/FSM_COS.MinimalConsumer/Program.md) to observe the returned assembly and dependency-first order.
 
-Instead:
+## 05 — Choose your next step
 
-```text
-composition semantics
-        ↓
-RuntimeAssembly
-        ↓
-host semantics
-        ↓
-observable experience
-```
-
-That separation is what allows a single composition request to be consumed by different manifestations.
-
-## Related concepts
+### Related concepts
 
 - [Runtime Manifest](RUNTIME_MANIFEST.md)
 - [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md)
