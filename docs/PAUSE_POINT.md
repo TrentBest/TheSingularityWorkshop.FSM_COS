@@ -3,9 +3,9 @@
 
 # FSM_COS Release Pause Point
 
-This is the maintainer handoff for the active FSM_COS release candidate. It records verified facts and the next critical path; it is not consumer-facing product documentation.
+This is the maintainer handoff for FSM_COS release work. The checkpoint below is a historical snapshot from 2026-10-22, not a live status report; refresh branch heads, artifacts, and workflows before relying on it. It is not consumer-facing product documentation.
 
-## Current checkpoint — 2026-10-22
+## Last recorded checkpoint — 2026-10-22 (historical snapshot)
 
 - Release: TheSingularityWorkshop.FSM_COS 0.1.0-alpha.7.
 - Authoritative branch: development.
@@ -13,6 +13,8 @@ This is the maintainer handoff for the active FSM_COS release candidate. It reco
 - Verification: [Pack and publish workflow run 1114](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/39866658509) passed build-and-test, public-package-compatibility, and source-integration; publish_nuget was skipped as intended.
 - Permanent branches: development and master. Do not merge the old master into development. The owner intends to replace master with the verified development tree as a separate release operation.
 - Publication: not authorized. Keep the workflow's && false hard gate unchanged.
+
+The documentation reorganization and implementation-to-documentation audit are active on `development`; use the current [documentation index](../DOCUMENTATION_INDEX.md) and [implementation/documentation matrix](IMPLEMENTATION_DOCUMENTATION_MATRIX.md) for that work. Do not treat this 2026-10-22 pause point or its workflow link as evidence for the current candidate.
 
 ## What remains before declaring release-ready
 
