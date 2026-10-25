@@ -30,9 +30,6 @@ For the request contract, see [Runtime Manifest](RUNTIME_MANIFEST.md). For a run
 
 ---
 
-<!-- THE SINGULARITY WORKSHOP FOOTER -->
-<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
-
 ## 03 — How do current plan and state transitions work?
 
 ### Current composition behavior
@@ -68,3 +65,6 @@ Inspect [RuntimeManifestPlanningTests.cs](../tests/FSM_COS.Tests/RuntimeManifest
 - [Runtime Manifest](RUNTIME_MANIFEST.md) — published request contract.
 - [RuntimeAssembly](RUNTIME_ASSEMBLY.md) — successful handoff contract.
 - [Composition Failures](COMPOSITION_FAILURES.md) — phase-aware failure behavior.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
