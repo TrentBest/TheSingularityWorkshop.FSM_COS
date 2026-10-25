@@ -44,7 +44,7 @@
     <None Include="../../NuGet.README.md" Pack="true" PackagePath="" />
     <None Include="../../LICENSE.txt" Pack="true" PackagePath="" />
     <None Include="../../SECURITY.md" Pack="true" PackagePath="" />
-    <None Include="../../DOCUMENTATION_INDEX.md" Pack="true" PackagePath="" />
+    <None Include="../../NuGet.DOCUMENTATION_INDEX.md" Pack="true" PackagePath="DOCUMENTATION_INDEX.md" />
     <None Include="../../docs/LEARNING_GUIDE.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/UML_VISUAL_STYLE.md" Pack="true" PackagePath="docs/" />
     <!-- Ship task-oriented consumer documentation only. Internal roadmaps, ancestry,
