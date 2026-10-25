@@ -5,7 +5,9 @@
 
 > **Purpose:** build a consumer that composes MicroBundles with FSM_COS. The MicroBundle contract itself belongs to [MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain); this guide covers the inputs your host supplies and the composition behavior FSM_COS provides.
 
-## The boundary
+## 01 — What does a consumer supply?
+
+### The boundary
 
 ![Dependency closure: root A depends on B and D, B depends on C, and depth-first composition loads C, B, D, then A](assets/dependency-resolution.svg)
 
@@ -38,7 +40,7 @@ The source can be an in-memory catalog, a repository adapter, local artifacts, g
 
 FSM_COS does not require a particular storage or delivery mechanism.
 
-## What FSM_COS consumes
+### What FSM_COS consumes
 
 FSM_COS consumes three intentionally small inputs.
 
@@ -115,23 +117,48 @@ If no configuration exists, the bundle receives no external configuration and us
 
 > For a fair comparison between direct workload execution and FSM_COS, see [Workload Benchmarking](WORKLOAD_BENCHMARKING.md): composition, activation, warm-up, and steady-state timing are separate measurements.
 
-## Minimal composition
+## 02 — Why use one composition algorithm?
 
-Start by running the complete, source-controlled example:
+### One composition algorithm, different catalogs
 
-```bash
-dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
+The same FSM_COS package can support very different environments.
+
+```text
+Developer A
+    manifest
+      ↓
+in-memory catalog
+      ↓
+FSM_COS
+      ↓
+desktop host
+
+Developer B
+    manifest
+      ↓
+repository catalog
+      ↓
+FSM_COS
+      ↓
+WebPage / Blazor
+
+Developer C
+    manifest
+      ↓
+remote catalog
+      ↓
+FSM_COS
+      ↓
+distributed host
 ```
 
-The [Minimal Consumer sample in the source repository](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.cs) is intentionally small and includes the pieces a real composition needs: a catalog, two MicroBundles, a versioned manifest, and the call to `FsmCos.Execute`. Its output demonstrates that a requested bundle's dependency is loaded first.
+The composition algorithm does not need to change because the delivery mechanism changed.
 
-The sample references the local FSM_COS project so it can be built and checked before a candidate version is published. It is not a package-installation test. Once using a published package, reference the available version from NuGet and use the same public contracts.
+That is the point of the boundary.
 
-The sample uses an in-memory catalog. No repository is required. No configuration source is required. No GUI framework is required. No serialization framework is required.
+## 03 — How do I build a composition?
 
-The composition kernel is useful with only the contracts it actually consumes.
-
-## Adding configuration
+### Adding configuration
 
 Configuration is optional and separate from the manifest. To supply it, implement the public `IMicroBundleConfigurationSource` contract and pass that implementation as the second argument to `FsmCos.Execute`.
 
@@ -143,7 +170,7 @@ Here, `cos`, `manifest`, and `configurationSource` refer to objects your applica
 
 The source can obtain configuration from local files, Azure Blob, a repository artifact, generated resources, or another application-owned location. FSM_COS receives the bytes through the contract and does not interpret their format. If no configuration exists, the MicroBundle uses its own defaults.
 
-## Using a repository
+### Using a repository
 
 A repository adapter can implement `IMicroBundleCatalog` and provide the artifacts requested by the manifest.
 
@@ -165,7 +192,7 @@ This is where **TheSingularityWorkshop.MicroBundleRepository** can participate.
 
 FSM_COS does not need to know whether the catalog came from that repository, another repository, or an application's own implementation.
 
-## Supplying your own MicroBundle
+### Supplying your own MicroBundle
 
 FSM_COS does not prescribe the internal implementation of a MicroBundle. For the complete domain definition, use MicroBundleDomain documentation. Here we only show the portion an FSM_COS developer must provide to the composition boundary.
 
@@ -204,7 +231,7 @@ stable assembly
 
 For the complete domain contract, use the MicroBundleDomain package documentation rather than duplicating it here.
 
-## MicroBundle dependency graph
+### MicroBundle dependency graph
 
 A root MicroBundle can declare dependencies through the domain contract.
 
@@ -231,7 +258,7 @@ Cycles fail composition.
 
 FSM_COS does not silently invent a substitute.
 
-## Version selection
+### Version selection
 
 Version is a manifest concern for root requests.
 
@@ -256,7 +283,7 @@ This prevents a catalog from silently returning a different version than the pub
 
 Dependency version policy remains a concern of the domain/repository contract that supplies those dependency relationships. FSM_COS does not invent a second versioning system inside the composition kernel.
 
-## Arbitration
+### Arbitration
 
 After loading, FSM_COS gives every loaded MicroBundle an opportunity to participate in reconciliation.
 
@@ -278,13 +305,13 @@ If the composition still reports changes after the maximum, FSM_COS fails rather
 
 See [Arbitration and Convergence](ARBITRATION.md).
 
-## Failure behavior and cleanup
+### Failure behavior and cleanup
 
 A failed `Execute` propagates the failure and does not return a `RuntimeAssembly`. FSM_COS completes all reachable bundle loads before it begins arbitration, so a load failure prevents arbitration from starting.
 
 This is not transactional loading: if a dependency's `Load` succeeds and a later dependent bundle's `Load` throws, FSM_COS cannot undo the dependency's arbitrary in-memory or external side effects. Exceptions during arbitration likewise do not produce an assembly, but FSM_COS cannot roll back mutations made by bundle code. Put cleanup and lifecycle recovery at the layer that owns those effects; do not assume a failed composition attempt automatically restores every bundle to its previous state. See [Architecture — Failure and partial side effects](ARCHITECTURE.md#failure-and-partial-side-effects).
 
-## Troubleshooting
+### Troubleshooting
 
 | Symptom | What to check |
 |---|---|
@@ -299,7 +326,7 @@ This is not transactional loading: if a dependency's `Load` succeeds and a later
 
 These checks help locate the failing boundary. Avoid fixing a catalog or host problem by adding storage, UI, or transport responsibilities to FSM_COS itself.
 
-## RuntimeAssembly
+### RuntimeAssembly
 
 Successful composition produces:
 
@@ -335,44 +362,7 @@ FSM_COS stops at the assembly boundary.
 
 The host decides what the assembly means operationally.
 
-## One composition algorithm, different catalogs
-
-The same FSM_COS package can support very different environments.
-
-```text
-Developer A
-    manifest
-      ↓
-in-memory catalog
-      ↓
-FSM_COS
-      ↓
-desktop host
-
-Developer B
-    manifest
-      ↓
-repository catalog
-      ↓
-FSM_COS
-      ↓
-WebPage / Blazor
-
-Developer C
-    manifest
-      ↓
-remote catalog
-      ↓
-FSM_COS
-      ↓
-distributed host
-```
-
-The composition algorithm does not need to change because the delivery mechanism changed.
-
-That is the point of the boundary.
-
-## Direct package dependencies
+### Direct package dependencies
 
 FSM_COS currently has three direct package dependencies, each with a distinct responsibility. The host can choose its UI, repository, serialization format, configuration storage, scheduler, and rendering engine without making those systems part of the composition kernel.
 
@@ -382,7 +372,27 @@ FSM_COS currently has three direct package dependencies, each with a distinct re
 | **MicroBundleDomain** | MicroBundle identity, version metadata, dependencies, load context, arbitration context, and runtime contract | the meaning, ontology, authoring model, or storage of MicroBundles |
 | **FSM_UserIO** | the optional `SemanticIntent` value carried from `RuntimeManifest` to `RuntimeAssembly` | input-device handling, UI presentation, or execution authority |
 
-## Related documents
+## 04 — See it in a minute
+
+### Minimal composition
+
+Start by running the complete, source-controlled example:
+
+```bash
+dotnet run --project samples/FSM_COS.MinimalConsumer/FSM_COS.MinimalConsumer.csproj
+```
+
+The [Minimal Consumer sample in the source repository](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.cs) is intentionally small and includes the pieces a real composition needs: a catalog, two MicroBundles, a versioned manifest, and the call to `FsmCos.Execute`. Its output demonstrates that a requested bundle's dependency is loaded first.
+
+The sample references the local FSM_COS project so it can be built and checked before a candidate version is published. It is not a package-installation test. Once using a published package, reference the available version from NuGet and use the same public contracts.
+
+The sample uses an in-memory catalog. No repository is required. No configuration source is required. No GUI framework is required. No serialization framework is required.
+
+The composition kernel is useful with only the contracts it actually consumes.
+
+## 05 — Choose your next step
+
+### Related documents
 
 - [Architecture](ARCHITECTURE.md)
 - [Runtime Manifest](RUNTIME_MANIFEST.md)
@@ -396,7 +406,7 @@ FSM_COS currently has three direct package dependencies, each with a distinct re
 
 ---
 
-## 🔗 Resources & Support
+### 🔗 Resources & Support
 
 - **Project:** [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
 - **Workshop projects:** [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
