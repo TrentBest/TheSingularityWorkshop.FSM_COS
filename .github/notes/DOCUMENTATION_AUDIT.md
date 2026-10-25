@@ -7,6 +7,28 @@
 
 **Standard:** No sentence, paragraph, page, diagram, or historical artifact is protected merely because it already exists. Preserve only material that explains a real contract, supports a real task, records important history, or provides evidence that cannot be cheaply recreated. Rewrite, merge, relocate, archive, or delete the rest after checking dependencies and source truth.
 
+## Current checkpoint — 2026-10-25
+
+The five-part reader journey is now aligned across `README.md`, `NuGet.README.md`, and `DOCUMENTATION_INDEX.md`:
+
+1. What
+2. Why
+3. How
+4. See it in a minute
+5. Choose your next step
+
+The documentation index is the public navigation layer. The new `docs/IMPLEMENTATION_DOCUMENTATION_MATRIX.md` is maintainer audit material and must not be linked as a packaged consumer document: the source tree and tests it links to are not shipped in the NuGet package. `AGENTS.md` now directs maintainers to the matrix and this audit register.
+
+The first source/test map is in place, but the audit is **not complete**. A significant audit dimension is build-mode parity: normal package mode consumes published dependencies, while `WorkshopUseRepositorySources=true` defines `WORKSHOP_USE_REPOSITORY_SOURCES` and conditionally changes members such as pre-resolved arbitration/configuration fields. The public package API and repository-source API must be compared explicitly. Recent documentation commits triggered fresh Pack and CodeQL workflows; do not treat them as passed until the exact current HEAD is checked.
+
+Immediate next passes:
+- verify the current HEAD's package workflow and CodeQL results;
+- compare the five-section structure and all local links in README, NuGet README, and index;
+- complete the public-type/member inventory against both build modes;
+- reconcile each contract page with implementation and tests, prioritizing composition failures, configuration ownership, rollback semantics, staged-plan metadata, and runtime-experience lifecycle;
+- check whether each source companion/UML card/use-case is accurate and whether diagram generation is actually reproducible;
+- record implementation gaps separately from documentation gaps before deciding what to implement.
+
 ## Product definition to keep consistent
 
 FSM_COS is the Workshop's **Compute Operating System layer for runtime composition**. It takes a `RuntimeManifest`, resolves the requested MicroBundles through a host-supplied catalog, discovers and validates the dependency closure, loads prerequisites before dependents, performs bounded arbitration, and returns a `RuntimeAssembly` to the host.
