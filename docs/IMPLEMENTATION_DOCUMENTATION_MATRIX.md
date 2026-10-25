@@ -56,6 +56,18 @@ These are not implied by the existence of related names or planning metadata:
 - In-process MicroBundles are not sandboxed merely because they pass through the composition kernel.
 - A source version, release-note file, green historical workflow, or README badge does not prove that the current HEAD is release-ready or that a package version has been published.
 
+## First-pass source findings to carry into the detailed audit
+
+These points were confirmed while reading the current source, but each still needs to be reconciled with the authoritative contract page and relevant tests before the audit can close.
+
+- **Resource bounds:** `FsmCos` defaults to 10 arbitration rounds, 10,000 bundles, 100,000 dependency requests/edges, and 64 MiB of configuration data. Document the bound's scope and boundary conditions from source/tests; do not treat the defaults as universal guarantees for a host's total memory or CPU use.
+- **Input ownership:** composition snapshots manifest collections and configuration bytes to isolate the request from later caller/callback mutation. `RuntimeAssembly` snapshots the bundle list, but retains the bundle instances; this is not a deep clone or an immutability/thread-safety guarantee for MicroBundles.
+- **Failure phases:** `TryExecute` reports a `RuntimeCompositionPhase` and retains the original exception. Its result API does not promise that external side effects are undone.
+- **Compensation:** attempted bundle loads are offered `IMicroBundleRollback` compensation in reverse attempt order. Only bundles implementing that optional contract participate, and compensation failures are aggregated with the original composition failure. Do not describe this as an atomic transaction.
+- **Registry lifecycle:** `RuntimeExperienceRegistry` protects membership and active-selection metadata with a lock and returns a snapshot of its registry map. Removing an assembly does not unload or dispose the bundle instances; selection does not start or stop execution.
+- **Build-mode API parity:** the repository-source build conditionally exposes pre-resolved manifest/configuration behavior that is absent from the ordinary package build. Public docs must describe the shipped package contract, while repository-only behavior must be clearly identified as such.
+- **Thread-safety boundary:** the registry has explicit locking; that fact must not be generalized into a claim that arbitrary catalog implementations, MicroBundle callbacks, bundle instances, or a complete composition run are globally thread-safe.
+
 ## Audit completion checklist
 
 The audit is complete only when every public claim and meaningful contract has been checked against implementation and tests at the same revision.
