@@ -8,8 +8,6 @@ namespace FSM_COS.Benchmarks;
 [ShortRunJob]
 public class CompositionBenchmarks
 {
-    private FsmCos _emptyComposer = null!;
-    private RuntimeManifest _emptyManifest = null!;
     private FsmCos _composer = null!;
     private RuntimeManifest _manifest = null!;
 
@@ -19,20 +17,32 @@ public class CompositionBenchmarks
     [GlobalSetup]
     public void Setup()
     {
-        _emptyComposer = new FsmCos(new BenchmarkCatalog(Array.Empty<BenchmarkBundle>()));
-        _emptyManifest = RuntimeManifest.Empty(1);
-
         var graph = BenchmarkWorkloads.IndependentGraph(BundleCount);
         _composer = new FsmCos(graph.Catalog);
         _manifest = graph.Manifest;
     }
 
-    [Benchmark(Description = "COS-CMP-001 Execute empty manifest")]
-    public RuntimeAssembly COS_CMP_001_ExecuteEmptyManifest() =>
-        _emptyComposer.Execute(_emptyManifest);
-
     [Benchmark(Description = "COS-CMP-002 Compose independent roots")]
     public RuntimeAssembly COS_CMP_002_ComposeIndependentRoots() =>
+        _composer.Execute(_manifest);
+}
+
+[MemoryDiagnoser]
+[ShortRunJob]
+public class EmptyManifestBenchmarks
+{
+    private FsmCos _composer = null!;
+    private RuntimeManifest _manifest = null!;
+
+    [GlobalSetup]
+    public void Setup()
+    {
+        _composer = new FsmCos(new BenchmarkCatalog(Array.Empty<BenchmarkBundle>()));
+        _manifest = RuntimeManifest.Empty(1);
+    }
+
+    [Benchmark(Description = "COS-CMP-001 Execute empty manifest")]
+    public RuntimeAssembly COS_CMP_001_ExecuteEmptyManifest() =>
         _composer.Execute(_manifest);
 }
 
