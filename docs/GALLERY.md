@@ -83,8 +83,6 @@ Start with the overview, then choose the exhibit closest to the question you hav
 
 ## 05 — Choose your next step
 
-### Choose your next step
-
 - **Understand the problem and model:** [What Is FSM_COS?](WHAT_IS_FSM_COS.md).
 - **Use the composition API:** [Consuming MicroBundles](CONSUMING_MICROBUNDLES.md).
 - **Inspect runtime boundaries:** [RuntimeAssembly](RUNTIME_ASSEMBLY.md) and [Runtime Boundary](RUNTIME_BOUNDARY.md).
@@ -96,7 +94,7 @@ Start with the overview, then choose the exhibit closest to the question you hav
 
 ---
 
-## 🔗 Resources & Support
+### 🔗 Resources & Support
 
 - **Project:** [FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS)
 - **Workshop projects:** [FSM_API](https://github.com/TrentBest/FSM_API) · [FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) · [WebPage](https://github.com/TrentBest/WebPage)
