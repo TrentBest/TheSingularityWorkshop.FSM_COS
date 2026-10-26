@@ -56,8 +56,8 @@ public class RuntimeManifestLoadPlanBenchmarks
     public MicroBundleRuntimeState COS_LOAD_002_LookupPublishedBundleState() =>
         _freshPlan.GetState((ulong)BundleCount);
 
-    [Benchmark(Description = "COS-LOAD-003 Mark bundle localized")]
-    public void COS_LOAD_003_MarkBundleLocalized() =>
+    [Benchmark(Description = "COS-LOAD-003 Re-mark localized bundle (idempotent)")]
+    public void COS_LOAD_003_ReMarkLocalizedBundle() =>
         _freshPlan.MarkLocalized(1);
 
     [Benchmark(Description = "COS-LOAD-004 Lookup loaded bundle state")]
