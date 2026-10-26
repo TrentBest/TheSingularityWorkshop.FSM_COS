@@ -67,6 +67,22 @@ public class RuntimeManifestLoadPlanBenchmarks
     [Benchmark(Description = "COS-LOAD-005 Evaluate eligible promotions")]
     public int COS_LOAD_005_EvaluateEligiblePromotions() =>
         _localizedPlan.EvaluatePromotions(_evaluator, experienceContext: null, _schedule).Count();
+
+    // Invocation setup is excluded from the measured method so each invocation
+    // measures a real Published -> Localized -> Loaded transition rather than
+    // repeatedly exercising the idempotent Loaded-state fast path.
+    [InvocationSetup(Target = nameof(COS_LOAD_006_MarkBundleLoaded))]
+    public void SetupLoadedTransition()
+    {
+        _transitionPlan = new RuntimeManifestLoadPlan(_entries, _schedule);
+        _transitionPlan.MarkLocalized((ulong)BundleCount);
+    }
+
+    private RuntimeManifestLoadPlan _transitionPlan = null!;
+
+    [Benchmark(Description = "COS-LOAD-006 Mark localized bundle loaded")]
+    public void COS_LOAD_006_MarkBundleLoaded() =>
+        _transitionPlan.MarkLoaded((ulong)BundleCount);
 }
 
 internal sealed class BenchmarkManifestLoadEvaluator : IManifestLoadEvaluator
