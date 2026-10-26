@@ -16,7 +16,7 @@ jobs:
   observe:
     name: Observe the completed package workflow
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 60
     steps:
       - name: Checkout pinned CiAi source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -47,41 +47,58 @@ jobs:
           TARGET_BRANCH: ${{ github.ref_name }}
         run: |
           set -euo pipefail
-          run_id=""
-          for attempt in $(seq 1 30); do
+          package_run_id=""
+          benchmark_run_id=""
+          package_state=""
+          benchmark_state=""
+          for attempt in $(seq 1 90); do
             runs="$(gh api "repos/$TARGET_REPOSITORY/actions/runs?head_sha=$TARGET_SHA&per_page=100")"
-            run_id="$(jq -r --arg sha "$TARGET_SHA" --arg branch "$TARGET_BRANCH" '
+            package_run_id="$(jq -r --arg sha "$TARGET_SHA" --arg branch "$TARGET_BRANCH" '
               [.workflow_runs[] | select(
                 .path == ".github/workflows/package.yml" and
                 (.head_sha | ascii_downcase) == ($sha | ascii_downcase) and
                 .event == "push" and .head_branch == $branch
               )] | sort_by(.run_number) | last | .id // empty
             ' <<< "$runs")"
-            if [[ -n "$run_id" ]]; then
-              run_state="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$run_id" --jq '.status')"
-              if [[ "$run_state" == "completed" ]]; then
-                break
-              fi
+            benchmark_run_id="$(jq -r --arg sha "$TARGET_SHA" --arg branch "$TARGET_BRANCH" '
+              [.workflow_runs[] | select(
+                .path == ".github/workflows/benchmarks.yml" and
+                (.head_sha | ascii_downcase) == ($sha | ascii_downcase) and
+                .event == "push" and .head_branch == $branch
+              )] | sort_by(.run_number) | last | .id // empty
+            ' <<< "$runs")"
+
+            package_state="missing"
+            benchmark_state="missing"
+            if [[ -n "$package_run_id" ]]; then
+              package_state="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$package_run_id" --jq '.status')"
             fi
-            echo "Waiting for the exact package workflow run to complete (attempt $attempt/30)..."
+            if [[ -n "$benchmark_run_id" ]]; then
+              benchmark_state="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$benchmark_run_id" --jq '.status')"
+            fi
+            if [[ "$package_state" == "completed" && "$benchmark_state" == "completed" ]]; then
+              break
+            fi
+            echo "Waiting for required package and benchmark workflows (attempt $attempt/90; package=$package_state, benchmark=$benchmark_state)..."
             sleep 30
           done
-          if [[ -z "$run_id" || "$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$run_id" --jq '.status')" != "completed" ]]; then
-            echo "The package workflow did not reach a terminal state within the bounded wait."
+          if [[ -z "$package_run_id" || -z "$benchmark_run_id" || "$package_state" != "completed" || "$benchmark_state" != "completed" ]]; then
+            echo "Required package and benchmark workflows did not both reach terminal states within the bounded wait."
             exit 1
           fi
-          export CIAI_REQUIRED_WORKFLOW_PATHS=".github/workflows/package.yml#$run_id"
+          export CIAI_REQUIRED_WORKFLOW_PATHS=".github/workflows/package.yml#$package_run_id;.github/workflows/benchmarks.yml#$benchmark_run_id"
           mkdir -p artifacts
           dotnet run --project _tools/CiAi/samples/TheSingularityWorkshop.CiAi.ObserveRun --configuration Release --no-build -- "$TARGET_REPOSITORY" "$TARGET_SHA" artifacts/commit-observation.json
-          jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" --arg run_id "$run_id" '
+          jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" --arg package_id "$package_run_id" --arg benchmark_id "$benchmark_run_id" '
             .schema == "ciai.commit-observation.v1" and
             (.repository | ascii_downcase) == ($repo | ascii_downcase) and
             (.headSha | ascii_downcase) == ($sha | ascii_downcase) and
             .discoveryComplete == true and
             .complete == true and
-            (.requiredWorkflowResults | length) == 1 and
-            .requiredWorkflowResults[0].State == "passed" and
-            (.requiredWorkflowResults[0].MatchingRunIds | map(tostring) | index($run_id)) != null
+            (.requiredWorkflowResults | length) == 2 and
+            ([.requiredWorkflowResults[].State] | all(. == "passed")) and
+            ([.requiredWorkflowResults[].MatchingRunIds[] | tostring] | index($package_id)) != null and
+            ([.requiredWorkflowResults[].MatchingRunIds[] | tostring] | index($benchmark_id)) != null
           ' artifacts/commit-observation.json
 
       - name: Upload CiAi observation evidence
