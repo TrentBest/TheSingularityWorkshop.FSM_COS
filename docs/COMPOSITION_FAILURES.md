@@ -58,7 +58,7 @@ See [Architecture](ARCHITECTURE.md), [Runtime Boundary](RUNTIME_BOUNDARY.md), [A
 
 ## 04 — See it in a minute
 
-Inspect failure-focused cases in [FsmCosTests.cs](../tests/FSM_COS.Tests/FsmCosTests.cs). The test suite is evidence for the checked cases, not a promise that every external side effect can be undone.
+Inspect failure-focused cases in [FsmCosTests.cs](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/tests/FSM_COS.Tests/FsmCosTests.cs). The test suite is evidence for the checked cases, not a promise that every external side effect can be undone.
 
 ## 05 — Choose your next step
 
