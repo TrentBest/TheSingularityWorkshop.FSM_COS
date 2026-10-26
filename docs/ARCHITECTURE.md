@@ -238,7 +238,7 @@ Hosts should catch failures at their composition boundary, preserve the exceptio
 
 ## 04 — See it in a minute
 
-The smallest runnable proof is the [minimal consumer recipe](../samples/FSM_COS.MinimalConsumer/Program.md), which demonstrates dependency-first composition. It is a sample of the public composition path, not a hosted application or artifact-delivery system.
+The smallest runnable proof is the [minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md), which demonstrates dependency-first composition. It is a sample of the public composition path, not a hosted application or artifact-delivery system.
 
 ## 05 — Choose your next step
 
