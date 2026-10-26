@@ -326,12 +326,12 @@ jobs:
         run: dotnet nuget push "./artifacts-public/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
 
   ciai-observation:
-    name: CiAi read-only commit evidence (advisory)
+    name: CiAi required read-only commit evidence
     # Observe after the package lanes finish, including when a lane fails.
-    # This is an advisory report, not a release approval or publish permission.
+    # Required evidence collection: incomplete or failed observation fails this workflow.
+    # The report is not a release approval or publication permission.
     if: ${{ always() }}
     needs: [build-and-test, public-package-compatibility, source-integration]
-    continue-on-error: true
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
