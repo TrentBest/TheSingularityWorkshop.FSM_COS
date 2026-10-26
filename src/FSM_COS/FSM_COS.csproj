@@ -56,6 +56,9 @@
     <None Include="../../docs/CONSUMING_MICROBUNDLES.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/WORKLOAD_BENCHMARKING.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/DOMAIN.md" Pack="true" PackagePath="docs/" />
+    <!-- Keep the packaged domain guide's minimal-consumer link usable in NuGet. -->
+    <None Include="../../samples/FSM_COS.MinimalConsumer/Program.md" Pack="true" PackagePath="samples/FSM_COS.MinimalConsumer/" />
+    <None Include="../../samples/FSM_COS.MinimalConsumer/Program.cs" Pack="true" PackagePath="samples/FSM_COS.MinimalConsumer/" />
     <None Include="../../docs/ARBITRATION.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/RUNTIME_ASSEMBLY.md" Pack="true" PackagePath="docs/" />
     <None Include="../../docs/RUNTIME_BOUNDARY.md" Pack="true" PackagePath="docs/" />
