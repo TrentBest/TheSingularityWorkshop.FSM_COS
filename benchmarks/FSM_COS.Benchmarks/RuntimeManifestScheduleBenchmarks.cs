@@ -44,4 +44,12 @@ public class RuntimeManifestScheduleBenchmarks
     [Benchmark(Description = "COS-SCH-004 Enumerate independent entries")]
     public int COS_SCH_004_EnumerateIndependentEntries() =>
         _schedule.IndependentEntries.Count;
+
+    [Benchmark(Description = "COS-SCH-005 Query dependencies for missing bundle")]
+    public int COS_SCH_005_QueryDependenciesForMissingBundle() =>
+        _schedule.DependenciesOf((ulong)BundleCount + 1).Count;
+
+    [Benchmark(Description = "COS-SCH-006 Check readiness of independent bundle")]
+    public bool COS_SCH_006_CheckReadinessOfIndependentBundle() =>
+        _schedule.IsDependencyReady((ulong)BundleCount, static _ => true);
 }
