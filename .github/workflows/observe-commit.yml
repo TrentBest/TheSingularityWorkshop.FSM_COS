@@ -82,13 +82,22 @@ jobs:
             echo "Waiting for required package and benchmark workflows (attempt $attempt/90; package=$package_state, benchmark=$benchmark_state)..."
             sleep 30
           done
-          if [[ -z "$package_run_id" || -z "$benchmark_run_id" || "$package_state" != "completed" || "$benchmark_state" != "completed" ]]; then
-            echo "Required package and benchmark workflows did not both reach terminal states within the bounded wait."
-            exit 1
+          if [[ -n "$package_run_id" ]]; then
+            package_attempt="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$package_run_id" --jq '.run_attempt')"
+            package_selector=".github/workflows/package.yml#$package_run_id#$package_attempt"
+          else
+            package_selector=".github/workflows/package.yml#missing"
           fi
-          package_attempt="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$package_run_id" --jq '.run_attempt')"
-          benchmark_attempt="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$benchmark_run_id" --jq '.run_attempt')"
-          export CIAI_REQUIRED_WORKFLOW_PATHS=".github/workflows/package.yml#$package_run_id#$package_attempt;.github/workflows/benchmarks.yml#$benchmark_run_id#$benchmark_attempt"
+          if [[ -n "$benchmark_run_id" ]]; then
+            benchmark_attempt="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$benchmark_run_id" --jq '.run_attempt')"
+            benchmark_selector=".github/workflows/benchmarks.yml#$benchmark_run_id#$benchmark_attempt"
+          else
+            benchmark_selector=".github/workflows/benchmarks.yml#missing"
+          fi
+          if [[ "$package_state" != "completed" || "$benchmark_state" != "completed" ]]; then
+            echo "Required package and/or benchmark workflow did not reach a terminal state within the bounded wait; preserving a failing observation report."
+          fi
+          export CIAI_REQUIRED_WORKFLOW_PATHS="$package_selector;$benchmark_selector"
           mkdir -p artifacts
           dotnet run --project _tools/CiAi/samples/TheSingularityWorkshop.CiAi.ObserveRun --configuration Release --no-build -- "$TARGET_REPOSITORY" "$TARGET_SHA" artifacts/commit-observation.json
           jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" --arg package_id "$package_run_id" --arg package_attempt "$package_attempt" --arg benchmark_id "$benchmark_run_id" --arg benchmark_attempt "$benchmark_attempt" '
