@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: TrentBest/TheSingularityWorkshop.CiAi
-          ref: c71bfc979448fb75945737272b8fba47345bb99c
+          ref: b315258827408d52eea1fca110a280646f5460fc
           path: _tools/CiAi
 
       - name: Setup .NET
