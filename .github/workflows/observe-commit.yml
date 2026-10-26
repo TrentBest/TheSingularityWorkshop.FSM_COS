@@ -55,14 +55,14 @@ jobs:
             runs="$(gh api "repos/$TARGET_REPOSITORY/actions/runs?head_sha=$TARGET_SHA&per_page=100")"
             package_run_id="$(jq -r --arg sha "$TARGET_SHA" --arg branch "$TARGET_BRANCH" '
               [.workflow_runs[] | select(
-                .path == ".github/workflows/package.yml" and
+                (.path | split("@")[0]) == ".github/workflows/package.yml" and
                 (.head_sha | ascii_downcase) == ($sha | ascii_downcase) and
                 .event == "push" and .head_branch == $branch
               )] | sort_by(.run_number) | last | .id // empty
             ' <<< "$runs")"
             benchmark_run_id="$(jq -r --arg sha "$TARGET_SHA" --arg branch "$TARGET_BRANCH" '
               [.workflow_runs[] | select(
-                .path == ".github/workflows/benchmarks.yml" and
+                (.path | split("@")[0]) == ".github/workflows/benchmarks.yml" and
                 (.head_sha | ascii_downcase) == ($sha | ascii_downcase) and
                 .event == "push" and .head_branch == $branch
               )] | sort_by(.run_number) | last | .id // empty
