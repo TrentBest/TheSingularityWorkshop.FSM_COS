@@ -1,9 +1,7 @@
 name: CiAi Commit Evidence
 
 on:
-  workflow_run:
-    workflows: ["Pack and publish"]
-    types: [completed]
+  push:
     branches: [development, master]
 
 permissions:
@@ -11,7 +9,7 @@ permissions:
   actions: read
 
 concurrency:
-  group: ciai-commit-evidence-${{ github.event.workflow_run.id }}
+  group: ciai-commit-evidence-${{ github.sha }}
   cancel-in-progress: false
 
 jobs:
@@ -43,14 +41,39 @@ jobs:
         shell: bash
         env:
           CIAI_GITHUB_TOKEN: ${{ github.token }}
-          CIAI_REQUIRED_WORKFLOW_PATHS: .github/workflows/package.yml#${{ github.event.workflow_run.id }}
-          TARGET_REPOSITORY: ${{ github.event.workflow_run.repository.full_name }}
-          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+          GH_TOKEN: ${{ github.token }}
+          TARGET_REPOSITORY: ${{ github.repository }}
+          TARGET_SHA: ${{ github.sha }}
+          TARGET_BRANCH: ${{ github.ref_name }}
         run: |
           set -euo pipefail
+          run_id=""
+          for attempt in $(seq 1 30); do
+            runs="$(gh api "repos/$TARGET_REPOSITORY/actions/runs?head_sha=$TARGET_SHA&per_page=100")"
+            run_id="$(jq -r --arg sha "$TARGET_SHA" --arg branch "$TARGET_BRANCH" '
+              [.workflow_runs[] | select(
+                .path == ".github/workflows/package.yml" and
+                (.head_sha | ascii_downcase) == ($sha | ascii_downcase) and
+                .event == "push" and .head_branch == $branch
+              )] | sort_by(.run_number) | last | .id // empty
+            ' <<< "$runs")"
+            if [[ -n "$run_id" ]]; then
+              run_state="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$run_id" --jq '.status')"
+              if [[ "$run_state" == "completed" ]]; then
+                break
+              fi
+            fi
+            echo "Waiting for the exact package workflow run to complete (attempt $attempt/30)..."
+            sleep 30
+          done
+          if [[ -z "$run_id" || "$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$run_id" --jq '.status')" != "completed" ]]; then
+            echo "The package workflow did not reach a terminal state within the bounded wait."
+            exit 1
+          fi
+          export CIAI_REQUIRED_WORKFLOW_PATHS=".github/workflows/package.yml#$run_id"
           mkdir -p artifacts
           dotnet run --project _tools/CiAi/samples/TheSingularityWorkshop.CiAi.ObserveRun --configuration Release --no-build -- "$TARGET_REPOSITORY" "$TARGET_SHA" artifacts/commit-observation.json
-          jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" --arg run_id "${{ github.event.workflow_run.id }}" '
+          jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" --arg run_id "$run_id" '
             .schema == "ciai.commit-observation.v1" and
             (.repository | ascii_downcase) == ($repo | ascii_downcase) and
             (.headSha | ascii_downcase) == ($sha | ascii_downcase) and
