@@ -1,0 +1,73 @@
+name: CiAi Commit Evidence
+
+on:
+  workflow_run:
+    workflows: ["Pack and publish"]
+    types: [completed]
+    branches: [development, master]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: ciai-commit-evidence-${{ github.event.workflow_run.id }}
+  cancel-in-progress: false
+
+jobs:
+  observe:
+    name: Observe the completed package workflow
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout pinned CiAi source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: TrentBest/TheSingularityWorkshop.CiAi
+          ref: c71bfc979448fb75945737272b8fba47345bb99c
+          path: _tools/CiAi
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build and verify the pinned CiAi contract
+        working-directory: _tools/CiAi
+        run: |
+          dotnet restore CiAi.slnx
+          dotnet build CiAi.slnx --configuration Release --no-restore
+          dotnet run --project tests/TheSingularityWorkshop.CiAi.ContractTests --configuration Release --no-build
+
+      - name: Observe the exact completed package workflow run
+        shell: bash
+        env:
+          CIAI_GITHUB_TOKEN: ${{ github.token }}
+          CIAI_REQUIRED_WORKFLOW_PATHS: .github/workflows/package.yml#${{ github.event.workflow_run.id }}
+          TARGET_REPOSITORY: ${{ github.event.workflow_run.repository.full_name }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          dotnet run --project _tools/CiAi/samples/TheSingularityWorkshop.CiAi.ObserveRun --configuration Release --no-build -- "$TARGET_REPOSITORY" "$TARGET_SHA" artifacts/commit-observation.json
+          jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" --arg run_id "${{ github.event.workflow_run.id }}" '
+            .schema == "ciai.commit-observation.v1" and
+            (.repository | ascii_downcase) == ($repo | ascii_downcase) and
+            (.headSha | ascii_downcase) == ($sha | ascii_downcase) and
+            .discoveryComplete == true and
+            .complete == true and
+            (.requiredWorkflowResults | length) == 1 and
+            .requiredWorkflowResults[0].State == "passed" and
+            (.requiredWorkflowResults[0].MatchingRunIds | map(tostring) | index($run_id)) != null
+          ' artifacts/commit-observation.json
+
+      - name: Upload CiAi observation evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: ciai-commit-observation-${{ github.event.workflow_run.id }}
+          path: |
+            artifacts/commit-observation.json
+            artifacts/commit-observation.md
+          if-no-files-found: warn
+          retention-days: 14
