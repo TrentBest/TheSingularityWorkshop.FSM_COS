@@ -58,7 +58,7 @@ The plan and schedule expose read-only collection snapshots. This protects colle
 
 ## 04 — See it in a minute
 
-Inspect [RuntimeManifestPlanningTests.cs](../tests/FSM_COS.Tests/RuntimeManifestPlanningTests.cs) to see which plan validation and state-transition behaviors are tested. These tests do not turn plan metadata into a deferred activation engine.
+Use [Runtime Manifest](RUNTIME_MANIFEST.md) to explore the published request contract. Automated tests cover plan validation and state transitions; these tests do not turn plan metadata into a deferred activation engine.
 
 ## 05 — Choose your next step
 
