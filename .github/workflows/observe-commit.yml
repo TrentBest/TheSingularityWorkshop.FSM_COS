@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: TrentBest/TheSingularityWorkshop.CiAi
-          ref: b315258827408d52eea1fca110a280646f5460fc
+          ref: ad404f7948b2a57bf75e92eec7d4fb288270e6ae
           path: _tools/CiAi
 
       - name: Setup .NET
@@ -92,7 +92,7 @@ jobs:
           mkdir -p artifacts
           dotnet run --project _tools/CiAi/samples/TheSingularityWorkshop.CiAi.ObserveRun --configuration Release --no-build -- "$TARGET_REPOSITORY" "$TARGET_SHA" artifacts/commit-observation.json
           jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" --arg package_id "$package_run_id" --arg package_attempt "$package_attempt" --arg benchmark_id "$benchmark_run_id" --arg benchmark_attempt "$benchmark_attempt" '
-            .schema == "ciai.commit-observation.v1" and
+            .schema == "ciai.commit-observation.v2" and
             (.repository | ascii_downcase) == ($repo | ascii_downcase) and
             (.headSha | ascii_downcase) == ($sha | ascii_downcase) and
             .discoveryComplete == true and
