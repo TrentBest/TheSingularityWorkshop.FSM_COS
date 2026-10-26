@@ -86,10 +86,12 @@ jobs:
             echo "Required package and benchmark workflows did not both reach terminal states within the bounded wait."
             exit 1
           fi
-          export CIAI_REQUIRED_WORKFLOW_PATHS=".github/workflows/package.yml#$package_run_id;.github/workflows/benchmarks.yml#$benchmark_run_id"
+          package_attempt="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$package_run_id" --jq '.run_attempt')"
+          benchmark_attempt="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$benchmark_run_id" --jq '.run_attempt')"
+          export CIAI_REQUIRED_WORKFLOW_PATHS=".github/workflows/package.yml#$package_run_id#$package_attempt;.github/workflows/benchmarks.yml#$benchmark_run_id#$benchmark_attempt"
           mkdir -p artifacts
           dotnet run --project _tools/CiAi/samples/TheSingularityWorkshop.CiAi.ObserveRun --configuration Release --no-build -- "$TARGET_REPOSITORY" "$TARGET_SHA" artifacts/commit-observation.json
-          jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" --arg package_id "$package_run_id" --arg benchmark_id "$benchmark_run_id" '
+          jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" --arg package_id "$package_run_id" --arg package_attempt "$package_attempt" --arg benchmark_id "$benchmark_run_id" --arg benchmark_attempt "$benchmark_attempt" '
             .schema == "ciai.commit-observation.v1" and
             (.repository | ascii_downcase) == ($repo | ascii_downcase) and
             (.headSha | ascii_downcase) == ($sha | ascii_downcase) and
@@ -97,8 +99,8 @@ jobs:
             .complete == true and
             (.requiredWorkflowResults | length) == 2 and
             ([.requiredWorkflowResults[].State] | all(. == "passed")) and
-            ([.requiredWorkflowResults[].MatchingRunIds[] | tostring] | index($package_id)) != null and
-            ([.requiredWorkflowResults[].MatchingRunIds[] | tostring] | index($benchmark_id)) != null
+            ([.requiredWorkflowResults[].WorkflowPath] | index(".github/workflows/package.yml#" + $package_id + "#" + $package_attempt)) != null and
+            ([.requiredWorkflowResults[].WorkflowPath] | index(".github/workflows/benchmarks.yml#" + $benchmark_id + "#" + $benchmark_attempt)) != null
           ' artifacts/commit-observation.json
 
       - name: Upload CiAi observation evidence
