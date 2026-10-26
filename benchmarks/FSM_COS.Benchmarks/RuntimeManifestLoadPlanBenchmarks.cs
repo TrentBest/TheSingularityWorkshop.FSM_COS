@@ -60,8 +60,8 @@ public class RuntimeManifestLoadPlanBenchmarks
     public void COS_LOAD_003_MarkBundleLocalized() =>
         _freshPlan.MarkLocalized(1);
 
-    [Benchmark(Description = "COS-LOAD-004 Mark dependency-ready bundle loaded")]
-    public void COS_LOAD_004_MarkDependencyReadyBundleLoaded() =>
+    [Benchmark(Description = "COS-LOAD-004 Lookup loaded bundle state")]
+    public void COS_LOAD_004_LookupLoadedBundleState() =>
         _loadedPlan.GetState((ulong)BundleCount);
 
     [Benchmark(Description = "COS-LOAD-005 Evaluate eligible promotions")]
