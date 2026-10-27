@@ -47,5 +47,19 @@ No README badge has been removed or altered as part of this initial evidence pas
 
 This audit did not establish rendered badge image availability from every provider, a fresh Codecov upload timestamp, or the existence of a published FSM_COS package. It therefore makes no claim that all current badge URLs are healthy. No publishing, release-gate change, branch deletion, or destructive action was performed.
 
+## Development-branch follow-up — 2026-10-27
+
+**Reviewed ref:** `development` at commit `6b4872ef543bfd0468f87d33d5c39f6f319975aa` for the README badge destination change.
+
+| Badge | Current assessment | Evidence / remaining limit |
+|---|---|---|
+| GitHub Actions / CI | **Configured; live status not verified in this audit** | The README points to the existing `.github/workflows/package.yml` workflow and explicitly selects `development`. No current run result is inferred from the badge URL alone. |
+| NuGet version and downloads | **Unverified** | Both use the same package ID and NuGet package page. Current public-feed publication state was not established by this repository-only review. |
+| Codecov coverage | **Configured; live status unverified** | The workflow collects Cobertura coverage and requires the upload action to succeed; that does not independently verify the current badge image or latest received report. |
+| Last commit | **Configured** | The badge targets the repository's `development` commit history. |
+| MIT license | **Destination corrected** | Commit [`6b4872e`](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/6b4872ef543bfd0468f87d33d5c39f6f319975aa) now links the badge directly to [`LICENSE.txt`](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/LICENSE.txt), rather than a generic external license page. |
+
+This follow-up is a source/configuration review, not a live HTTP check of badge images or a fresh Codecov/NuGet verification. Keep unresolved provider state **unverified**, not broken. The original audit above describes the initial `master` review and is retained as historical evidence.
+
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
