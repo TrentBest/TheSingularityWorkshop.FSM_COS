@@ -560,6 +560,30 @@ public sealed class RuntimeManifestPlanningTests
         Assert.Equal(MicroBundleRuntimeState.Localized, plan.GetState(2));
     }
 
+
+    [Fact]
+    public void Schedule_dependency_queries_preserve_edge_order_and_return_read_only_cached_results()
+    {
+        var first = new RuntimeManifestEntry(Reference(1, "1.0.0"));
+        var second = new RuntimeManifestEntry(Reference(2, "1.0.0"));
+        var third = new RuntimeManifestEntry(Reference(3, "1.0.0"));
+        var edges = new[]
+        {
+            new RuntimeManifestDependency(3, 2),
+            new RuntimeManifestDependency(3, 1)
+        };
+        var schedule = new RuntimeManifestSchedule(new[] { first, second, third }, edges);
+
+        var result = schedule.DependenciesOf(3);
+
+        Assert.Equal(edges, result);
+        Assert.Same(result, schedule.DependenciesOf(3));
+        Assert.Empty(schedule.DependenciesOf(99));
+        Assert.True(schedule.IsDependencyReady(1, _ => throw new InvalidOperationException("No prerequisites should be queried.")));
+        Assert.Throws<NotSupportedException>(() =>
+            ((IList<RuntimeManifestDependency>)result).Add(new RuntimeManifestDependency(3, 1)));
+    }
+
     private static MicroBundleReference Reference(ulong id, string version) =>
         new(id, version, $"sha256:{id}-{version}");
 
