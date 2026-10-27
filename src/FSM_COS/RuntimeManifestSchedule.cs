@@ -13,6 +13,9 @@ public sealed class RuntimeManifestSchedule
     public const int DefaultMaximumEntryCount = 10_000;
     public const int DefaultMaximumDependencyCount = 100_000;
 
+    private readonly HashSet<ulong> _entryIds;
+    private readonly Dictionary<ulong, IReadOnlyList<RuntimeManifestDependency>> _dependenciesByBundle;
+
     public RuntimeManifestSchedule(
         IReadOnlyList<RuntimeManifestEntry> entries,
         IReadOnlyList<RuntimeManifestDependency> dependencies)
@@ -83,6 +86,13 @@ public sealed class RuntimeManifestSchedule
         Entries = Array.AsReadOnly(entries.ToArray());
         Dependencies = Array.AsReadOnly(dependencies.ToArray());
 
+        _entryIds = ids;
+        _dependenciesByBundle = Dependencies
+            .GroupBy(edge => edge.BundleId)
+            .ToDictionary(
+                group => group.Key,
+                group => (IReadOnlyList<RuntimeManifestDependency>)Array.AsReadOnly(group.ToArray()));
+
         var entriesWithPrerequisites = dependencies.Select(edge => edge.BundleId).ToHashSet();
         IndependentEntries = Array.AsReadOnly(Entries.Where(entry => !entriesWithPrerequisites.Contains(entry.Reference.BundleId)).ToArray());
         DependencyEntries = Array.AsReadOnly(Entries.Where(entry => entriesWithPrerequisites.Contains(entry.Reference.BundleId)).ToArray());
@@ -95,16 +105,29 @@ public sealed class RuntimeManifestSchedule
     public IReadOnlyList<RuntimeManifestEntry> IndependentEntries { get; }
     public IReadOnlyList<RuntimeManifestEntry> DependencyEntries { get; }
 
+    /// <summary>Gets the prerequisites for a bundle in original edge order.</summary>
+    /// <remarks>The returned collection is cached and read-only; an unknown ID has no prerequisites.</remarks>
     public IReadOnlyList<RuntimeManifestDependency> DependenciesOf(ulong bundleId) =>
-        Dependencies.Where(edge => edge.BundleId == bundleId).ToArray();
+        _dependenciesByBundle.TryGetValue(bundleId, out var dependencies)
+            ? dependencies
+            : Array.Empty<RuntimeManifestDependency>();
 
     public bool IsDependencyReady(ulong bundleId, Func<ulong, bool> isLoaded)
     {
         ArgumentNullException.ThrowIfNull(isLoaded);
-        if (!Entries.Any(entry => entry.Reference.BundleId == bundleId))
+        if (!_entryIds.Contains(bundleId))
             throw new KeyNotFoundException($"MicroBundle {bundleId} is not present in the schedule.");
 
-        return DependenciesOf(bundleId).All(edge => isLoaded(edge.DependencyId));
+        if (!_dependenciesByBundle.TryGetValue(bundleId, out var dependencies))
+            return true;
+
+        foreach (var dependency in dependencies)
+        {
+            if (!isLoaded(dependency.DependencyId))
+                return false;
+        }
+
+        return true;
     }
 
     private static T[] SnapshotBounded<T>(
