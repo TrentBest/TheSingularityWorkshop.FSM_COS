@@ -16,7 +16,6 @@ public sealed class FsmCosTests
         Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 0, 1));
         Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 1, 0));
         Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 1, 1, -1));
-        Assert.Throws<ArgumentOutOfRangeException>(() => new FsmCos(catalog, 10, 1, 1, -1));
     }
 
     [Fact]
@@ -1976,6 +1975,31 @@ public sealed class FsmCosTests
         Assert.Equal(RuntimeCompositionPhase.DependencyResolution, result.FailurePhase);
         Assert.IsType<InvalidOperationException>(result.Exception);
         Assert.Contains("could not be resolved", result.Exception!.Message);
+    }
+
+    [Fact]
+    public void TryExecute_preserves_composition_and_compensation_failures()
+    {
+        var compositionFailure = new InvalidOperationException("bundle load failed");
+        var compensationFailure = new InvalidOperationException("rollback failed");
+        var bundle = new TestBundle(1)
+        {
+            LoadException = compositionFailure,
+            RollbackException = compensationFailure
+        };
+
+        var result = new FsmCos(new TestCatalog(bundle))
+            .TryExecute(new RuntimeManifest(42, new[] { Entry(1) }));
+
+        Assert.False(result.Succeeded);
+        Assert.Null(result.Assembly);
+        Assert.Equal(RuntimeCompositionPhase.BundleLoading, result.FailurePhase);
+        var aggregate = Assert.IsType<AggregateException>(result.Exception);
+        Assert.Collection(
+            aggregate.InnerExceptions,
+            first => Assert.Same(compositionFailure, first),
+            second => Assert.Same(compensationFailure, second));
+        Assert.Equal(1, bundle.RollbackCalls);
     }
 
     [Fact]
