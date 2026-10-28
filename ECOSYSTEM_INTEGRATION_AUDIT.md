@@ -151,17 +151,23 @@ This is a concrete version mismatch across the inspected branch snapshots, but n
 
 **Why this matters:** A discoverable Experience record is not proof that every bundle it requests is published, immutable, retrievable, and verifiable.
 
+**Source-checked evidence**
+
+- The [Experiences build workflow](https://github.com/TrentBest/TheSingularityWorkshop.Experiences/blob/master/.github/workflows/build.yml) builds and packs the Forge, Moniker, and Elements projects, then stages their assemblies as workflow artifacts. Its inspected steps do not publish those outputs through the MicroBundle Repository REST API or create a published Experience pointer.
+- The repository REST host exposes MicroBundle artifact PUT/GET and Experience artifact retrieval/catalog-listing endpoints in [Program.cs](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/master/src/REST/TheSingularityWorkshop.MicroBundleRepository.Rest.Host/Program.cs).
+- The repository has immutable, content-addressed MicroBundle and Experience artifact contracts, plus an Experience publication catalog. Those are useful existing pieces; the gap is connecting publication and consumption as one proven pipeline.
+
 **Refactor**
 
-1. Map the current publication path in the Experiences repository, MicroBundleRepository, and any repository/catalog service. Identify who creates the manifest, bundle artifacts, immutable identity, and catalog entry.
+1. Connect the Experiences build/package workflow to the repository publication contract, with an explicit owner-approved publication trigger rather than publishing on every ordinary build.
 2. Make publication produce one consistent chain: bundle artifact(s) → content hashes and versions → Experience manifest referencing those identities → discoverable catalog entry.
-3. Verify that publication is idempotent and cannot overwrite bytes under an existing immutable identity.
-4. Ensure hosts retrieve through the repository contract rather than an alternate direct-storage path. Treat direct Azure uploads as a gap only after confirming the current workflow actually bypasses the repository; the present source pass did not establish the complete publication workflow.
+3. Make publication idempotent and ensure it cannot overwrite bytes under an existing immutable identity. The repository's immutable artifact storage and Experience publication-pointer contracts already provide pieces of this design; connect and test them as one workflow.
+4. Ensure hosts retrieve through the repository contract rather than an alternate direct-storage path. The inspected build workflow does not demonstrate a direct-Azure bypass; the confirmed gap is that its bundle outputs are staged as CI artifacts rather than published to the repository.
 5. Test from a clean consumer that has no local copy of the bundle implementation.
 
-**Acceptance evidence:** A clean-room publication-and-consumption test, including identity mismatch and missing-dependency failures.
+**Acceptance evidence:** A clean-room publication-and-consumption test, including identity mismatch, missing artifact, missing dependency, and immutable-write behavior.
 
-**Status:** The repository exposes REST endpoints for MicroBundle artifact PUT/GET and Experience artifact retrieval/catalog listing. The inspected Experiences workflow only stages package/assembly artifacts in CI, so end-to-end publication into that repository is not present in that workflow. Other manual or external publication paths were not exhaustively searched.
+**Status:** The repository exposes REST endpoints and the corresponding artifact/catalog abstractions. The inspected Experiences workflow only stages package/assembly artifacts in CI, so end-to-end publication into that repository is not present in that workflow. Other manual or external publication paths were not exhaustively searched.
 
 ### P3 — Remove transitional registries and demo scaffolding after replacement
 
