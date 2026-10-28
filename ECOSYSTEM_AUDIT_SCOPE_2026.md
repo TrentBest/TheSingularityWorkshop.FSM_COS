@@ -40,7 +40,7 @@ Status legend:
 | [AnyApp](https://github.com/TrentBest/AnyApp) | Source review started | Runtime composition, repository catalog, metaDev, StoryBuilder persistence, semantic exchange |
 | [WebPage](https://github.com/TrentBest/WebPage) | Source review started | Legacy Hub lifecycle, FSM_COS composition, activation path, fixed catalog, host adapter |
 | [TheSingularityWorkshop.WebApp](https://github.com/TrentBest/TheSingularityWorkshop.WebApp) | Source review started | Private heartbeat/actor FSMs, AnyApp parity, browser input and presentation |
-| [The](https://github.com/TrentBest/The) | Source review started | Architect startup lifecycle, async FSM callbacks, Foundry adoption, GUI command boundary |
+| [The](https://github.com/TrentBest/The) | Source review started | Architect async-void startup callback; pure lifecycle-policy tests exist but do not prove awaited provider/shutdown behavior |
 | [TheSingularityWorkshop.MyVR](https://github.com/TrentBest/TheSingularityWorkshop.MyVR) | Cross-repo sampled | Device capability, immersive lifecycle, bounded Experience interaction |
 | [StoryBuilder](https://github.com/TrentBest/StoryBuilder) | Source review started | Authoring and FSM_COS composition test exist; package-to-manifest-to-artifact-to-host vertical slice is explicitly not complete |
 | [TheSingularityWorkshop.Experiences](https://github.com/TrentBest/TheSingularityWorkshop.Experiences) | Source review started | Experience identity, publisher workflow, host-neutral lifecycle and demo integration |
