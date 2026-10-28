@@ -107,7 +107,6 @@ Status legend:
 |---|---|---|
 | [SimpleDemos](https://github.com/TrentBest/SimpleDemos) | Source review started | Trace-to-visualization, stress methodology, real consumer proofs |
 | [TheSingularityWorkshop](https://github.com/TrentBest/TheSingularityWorkshop) | Queued | Shared docs/brand/contracts and cross-repository navigation |
-| [TheSingularityWorkshop.FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) | Source review started | Canonical audit ledger and policy links |
 
 ## 03 — How coverage advances
 
