@@ -228,6 +228,37 @@ Reuse this strict evidence model across each repository's named tests and benchm
 
 The broader 2026 repository scope and review status are maintained in [ECOSYSTEM_AUDIT_SCOPE_2026.md](ECOSYSTEM_AUDIT_SCOPE_2026.md). A repository listed there is not considered fully audited merely because its README was read. Each entry must progress from inventory to source review, then tests/workflows and cross-repository contract verification.
 
+
+## 17 — P1: WebApp has a documented canonical architecture but still runs a parallel lifecycle
+
+**Direct development-branch evidence**
+
+- [WebApp README](https://github.com/TrentBest/TheSingularityWorkshop.WebApp/blob/development/README.md) says WebApp is “AnyApp for the web,” not another application runtime, and explicitly labels its gateway → Moniker → hub slice transitional.
+- [WebApp architecture](https://github.com/TrentBest/TheSingularityWorkshop.WebApp/blob/development/docs/ARCHITECTURE.md) says the host should translate browser events to application requests, compose the selected manifest through FSM_COS, and progress the Experience through the canonical execution owner. It explicitly states that successful FSM_COS composition alone does not prove the Experience executes.
+- [WebAppCosRuntime.cs](https://github.com/TrentBest/TheSingularityWorkshop.WebApp/blob/development/Infrastructure/WebAppCosRuntime.cs) composes a local Moniker bundle. Separately, [WebAppExperienceRuntime.cs](https://github.com/TrentBest/TheSingularityWorkshop.WebApp/blob/development/Infrastructure/WebAppExperienceRuntime.cs) creates page/actor FSMs and a private background heartbeat.
+- [WebAppCompositionTests.cs](https://github.com/TrentBest/TheSingularityWorkshop.WebApp/blob/development/tests/TheSingularityWorkshop.WebApp.Tests/WebAppCompositionTests.cs) tests that local Moniker composition works and that the transitional actor runtime starts. These tests do not prove a published manifest → repository artifact → FSM_COS composition → canonical execution → browser result path.
+- [AnyAppRuntime.cs](https://github.com/TrentBest/AnyApp/blob/development/AnyAppRuntime.cs) provides a concrete sibling-host composition path, including repository-backed closure preload and configuration resolution, but the AnyApp project is a Windows/WPF executable. WebApp architecture correctly warns against taking a direct project dependency on that desktop executable.
+
+**Decision:** This is a real integration gap already acknowledged by WebApp's own documentation, not a newly discovered requirement. The next step is to extract/reuse only the host-neutral request/manifest/result contract that is actually needed, connect web input to artifact resolution and FSM_COS, then use Foundry for workflow-owned execution/lifecycle where appropriate. Do not make WebApp depend on WPF, do not equate RuntimeAssembly with WorkflowDefinition, and do not remove the private heartbeat until parity and lifecycle tests prove the replacement.
+
+**Acceptance evidence:** a deterministic host-level test submits an Experience request, validates stable artifact identity, resolves a clean-cache manifest, composes through FSM_COS, starts exactly one canonical execution path, observes browser-facing state, and verifies cancellation/failure/disposal without duplicate ticks or leaked background work.
+
+**Confidence:** High that the current implementation is transitional and does not yet prove the intended end-to-end path; migration design remains subject to current Foundry/FSM_COS contracts and existing behavior-preservation tests.
+
+## 18 — P1: The Architect's async startup callbacks need an awaited lifecycle contract
+
+**Direct development-branch evidence**
+
+- [ArchitectFSM.cs](https://github.com/TrentBest/The/blob/development/Architect/ArchitectFSM.cs) declares its OnEnterFetchingStatus callback async void; startup also has a separate FetchingRepositories state.
+- [ARCHITECTURE_MEMORY.md](https://github.com/TrentBest/The/blob/development/docs/ARCHITECTURE_MEMORY.md) already identifies async-void startup callbacks as a concern: completion, failure, and shutdown need deterministic tests and an awaited lifecycle contract.
+- [StartupLifecyclePolicyTests.cs](https://github.com/TrentBest/The/blob/development/Architect.Tests/StartupLifecyclePolicyTests.cs) tests pure transition/degraded-status rules, but these policy tests alone do not prove asynchronous provider work is awaited, cancelled, or joined during shutdown.
+
+**Opportunity:** use the same explicit operation lifecycle vocabulary as Foundry where startup work genuinely qualifies as a workflow, or introduce a narrow awaited operation abstraction if a full workflow is unnecessary. Do not put WPF view models or GitHub credentials into Foundry. Keep the Architect's presentation and local credential boundary in The.
+
+**Acceptance evidence:** controlled fake providers prove success, failure, timeout/cancellation, no premature Ready state, no unobserved async exceptions, and shutdown waits for owned operations. Run these as deterministic tests; do not claim this behavior is fixed from the pure policy tests alone.
+
+**Confidence:** High for the async-void callback and the limited scope of existing policy tests; runtime failure modes have not been executed in this audit.
+
 ---
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
