@@ -259,6 +259,35 @@ The broader 2026 repository scope and review status are maintained in [ECOSYSTEM
 
 **Confidence:** High for the async-void callback and the limited scope of existing policy tests; runtime failure modes have not been executed in this audit.
 
+
+## 19 — P2: FSM_PackageManager advertises a runtime manager but its inspected implementation is a placeholder
+
+**Direct development-branch evidence**
+
+- [FSM_PackageManager.csproj](https://github.com/TrentBest/FSM_PackageManager/blob/development/FSM_PackageManager/FSM_PackageManager.csproj) describes a package that manages runtime package loading, dynamic FSM definitions, and package-to-package arbitration, and references FSM_API.
+- Its only inspected implementation file, [Class1.cs](https://github.com/TrentBest/FSM_PackageManager/blob/development/FSM_PackageManager/Class1.cs), contains an empty `Class1` type. The README is branding/documentation-standard content rather than an operational contract.
+
+**Disposition:** The project metadata and implementation do not currently establish a reusable package-management capability. Do not wire it into FSM_COS, Foundry, or MicroBundleRepository on the strength of its package description. First determine whether it is intentionally abandoned, a scaffold, or a package whose implementation lives elsewhere. If its intended responsibility is still needed, define a minimal executable contract and tests before any consumer adopts it.
+
+**Acceptance evidence:** documented scope and supported frameworks match public types; tests demonstrate the claimed load/resolve/arbitrate behavior; consumer and dependency direction are explicit; package publication remains separately authorized.
+
+**Confidence:** High for the inspected development-branch placeholder; historical release contents and consumer usage were not exhaustively audited.
+
+## 20 — P2: Treat TheForge as an architectural predecessor, not a source of drop-in implementations
+
+**Direct development-branch evidence**
+
+- [TheForge IMicroPackage](https://github.com/TrentBest/TheForge/blob/development/Assets/Scripts/MicroPackages/IMicroPackage.cs) defines Unity-message-associated process groups and package load/arbitrate callbacks.
+- [TheForge IPackageArbitrator](https://github.com/TrentBest/TheForge/blob/development/Assets/Scripts/MicroPackages/IPackageArbitrator.cs) contains package names, process-group mappings, arbitration mutations, and provider registration—concepts that overlap at a high level with current MicroBundleDomain/FSM_COS composition and arbitration.
+- [TheForge DataWarehouse](https://github.com/TrentBest/TheForge/blob/development/Assets/Scripts/Memory/DataWarehouse.cs) directly uses Unity Collections and unsafe raw memory. Its shown Dispose path frees the raw shelf but leaves NativeArray disposal commented out; this file is not interchangeable with the current platform-neutral DataWarehouse package.
+- [TheForge GraphicalUserInterfaceBuilder](https://github.com/TrentBest/TheForge/blob/development/Assets/Scripts/Builders/GuiBuilders/GraphicalUserInterfaceBuilder.cs) builds Unity UIElements and owns Unity-specific styling/layout state; it is not a replacement for GUI.Core semantic contracts or GUI.SVG/WPF/Blazor adapters.
+
+**Opportunity:** Map the valuable *concepts* from this older editor/tooling architecture to current owners: FSM_API for state-machine mechanics, MicroBundleDomain for capability contracts, FSM_COS for composition, GUI.Core for semantic UI, host adapters for Unity/WPF/Blazor/SVG presentation, and DataWarehouse for its own bounded memory-store contract. Only migrate a behavior after a concrete current consumer and parity tests exist. Do not copy Unity types, unsafe memory routines, or historical package-arbitration code into neutral packages.
+
+**Acceptance evidence:** a concept-to-current-owner map distinguishes retained behavior, replaced behavior, and intentionally retired behavior; each migrated behavior has a consumer test; unsafe allocation/disposal receives dedicated tests before any reuse.
+
+**Confidence:** High for the inspected files' ownership and technology dependencies; a complete TheForge source audit has not been performed.
+
 ---
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
