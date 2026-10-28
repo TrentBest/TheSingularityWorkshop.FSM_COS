@@ -1,0 +1,140 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
+# 2026 Ecosystem Audit Scope and Coverage Ledger
+
+**Owner:** Trent Best  
+**Status:** Active; inventory and first-pass coverage only  
+**Scope:** Repositories operated on during 2026 that are part of, support, demonstrate, benchmark, or host The Singularity Workshop ecosystem. This deliberately excludes unrelated older projects unless current-year work brings them back into scope.
+
+This is a **coverage ledger**, not a claim that every listed repository has already been audited. Repository README inspection alone does not count as source-level or integration verification. The audit is looking for missed reuse of existing Workshop technology, duplicated responsibilities, unfinished cross-repository contracts, and proof gaps.
+
+## 01 — Confirmed high-priority architecture findings
+
+| Priority | Finding | Current evidence | Next proof |
+|---|---|---|---|
+| P0 | Host execution/lifecycle boundaries are not yet unified through Foundry | Foundry development architecture says FSM_COS integration and a reusable FSM_API adapter are not implemented; WebApp documents a private heartbeat and 100 actor FSM contexts as transitional | Trace real AnyApp, WebPage, WebApp, and The callers; define a tested adapter without conflating Foundry workflows, FSM_COS composition, and FSM_API ticks |
+| P0 | WebPage's composition and Hub activation may create two execution paths | FSM_COS audit found composition followed by a separate Hub bundle activation; exact equivalence/intent needs caller and test verification | Trace lifecycle, cancellation, disposal, errors, and observable results end to end |
+| P1 | Published Experience resolution is not yet a single shared host path | AnyApp has repository-backed resolution; WebPage still has a fixed composition catalog; MicroBundleRepository has a version-aware catalog | Clean-checkout resolution by immutable BundleId + Version + ContentHash |
+| P1 | Publication, artifact delivery, and Experience discovery do not yet form a proven round trip | Publisher/workflow/catalog findings in the FSM_COS audit; repository REST catalog is read-oriented in inspected paths | Clean-room publish → catalog discovery → immutable retrieval → host composition test |
+| P1 | Foundry lifecycle exists, but cross-host adoption is incomplete | Foundry documents its own sequential runner/coordinator, while WebApp and The describe separate transitional lifecycle implementations | Host-by-host adapter and migration evidence; preserve host-owned presentation/capabilities |
+| P1 | Runtime observations and benchmark evidence are not yet proven to feed metaDev as a reproducible feedback loop | metaDev design and benchmark plans exist; implementation of the collector/adapter still needs source verification | Raw measurements with workload, commit, source/package mode, runtime/machine, allocations, phase timings, and outcomes |
+| P2 | Serialization consumer boundaries need a complete round-trip audit | StoryBuilder/AnyApp document binary workspace persistence, but restart/reopen and broader consumer coverage remain to be verified | Create/link/save/exit/restart/reopen plus malformed/truncated/compatibility tests |
+| P2 | Semantic intent integration needs shared conformance fixtures | AnyApp integrates ProtocolAi, GrammarAi, and FSM_UserIO; cross-package fixture coverage is not yet established | Unknown symbols, grammar rejection, protocol mismatch, and admission-vs-authorization cases |
+| P2 | DataWarehouse adoption should be evidence-driven | Low-level store and separate benchmark laboratory exist; no specific higher-level consumer benefit has yet been proven by this audit | Select a real simulation/telemetry workload and compare correctness, allocations, and performance |
+| P2 | MicroBundleIngestor publication policy needs repository-side proof | Forge-only Put authority is described as a policy; the repository host must enforce it | Negative authorization tests and contract-valid generated artifacts |
+
+## 02 — Repository inventory
+
+Status legend:
+- **Source review started** — explicit source/document reads have produced findings, but the repository is not fully audited.
+- **Cross-repo sampled** — relevant entry-point/docs were read; code/tests/workflows still need inspection.
+- **Queued** — in-scope repository identified; individual source and integration review remains.
+- **Separate audit** — repository has a focused workstream (for example release readiness or benchmark coverage) that must be coordinated with this ecosystem audit rather than duplicated.
+
+### Runtime, composition, and hosts
+
+| Repository | Coverage | Focus |
+|---|---|---|
+| [TheSingularityWorkshop.Foundry](https://github.com/TrentBest/TheSingularityWorkshop.Foundry) | Source review started | Workflow execution, retained lifecycle, cancellation, FSM_API adapter, host migration |
+| [AnyApp](https://github.com/TrentBest/AnyApp) | Source review started | Runtime composition, repository catalog, metaDev, StoryBuilder persistence, semantic exchange |
+| [WebPage](https://github.com/TrentBest/WebPage) | Source review started | Legacy Hub lifecycle, FSM_COS composition, activation path, fixed catalog, host adapter |
+| [TheSingularityWorkshop.WebApp](https://github.com/TrentBest/TheSingularityWorkshop.WebApp) | Source review started | Private heartbeat/actor FSMs, AnyApp parity, browser input and presentation |
+| [The](https://github.com/TrentBest/The) | Source review started | Architect startup lifecycle, async FSM callbacks, Foundry adoption, GUI command boundary |
+| [TheSingularityWorkshop.MyVR](https://github.com/TrentBest/TheSingularityWorkshop.MyVR) | Cross-repo sampled | Device capability, immersive lifecycle, bounded Experience interaction |
+| [StoryBuilder](https://github.com/TrentBest/StoryBuilder) | Queued | Authoring, manifest/configuration boundaries, serialization, AnyApp integration |
+| [TheSingularityWorkshop.Experiences](https://github.com/TrentBest/TheSingularityWorkshop.Experiences) | Source review started | Experience identity, publisher workflow, host-neutral lifecycle and demo integration |
+| [TheSingularityWorkshop.FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) | Source review started | Composition, RuntimeAssembly, arbitration, catalog seams, docs and release boundaries |
+| [TheSingularityWorkshop.FSM_REST](https://github.com/TrentBest/TheSingularityWorkshop.FSM_REST) | Separate audit | REST boundary, host/service reuse, release readiness |
+| [TheSingularityWorkshop.MicroBundleRepository](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository) | Source review started | Immutable artifact identity, REST catalog, publication/discovery, authorization |
+| [TheSingularityWorkshop.MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain) | Cross-repo sampled | Contract fit, lifecycle semantics, package neutrality |
+| [TheSingularityWorkshop.MicroBundleIngestor](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleIngestor) | Cross-repo sampled | OpenAPI ingestion, generated capability conformance, Forge-only publication authority |
+
+### Core FSM, persistence, and semantic boundaries
+
+| Repository | Coverage | Focus |
+|---|---|---|
+| [FSM_API](https://github.com/TrentBest/FSM_API) | Source review started | Host execution mechanics, identity/cleanup, integration contract |
+| [FSM_API_Benchmark](https://github.com/TrentBest/FSM_API_Benchmark) | Separate audit | Named benchmark coverage, historical comparisons, CI regression evidence |
+| [TheSingularityWorkshop.FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) | Separate audit | Serialization contracts, ownership, failure handling, consumers |
+| [FSM_Serialization_Benchmarks](https://github.com/TrentBest/FSM_Serialization_Benchmarks) | Separate audit | Comprehensive serialization benchmarks and regression evidence |
+| [FSM_UserIO](https://github.com/TrentBest/FSM_UserIO) | Separate audit | NuGet release readiness, user input/output contracts, host integration |
+| [TheSingularityWorkshop.ProtocolAi](https://github.com/TrentBest/TheSingularityWorkshop.ProtocolAi) | Cross-repo sampled | Protocol identities, semantic exchange, conformance fixtures |
+| [TheSingularityWorkshop.GrammarAi](https://github.com/TrentBest/TheSingularityWorkshop.GrammarAi) | Cross-repo sampled | Grammar construction, rejection semantics, consumer fixtures |
+| [TheSingularityWorkshop.HeadlessAi](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi) | Queued | Provider-neutral core and host boundary |
+| [TheSingularityWorkshop.HeadlessAi.AnyAppExample](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi.AnyAppExample) | Queued | Actual consumer integration and example parity |
+| [TheSingularityWorkshop.HeadlessAi.Benchmarks](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi.Benchmarks) | Queued | Workload validity, benchmark linkage, regressions |
+| [TheSingularityWorkshop.Ontology](https://github.com/TrentBest/TheSingularityWorkshop.Ontology) | Cross-repo sampled | Optional semantic contracts and actual consumers |
+
+### GUI, rendering, visualization, physics, and procedural capability
+
+| Repository | Coverage | Focus |
+|---|---|---|
+| [TheSingularityWorkshop.GUI](https://github.com/TrentBest/TheSingularityWorkshop.GUI) | Separate audit | Full GUI domain implementation and renderer/host contracts |
+| [TheSingularityWorkshop.Renderer](https://github.com/TrentBest/TheSingularityWorkshop.Renderer) | Cross-repo sampled | Observer/representation contracts and actual consumers |
+| [TheSingularityWorkshop.Renderer.Benchmarks](https://github.com/TrentBest/TheSingularityWorkshop.Renderer.Benchmarks) | Queued | Renderer workload matrix and performance evidence |
+| [TheSingularityWorkshop.Visualize](https://github.com/TrentBest/TheSingularityWorkshop.Visualize) | Source review started | Trace ingestion, replay, generated documentation, GUI.SVG handoff |
+| [TheSingularityWorkshop.Physics](https://github.com/TrentBest/TheSingularityWorkshop.Physics) | Cross-repo sampled | Deterministic physical model and demo integration |
+| [TheSingularityWorkshop.Gestures](https://github.com/TrentBest/TheSingularityWorkshop.Gestures) | Cross-repo sampled | CPU reference evaluator, deterministic variation, renderer/physics consumers |
+
+### Benchmarking, evidence, and CI
+
+| Repository | Coverage | Focus |
+|---|---|---|
+| [FSM_COS_Benchmarks](https://github.com/TrentBest/FSM_COS_Benchmarks) | Separate audit | Broad named benchmark coverage and historical deltas |
+| [MicroBundleDomain_Benchmarks](https://github.com/TrentBest/MicroBundleDomain_Benchmarks) | Queued | Contract/runtime cost, workload relevance |
+| [TheSingularityWorkshop.CiAi](https://github.com/TrentBest/TheSingularityWorkshop.CiAi) | Source review started | Reusable named evidence, provenance, explicit release authorization |
+| [TheSingularityWorkshop.CiAi.CogA](https://github.com/TrentBest/TheSingularityWorkshop.CiAi.CogA) | Queued | Actual cog responsibility and reusable integration |
+| [TheSingularityWorkshop.CiAi.CogB](https://github.com/TrentBest/TheSingularityWorkshop.CiAi.CogB) | Queued | Actual cog responsibility and reusable integration |
+| [TheSingularityWorkshop.CiAi.CogC](https://github.com/TrentBest/TheSingularityWorkshop.CiAi.CogC) | Queued | Actual cog responsibility and reusable integration |
+| [TheSingularityWorkshop.CiAi.CogD](https://github.com/TrentBest/TheSingularityWorkshop.CiAi.CogD) | Queued | Actual cog responsibility and reusable integration |
+| [TheSingularityWorkshop.CiAi.CogE](https://github.com/TrentBest/TheSingularityWorkshop.CiAi.CogE) | Queued | Actual cog responsibility and reusable integration |
+
+### Data, business, and higher-level capability consumers
+
+| Repository | Coverage | Focus |
+|---|---|---|
+| [TheSingularityWorkshop.DataWarehouse](https://github.com/TrentBest/TheSingularityWorkshop.DataWarehouse) | Cross-repo sampled | Data structure boundaries, real consumers, no unsupported performance claims |
+| [TheSingularityWorkshop.Benchmarks.DataWarehouse](https://github.com/TrentBest/TheSingularityWorkshop.Benchmarks.DataWarehouse) | Cross-repo sampled | Workload coverage and measured benefit |
+| [SingularityWarehouse](https://github.com/TrentBest/SingularityWarehouse) | Queued | Core/API/WPF/styling and Revit/Inventor adapters; distinguish from low-level DataWarehouse |
+| [TheSingularityWorkshop.Profiles](https://github.com/TrentBest/TheSingularityWorkshop.Profiles) | Cross-repo sampled | Profile contract reuse and consumers |
+| [TheSingularityWorkshop.Economy](https://github.com/TrentBest/TheSingularityWorkshop.Economy) | Queued | Domain contract reuse and runtime integration |
+| [TheSingularityWorkshop.CreatorNetwork](https://github.com/TrentBest/TheSingularityWorkshop.CreatorNetwork) | Queued | Creator identity/distribution, repository/Experience integration |
+
+### Demonstrations, article evidence, and workshop root
+
+| Repository | Coverage | Focus |
+|---|---|---|
+| [SimpleDemos](https://github.com/TrentBest/SimpleDemos) | Source review started | Trace-to-visualization, stress methodology, real consumer proofs |
+| [TheSingularityWorkshop](https://github.com/TrentBest/TheSingularityWorkshop) | Queued | Shared docs/brand/contracts and cross-repository navigation |
+| [TheSingularityWorkshop.FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) | Source review started | Canonical audit ledger and policy links |
+
+## 03 — How coverage advances
+
+For each repository, the audit should record:
+1. **Identity and activity:** confirm it belongs to 2026 work and read the intended active branch (usually `development`).
+2. **Actual implementation:** inspect entry points, project references, public contracts, adapters, and tests—not only README claims.
+3. **Neighbor contracts:** inspect the upstream/downstream repository where a boundary is crossed.
+4. **Reuse decision:** mark as confirmed missed integration, intentional boundary, already implemented, or unresolved candidate.
+5. **Proof:** run the narrow relevant tests/build/workflow when available; explicitly label anything that remains source-review only.
+6. **Record:** add source links, confidence, priority, acceptance evidence, and date to the canonical audit.
+
+Prioritize by architectural leverage: runtime ownership and duplicate execution first; artifact publication/resolution next; serialization, semantic, and rendering contracts after that; measured performance opportunities next; documentation and low-risk cleanup last.
+
+## 04 — Important exclusions and constraints
+
+- Do not publish NuGet, deploy, or authorize a release as part of this audit.
+- Do not delete branches or assume every non-`master`/non-`development` branch is disposable.
+- Do not move host-specific UI, credentials, platform permissions, or device APIs into FSM_COS.
+- Do not make Foundry workflow steps a substitute for FSM_API state transitions or treat a RuntimeAssembly as a workflow definition.
+- Do not adopt DataWarehouse, GUI, Ontology, or any other package merely because it exists; demonstrate a real consumer and measurable or contractual value.
+- Do not call this scope complete until every in-scope repository has an explicit disposition.
+
+## 05 — Current limitations
+
+This inventory is assembled from 2026 conversation/workstream context and repository search results. It is a working scope, not a GitHub-wide proof of every repository touched during the year. Repositories may be added when commit history or work records show 2026 activity. Some linked repositories have only had README/architecture-level sampling; their code, tests, and workflows remain unaudited.
+
+---
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop" width="200" /></p>
