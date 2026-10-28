@@ -55,10 +55,10 @@ Status legend:
 | Repository | Coverage | Focus |
 |---|---|---|
 | [FSM_Layer_Generics](https://github.com/TrentBest/FSM_Layer_Generics) | Queued | Generic FSM layer contract; verify whether host projects duplicate layer behavior or intentionally stay on FSM_API |
-| [FSM_Layer_DependencyInjection](https://github.com/TrentBest/FSM_Layer_DependencyInjection) | Queued | Dependency-injection adapter; verify package direction and real consumers |
+| [FSM_Layer_DependencyInjection](https://github.com/TrentBest/FSM_Layer_DependencyInjection) | Source review started | Inspected class is empty and project has no DI contract/dependencies; do not treat as implemented adapter |
 | [FSM_PackageManager](https://github.com/TrentBest/FSM_PackageManager) | Source review started | Project metadata advertises runtime package management/arbitration, but inspected implementation is an empty placeholder; historical package/consumer status unverified |
 | [FSM_UnityIntegrationAdvanced](https://github.com/TrentBest/FSM_UnityIntegrationAdvanced) | Queued | Unity adapter ownership and current relevance; keep Unity-specific types outside FSM_API core |
-| [FSM_ProjectTemplates](https://github.com/TrentBest/FSM_ProjectTemplates) | Queued | Template drift and reuse of current package/host architecture |
+| [FSM_ProjectTemplates](https://github.com/TrentBest/FSM_ProjectTemplates) | Source review started | Single WPF template pins FSM_API 1.0.9; current integration work uses 1.0.13; compatibility not tested |
 | [FSM_Dungeon](https://github.com/TrentBest/FSM_Dungeon) | Queued | FSM_API consumer patterns and opportunities to reuse Experience/MicroBundle composition |
 | [FSM_Bot](https://github.com/TrentBest/FSM_Bot) | Queued | FSM_API consumer patterns, lifecycle ownership, and host boundaries |
 | [FSM_Bot_Editor](https://github.com/TrentBest/FSM_Bot_Editor) | Queued | Editor integration and GUI/domain boundary; verify actual shared GUI contracts |
