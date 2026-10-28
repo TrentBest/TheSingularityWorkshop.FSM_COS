@@ -56,13 +56,13 @@ Status legend:
 |---|---|---|
 | [FSM_Layer_Generics](https://github.com/TrentBest/FSM_Layer_Generics) | Queued | Generic FSM layer contract; verify whether host projects duplicate layer behavior or intentionally stay on FSM_API |
 | [FSM_Layer_DependencyInjection](https://github.com/TrentBest/FSM_Layer_DependencyInjection) | Queued | Dependency-injection adapter; verify package direction and real consumers |
-| [FSM_PackageManager](https://github.com/TrentBest/FSM_PackageManager) | Queued | Package discovery/install boundary; compare with MicroBundleRepository and FSM_COS without conflating package management with runtime artifact resolution |
+| [FSM_PackageManager](https://github.com/TrentBest/FSM_PackageManager) | Source review started | Project metadata advertises runtime package management/arbitration, but inspected implementation is an empty placeholder; historical package/consumer status unverified |
 | [FSM_UnityIntegrationAdvanced](https://github.com/TrentBest/FSM_UnityIntegrationAdvanced) | Queued | Unity adapter ownership and current relevance; keep Unity-specific types outside FSM_API core |
 | [FSM_ProjectTemplates](https://github.com/TrentBest/FSM_ProjectTemplates) | Queued | Template drift and reuse of current package/host architecture |
 | [FSM_Dungeon](https://github.com/TrentBest/FSM_Dungeon) | Queued | FSM_API consumer patterns and opportunities to reuse Experience/MicroBundle composition |
 | [FSM_Bot](https://github.com/TrentBest/FSM_Bot) | Queued | FSM_API consumer patterns, lifecycle ownership, and host boundaries |
 | [FSM_Bot_Editor](https://github.com/TrentBest/FSM_Bot_Editor) | Queued | Editor integration and GUI/domain boundary; verify actual shared GUI contracts |
-| [TheForge](https://github.com/TrentBest/TheForge) | Queued | Forge authority boundaries, publishing authorization, and repository integration |
+| [TheForge](https://github.com/TrentBest/TheForge) | Source review started | Historical Unity micro-package/arbitration, GUI builders, and unsafe DataWarehouse overlap current packages conceptually; no drop-in reuse assumed |
 | [RevitFamilyManagerBuilders](https://github.com/TrentBest/RevitFamilyManagerBuilders) | Cross-repo sampled | Composable Builders migration; live Revit catalog synchronization remains explicitly unverified for production |
 | [FSM_API](https://github.com/TrentBest/FSM_API) | Source review started | Host execution mechanics, identity/cleanup, integration contract |
 | [FSM_API_Benchmark](https://github.com/TrentBest/FSM_API_Benchmark) | Separate audit | Named benchmark coverage, historical comparisons, CI regression evidence |
