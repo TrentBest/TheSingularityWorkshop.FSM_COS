@@ -150,6 +150,8 @@ The first concrete duplication to remove is WebApp's private page/actor heartbea
 - [MicroBundleIngestor README](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleIngestor/blob/development/README.md) separates external API ingestion, capability definition, and runtime invocation. Its repository capability includes Get/Put, while publication authority is intended to be Forge-only and must be enforced by the repository host.
 - [DataWarehouse benchmark laboratory](https://github.com/TrentBest/TheSingularityWorkshop.Benchmarks.DataWarehouse) is a separate performance project, appropriately distinct from the storage implementation.
 
+**Existing repository handoffs:** MicroBundleRepository [issue #23 — Map the complete MicroBundle domain and identify missing contracts](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/issues/23) is the umbrella lifecycle/domain map, and [issue #22](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/issues/22) tracks the immutable Experience retrieval/activation vertical slice. These existing issues cover the repository lifecycle gaps, so this audit did not create duplicates.
+
 **Opportunity**
 
 Do not add dependencies from DataWarehouse into FSM_COS, MicroBundleDomain, or MicroBundleIngestor just because these are all foundational projects. Instead, identify a real high-volume consumer—such as a simulation or telemetry path—and compare the DataWarehouse-backed representation against the existing representation with repeatable workload evidence. Separately, ensure MicroBundleIngestor-generated capability metadata conforms to MicroBundleDomain contracts and that Forge-only Put authority is enforced by repository-side authorization, not merely described in a generated bundle.
@@ -183,6 +185,8 @@ Before broadening GUI's public abstraction, define a small set of semantic scene
 - StoryBuilder's own README says embedding its Experience into WebPage remains open and that the browser demo is local-only (no cloud sync or multi-user sharing).
 
 **Owning-repository handoff:** [Experiences issue #28 — Prove the StoryBuilder capture-to-AnyApp Experience path end to end](https://github.com/TrentBest/TheSingularityWorkshop.Experiences/issues/28). Created after checking the repository's existing issues; this is the owning vertical-slice task, not a request to rebuild StoryBuilder persistence or FSM_COS composition.
+
+**Existing repository handoff:** MicroBundleRepository [issue #22 — Expose immutable Experience artifact retrieval through the repository REST boundary](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/issues/22) already owns publication lookup, immutable artifact retrieval, security/limits, and the end-to-end composition/activation proof. Keep that repository issue linked with the new Experiences vertical-slice issue rather than creating a duplicate repository task.
 
 **Disposition:** This is a confirmed integration gap, not a missing persistence or missing composition feature. Do not rewrite those parts. The next valuable test is one clean end-to-end path that starts from a real authored workspace, produces a validated package/immutable artifacts, publishes or resolves its manifest, composes through FSM_COS, and presents the same Experience in AnyApp and then WebPage. Preserve local-only behavior as an honest demo limitation until remote storage is actually implemented.
 
