@@ -9,6 +9,9 @@
 
 Related continuing scan: [Cross-Repository Missed Integration Opportunities](CROSS_REPOSITORY_MISSED_INTEGRATIONS.md) tracks additional candidates involving GUI.SVG/Visualize, metaDev measurements, semantic intent, FSM_Serialization, and CiAi evidence. Treat it as a source-review addendum, not as proof that unverified candidates are runtime defects.
 
+
+**2026 coverage ledger:** [ECOSYSTEM_AUDIT_SCOPE_2026.md](ECOSYSTEM_AUDIT_SCOPE_2026.md) tracks repositories in scope and distinguishes source-reviewed findings from queued work.
+
 ## 01 — The architecture we are integrating
 
 The intended responsibility chain is:
