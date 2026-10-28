@@ -169,6 +169,45 @@ Before broadening GUI's public abstraction, define a small set of semantic scene
 
 **Confidence:** High that conformance coverage is intentionally narrow (the README states so); the exact missing fixture cases require test-source inspection.
 
+## 14 — P1: Close StoryBuilder → Experience → manifest → host as one verified vertical slice
+
+**Evidence (current `development` README, not a guessed missing feature)**
+
+- [StoryBuilder README](https://github.com/TrentBest/StoryBuilder/blob/development/README.md) says its MicroBundle exposes authoring capabilities through MicroBundleDomain and an automated test composes it through FSM_COS. It also documents versioned FSM_Serialization persistence, browser-local autosave, and a live GUI.SVG map.
+- [Experiences README](https://github.com/TrentBest/TheSingularityWorkshop.Experiences/blob/development/README.md) explicitly says the StoryBuilder launch in AnyApp is an early authoring integration proof, **not** proof that the complete package-to-manifest-to-FSM_COS path is finished. It links a vertical-slice document describing gaps between authored package, manifest, artifact resolution, composition, and native presentation.
+- StoryBuilder's own README says embedding its Experience into WebPage remains open and that the browser demo is local-only (no cloud sync or multi-user sharing).
+
+**Disposition:** This is a confirmed integration gap, not a missing persistence or missing composition feature. Do not rewrite those parts. The next valuable test is one clean end-to-end path that starts from a real authored workspace, produces a validated package/immutable artifacts, publishes or resolves its manifest, composes through FSM_COS, and presents the same Experience in AnyApp and then WebPage. Preserve local-only behavior as an honest demo limitation until remote storage is actually implemented.
+
+**Acceptance evidence:** one authored fixture with stable Experience/bundle IDs and hashes; round-trip persistence; manifest resolution from a clean cache; FSM_COS composition; host-visible result; failures at every boundary produce actionable outcomes and leave no partial publication.
+
+## 15 — P2: Validate reuse of FSM_REST and HeadlessAi at real consumer boundaries
+
+**Evidence**
+
+- [FSM_REST README](https://github.com/TrentBest/TheSingularityWorkshop.FSM_REST/blob/development/README.md) clearly defines a reusable REST capability/transport substrate, with opt-in FSM-backed request lifecycle and domain MicroBundles owning API meaning. It includes deterministic in-memory transport examples and a storefront comparison sample that defaults to test responses.
+- [HeadlessAi README](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi/blob/development/README.md) documents explicit raw-text, delegate, JSON, OpenAI Responses, Gemini, and Anthropic protocol adapters, while assigning intent, permissions, memory, validation, and consequential actions to the host.
+- These documented capabilities are useful reuse surfaces; this review has **not yet proven** that every eligible Workshop consumer uses them rather than private HTTP/protocol code.
+
+**Opportunity**
+
+Search actual HTTP call sites in MicroBundleIngestor, StoryBuilder, AnyApp, WebPage, and the higher-level domain projects. Reuse FSM_REST only where the operation is naturally a domain capability with an explicit transport boundary; reuse HeadlessAi only for compatible endpoint protocols. Keep authorization, secret ownership, domain semantics, and approval of actions in the host. Avoid adding a package dependency merely to replace a tiny, appropriately isolated call.
+
+**Acceptance evidence:** consumer inventory identifies each outbound HTTP path, its owner, protocol and failure behavior; each reuse decision is recorded as adopted, intentionally local, or blocked by a missing contract; tests cover timeout, malformed response, cancellation, and unauthorized operation where applicable.
+
+## 16 — P2: Preserve the Revit production verification boundary while auditing builder reuse
+
+**Evidence**
+
+- [RevitFamilyManagerBuilders README](https://github.com/TrentBest/RevitFamilyManagerBuilders/blob/development/README.md) describes a migration to a declarative Composable Builders Engine and states that live catalog synchronization is not production-verified until transaction, regeneration, reread, and final model evidence exist.
+- The README also calls its legacy WPF UI project a ghost, so the old WPF project must not be assumed to be the current implementation path.
+
+**Opportunity**
+
+Audit whether the newer Workshop GUI/Composable Builders contracts can replace duplicated builder primitives in the active Revit path, but only after mapping actual project references and the Revit thread/transaction boundary. Do not mark catalog sync production-ready from a successful compile or simulated test.
+
+**Acceptance evidence:** actual Revit-hosted validation includes transaction success/failure, regeneration, reread of persisted model state, and a saved final model artifact. If no live Revit host is available, record that limitation rather than claiming production verification.
+
 ## 13 — P2: Treat CiAi evidence policy as reusable infrastructure, not merely a demo
 
 **Additional evidence**
