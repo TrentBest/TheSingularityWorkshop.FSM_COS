@@ -9,6 +9,10 @@
 
 This is a **coverage ledger**, not a claim that every listed repository has already been audited. Repository README inspection alone does not count as source-level or integration verification. The audit is looking for missed reuse of existing Workshop technology, duplicated responsibilities, unfinished cross-repository contracts, and proof gaps.
 
+## Release readiness companion
+
+The current release triage is maintained in [RELEASE_READINESS_PORTFOLIO.md](RELEASE_READINESS_PORTFOLIO.md). It records exact development HEADs and workflow evidence, separates package blockers from ecosystem integration work, and explicitly avoids readiness percentages where evidence is not comparable. Treat it as a dated snapshot; refresh it when candidate SHAs change. No entry authorizes publication.
+
 ## 01 — Confirmed high-priority architecture findings
 
 | Priority | Finding | Current evidence | Next proof |
