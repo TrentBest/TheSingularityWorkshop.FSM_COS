@@ -7,6 +7,8 @@
 **Purpose:** Identify where Workshop functionality is still implemented through transitional host-specific machinery, duplicated runtime paths, or compiled-in bundle inventories instead of flowing through the intended technology boundaries. Order the work from structural refactors to smaller integration and proof tasks.  
 **Target:** A coherent end-to-end path from published Experience intent to immutable MicroBundle artifacts, FSM_COS composition, and host-owned execution/presentation.
 
+Related continuing scan: [Cross-Repository Missed Integration Opportunities](CROSS_REPOSITORY_MISSED_INTEGRATIONS.md) tracks additional candidates involving GUI.SVG/Visualize, metaDev measurements, semantic intent, FSM_Serialization, and CiAi evidence. Treat it as a source-review addendum, not as proof that unverified candidates are runtime defects.
+
 ## 01 — The architecture we are integrating
 
 The intended responsibility chain is:
