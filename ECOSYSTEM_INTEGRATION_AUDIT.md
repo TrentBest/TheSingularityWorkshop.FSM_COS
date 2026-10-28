@@ -84,14 +84,14 @@ These findings show two connected paths: FSM_COS composition and a separate Hub 
 - [WebPage WorkshopCompositionCatalog.cs](https://github.com/TrentBest/WebPage/blob/development/TheSingularityWorkshop/Workshop/Composition/WorkshopCompositionCatalog.cs) has a fixed set of bundle-ID-to-factory registrations for Moniker, Living GUI, rendering, and AI-related bundles.
 - [AnyApp AnyAppMicroBundleCatalog.cs](https://github.com/TrentBest/AnyApp/blob/master/AnyAppMicroBundleCatalog.cs) constructs Moniker and Forge bundles directly. Its own comment says repository materialization is intended to replace this compiled catalog.
 - [AnyApp ExperienceCatalogClient.cs](https://github.com/TrentBest/AnyApp/blob/master/ExperienceCatalogClient.cs) retrieves published Experience metadata and a base64-encoded Experience artifact, then parses it as an `ExperienceManifest`. That proves a remote Experience-manifest path exists; it does **not** prove the referenced executable/behavioral MicroBundles are independently delivered and materialized.
-- The [MicroBundleRepository README](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/master/README.md) defines the artifact delivery boundary and content-hash verification responsibility. FSM_COS's [WebPage integration contract](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/WEBPAGE_INTEGRATION.md) explicitly says the kernel itself does not discover artifacts and requires a host-supplied catalog.
+- The [MicroBundleRepository README](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/master/README.md) defines the artifact delivery boundary and content-hash verification responsibility. Its [REST catalog adapter](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/master/src/REST/TheSingularityWorkshop.MicroBundleRepository.FSM_COS/RestMicroBundleCatalog.cs) and [assembly materializer](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/master/src/REST/TheSingularityWorkshop.MicroBundleRepository.FSM_COS/AssemblyMicroBundleArtifactMaterializer.cs) already implement much of the intended bridge. However, the adapter project references FSM_COS alpha.5 and the current FSM_COS `development` [IMicroBundleCatalog contract](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/src/FSM_COS/IMicroBundleCatalog.cs) requires a version-aware overload that the inspected adapter source does not implement. This is a concrete integration/version seam, not a reason to recreate the adapter in a host.
 
 **Refactor**
 
-1. Define and test the provider/catalog adapter that resolves a manifest's `(BundleId, Version, ContentHash)` identity to the correct domain bundle instance.
-2. Route artifact retrieval through `IMicroBundleRepository` (and its supported materialization mechanism), verify bytes against the immutable content identity, and only then expose a bundle to the catalog/composition boundary.
-3. Ensure the catalog creates isolated bundle instances for independent runtime generations; do not reuse an already-owned mutable bundle object across assemblies.
-4. Migrate WebPage's `WorkshopCompositionCatalog` and AnyApp's `AnyAppMicroBundleCatalog` behind the same provider contract. A local development provider may remain, but it must implement the same contract rather than being a second architecture.
+1. Reconcile the existing repository adapter with the current FSM_COS contract before connecting hosts. The current `development` `IMicroBundleCatalog` requires both version-aware `TryResolve(bundleId, version, ...)` and identity-only dependency resolution. The repository's `RestMicroBundleCatalog` implements only the identity-only overload, while its project currently references FSM_COS alpha.5. Treat this as an explicit adapter/API-version seam to resolve—not as proof that the current package can be dropped into alpha.7 unchanged.
+2. Route artifact retrieval through `IMicroBundleRepository` and the existing `AssemblyMicroBundleArtifactMaterializer`, verify bytes against immutable content identity, and only then expose a bundle to the catalog/composition boundary.
+3. Ensure the catalog resolves the exact requested version and content hash and creates isolated bundle instances for independent runtime generations; do not reuse an already-owned mutable bundle object across assemblies.
+4. Migrate WebPage's `WorkshopCompositionCatalog` and AnyApp's `AnyAppMicroBundleCatalog` behind the reconciled provider contract. A local development provider may remain, but it must implement the same contract rather than being a second architecture.
 5. Keep network, storage credentials, cache policy, and trust decisions in the provider/host layer; do not add Azure or HTTP concerns to FSM_COS.
 
 **Acceptance evidence**
@@ -101,7 +101,7 @@ These findings show two connected paths: FSM_COS composition and a separate Hub 
 - A repeated request resolves the same immutable artifact identity while producing runtime-owned instances with independent lifetimes.
 - Offline/local development and remote delivery pass the same catalog contract tests.
 
-**Status:** The host-compiled catalogs are confirmed. End-to-end MicroBundle artifact materialization through the repository is not established by the inspected files and remains a required integration proof.
+**Status:** The repository-backed catalog/materializer exists and has focused tests. It is not wired into the inspected WebPage or AnyApp catalog paths, and its contract must be reconciled with the current FSM_COS API before it can be treated as the shared integration path.
 
 ### P1 — Make the Experience lifecycle a first-class contract, not a host-specific inference
 
@@ -161,7 +161,7 @@ This is a concrete version mismatch across the inspected branch snapshots, but n
 
 **Acceptance evidence:** A clean-room publication-and-consumption test, including identity mismatch and missing-dependency failures.
 
-**Status:** The boundary and desired immutable identity are documented by the repository. The complete current publication workflow remains to be traced; no claim is made here that a direct-storage bypass is still present.
+**Status:** The repository exposes REST endpoints for MicroBundle artifact PUT/GET and Experience artifact retrieval/catalog listing. The inspected Experiences workflow only stages package/assembly artifacts in CI, so end-to-end publication into that repository is not present in that workflow. Other manual or external publication paths were not exhaustively searched.
 
 ### P3 — Remove transitional registries and demo scaffolding after replacement
 
