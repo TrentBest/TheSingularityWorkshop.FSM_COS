@@ -41,7 +41,7 @@ If the work is ambiguous or changes architectural direction, present the evidenc
 
 ## Before starting a task
 
-Read `docs/PAUSE_POINT.md`, `docs/BRANCH_RECONCILIATION.md`, `docs/IMPLEMENTATION_DOCUMENTATION_MATRIX.md`, `.github/notes/DOCUMENTATION_AUDIT.md`, and the relevant working-task or architecture documents. For cross-repository or host-integration work, also read [`ECOSYSTEM_INTEGRATION_AUDIT.md`](ECOSYSTEM_INTEGRATION_AUDIT.md) and re-check each affected repository's active branch before acting. Check the current branch heads and working CI status rather than relying on a prior session summary.
+Read `docs/PAUSE_POINT.md`, `docs/BRANCH_RECONCILIATION.md`, `docs/IMPLEMENTATION_DOCUMENTATION_MATRIX.md`, `.github/notes/DOCUMENTATION_AUDIT.md`, and the relevant working-task or architecture documents. For cross-repository or host-integration work, read [`ECOSYSTEM_INTEGRATION_AUDIT.md`](ECOSYSTEM_INTEGRATION_AUDIT.md) and [`CROSS_REPOSITORY_MISSED_INTEGRATIONS.md`](CROSS_REPOSITORY_MISSED_INTEGRATIONS.md), then re-check each affected repository's active branch before acting. Check the current branch heads and working CI status rather than relying on a prior session summary.
 
 
 ---
