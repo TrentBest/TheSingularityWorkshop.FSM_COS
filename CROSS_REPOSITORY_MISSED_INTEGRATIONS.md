@@ -111,6 +111,52 @@ This is an active source-review addendum, not an exhaustive audit. GitHub code s
 
 No builds, tests, live endpoints, browser sessions, or publication workflows were executed during this pass. The next review should inspect current Visualize/GUI.SVG trace ingestion, metaDev evidence collection, FSM_Serialization consumers, and CiAi result adapters, then update priorities with precise source/test evidence.
 
+
+## 09 — P0/P1: Align host execution with Foundry without conflating it with FSM_COS composition
+
+**New source evidence (2026-10-28, explicit `development` reads)**
+
+- [Foundry README](https://github.com/TrentBest/TheSingularityWorkshop.Foundry/blob/development/README.md) says the sequential workflow runner, preflight validation, structured outcomes, and retained in-process lifecycle coordinator are implemented. It explicitly distinguishes Foundry workflow execution from FSM_COS composition and says hosts provide capabilities.
+- [Foundry architecture](https://github.com/TrentBest/TheSingularityWorkshop.Foundry/blob/development/docs/ARCHITECTURE.md) says **Foundry ↔ FSM_COS integration is not implemented**, no reusable FSM_API adapter exists, and the in-memory lifecycle does not provide durable history or cross-process transport.
+- [WebApp README](https://github.com/TrentBest/TheSingularityWorkshop.WebApp/blob/development/README.md) explicitly says the current implementation creates a page FSM and 100 actor FSM contexts inside `WebAppExperienceRuntime` and advances them with a private heartbeat. It calls that a transitional prototype, not the target architecture.
+- [The / Architect architecture memory](https://github.com/TrentBest/The/blob/development/docs/ARCHITECTURE_MEMORY.md) documents startup orchestration through FSM_API callbacks declared `async void`; completion, failure, and shutdown need an awaited lifecycle contract.
+- [MyVR architecture](https://github.com/TrentBest/TheSingularityWorkshop.MyVR/blob/development/docs/ARCHITECTURE.md) correctly assigns VR device/session lifecycle and presentation to MyVR while explicitly excluding Experience composition and canonical artifact identity.
+
+**Opportunity**
+
+Treat Foundry as the common host-neutral execution/lifecycle authority for AnyApp, WebApp, The, and WebPage where the work being performed is a Foundry workflow. Migrate by tracing actual callers and preserving their distinct contracts: FSM_COS composes MicroBundles into a RuntimeAssembly; Foundry executes validated workflows and retains run outcomes; FSM_API remains the state-machine mechanic where directly used; each host owns its UI, device/browser capabilities, permissions, and presentation.
+
+The first concrete duplication to remove is WebApp's private page/actor heartbeat, but only after a tested adapter proves how a composed Experience is submitted to and observed through the canonical execution boundary. The's async startup lifecycle is another candidate for an awaited, observable orchestration contract. Do **not** mechanically wrap every FSM tick as a Foundry workflow step or treat RuntimeAssembly as WorkflowDefinition.
+
+**Acceptance evidence**
+
+- One named scenario is executed through the supported Foundry contract, with status, cancellation/failure, and terminal outcome observable.
+- WebApp no longer advances a second private Experience lifecycle; its browser inputs and presentation use a tested host adapter.
+- AnyApp, WebPage, and The have explicit caller/adapter maps showing which work belongs to Foundry versus FSM_COS/FSM_API.
+- MyVR remains a capability-bearing manifestation and only delegates workflows when its Experience contract calls for it.
+- Tests demonstrate failure/cancellation/cleanup and prevent duplicate execution. No package publication is part of this work.
+
+**Confidence:** High that integration work remains: Foundry's own architecture says FSM_COS integration and the reusable FSM_API adapter are not implemented; WebApp documents its private heartbeat as transitional. The exact minimal adapter is still an architectural question, not yet a proven implementation.
+
+## 10 — P2: Keep DataWarehouse and MicroBundle ingestion on their proper boundaries, then prove the useful bridge
+
+**Evidence**
+
+- [DataWarehouse README](https://github.com/TrentBest/TheSingularityWorkshop.DataWarehouse/blob/development/README.md) describes a platform-neutral unmanaged fixed-size record store with generation-checked handles, dirty-slot enumeration, disposal, and tests. It explicitly does not promise persistence or serialization.
+- [MicroBundleDomain README](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/blob/development/README.md) defines neutral capability contracts and leaves artifact delivery to MicroBundleRepository and composition to FSM_COS.
+- [MicroBundleIngestor README](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleIngestor/blob/development/README.md) separates external API ingestion, capability definition, and runtime invocation. Its repository capability includes Get/Put, while publication authority is intended to be Forge-only and must be enforced by the repository host.
+- [DataWarehouse benchmark laboratory](https://github.com/TrentBest/TheSingularityWorkshop.Benchmarks.DataWarehouse) is a separate performance project, appropriately distinct from the storage implementation.
+
+**Opportunity**
+
+Do not add dependencies from DataWarehouse into FSM_COS, MicroBundleDomain, or MicroBundleIngestor just because these are all foundational projects. Instead, identify a real high-volume consumer—such as a simulation or telemetry path—and compare the DataWarehouse-backed representation against the existing representation with repeatable workload evidence. Separately, ensure MicroBundleIngestor-generated capability metadata conforms to MicroBundleDomain contracts and that Forge-only Put authority is enforced by repository-side authorization, not merely described in a generated bundle.
+
+**Acceptance evidence:** A named consumer and workload demonstrate correctness and measured benefit before adopting DataWarehouse; ingestion emits contract-valid artifacts; repository tests prove unauthorized publication is rejected. Until such source/tests are inspected, this is a **candidate integration**, not a confirmed missing implementation.
+
+## 11 — Audit coverage ledger
+
+The broader 2026 repository scope and review status are maintained in [ECOSYSTEM_AUDIT_SCOPE_2026.md](ECOSYSTEM_AUDIT_SCOPE_2026.md). A repository listed there is not considered fully audited merely because its README was read. Each entry must progress from inventory to source review, then tests/workflows and cross-repository contract verification.
+
 ---
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
