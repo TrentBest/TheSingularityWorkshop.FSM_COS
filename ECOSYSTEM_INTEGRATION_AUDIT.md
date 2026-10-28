@@ -133,10 +133,11 @@ These findings show two connected paths: FSM_COS composition and a separate Hub 
 
 **Source-checked evidence**
 
-- FSM_COS `development` documents the source candidate as `0.1.0-alpha.7` in [WebPage integration](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/WEBPAGE_INTEGRATION.md).
-- [AnyApp.csproj on master](https://github.com/TrentBest/AnyApp/blob/master/AnyApp.csproj) references `TheSingularityWorkshop.FSM_COS` `0.1.0-alpha.4`.
+- FSM_COS `development` documents source candidate `0.1.0-alpha.7` in [WebPage integration](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/WEBPAGE_INTEGRATION.md).
+- [AnyApp.csproj on development](https://github.com/TrentBest/AnyApp/blob/development/AnyApp.csproj) uses the published FSM_COS `0.1.0-alpha.6` package when repository-source mode is disabled, while its source-integration mode references the checked-out FSM_COS source. [AnyApp master](https://github.com/TrentBest/AnyApp/blob/master/AnyApp.csproj) is further behind at `0.1.0-alpha.4`.
+- AnyApp development also pins the published MicroBundleRepository REST package at `0.1.0-alpha.2`, while source-integration mode builds the repository checkout. These are distinct dependency graphs and should not be treated as equivalent validation.
 
-This is a concrete version mismatch across the inspected branch snapshots, but not automatically an error: the package may intentionally remain pinned to a published baseline until a coordinated update. Do not change the package version or publish anything as part of this audit.
+This is deliberate source/package skew until coordinated releases are authorized, not an instruction to bump packages immediately. It means source-integration success does not prove the released package graph has the same behavior. Do not change package versions or publish anything as part of this audit.
 
 **Refactor**
 
