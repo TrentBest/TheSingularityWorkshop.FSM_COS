@@ -82,16 +82,16 @@ These findings show two connected paths: FSM_COS composition and a separate Hub 
 **Source-checked evidence**
 
 - [WebPage WorkshopCompositionCatalog.cs](https://github.com/TrentBest/WebPage/blob/development/TheSingularityWorkshop/Workshop/Composition/WorkshopCompositionCatalog.cs) has a fixed set of bundle-ID-to-factory registrations for Moniker, Living GUI, rendering, and AI-related bundles.
-- [AnyApp AnyAppMicroBundleCatalog.cs](https://github.com/TrentBest/AnyApp/blob/master/AnyAppMicroBundleCatalog.cs) constructs Moniker and Forge bundles directly. Its own comment says repository materialization is intended to replace this compiled catalog.
-- [AnyApp ExperienceCatalogClient.cs](https://github.com/TrentBest/AnyApp/blob/master/ExperienceCatalogClient.cs) retrieves published Experience metadata and a base64-encoded Experience artifact, then parses it as an `ExperienceManifest`. That proves a remote Experience-manifest path exists; it does **not** prove the referenced executable/behavioral MicroBundles are independently delivered and materialized.
-- The [MicroBundleRepository README](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/master/README.md) defines the artifact delivery boundary and content-hash verification responsibility. Its [REST catalog adapter](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/master/src/REST/TheSingularityWorkshop.MicroBundleRepository.FSM_COS/RestMicroBundleCatalog.cs) and [assembly materializer](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/master/src/REST/TheSingularityWorkshop.MicroBundleRepository.FSM_COS/AssemblyMicroBundleArtifactMaterializer.cs) already implement much of the intended bridge. However, the adapter project references FSM_COS alpha.5 and the current FSM_COS `development` [IMicroBundleCatalog contract](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/src/FSM_COS/IMicroBundleCatalog.cs) requires a version-aware overload that the inspected adapter source does not implement. This is a concrete integration/version seam, not a reason to recreate the adapter in a host.
+- [AnyApp's development `AnyAppMicroBundleCatalog`](https://github.com/TrentBest/AnyApp/blob/development/AnyAppMicroBundleCatalog.cs) still contains a compiled inventory, but [AnyAppRuntime.ComposeAsync](https://github.com/TrentBest/AnyApp/blob/development/AnyAppRuntime.cs) can take a repository-backed path when the manifest declares artifact identities. This is partial integration, not absence of integration.
+- [AnyApp's development `RepositoryMicroBundleCatalog`](https://github.com/TrentBest/AnyApp/blob/development/RepositoryMicroBundleCatalog.cs) implements recursive preload, local content-addressed caching, version checks, and resolved configuration loading. The repository itself also provides a [version-aware RestMicroBundleCatalog](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/development/src/REST/TheSingularityWorkshop.MicroBundleRepository.Rest/RestMicroBundleCatalog.cs). The core closure/materialization/resolution responsibility now exists in both places; AnyApp's cache/configuration behavior may be host-specific, but it should reuse or wrap the shared catalog behavior instead of maintaining a second closure loader.
+- The [MicroBundleRepository development README](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/development/README.md) defines the artifact delivery boundary and content-hash verification responsibility. Its current REST catalog and materializer form a real integration bridge, but they are not the only path in use. FSM_COS's [WebPage integration contract](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/docs/WEBPAGE_INTEGRATION.md) correctly leaves artifact discovery to a host-supplied catalog.
 
 **Refactor**
 
-1. Reconcile the existing repository adapter with the current FSM_COS contract before connecting hosts. The current `development` `IMicroBundleCatalog` requires both version-aware `TryResolve(bundleId, version, ...)` and identity-only dependency resolution. The repository's `RestMicroBundleCatalog` implements only the identity-only overload, while its project currently references FSM_COS alpha.5. Treat this as an explicit adapter/API-version seam to resolve—not as proof that the current package can be dropped into alpha.7 unchanged.
-2. Route artifact retrieval through `IMicroBundleRepository` and the existing `AssemblyMicroBundleArtifactMaterializer`, verify bytes against immutable content identity, and only then expose a bundle to the catalog/composition boundary.
-3. Ensure the catalog resolves the exact requested version and content hash and creates isolated bundle instances for independent runtime generations; do not reuse an already-owned mutable bundle object across assemblies.
-4. Migrate WebPage's `WorkshopCompositionCatalog` and AnyApp's `AnyAppMicroBundleCatalog` behind the reconciled provider contract. A local development provider may remain, but it must implement the same contract rather than being a second architecture.
+1. Make the repository-backed path the canonical path for published manifests. Retain the compiled catalog only as an explicit local-development/test provider or compatibility path, not as a host's permanent inventory of Experiences.
+2. Reuse the repository's version-aware `RestMicroBundleCatalog` and materializer in AnyApp. Preserve AnyApp's cache and configuration behavior, but separate those host policies from duplicate dependency-closure traversal and catalog resolution.
+3. Connect WebPage's `WorkshopCompositionCatalog` to the same repository-backed catalog/provider contract while keeping local factories only for tests and explicit offline demos.
+4. Resolve each manifest's exact `(BundleId, Version, ContentHash)` identity and create isolated bundle instances for independent runtime generations; do not reuse an already-owned mutable bundle object across assemblies.
 5. Keep network, storage credentials, cache policy, and trust decisions in the provider/host layer; do not add Azure or HTTP concerns to FSM_COS.
 
 **Acceptance evidence**
@@ -101,7 +101,7 @@ These findings show two connected paths: FSM_COS composition and a separate Hub 
 - A repeated request resolves the same immutable artifact identity while producing runtime-owned instances with independent lifetimes.
 - Offline/local development and remote delivery pass the same catalog contract tests.
 
-**Status:** The repository-backed catalog/materializer exists and has focused tests. It is not wired into the inspected WebPage or AnyApp catalog paths, and its contract must be reconciled with the current FSM_COS API before it can be treated as the shared integration path.
+**Status:** AnyApp development has a working source-level repository path for manifests with artifact identities; WebPage development still uses a fixed factory catalog. The repository also has a version-aware REST catalog. The refactor is to converge these existing pieces, not invent a new provider.
 
 ### P1 — Make the Experience lifecycle a first-class contract, not a host-specific inference
 
@@ -147,27 +147,28 @@ This is a concrete version mismatch across the inspected branch snapshots, but n
 
 **Acceptance evidence:** A consumer/package compatibility table tied to immutable commit/version evidence; no claim that a source candidate is published merely because it exists in a repository.
 
-### P2 — Separate Experience-manifest publication from MicroBundle artifact publication
+### P1 — Complete publication, artifact delivery, and Experience registration
 
 **Why this matters:** A discoverable Experience record is not proof that every bundle it requests is published, immutable, retrievable, and verifiable.
 
 **Source-checked evidence**
 
-- The [Experiences build workflow](https://github.com/TrentBest/TheSingularityWorkshop.Experiences/blob/master/.github/workflows/build.yml) builds and packs the Forge, Moniker, and Elements projects, then stages their assemblies as workflow artifacts. Its inspected steps do not publish those outputs through the MicroBundle Repository REST API or create a published Experience pointer.
-- The repository REST host exposes MicroBundle artifact PUT/GET and Experience artifact retrieval/catalog-listing endpoints in [Program.cs](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/master/src/REST/TheSingularityWorkshop.MicroBundleRepository.Rest.Host/Program.cs).
-- The repository has immutable, content-addressed MicroBundle and Experience artifact contracts, plus an Experience publication catalog. Those are useful existing pieces; the gap is connecting publication and consumption as one proven pipeline.
+- The [Experiences development publication workflow](https://github.com/TrentBest/TheSingularityWorkshop.Experiences/blob/development/.github/workflows/publish-microbundles.yml) has a manual Moniker publication path, but checks out the MicroBundleRepository `feature/microbundle-publisher` branch to run its publisher tool. That tool directory is absent from the repository's `development` tree, and the branch is outside the required long-lived `master`/`development` model.
+- The workflow writes a `publication.json` artifact after publishing the bundle but does not register an Experience manifest in the repository's Experience catalog.
+- [AnyApp's ExperiencePublisher](https://github.com/TrentBest/AnyApp/blob/development/Publishing/ExperiencePublisher.cs) resolves and uploads bundle/configuration artifacts through `IMicroBundleRepository`, then writes the resolved manifest to a local file. [AnyApp's own pipeline guide](https://github.com/TrentBest/AnyApp/blob/development/docs/EXPERIENCE_PUBLISH_PIPELINE.md) says its current Experience catalog API is read-only; manifest publication/registration still needs a write adapter.
+- The [MicroBundleRepository development REST host](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/development/src/REST/TheSingularityWorkshop.MicroBundleRepository.Rest.Host/Program.cs) exposes artifact retrieval and catalog listing endpoints. Bundle artifact publication exists, but the inspected paths do not complete the last step of publishing the resolved Experience manifest and making it discoverable through the catalog.
 
 **Refactor**
 
-1. Connect the Experiences build/package workflow to the repository publication contract, with an explicit owner-approved publication trigger rather than publishing on every ordinary build.
-2. Make publication produce one consistent chain: bundle artifact(s) → content hashes and versions → Experience manifest referencing those identities → discoverable catalog entry.
-3. Make publication idempotent and ensure it cannot overwrite bytes under an existing immutable identity. The repository's immutable artifact storage and Experience publication-pointer contracts already provide pieces of this design; connect and test them as one workflow.
-4. Ensure hosts retrieve through the repository contract rather than an alternate direct-storage path. The inspected build workflow does not demonstrate a direct-Azure bypass; the confirmed gap is that its bundle outputs are staged as CI artifacts rather than published to the repository.
-5. Test from a clean consumer that has no local copy of the bundle implementation.
+1. Bring the publisher tool into the repository's canonical `development` branch, update the workflow to consume that maintained source, and retire the feature-branch dependency only after confirming the needed tool has been integrated and tested. Do not delete the branch automatically.
+2. Add a supported write contract for the resolved Experience manifest and catalog publication pointer; keep bundle/configuration artifacts immutable and publish the discoverable manifest last.
+3. Make the complete chain atomic from the consumer's perspective: bundle/configuration artifacts → resolved manifest with exact identities/dependencies/load order → manifest artifact → catalog pointer. Partial failures may leave unreferenced immutable blobs, but must not create a discoverable incomplete Experience.
+4. Expand the manual workflow beyond Moniker only after the end-to-end path is proven for a multi-bundle Experience. Keep publication manually authorized; do not turn it into an automatic NuGet or artifact release on ordinary build.
+5. Test from a clean consumer that has no local copy of the bundle implementation and verify the selected Experience is discoverable after publication.
 
 **Acceptance evidence:** A clean-room publication-and-consumption test, including identity mismatch, missing artifact, missing dependency, and immutable-write behavior.
 
-**Status:** The repository exposes REST endpoints and the corresponding artifact/catalog abstractions. The inspected Experiences workflow only stages package/assembly artifacts in CI, so end-to-end publication into that repository is not present in that workflow. Other manual or external publication paths were not exhaustively searched.
+**Status:** Bundle artifact upload and local resolved-manifest generation are implemented in development. The end-to-end publication gap is manifest registration/discovery plus the publisher tool's dependency on a noncanonical feature branch. This is source-checked; the workflow was not executed.
 
 ### P3 — Remove transitional registries and demo scaffolding after replacement
 
@@ -202,15 +203,15 @@ The sequence deliberately addresses runtime semantics before transport. Moving a
 
 ## 04 — Audit scope, evidence, and limitations
 
-This initial pass source-checked the following branch snapshots:
+This initial pass source-checked these active-development snapshots where available, plus published/master baselines where version pins matter:
 
 - [FSM_COS `development`](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/development): architecture, runtime boundary, staged-loading limits, WebPage integration contract, repository instructions, documentation index, and current audit notes.
 - [WebPage `development`](https://github.com/TrentBest/WebPage/tree/development): composition service/catalog, Hub activation adapter, Experience execution adapter, host manifest, page FSM, and related transitional bundle.
-- [AnyApp `master`](https://github.com/TrentBest/AnyApp/tree/master): compiled MicroBundle catalog, runtime entry point, repository Experience client, project package references, and Moniker bundle.
-- [Experiences `master`](https://github.com/TrentBest/TheSingularityWorkshop.Experiences/tree/master): repository README and stated publication/manifestation boundary.
-- [MicroBundleRepository `master`](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/tree/master): repository README and artifact-delivery contract.
+- [AnyApp `development`](https://github.com/TrentBest/AnyApp/tree/development): compiled and repository-backed catalog paths, resolved-manifest publisher, configuration cache, source/package build modes, and its own publication status notes.
+- [Experiences `development`](https://github.com/TrentBest/TheSingularityWorkshop.Experiences/tree/development): bundle publication workflow, artifact identity generation, and current publication documentation.
+- [MicroBundleRepository `development`](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/tree/development): REST catalog, artifact repository, host endpoints, build/source-integration workflow, and branch-dependent publisher integration.
 
-This is **source-checked, not executed**. I did not clone/build the repositories, run their test suites, inspect every file or commit history, verify live browser behavior, validate a deployed repository endpoint, or verify the current CI status. In particular, the exact current publication implementation, complete WebPage activation/rollback path, all Experience packages, and the active development branch of each consumer still require deeper passes. Branch snapshots differ, so findings must be reconciled against each repository's active branch before implementation.
+This is **source-checked, not executed**. I did not clone/build the repositories, run their test suites, inspect every file or commit history, verify live browser behavior, validate a deployed repository endpoint, or verify current CI status. The full WebPage activation/rollback path, all Experience package variants, and runtime behavior across multiple manifests still require deeper passes. The publisher workflow's feature-branch dependency and missing development-branch tool path were checked against the repository trees; the workflow was not run.
 
 The audit identifies the largest supported integration seams and a safe order for investigating them. It does not authorize broad deletion, package publication, or replacement of `master`.
 
@@ -223,10 +224,12 @@ The audit identifies the largest supported integration seams and a safe order fo
 - [WebPage composition service](https://github.com/TrentBest/WebPage/blob/development/TheSingularityWorkshop/Services/WorkshopExperienceService.cs)
 - [WebPage composition catalog](https://github.com/TrentBest/WebPage/blob/development/TheSingularityWorkshop/Workshop/Composition/WorkshopCompositionCatalog.cs)
 - [WebPage Experience execution adapter](https://github.com/TrentBest/WebPage/blob/development/TheSingularityWorkshop/Services/ExperienceExecutionRuntime.cs)
-- [AnyApp runtime entry point](https://github.com/TrentBest/AnyApp/blob/master/AnyAppRuntime.cs)
-- [AnyApp repository client](https://github.com/TrentBest/AnyApp/blob/master/ExperienceCatalogClient.cs)
-- [MicroBundleRepository contract](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/master/README.md)
-- [Experiences repository overview](https://github.com/TrentBest/TheSingularityWorkshop.Experiences/blob/master/README.md)
+- [AnyApp runtime entry point](https://github.com/TrentBest/AnyApp/blob/development/AnyAppRuntime.cs)
+- [AnyApp repository catalog](https://github.com/TrentBest/AnyApp/blob/development/RepositoryMicroBundleCatalog.cs)
+- [AnyApp publisher](https://github.com/TrentBest/AnyApp/blob/development/Publishing/ExperiencePublisher.cs)
+- [MicroBundleRepository catalog](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/development/src/REST/TheSingularityWorkshop.MicroBundleRepository.Rest/RestMicroBundleCatalog.cs)
+- [Experiences publication workflow](https://github.com/TrentBest/TheSingularityWorkshop.Experiences/blob/development/.github/workflows/publish-microbundles.yml)
+- [Experiences repository overview](https://github.com/TrentBest/TheSingularityWorkshop.Experiences/blob/development/README.md)
 
 ---
 
