@@ -54,6 +54,16 @@ Status legend:
 
 | Repository | Coverage | Focus |
 |---|---|---|
+| [FSM_Layer_Generics](https://github.com/TrentBest/FSM_Layer_Generics) | Queued | Generic FSM layer contract; verify whether host projects duplicate layer behavior or intentionally stay on FSM_API |
+| [FSM_Layer_DependencyInjection](https://github.com/TrentBest/FSM_Layer_DependencyInjection) | Queued | Dependency-injection adapter; verify package direction and real consumers |
+| [FSM_PackageManager](https://github.com/TrentBest/FSM_PackageManager) | Queued | Package discovery/install boundary; compare with MicroBundleRepository and FSM_COS without conflating package management with runtime artifact resolution |
+| [FSM_UnityIntegrationAdvanced](https://github.com/TrentBest/FSM_UnityIntegrationAdvanced) | Queued | Unity adapter ownership and current relevance; keep Unity-specific types outside FSM_API core |
+| [FSM_ProjectTemplates](https://github.com/TrentBest/FSM_ProjectTemplates) | Queued | Template drift and reuse of current package/host architecture |
+| [FSM_Dungeon](https://github.com/TrentBest/FSM_Dungeon) | Queued | FSM_API consumer patterns and opportunities to reuse Experience/MicroBundle composition |
+| [FSM_Bot](https://github.com/TrentBest/FSM_Bot) | Queued | FSM_API consumer patterns, lifecycle ownership, and host boundaries |
+| [FSM_Bot_Editor](https://github.com/TrentBest/FSM_Bot_Editor) | Queued | Editor integration and GUI/domain boundary; verify actual shared GUI contracts |
+| [TheForge](https://github.com/TrentBest/TheForge) | Queued | Forge authority boundaries, publishing authorization, and repository integration |
+| [RevitFamilyManagerBuilders](https://github.com/TrentBest/RevitFamilyManagerBuilders) | Cross-repo sampled | Composable Builders migration; live Revit catalog synchronization remains explicitly unverified for production |
 | [FSM_API](https://github.com/TrentBest/FSM_API) | Source review started | Host execution mechanics, identity/cleanup, integration contract |
 | [FSM_API_Benchmark](https://github.com/TrentBest/FSM_API_Benchmark) | Separate audit | Named benchmark coverage, historical comparisons, CI regression evidence |
 | [TheSingularityWorkshop.FSM_Serialization](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Serialization) | Separate audit | Serialization contracts, ownership, failure handling, consumers |
@@ -131,7 +141,7 @@ Prioritize by architectural leverage: runtime ownership and duplicate execution 
 
 ## 05 — Current limitations
 
-This inventory is assembled from 2026 conversation/workstream context, current-year commit search results, and repository source/README reads. It is a working scope, not a GitHub-wide proof of every repository touched during the year. Repositories may be added when commit history or work records show 2026 activity. Some linked repositories have only had README/architecture-level sampling; their code, tests, and workflows remain unaudited.
+This inventory is assembled from 2026 conversation/workstream context, current-year commit search results, current development-branch tip checks, and repository source/README reads. Some newly added repositories are confirmed as touched in 2026 by documentation commits only and remain queued for source-level audit. It is a working scope, not a GitHub-wide proof of every repository touched during the year. Repositories may be added when commit history or work records show 2026 activity. Some linked repositories have only had README/architecture-level sampling; their code, tests, and workflows remain unaudited.
 
 ---
 
