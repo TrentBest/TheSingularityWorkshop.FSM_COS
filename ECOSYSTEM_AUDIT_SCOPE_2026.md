@@ -144,6 +144,27 @@ Prioritize by architectural leverage: runtime ownership and duplicate execution 
 
 This inventory is assembled from 2026 conversation/workstream context, current-year commit search results, current development-branch tip checks, and repository source/README reads. Some newly added repositories are confirmed as touched in 2026 by documentation commits only and remain queued for source-level audit. It is a working scope, not a GitHub-wide proof of every repository touched during the year. Repositories may be added when commit history or work records show 2026 activity. Some linked repositories have only had README/architecture-level sampling; their code, tests, and workflows remain unaudited.
 
+## 06 — Repository-local issue handoff
+
+Every source-backed gap discovered during this audit must be handed to the owning repository's development issue tracker, not left only in the central audit document.
+
+- Search existing open issues first. Link the existing issue when it already owns the gap; do not create a duplicate merely to restate it.
+- Create an issue in the owning repository when no suitable issue exists. Give the repository LLM a source-backed problem statement, exact files/contracts to inspect, architectural ownership and non-goals, focused implementation steps, deterministic acceptance tests, documentation expectations, and explicit no-release/no-deployment constraints.
+- Keep uncertainty honest: distinguish a demonstrated defect from a reachable risk, an unimplemented contract, a missing test, and a candidate integration that still needs consumer evidence.
+- Cross-link the owning issue from [CROSS_REPOSITORY_MISSED_INTEGRATIONS.md](CROSS_REPOSITORY_MISSED_INTEGRATIONS.md) so the central audit remains navigable.
+- An issue being created or a test existing in source is not proof of implementation, CI success, or release readiness. Record actual execution evidence separately.
+- Preserve ownership boundaries and use the `development` branch; do not publish NuGet, deploy, or change `master` without explicit authorization.
+
+Initial handoffs created during this iteration:
+- [WebPage #126 — atomic manifest activation](https://github.com/TrentBest/WebPage/issues/126)
+- [StoryBuilder #5 — real browser persistence/reload proof](https://github.com/TrentBest/StoryBuilder/issues/5)
+- [FSM_PackageManager #2 — reconcile advertised behavior with implementation](https://github.com/TrentBest/FSM_PackageManager/issues/2)
+- [The #20 — awaited Architect startup lifecycle](https://github.com/TrentBest/The/issues/20)
+- [GUI #59 — shared semantic adapter conformance](https://github.com/TrentBest/TheSingularityWorkshop.GUI/issues/59)
+- [Experiences #28 — StoryBuilder capture-to-AnyApp vertical slice](https://github.com/TrentBest/TheSingularityWorkshop.Experiences/issues/28)
+
+Existing issues reused rather than duplicated include [Foundry #1](https://github.com/TrentBest/TheSingularityWorkshop.Foundry/issues/1), [WebApp #10](https://github.com/TrentBest/TheSingularityWorkshop.WebApp/issues/10), [AnyApp #23](https://github.com/TrentBest/AnyApp/issues/23), and [MicroBundleRepository #22/#23](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/issues/23).
+
 ---
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
