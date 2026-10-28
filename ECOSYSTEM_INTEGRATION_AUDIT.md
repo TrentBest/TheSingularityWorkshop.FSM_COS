@@ -12,6 +12,8 @@ Related continuing scan: [Cross-Repository Missed Integration Opportunities](CRO
 
 **2026 coverage ledger:** [ECOSYSTEM_AUDIT_SCOPE_2026.md](ECOSYSTEM_AUDIT_SCOPE_2026.md) tracks repositories in scope and distinguishes source-reviewed findings from queued work.
 
+**Release planning:** [RELEASE_READINESS_PORTFOLIO.md](RELEASE_READINESS_PORTFOLIO.md) compares current candidate evidence, immediate release blockers, and the largest remaining ecosystem integration gaps. It is an initial evidence-based triage, not release authorization.
+
 ## 01 — The architecture we are integrating
 
 The intended responsibility chain is:
