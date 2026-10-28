@@ -153,6 +153,38 @@ Do not add dependencies from DataWarehouse into FSM_COS, MicroBundleDomain, or M
 
 **Acceptance evidence:** A named consumer and workload demonstrate correctness and measured benefit before adopting DataWarehouse; ingestion emits contract-valid artifacts; repository tests prove unauthorized publication is rejected. Until such source/tests are inspected, this is a **candidate integration**, not a confirmed missing implementation.
 
+## 12 — P2: Turn GUI adapter diversity into a shared, executable conformance contract
+
+**Evidence (current `development` README)**
+
+- [GUI README](https://github.com/TrentBest/TheSingularityWorkshop.GUI/blob/development/README.md) confirms Core plus Blazor, WPF, and SVG adapters exist.
+- The same README explicitly says adapter contracts and coverage differ and the shared conformance suite is intentionally narrow.
+- [Visualize](https://github.com/TrentBest/TheSingularityWorkshop.Visualize) and SimpleDemos already provide trace/replay use cases; the previous sections identify GUI.SVG as one endpoint and AnyApp/GUI.WPF as another.
+
+**Opportunity**
+
+Before broadening GUI's public abstraction, define a small set of semantic scene/node fixtures that every applicable adapter must handle, with explicit unsupported-node behavior. Run the same fixtures through SVG and WPF first, then Blazor where its current contract applies. Compare semantic output and stable identities, not pixel equality where renderers intentionally differ. Keep adapter-specific capabilities explicit; do not force SVG animation, browser behavior, and WPF control lifecycles into a false common denominator.
+
+**Acceptance evidence:** The same named fixture suite executes against at least two adapters; supported and unsupported nodes are reported explicitly; output semantics and IDs are stable; tests do not claim visual parity they do not measure.
+
+**Confidence:** High that conformance coverage is intentionally narrow (the README states so); the exact missing fixture cases require test-source inspection.
+
+## 13 — P2: Treat CiAi evidence policy as reusable infrastructure, not merely a demo
+
+**Additional evidence**
+
+- [CiAi README](https://github.com/TrentBest/TheSingularityWorkshop.CiAi/blob/development/README.md) documents observing workflow runs by full commit SHA, collecting exact run attempts/jobs/steps, and writing JSON/Markdown evidence.
+- Its documented policy fails closed when required evidence is missing, duplicated, non-terminal, unsuccessful, or incomplete; unrelated runs can remain diagnostic rather than blocking.
+- The README explicitly says CiAi exposes CI facts to an LLM; it is not an AI-powered CI runner.
+
+**Opportunity**
+
+Reuse this strict evidence model across each repository's named tests and benchmarks, retaining source revision, exact workflow/run attempt, package-versus-source mode, and benchmark artifact identity. Keep decision and execution authority outside model-authored text. This complements (rather than replaces) each repository's tests and release gates.
+
+**Acceptance evidence:** A cross-repository report can show which exact required workflows ran for a commit and which required checks are absent; failed or incomplete evidence cannot be summarized as green; NuGet publication remains separately owner-authorized.
+
+**Confidence:** High for the evidence observer and fail-closed policy documented in CiAi; cross-repository rollout remains unverified.
+
 ## 11 — Audit coverage ledger
 
 The broader 2026 repository scope and review status are maintained in [ECOSYSTEM_AUDIT_SCOPE_2026.md](ECOSYSTEM_AUDIT_SCOPE_2026.md). A repository listed there is not considered fully audited merely because its README was read. Each entry must progress from inventory to source review, then tests/workflows and cross-repository contract verification.
