@@ -288,6 +288,21 @@ The broader 2026 repository scope and review status are maintained in [ECOSYSTEM
 
 **Confidence:** High for the inspected files' ownership and technology dependencies; a complete TheForge source audit has not been performed.
 
+
+## 21 — P2: Refresh project templates against the current FSM_API contract before treating them as canonical examples
+
+**Direct development-branch evidence**
+
+- [FSM_ProjectTemplates README](https://github.com/TrentBest/FSM_ProjectTemplates/blob/development/README.md) describes the repository as a starting point for FSM_API consumers and currently lists a single WPF Minesweeper template.
+- [FSM_WPF.csproj](https://github.com/TrentBest/FSM_ProjectTemplates/blob/development/FSM_WPF/FSM_WPF.csproj) pins FSM_API 1.0.9, while the current Workshop runtime integration work references FSM_API 1.0.13. This is version skew in the template source, not evidence by itself that the sample is broken.
+- [FSM_Layer_DependencyInjection.cs](https://github.com/TrentBest/FSM_Layer_DependencyInjection/blob/development/FSM_Layer_DependencyInjection/FSM_Layer_DependencyInjection.cs) is an empty placeholder class, and its project file currently declares only a .NET 8 target with no package or dependency-injection contract.
+
+**Opportunity:** treat templates and layer adapters as tested integration examples. Update the template only after compiling and testing it against the current supported FSM_API version, and add a new host template only when a real reusable pattern exists. Do not promote FSM_Layer_DependencyInjection as an available integration until its public contract and tests exist.
+
+**Acceptance evidence:** clean restore/build/test of the template against the intended FSM_API version; README accurately lists what is implemented; dependency-injection adapter, if retained, has a minimal public contract and consumer tests.
+
+**Confidence:** High for the explicit version pin and placeholder class; template execution and package compatibility were not tested during this audit.
+
 ---
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
