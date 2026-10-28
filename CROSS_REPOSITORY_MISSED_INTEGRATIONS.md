@@ -303,6 +303,37 @@ The broader 2026 repository scope and review status are maintained in [ECOSYSTEM
 
 **Confidence:** High for the explicit version pin and placeholder class; template execution and package compatibility were not tested during this audit.
 
+
+## 22 — P1: Make WebPage manifest activation atomic across Hub and Experience execution
+
+**Direct development-branch evidence**
+
+- [WorkshopExperienceService.SwitchManifestAsync](https://github.com/TrentBest/WebPage/blob/development/TheSingularityWorkshop/Services/WorkshopExperienceService.cs) prepares a candidate FSM_COS assembly and candidate Hub/capability assemblies, then saves the previous primary assembly and Hub bundles before committing activation.
+- The activation sequence calls `_hubRuntime.ActivateManifestBundle(candidateHubBundle)` and then `_executionHost.ActivateExecutionRuntime(candidateExecutionRuntime)`. The `catch` path disposes candidate runtime objects when `activated` is still false, but it does not restore the previous Hub manifest bundle set if a later operation in that commit sequence fails.
+- [HubRuntime.ActivateManifestBundle](https://github.com/TrentBest/WebPage/blob/development/TheSingularityWorkshop/Infrastructure/Hub/HubRuntime.cs) has rollback for failures inside its own load/arbitration operation. That local rollback does not cover a failure after it returns to the caller.
+- [FSMManagerService.ActivateExecutionRuntime](https://github.com/TrentBest/WebPage/blob/development/TheSingularityWorkshop/Services/FSMManagerService.cs) currently validates the prepared adapter and writes it atomically, so the cross-step failure window is narrow today. The surrounding code nevertheless presents manifest switching as an atomic activation and captures old Hub state without using it for rollback.
+
+**Opportunity:** make the entire manifest activation commit either succeed as a unit or restore the previous Hub bundle set and execution adapter. At minimum, make the commit sequence explicitly non-throwing after Hub mutation, or retain/restore the old execution adapter and Hub bundle state in a guarded rollback. Do not dispose old runtime objects until all state owners have committed successfully.
+
+**Acceptance evidence:** inject a failure after Hub activation but before activation completion; assert the prior Hub bundle identities, execution adapter, manifest, assembly references, and observable runtime state remain active. Also verify a successful switch retires old disposable objects exactly once.
+
+**Confidence:** Medium-high. The source sequence and missing outer rollback are visible; current adapter activation has few failure modes, so tests should establish whether this is an actual reachable defect before a large refactor.
+
+## 23 — P2: Update persistence audit claims to reflect existing restart and round-trip tests
+
+**Direct development-branch evidence**
+
+- [AnyApp StoryBuilderDesktopPersistenceStoreTests](https://github.com/TrentBest/AnyApp/blob/development/tests/TheSingularityWorkshop.AnyApp.Tests/StoryBuilderDesktopPersistenceStoreTests.cs) includes stable-ID and event-to-manuscript-link round-trip coverage, byte-identical re-save coverage, unreadable-save preservation, and a native application process-restart probe that writes in one process and verifies in a second.
+- [StoryBuilderPersistenceCoordinatorTests](https://github.com/TrentBest/StoryBuilder/blob/development/tests/StoryBuilder.Core.Tests/StoryBuilderPersistenceCoordinatorTests.cs) verifies binary workspace save/load into a new session through a fake `IJSRuntime`; this proves coordinator behavior, not a real browser reload or browser storage failure behavior.
+- [StoryBuilderPersistenceCoordinator](https://github.com/TrentBest/StoryBuilder/blob/development/samples/StoryBuilder.WebDemo/StoryBuilderPersistenceCoordinator.cs) uses browser-local storage and preserves an unreadable saved value until the user explicitly chooses to clear it.
+
+**Correction to the audit status:** it is no longer accurate to say that *all* create/link/save/restart/reopen coverage is simply outstanding. The AnyApp development branch contains a process-restart probe in source, although it has not been executed as part of this audit. Remaining proof includes running the native probe in CI and exercising the real browser storage/reload path; the fake-JS StoryBuilder test alone does not prove those browser behaviors.
+
+**Acceptance evidence:** record the actual CI result for the AnyApp process-restart test; add or document a browser-level reload test for StoryBuilder's localStorage path; preserve malformed/unsupported input and explicit-reset behavior. Do not duplicate the already-existing persistence implementation merely to satisfy the audit.
+
+**Confidence:** High for the presence and stated scope of the inspected tests; execution status is unverified in this audit.
+
+
 ---
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
