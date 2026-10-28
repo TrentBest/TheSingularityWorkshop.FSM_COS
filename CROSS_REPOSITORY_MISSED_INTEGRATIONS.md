@@ -123,6 +123,8 @@ No builds, tests, live endpoints, browser sessions, or publication workflows wer
 - [The / Architect architecture memory](https://github.com/TrentBest/The/blob/development/docs/ARCHITECTURE_MEMORY.md) documents startup orchestration through FSM_API callbacks declared `async void`; completion, failure, and shutdown need an awaited lifecycle contract.
 - [MyVR architecture](https://github.com/TrentBest/TheSingularityWorkshop.MyVR/blob/development/docs/ARCHITECTURE.md) correctly assigns VR device/session lifecycle and presentation to MyVR while explicitly excluding Experience composition and canonical artifact identity.
 
+**Owning-repository handoff:** [Foundry issue #1 — Own the Hub execution runtime in Foundry; keep GUI as presentation](https://github.com/TrentBest/TheSingularityWorkshop.Foundry/issues/1) already tracks the ownership boundary and the missing adapter; [WebApp issue #10](https://github.com/TrentBest/TheSingularityWorkshop.WebApp/issues/10) tracks WebApp's transition to canonical execution. These existing issues cover the identified work, so no duplicate issues were opened.
+
 **Opportunity**
 
 Treat Foundry as the common host-neutral execution/lifecycle authority for AnyApp, WebApp, The, and WebPage where the work being performed is a Foundry workflow. Migrate by tracing actual callers and preserving their distinct contracts: FSM_COS composes MicroBundles into a RuntimeAssembly; Foundry executes validated workflows and retains run outcomes; FSM_API remains the state-machine mechanic where directly used; each host owns its UI, device/browser capabilities, permissions, and presentation.
@@ -165,6 +167,8 @@ Do not add dependencies from DataWarehouse into FSM_COS, MicroBundleDomain, or M
 **Opportunity**
 
 Before broadening GUI's public abstraction, define a small set of semantic scene/node fixtures that every applicable adapter must handle, with explicit unsupported-node behavior. Run the same fixtures through SVG and WPF first, then Blazor where its current contract applies. Compare semantic output and stable identities, not pixel equality where renderers intentionally differ. Keep adapter-specific capabilities explicit; do not force SVG animation, browser behavior, and WPF control lifecycles into a false common denominator.
+
+**Owning-repository handoff:** [GUI issue #59 — Expand shared semantic conformance fixtures across GUI adapters](https://github.com/TrentBest/TheSingularityWorkshop.GUI/issues/59). Created after checking open issues for an existing adapter-conformance task.
 
 **Acceptance evidence:** The same named fixture suite executes against at least two adapters; supported and unsupported nodes are reported explicitly; output semantics and IDs are stable; tests do not claim visual parity they do not measure.
 
@@ -256,6 +260,8 @@ The broader 2026 repository scope and review status are maintained in [ECOSYSTEM
 
 **Opportunity:** use the same explicit operation lifecycle vocabulary as Foundry where startup work genuinely qualifies as a workflow, or introduce a narrow awaited operation abstraction if a full workflow is unnecessary. Do not put WPF view models or GitHub credentials into Foundry. Keep the Architect's presentation and local credential boundary in The.
 
+**Owning-repository handoff:** [The issue #20 — Replace Architect async-void startup work with an awaited, cancellable lifecycle](https://github.com/TrentBest/The/issues/20). Created after checking open issues for an existing async startup lifecycle task.
+
 **Acceptance evidence:** controlled fake providers prove success, failure, timeout/cancellation, no premature Ready state, no unobserved async exceptions, and shutdown waits for owned operations. Run these as deterministic tests; do not claim this behavior is fixed from the pure policy tests alone.
 
 **Confidence:** High for the async-void callback and the limited scope of existing policy tests; runtime failure modes have not been executed in this audit.
@@ -267,6 +273,8 @@ The broader 2026 repository scope and review status are maintained in [ECOSYSTEM
 
 - [FSM_PackageManager.csproj](https://github.com/TrentBest/FSM_PackageManager/blob/development/FSM_PackageManager/FSM_PackageManager.csproj) describes a package that manages runtime package loading, dynamic FSM definitions, and package-to-package arbitration, and references FSM_API.
 - Its only inspected implementation file, [Class1.cs](https://github.com/TrentBest/FSM_PackageManager/blob/development/FSM_PackageManager/Class1.cs), contains an empty `Class1` type. The README is branding/documentation-standard content rather than an operational contract.
+
+**Owning-repository handoff:** [FSM_PackageManager issue #2 — Reconcile advertised runtime behavior with the actual public implementation](https://github.com/TrentBest/FSM_PackageManager/issues/2). Created after checking open issues. The task intentionally begins by confirming whether this project is still meant to be active, rather than assuming it should be implemented.
 
 **Disposition:** The project metadata and implementation do not currently establish a reusable package-management capability. Do not wire it into FSM_COS, Foundry, or MicroBundleRepository on the strength of its package description. First determine whether it is intentionally abandoned, a scaffold, or a package whose implementation lives elsewhere. If its intended responsibility is still needed, define a minimal executable contract and tests before any consumer adopts it.
 
