@@ -318,6 +318,8 @@ The broader 2026 repository scope and review status are maintained in [ECOSYSTEM
 
 **Acceptance evidence:** inject a failure after Hub activation but before activation completion; assert the prior Hub bundle identities, execution adapter, manifest, assembly references, and observable runtime state remain active. Also verify a successful switch retires old disposable objects exactly once.
 
+**Owning-repository handoff:** [WebPage issue #126 — Make manifest activation atomic across Hub and Experience runtime state](https://github.com/TrentBest/WebPage/issues/126). Created after checking open issues; issue #100 is related but focuses on authoring-to-browser handoff, not cross-owner rollback.
+
 **Confidence:** Medium-high. The source sequence and missing outer rollback are visible; current adapter activation has few failure modes, so tests should establish whether this is an actual reachable defect before a large refactor.
 
 ## 23 — P2: Update persistence audit claims to reflect existing restart and round-trip tests
@@ -329,6 +331,8 @@ The broader 2026 repository scope and review status are maintained in [ECOSYSTEM
 - [StoryBuilderPersistenceCoordinator](https://github.com/TrentBest/StoryBuilder/blob/development/samples/StoryBuilder.WebDemo/StoryBuilderPersistenceCoordinator.cs) uses browser-local storage and preserves an unreadable saved value until the user explicitly chooses to clear it.
 
 **Correction to the audit status:** it is no longer accurate to say that *all* create/link/save/restart/reopen coverage is simply outstanding. The AnyApp development branch contains a process-restart probe in source, although it has not been executed as part of this audit. Remaining proof includes running the native probe in CI and exercising the real browser storage/reload path; the fake-JS StoryBuilder test alone does not prove those browser behaviors.
+
+**Owning-repository handoff:** [StoryBuilder issue #5 — Verify StoryBuilder browser localStorage persistence across a real reload](https://github.com/TrentBest/StoryBuilder/issues/5). Created after searching the repository's existing issues; the source gap is specifically real browser storage/reload verification, not another coordinator implementation.
 
 **Acceptance evidence:** record the actual CI result for the AnyApp process-restart test; add or document a browser-level reload test for StoryBuilder's localStorage path; preserve malformed/unsupported input and explicit-reset behavior. Do not duplicate the already-existing persistence implementation merely to satisfy the audit.
 
