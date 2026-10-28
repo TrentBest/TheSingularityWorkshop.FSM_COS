@@ -42,10 +42,10 @@ Status legend:
 | [TheSingularityWorkshop.WebApp](https://github.com/TrentBest/TheSingularityWorkshop.WebApp) | Source review started | Private heartbeat/actor FSMs, AnyApp parity, browser input and presentation |
 | [The](https://github.com/TrentBest/The) | Source review started | Architect startup lifecycle, async FSM callbacks, Foundry adoption, GUI command boundary |
 | [TheSingularityWorkshop.MyVR](https://github.com/TrentBest/TheSingularityWorkshop.MyVR) | Cross-repo sampled | Device capability, immersive lifecycle, bounded Experience interaction |
-| [StoryBuilder](https://github.com/TrentBest/StoryBuilder) | Queued | Authoring, manifest/configuration boundaries, serialization, AnyApp integration |
+| [StoryBuilder](https://github.com/TrentBest/StoryBuilder) | Source review started | Authoring and FSM_COS composition test exist; package-to-manifest-to-artifact-to-host vertical slice is explicitly not complete |
 | [TheSingularityWorkshop.Experiences](https://github.com/TrentBest/TheSingularityWorkshop.Experiences) | Source review started | Experience identity, publisher workflow, host-neutral lifecycle and demo integration |
 | [TheSingularityWorkshop.FSM_COS](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS) | Source review started | Composition, RuntimeAssembly, arbitration, catalog seams, docs and release boundaries |
-| [TheSingularityWorkshop.FSM_REST](https://github.com/TrentBest/TheSingularityWorkshop.FSM_REST) | Separate audit | REST boundary, host/service reuse, release readiness |
+| [TheSingularityWorkshop.FSM_REST](https://github.com/TrentBest/TheSingularityWorkshop.FSM_REST) | Source review started | Reusable REST capability substrate; inspect real capability consumers and transport/error conformance |
 | [TheSingularityWorkshop.MicroBundleRepository](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository) | Source review started | Immutable artifact identity, REST catalog, publication/discovery, authorization |
 | [TheSingularityWorkshop.MicroBundleDomain](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain) | Cross-repo sampled | Contract fit, lifecycle semantics, package neutrality |
 | [TheSingularityWorkshop.MicroBundleIngestor](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleIngestor) | Cross-repo sampled | OpenAPI ingestion, generated capability conformance, Forge-only publication authority |
@@ -61,7 +61,7 @@ Status legend:
 | [FSM_UserIO](https://github.com/TrentBest/FSM_UserIO) | Separate audit | NuGet release readiness, user input/output contracts, host integration |
 | [TheSingularityWorkshop.ProtocolAi](https://github.com/TrentBest/TheSingularityWorkshop.ProtocolAi) | Cross-repo sampled | Protocol identities, semantic exchange, conformance fixtures |
 | [TheSingularityWorkshop.GrammarAi](https://github.com/TrentBest/TheSingularityWorkshop.GrammarAi) | Cross-repo sampled | Grammar construction, rejection semantics, consumer fixtures |
-| [TheSingularityWorkshop.HeadlessAi](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi) | Queued | Provider-neutral core and host boundary |
+| [TheSingularityWorkshop.HeadlessAi](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi) | Cross-repo sampled | Provider-neutral HTTP/protocol adapters; verify consumer reuse and bounded failure behavior |
 | [TheSingularityWorkshop.HeadlessAi.AnyAppExample](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi.AnyAppExample) | Queued | Actual consumer integration and example parity |
 | [TheSingularityWorkshop.HeadlessAi.Benchmarks](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi.Benchmarks) | Queued | Workload validity, benchmark linkage, regressions |
 | [TheSingularityWorkshop.Ontology](https://github.com/TrentBest/TheSingularityWorkshop.Ontology) | Cross-repo sampled | Optional semantic contracts and actual consumers |
@@ -131,7 +131,7 @@ Prioritize by architectural leverage: runtime ownership and duplicate execution 
 
 ## 05 — Current limitations
 
-This inventory is assembled from 2026 conversation/workstream context and repository search results. It is a working scope, not a GitHub-wide proof of every repository touched during the year. Repositories may be added when commit history or work records show 2026 activity. Some linked repositories have only had README/architecture-level sampling; their code, tests, and workflows remain unaudited.
+This inventory is assembled from 2026 conversation/workstream context, current-year commit search results, and repository source/README reads. It is a working scope, not a GitHub-wide proof of every repository touched during the year. Repositories may be added when commit history or work records show 2026 activity. Some linked repositories have only had README/architecture-level sampling; their code, tests, and workflows remain unaudited.
 
 ---
 
