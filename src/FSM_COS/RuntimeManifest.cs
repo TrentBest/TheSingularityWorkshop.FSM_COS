@@ -96,9 +96,10 @@ public sealed record RuntimeManifest(
         if (ArbitrationResolved)
         {
             var requestedIds = bundles.Select(entry => entry.BundleId).ToHashSet();
-            if (!requestedIds.SetEquals(byId.Keys))
+            var missingRoots = requestedIds.Except(byId.Keys).OrderBy(id => id).ToArray();
+            if (missingRoots.Length > 0)
                 throw new InvalidOperationException(
-                    "A pre-resolved runtime manifest must list the complete flattened bundle closure in Bundles and LoadPlan.");
+                    $"A pre-resolved runtime manifest load plan is missing requested root MicroBundle IDs: [{string.Join(", ", missingRoots)}].");
         }
 
 #endif
