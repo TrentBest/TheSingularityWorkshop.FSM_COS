@@ -27,6 +27,63 @@ Keep the five roles and their order stable; tailor the visible heading wording t
 
 This five-part shape applies to substantive public guides, not blindly to every artifact. Generated UML/type cards, machine-readable reports, release evidence checklists, changelogs, security reporting instructions, and internal audit ledgers keep the format appropriate to their job, while still stating scope, evidence, limitations, and next action where relevant.
 
+
+## Textbook-style theory chapters
+
+Every repository should teach its own domain as a small, college-textbook-quality learning path—not merely provide an architecture overview, API inventory, or design rationale. The aim is to make the technology understandable to a curious newcomer, useful to an experienced engineer, and adaptable by an instructor who wants to reorder, replace, annotate, or extend individual chapters.
+
+The repository's theory is **domain-specific**. Explain the problem this technology owns and the concepts needed to reason about it. Link to authoritative neighboring repositories for concepts they own rather than copying their manuals or claiming their theory. For example, FSM_API owns general finite-state-machine theory; a consuming package explains how it uses that theory at its own boundary.
+
+### Chapter teaching sequence
+
+Build a progressive path from familiar experience to precise, source-grounded understanding. A chapter may combine or omit a part when the subject genuinely does not need it, but should not skip evidence or limitations just to make the story persuasive.
+
+1. **Intuition and motivating problem.** Begin with a recognizable real-world or programming problem before introducing specialist vocabulary. Explain the cost of the problem and why the reader should care.
+2. **Concepts and vocabulary.** Define terms plainly, give a concrete analogy, and state where the analogy stops being accurate. Separate related ideas that are easy to confuse.
+3. **Theory and reasoning.** Explain the governing model, assumptions, invariants, trade-offs, alternatives, and conditions under which the idea is useful or a poor fit. Show the reasoning, not only the conclusion.
+4. **Model or living visual.** Provide a diagram, worked model, animation, interactive example, or data flow that helps the reader reason about the concept. Include a caption and accessible text equivalent. Label conceptual illustrations honestly; visuals are not runtime proof merely because they animate.
+5. **Implementation mapping.** Trace each important concept to real public types, members, source files, tests, and lifecycle stages. Explain why the implementation is shaped this way, what it guarantees, and which responsibilities remain elsewhere. Link rather than invent symbols or duplicate full API references.
+6. **Worked example.** Walk through a small end-to-end case with inputs, intermediate steps, outputs, and important failure or alternative paths. Provide exact prerequisites and reproducible commands when executable.
+7. **Evidence and limits.** State what was source-checked, built, tested, benchmarked, or observed, against which revision and scope. Distinguish current implementation, intended architecture, hypothesis, and future work. Record counterexamples, edge cases, unverified assumptions, and guarantees the system does not make.
+8. **Practice and assessment.** Include useful review questions, a small exercise, or an investigation prompt. Where appropriate, ask the reader to predict an outcome before revealing it, compare alternatives, or find a counterexample.
+9. **Further reading.** Link to the exact contracts, runnable recipes, related chapters, tests, source, and authoritative theory owned by neighboring repositories.
+10. **Instructor/editor notes where useful.** Keep chapters modular and independently linkable. Put repository-specific extension points, suggested experiments, discussion prompts, and visual/source assets where an instructor can adapt them without rewriting the entire book.
+
+Not every chapter needs ten separately titled sections. This is a content-completeness checklist and editorial target, not a rigid page template. A short chapter should still connect intuition, concept, implementation, and evidence in proportion to its subject.
+
+### Research discipline: from implementation to theory
+
+Theory must be more than a confident explanation of current code. Where the repository makes or explores a general claim, preserve the reasoning chain:
+
+**implementation → observation → proposition → evidence → counterexample / open question**
+
+- **Implementation:** identify the exact code, contract, or behavior under discussion.
+- **Observation:** record what source inspection, tests, a trace, or a benchmark actually shows, including the conditions of observation.
+- **Proposition:** state the general claim that might follow. Make it precise enough to challenge.
+- **Evidence:** link repeatable tests, examples, measurements, or independent reasoning that supports or weakens the claim.
+- **Counterexample / open question:** record the conditions that break the claim, where evidence is missing, and what experiment would resolve uncertainty.
+
+Do not silently promote an observation into a universal law. Label assumptions and confidence. Big-O analysis, benchmark measurements, formal guarantees, conceptual models, and anecdotes are different kinds of evidence and must not be presented as interchangeable.
+
+### Chapter organization and maintainability
+
+- Provide a **theory index / learning path** that describes the intended order and links to standalone chapters.
+- Give chapters stable, descriptive names and ordering prefixes where order matters. Keep links useful when a chapter is read independently.
+- Make it possible for instructors and maintainers to insert, reorder, replace, or extend chapters without requiring edits to one giant monolithic document.
+- Keep reusable source examples, visual assets, exercises, and answer/rationale notes clearly associated with the chapter that uses them.
+- Prefer living, editable visuals when they materially improve understanding. Keep their source editable, explain how to regenerate them, and provide static fallbacks or text equivalents. State whether each visual is conceptual, source-derived, or captured from a named execution.
+- Link implementation claims to the relevant source and tests. Avoid brittle line-number citations unless the repository has a reliable way to keep them current.
+- Keep the learning path complementary to the README, getting-started guide, API reference, UML, and runnable examples. The theory chapter explains **why and how to reason**; API reference defines exact contracts; recipes teach a task; UML maps structure and relationships.
+- Include limitations and poor-fit scenarios. The goal is understanding, not marketing.
+- Do not invent a public type, feature, test result, performance claim, guarantee, or external dependency to complete a narrative.
+- For a repository that has no meaningful domain theory, document that decision and link to the owning repository's theory instead of manufacturing chapters.
+
+### Review standard
+
+A theory chapter is ready when a reader can answer: What problem is this solving? What are the concepts and assumptions? Why does the model work? Where is it implemented? What evidence supports the explanation? What does it not guarantee? How could I reproduce, challenge, or extend it? What should I read next?
+
+The theory index and chapter set should make these answers discoverable without requiring the reader to already know the implementation or the repository's internal vocabulary.
+
 ## Accuracy and evidence
 
 Source is authoritative for implementation claims. Separate implemented behavior, current development state, intended architecture, and future work. Label examples as **Verified** (built/run against a named version/commit), **Source-checked** (checked but not executed), or **Conceptual** (illustrative, not runnable). Diagrams must be identified as source-derived, authored conceptual models, or captured runtime observations. Record target identity, source/revision, analysis scope, generation path, unresolved relationships, and regeneration/check instructions where applicable. A green CI badge is not an explanation of what was tested. Never imply that a static picture proves runtime behavior or that fixture-level generation proves repository-wide automation.
