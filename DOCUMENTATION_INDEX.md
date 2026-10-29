@@ -21,7 +21,7 @@ Start with the concept before learning the vocabulary.
 
 Read these when you need the reasoning behind the boundaries, rather than another description of the API.
 
-- [FSM_COS Theory](docs/THEORY.md) — the composition model and its design rationale.
+- [FSM_COS Theory](docs/THEORY.md) — the composition model and its design rationale; use it as the starting point for the domain's textbook-style learning path.
 - [Runtime Manifest Theory](docs/MANIFEST_THEORY.md) — why the published request is narrower than a rich authoring model.
 - [Security and Trust Boundaries](SECURITY.md) — trust assumptions, resource limits, and what in-process MicroBundles do not guarantee.
 - [Composition Failures](docs/COMPOSITION_FAILURES.md) — why failures are phase-aware and prevent a successful handoff.
@@ -46,7 +46,7 @@ Choose the task you are trying to complete. These are the practical guides and e
 
 **Maintain the implementation**
 - [Architecture](docs/ARCHITECTURE.md) — component boundaries and data flow.
-- [Documentation standard](DOCUMENTATION_STANDARD.md) — shared Workshop requirements for evidence, accuracy, and type documentation.
+- [Documentation standard](DOCUMENTATION_STANDARD.md) — shared Workshop requirements for textbook-style theory chapters, evidence, accuracy, visuals, and type documentation.
 
 ## 04 — See it in a minute
 
