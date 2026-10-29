@@ -180,6 +180,7 @@ public sealed class FsmCos : IFsmCos
         if (manifest.ArbitrationResolved)
         {
             resolvedBundles = ResolvePublishedFlatSet(
+                manifest,
                 requestedRoots,
                 out dependencyRequestsById,
                 out totalConfigurationBytes);
@@ -416,17 +417,44 @@ public sealed class FsmCos : IFsmCos
 
 #if WORKSHOP_USE_REPOSITORY_SOURCES
     private Dictionary<ulong, IMicroBundle> ResolvePublishedFlatSet(
-        IReadOnlyDictionary<ulong, IMicroBundle> publishedBundles,
+        RuntimeManifest manifest,
+        IReadOnlyDictionary<ulong, IMicroBundle> requestedRoots,
         out Dictionary<ulong, MicroBundleDependencyRequest[]> dependencyRequestsById,
         out long totalConfigurationBytes)
     {
-        var resolvedBundles = new Dictionary<ulong, IMicroBundle>(publishedBundles.Count);
+        var plan = manifest.LoadPlan
+            ?? throw new InvalidOperationException("A pre-resolved runtime manifest must include its complete flat load plan.");
+        var resolvedBundles = new Dictionary<ulong, IMicroBundle>(plan.Count);
         dependencyRequestsById = new Dictionary<ulong, MicroBundleDependencyRequest[]>();
         totalConfigurationBytes = 0;
         var dependencyRequestCount = 0;
 
-        foreach (var (bundleId, bundle) in publishedBundles)
+        // Bundles contains only authored composition roots. Resolve every remaining entry
+        // from the published flat plan independently, without promoting dependencies to roots.
+        foreach (var entry in plan)
         {
+            var bundleId = entry.Reference.BundleId;
+            IMicroBundle bundle;
+            if (requestedRoots.TryGetValue(bundleId, out var requestedRoot))
+            {
+                bundle = requestedRoot;
+                if (!string.Equals(bundle.Descriptor.Version, entry.Reference.Version, StringComparison.Ordinal))
+                    throw new InvalidOperationException(
+                        $"Runtime manifest load plan expects root MicroBundle {bundleId} version '{entry.Reference.Version}', " +
+                        $"but the requested root is '{bundle.Descriptor.Version}'.");
+            }
+            else if (!_catalog.TryResolve(bundleId, entry.Reference.Version, out var dependencyBundle) ||
+                     dependencyBundle is null)
+            {
+                throw new InvalidOperationException(
+                    $"Pre-resolved dependency MicroBundle {bundleId} version '{entry.Reference.Version}' could not be resolved.");
+            }
+            else
+            {
+                bundle = dependencyBundle;
+                ValidateResolvedBundle(bundleId, entry.Reference.Version, bundle);
+            }
+
             ValidateResolvedDescriptorIdentity(bundleId, bundle);
             var declaredDependencies = bundle.Dependencies;
             if (declaredDependencies is null)
