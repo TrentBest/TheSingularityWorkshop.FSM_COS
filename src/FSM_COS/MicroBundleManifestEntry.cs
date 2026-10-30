@@ -29,7 +29,10 @@ public readonly record struct MicroBundleManifestEntry
 
         BundleId = bundleId;
         Version = version;
+        // SHA-256 pins use the repository-wide lowercase hexadecimal representation.
+#pragma warning disable CA1308 // Lowercase hexadecimal is the canonical MicroBundle hash representation.
         ContentHash = contentHash?.ToLowerInvariant();
+#pragma warning restore CA1308
     }
 
     public ulong BundleId { get; }
