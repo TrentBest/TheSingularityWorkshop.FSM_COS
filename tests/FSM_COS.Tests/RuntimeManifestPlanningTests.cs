@@ -212,12 +212,16 @@ public sealed class RuntimeManifestPlanningTests
     {
         var reference = Reference(7, "1.2.0");
         Assert.True(reference.IsValid);
-        Assert.True(reference.Matches(new MicroBundleManifestEntry(7, "1.2.0")));
-        Assert.False(reference.Matches(new MicroBundleManifestEntry(7, "2.0.0")));
-        Assert.False(reference.Matches(new MicroBundleManifestEntry(8, "1.2.0")));
+        Assert.True(reference.Matches(new MicroBundleManifestEntry(7, "1.2.0", reference.ContentHash)));
+        Assert.False(reference.Matches(new MicroBundleManifestEntry(7, "1.2.0")));
+        Assert.False(reference.Matches(new MicroBundleManifestEntry(7, "2.0.0", reference.ContentHash)));
+        Assert.False(reference.Matches(new MicroBundleManifestEntry(8, "1.2.0", reference.ContentHash)));
+        Assert.False(reference.Matches(new MicroBundleManifestEntry(7, "1.2.0", new string('0', 64))));
         Assert.False(new MicroBundleReference(0, "1.2.0", "sha256:content").IsValid);
         Assert.False(new MicroBundleReference(7, " ", "sha256:content").IsValid);
         Assert.False(new MicroBundleReference(7, "1.2.0", " ").IsValid);
+        Assert.False(new MicroBundleReference(7, "1.2.0", "sha256:content").IsValid);
+        Assert.Throws<ArgumentException>(() => new MicroBundleManifestEntry(7, "1.2.0", "sha256:content"));
     }
 
     [Fact]
@@ -585,7 +589,9 @@ public sealed class RuntimeManifestPlanningTests
     }
 
     private static MicroBundleReference Reference(ulong id, string version) =>
-        new(id, version, $"sha256:{id}-{version}");
+        new(id, version, Convert.ToHexString(
+            System.Security.Cryptography.SHA256.HashData(
+                System.Text.Encoding.UTF8.GetBytes($"{id}-{version}"))).ToLowerInvariant());
 
     private sealed class MisreportingReadOnlyList<T> : IReadOnlyList<T>
     {
