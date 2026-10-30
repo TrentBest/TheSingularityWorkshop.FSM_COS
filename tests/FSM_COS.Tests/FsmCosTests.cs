@@ -57,8 +57,8 @@ public sealed class FsmCosTests
         var root = new TestBundle(1);
         var plan = new[]
         {
-            new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", "hash-1")),
-            new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", "hash-2"))
+            new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", new string('1', 64))),
+            new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", new string('2', 64)))
         };
 
         var exception = Assert.Throws<InvalidOperationException>(() =>
@@ -76,8 +76,8 @@ public sealed class FsmCosTests
         var schedule = new RuntimeManifestSchedule(
             new[]
             {
-                new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", "hash-1")),
-                new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", "hash-2"))
+                new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", new string('1', 64))),
+                new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", new string('2', 64)))
             },
             Array.Empty<RuntimeManifestDependency>());
 
@@ -96,9 +96,9 @@ public sealed class FsmCosTests
         var schedule = new RuntimeManifestSchedule(
             new[]
             {
-                new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", "hash-1")),
-                new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", "hash-2")),
-                new RuntimeManifestEntry(new MicroBundleReference(3, "0.1.0-test", "hash-3"))
+                new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", new string('1', 64))),
+                new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", new string('2', 64))),
+                new RuntimeManifestEntry(new MicroBundleReference(3, "0.1.0-test", new string('3', 64)))
             },
             new[]
             {
@@ -580,9 +580,9 @@ public sealed class FsmCosTests
         var expected = new InvalidOperationException("catalog dependency lookup failed");
         var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
         var rootEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+            new MicroBundleReference(1, "0.1.0-test", new string('a', 64)));
         var dependencyEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(2, "0.1.0-test", "sha256:dependency"));
+            new MicroBundleReference(2, "0.1.0-test", new string('b', 64)));
         var schedule = new RuntimeManifestSchedule(
             new[] { rootEntry, dependencyEntry },
             new[] { new RuntimeManifestDependency(1, 2) });
@@ -911,8 +911,8 @@ public sealed class FsmCosTests
         var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
         var entries = new[]
         {
-            new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", "sha256:root")),
-            new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", "sha256:dependency"))
+            new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", new string('a', 64))),
+            new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", new string('b', 64)))
         };
         var schedule = new RuntimeManifestSchedule(
             entries,
@@ -937,8 +937,8 @@ public sealed class FsmCosTests
         var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
         var entries = new[]
         {
-            new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", "sha256:root")),
-            new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", "sha256:dependency"))
+            new RuntimeManifestEntry(new MicroBundleReference(1, "0.1.0-test", new string('a', 64))),
+            new RuntimeManifestEntry(new MicroBundleReference(2, "0.1.0-test", new string('b', 64)))
         };
         var schedule = new RuntimeManifestSchedule(entries, Array.Empty<RuntimeManifestDependency>());
 
@@ -986,7 +986,7 @@ public sealed class FsmCosTests
         var requestedDependency = new TestBundle(2, "2.0.0");
         var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
         var rootEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+            new MicroBundleReference(1, "0.1.0-test", new string('a', 64)));
         var dependencyEntry = new RuntimeManifestEntry(
             new MicroBundleReference(2, "2.0.0", "sha256:selected-dependency"));
         var entries = new[] { rootEntry, dependencyEntry };
@@ -1037,7 +1037,7 @@ public sealed class FsmCosTests
         var dependency = new TestBundle(2);
         var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
         var rootEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+            new MicroBundleReference(1, "0.1.0-test", new string('a', 64)));
         var schedule = new RuntimeManifestSchedule(
             new[] { rootEntry },
             Array.Empty<RuntimeManifestDependency>());
@@ -1061,9 +1061,9 @@ public sealed class FsmCosTests
         var dependency = new TestBundle(2);
         var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
         var rootEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+            new MicroBundleReference(1, "0.1.0-test", new string('a', 64)));
         var dependencyEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(2, "9.9.9", "sha256:dependency"));
+            new MicroBundleReference(2, "9.9.9", new string('b', 64)));
         var entries = new[] { rootEntry, dependencyEntry };
         var schedule = new RuntimeManifestSchedule(
             entries,
@@ -1256,7 +1256,7 @@ public sealed class FsmCosTests
     {
         var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
         var rootEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+            new MicroBundleReference(1, "0.1.0-test", new string('a', 64)));
         var dependencyEntry = new RuntimeManifestEntry(
             new MicroBundleReference(2, "0.1.0-test", "sha256:missing"));
         var entries = new[] { rootEntry, dependencyEntry };
@@ -1282,9 +1282,9 @@ public sealed class FsmCosTests
         var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
         var dependency = new TestBundle(2, MicroBundleDependencyRequest.Unconfigured(1));
         var rootEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+            new MicroBundleReference(1, "0.1.0-test", new string('a', 64)));
         var dependencyEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(2, "0.1.0-test", "sha256:dependency"));
+            new MicroBundleReference(2, "0.1.0-test", new string('b', 64)));
         var entries = new[] { rootEntry, dependencyEntry };
         // The published schedule is acyclic, but the domain-owned declarations are not.
         var schedule = new RuntimeManifestSchedule(
@@ -1310,9 +1310,9 @@ public sealed class FsmCosTests
         var root = new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2));
         var dependency = new MalformedBundle(2);
         var rootEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(1, "0.1.0-test", "sha256:root"));
+            new MicroBundleReference(1, "0.1.0-test", new string('a', 64)));
         var dependencyEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(2, "0.1.0-test", "sha256:dependency"));
+            new MicroBundleReference(2, "0.1.0-test", new string('b', 64)));
         var entries = new[] { rootEntry, dependencyEntry };
         var schedule = new RuntimeManifestSchedule(
             entries,
