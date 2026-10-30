@@ -988,7 +988,7 @@ public sealed class FsmCosTests
         var rootEntry = new RuntimeManifestEntry(
             new MicroBundleReference(1, "0.1.0-test", new string('a', 64)));
         var dependencyEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(2, "2.0.0", "sha256:selected-dependency"));
+            new MicroBundleReference(2, "2.0.0", new string('c', 64)));
         var entries = new[] { rootEntry, dependencyEntry };
         var schedule = new RuntimeManifestSchedule(
             entries,
@@ -1258,7 +1258,7 @@ public sealed class FsmCosTests
         var rootEntry = new RuntimeManifestEntry(
             new MicroBundleReference(1, "0.1.0-test", new string('a', 64)));
         var dependencyEntry = new RuntimeManifestEntry(
-            new MicroBundleReference(2, "0.1.0-test", "sha256:missing"));
+            new MicroBundleReference(2, "0.1.0-test", new string('d', 64)));
         var entries = new[] { rootEntry, dependencyEntry };
         var schedule = new RuntimeManifestSchedule(
             entries,
