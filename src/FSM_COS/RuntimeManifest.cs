@@ -113,6 +113,11 @@ public sealed record RuntimeManifest(
                 throw new InvalidOperationException(
                     $"Runtime manifest load plan requests MicroBundle {requested.BundleId} at version " +
                     $"'{planned.Reference.Version}', but the root manifest requests '{requested.Version}'.");
+
+            if (requested.IsPinned &&
+                !planned.Reference.Matches(requested))
+                throw new InvalidOperationException(
+                    $"Runtime manifest load plan does not match the pinned content hash for MicroBundle {requested.BundleId} at version '{requested.Version}'.");
         }
 
         if (Schedule is null || LoadPlan is null)
