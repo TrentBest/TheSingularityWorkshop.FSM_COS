@@ -13,7 +13,7 @@ public sealed class ResolvedRuntimeTests
         var bundle = new ResolvedBundle(1);
         var catalog = new ResolvedCatalog(bundle);
         var entry = new RuntimeManifestEntry(
-            new MicroBundleReference(1, "1.0.0", "sha256:bundle-1"));
+            new MicroBundleReference(1, "1.0.0", new string('1', 64)));
         var schedule = new RuntimeManifestSchedule(
             new[] { entry },
             Array.Empty<RuntimeManifestDependency>());
@@ -39,8 +39,8 @@ public sealed class ResolvedRuntimeTests
         var dependency = new ClosureBundle(2, []);
         var root = new ClosureBundle(1, [2]);
         var catalog = new ClosureCatalog(root, dependency);
-        var dependencyEntry = new RuntimeManifestEntry(new MicroBundleReference(2, "1.0.0", "sha256:bundle-2"));
-        var rootEntry = new RuntimeManifestEntry(new MicroBundleReference(1, "1.0.0", "sha256:bundle-1"));
+        var dependencyEntry = new RuntimeManifestEntry(new MicroBundleReference(2, "1.0.0", new string('2', 64)));
+        var rootEntry = new RuntimeManifestEntry(new MicroBundleReference(1, "1.0.0", new string('1', 64)));
         var plan = new[] { dependencyEntry, rootEntry };
         var schedule = new RuntimeManifestSchedule(
             plan,
@@ -69,7 +69,7 @@ public sealed class ResolvedRuntimeTests
     {
         var bundle = new PlainBundle(1);
         var entry = new RuntimeManifestEntry(
-            new MicroBundleReference(1, "1.0.0", "sha256:bundle-1"));
+            new MicroBundleReference(1, "1.0.0", new string('1', 64)));
         var schedule = new RuntimeManifestSchedule(
             new[] { entry },
             Array.Empty<RuntimeManifestDependency>());
