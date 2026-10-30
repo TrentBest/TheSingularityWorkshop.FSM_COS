@@ -73,6 +73,11 @@ public sealed record RuntimeManifest(
             LoadPlan ?? Schedule!.Entries,
             RuntimeManifestSchedule.DefaultMaximumEntryCount,
             "Runtime manifest load plan");
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+        if (ArbitrationResolved && bundles.Any(entry => !entry.IsPinned))
+            throw new InvalidOperationException(
+                "A pre-resolved runtime manifest must pin the content hash of every requested root MicroBundle.");
+#endif
         for (var index = 0; index < plan.Length; index++)
         {
             var entry = plan[index];
