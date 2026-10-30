@@ -225,6 +225,40 @@ public sealed class RuntimeManifestPlanningTests
     }
 
     [Fact]
+    public void Staged_plan_requires_exact_content_hash_when_root_is_pinned()
+    {
+        var reference = Reference(7, "1.2.0");
+        var matchingRoot = new MicroBundleManifestEntry(7, "1.2.0", reference.ContentHash);
+        var matching = new RuntimeManifest(
+            42,
+            new[] { matchingRoot },
+            LoadPlan: new[] { new RuntimeManifestEntry(reference) });
+
+        matching.ValidateStagedPlan();
+
+        var mismatchedRoot = new MicroBundleManifestEntry(7, "1.2.0", new string('0', 64));
+        var mismatched = new RuntimeManifest(
+            42,
+            new[] { mismatchedRoot },
+            LoadPlan: new[] { new RuntimeManifestEntry(reference) });
+
+        var exception = Assert.Throws<InvalidOperationException>(mismatched.ValidateStagedPlan);
+        Assert.Contains("content hash", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("MicroBundle 7", exception.Message);
+    }
+
+    [Fact]
+    public void Manifest_entry_rejects_malformed_content_hashes()
+    {
+        Assert.Throws<ArgumentException>(() =>
+            new MicroBundleManifestEntry(7, "1.2.0", "sha256:content"));
+
+        var pinned = new MicroBundleManifestEntry(7, "1.2.0", new string('A', 64));
+        Assert.True(pinned.IsPinned);
+        Assert.Equal(new string('a', 64), pinned.ContentHash);
+    }
+
+    [Fact]
     public void Schedule_rejects_invalid_entries_edges_and_duplicate_relationships()
     {
         var valid = new RuntimeManifestEntry(Reference(1, "1.0.0"));
