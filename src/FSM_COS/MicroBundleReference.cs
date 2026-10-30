@@ -16,10 +16,17 @@ public readonly record struct MicroBundleReference(
     public bool IsValid =>
         BundleId != 0 &&
         !string.IsNullOrWhiteSpace(Version) &&
-        !string.IsNullOrWhiteSpace(ContentHash);
+        ContentHash is { Length: 64 } &&
+        ContentHash.All(Uri.IsHexDigit);
 
+    /// <summary>
+    /// Matches only a fully pinned manifest entry. ID/version-only entries
+    /// cannot establish immutable artifact identity.
+    /// </summary>
     public bool Matches(MicroBundleManifestEntry entry) =>
         IsValid &&
+        entry.IsPinned &&
         BundleId == entry.BundleId &&
-        string.Equals(Version, entry.Version, StringComparison.Ordinal);
+        string.Equals(Version, entry.Version, StringComparison.Ordinal) &&
+        string.Equals(ContentHash, entry.ContentHash, StringComparison.OrdinalIgnoreCase);
 }
