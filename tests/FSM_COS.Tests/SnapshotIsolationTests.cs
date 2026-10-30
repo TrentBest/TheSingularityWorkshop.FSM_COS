@@ -62,5 +62,5 @@ public sealed class SnapshotIsolationTests
     }
 
     private static RuntimeManifestEntry Entry(ulong id) =>
-        new(new MicroBundleReference(id, "1.0.0", $"sha256:{id}"));
+        new(new MicroBundleReference(id, "1.0.0", id.ToString("x64")));
 }
