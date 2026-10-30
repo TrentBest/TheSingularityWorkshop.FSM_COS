@@ -183,6 +183,21 @@ If generation or static analysis is not implemented, the documentation must say 
 
 Use contrast for priority, repetition for recognition, proximity for ownership, and concrete metaphors for abstract systems. Diagrams need descriptive alt text, explanatory captions, readable labels, and accurate boundaries. Avoid hype as a substitute for evidence. State prerequisites, poor-fit scenarios, maturity, limitations, and performance context honestly.
 
+## Workshop identity and canonical document footer
+
+The Workshop's static brand mark is the canonical footer image for Markdown documents. Use this exact, repository-independent raw image URL:
+
+`https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png`
+
+Append the following block at the very end of each Markdown document, after all substantive content and links:
+
+```html
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
+```
+
+This footer mark is distinct from the animated moniker used as a document header or the author's GitHub avatar. Do not substitute `Avatar.jpg`, a personal avatar, an SVG moniker, a repository-relative image, or a guessed mirror for this canonical asset. Keep the exact raw URL so the image resolves consistently across repositories. The footer block must appear once, at the end; do not duplicate it or add competing workshop-logo footers. Existing documents should be migrated to this exact block when they are next edited as part of documentation-standard alignment.
+
 ## Review checklist
 
 - [ ] README follows the shared reader journey where applicable.
