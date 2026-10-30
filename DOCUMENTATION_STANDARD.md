@@ -192,7 +192,6 @@ The Workshop's static brand mark is the canonical footer image for Markdown docu
 Append the following block at the very end of each Markdown document, after all substantive content and links:
 
 ```html
-<!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
 ```
 
