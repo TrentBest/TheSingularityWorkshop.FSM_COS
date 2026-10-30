@@ -224,6 +224,28 @@ public sealed class RuntimeManifestPlanningTests
         Assert.Throws<ArgumentException>(() => new MicroBundleManifestEntry(7, "1.2.0", "sha256:content"));
     }
 
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+    [Fact]
+    public void Pre_resolved_manifest_rejects_a_version_only_root_pin()
+    {
+        var planned = new RuntimeManifestEntry(Reference(7, "1.2.0"));
+        var schedule = new RuntimeManifestSchedule(
+            new[] { planned },
+            Array.Empty<RuntimeManifestDependency>());
+        var manifest = new RuntimeManifest(
+            42,
+            new[] { new MicroBundleManifestEntry(7, "1.2.0") },
+            LoadPlan: new[] { planned },
+            Schedule: schedule,
+            ArbitrationResolved: true,
+            PublishedArbitrationRounds: 0);
+
+        var error = Assert.Throws<InvalidOperationException>(manifest.ValidateStagedPlan);
+
+        Assert.Contains("pin the content hash of every requested root", error.Message);
+    }
+#endif
+
     [Fact]
     public void Staged_plan_requires_exact_content_hash_when_root_is_pinned()
     {
