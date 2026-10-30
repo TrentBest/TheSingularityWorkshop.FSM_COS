@@ -19,7 +19,7 @@ public sealed class ResolvedRuntimeTests
             Array.Empty<RuntimeManifestDependency>());
         var manifest = new RuntimeManifest(
             42,
-            new[] { new MicroBundleManifestEntry(1, "1.0.0") },
+            new[] { new MicroBundleManifestEntry(1, "1.0.0", new string('1', 64)) },
             LoadPlan: new[] { entry },
             Schedule: schedule,
             ArbitrationResolved: true,
@@ -47,7 +47,7 @@ public sealed class ResolvedRuntimeTests
             new[] { new RuntimeManifestDependency(1, 2) });
         var manifest = new RuntimeManifest(
             42,
-            new[] { new MicroBundleManifestEntry(1, "1.0.0") },
+            new[] { new MicroBundleManifestEntry(1, "1.0.0", new string('1', 64)) },
             LoadPlan: plan,
             Schedule: schedule,
             ArbitrationResolved: true,
@@ -75,7 +75,7 @@ public sealed class ResolvedRuntimeTests
             Array.Empty<RuntimeManifestDependency>());
         var manifest = new RuntimeManifest(
             42,
-            new[] { new MicroBundleManifestEntry(1, "1.0.0") },
+            new[] { new MicroBundleManifestEntry(1, "1.0.0", new string('1', 64)) },
             LoadPlan: new[] { entry },
             Schedule: schedule,
             ArbitrationResolved: true,
