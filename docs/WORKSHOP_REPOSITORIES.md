@@ -27,6 +27,21 @@ The Singularity Workshop is a set of independently useful libraries and applicat
 | [HeadlessAi](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi) | Send inputs to configured AI-capable HTTP endpoints through explicit protocol adapters, without a browser or provider SDK in the direct HTTP path. |
 | [ProtocolAi](https://github.com/TrentBest/TheSingularityWorkshop.ProtocolAi) | Define stable, integer-backed protocol identities and the vocabulary that gives symbols their meaning. |
 | [GrammarAi](https://github.com/TrentBest/TheSingularityWorkshop.GrammarAi) | Describe how symbols can be arranged into ordered grammar productions while keeping external vocabulary ownership separate. |
+| [CommandAi](https://github.com/TrentBest/TheSingularityWorkshop.CommandAi) | Represent proposed commands as bounded, versioned data for a host to inspect; it does not resolve authority or execute commands. |
+
+### AI lineage and agent onboarding
+
+The AI-facing packages are complementary layers, not one autonomous authority chain:
+
+```text
+HeadlessAi   -> configured endpoint request/response transport
+ProtocolAi   -> application-owned vocabulary and symbol identity
+GrammarAi    -> structural composition over protocol references
+CommandAi    -> versioned command-proposal representation
+Host         -> interpretation, trust, policy, authorization, approval, execution
+```
+
+Start with each repository's [agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi/blob/development/AGENTS.md), [ProtocolAi agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.ProtocolAi/blob/development/AGENTS.md), [GrammarAi agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.GrammarAi/blob/development/AGENTS.md), and [CommandAi agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.CommandAi/blob/development/AGENTS.md). These are repository-specific onboarding guides subordinate to the [FSM_COS Documentation Standard](../DOCUMENTATION_STANDARD.md). Verify each repository's current source, tests, and CI before assuming cross-package interoperability.
 
 ## Visual explanation and application experiences
 
