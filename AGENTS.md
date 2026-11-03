@@ -11,7 +11,7 @@ The permanent branch model for this repository is exactly:
 - `development` — the source of truth for active work and the next release candidate.
 - `master` — the previously released baseline until the owner-authorized release operation replaces it with the approved `development` candidate.
 
-Do not create additional persistent branches for features, documentation, experiments, release preparation, or agent handoffs. Work directly on `development` unless the owner explicitly authorizes a short-lived exploratory branch. The release owner may direct replacement of `master` with the verified `development` candidate; this does not authorize NuGet publication. Any explicitly authorized temporary branch must be reconciled and retired promptly; the normal target remains exactly two branches.
+Do not leave additional persistent branches for features, documentation, experiments, release preparation, or agent handoffs. Use `development` as the integration source. A focused, short-lived task branch may be created when it materially improves review or isolation; it must start from current `development`, have a clear owner/task, and be reconciled promptly. Temporary branches are not a third canonical branch. The release owner may direct replacement of `master` with the verified `development` candidate; this does not authorize NuGet publication. The normal permanent target remains exactly two branches.
 
 This rule applies to every contributor and every LLM/agent. A task-specific branch is not permission to abandon the two-branch policy.
 
@@ -47,3 +47,19 @@ Read `docs/PAUSE_POINT.md`, `docs/BRANCH_RECONCILIATION.md`, `docs/IMPLEMENTATIO
 ---
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
+
+
+## Branch activity, evidence, and Sith status reporting — mandatory
+
+A branch selector is not an adequate portfolio status system. Whenever reporting repository status or beginning branch cleanup:
+
+1. Enumerate the complete live branch inventory from GitHub (paginate until complete). Do not rely on a remembered branch list or a single recent-commit feed.
+2. For every branch, resolve its current head commit and report the **committer timestamp in UTC**, author, subject, full SHA, and commit URL. Sort newest activity first. If author and committer differ, preserve both identities/timestamps where useful.
+3. Report `development` and `master` separately, including their exact SHAs and latest commit timestamps. `development` is the active integration/candidate branch and may be incomplete or broken. Recent activity means modified, not working.
+4. Treat `master` as the last released/known-working baseline only when its exact SHA is supported by release/package evidence. If the release association has not been verified, say so explicitly; never infer it from the branch name or age.
+5. For every noncanonical branch, compare it against current `development` and report ahead/behind counts, unique file changes, open PR/review state, and a reasoned disposition. Inspect the actual source, tests, docs, and workflows before calling work redundant or safe to retire.
+6. Check CI/check-runs for the exact head SHA of each relevant candidate. Distinguish **not run / no checks reported**, **queued/in progress**, **failed**, and **passed**. A green badge, a run on an older SHA, or an empty status response is not proof that the current head works.
+7. Every status summary must distinguish: latest branch activity, divergence/reconciliation, exact-head verification, PR/review state, release baseline, and release authorization. Include links to branch heads and evidence.
+8. Never merge, replace `master`, delete branches, publish packages, or deploy without the owner's explicit authorization for that exact action. Branch equality and green CI establish readiness evidence only; they are not release authorization.
+
+The repository's maintainer ledger must retain a dated, newest-first activity snapshot and record the exact SHA and evidence scope. Refresh it when performing a portfolio audit; label old snapshots historical. The Workshop command center should aggregate this information across repositories so the owner does not have to inspect branch-selector menus repository by repository.
