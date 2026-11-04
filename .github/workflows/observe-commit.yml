@@ -14,111 +14,235 @@ concurrency:
 
 jobs:
   observe:
-    name: Observe the completed package workflow
+    name: Observe exact package and benchmark runs
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
-      - name: Checkout pinned CiAi source
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Check out pinned CiAi source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: TrentBest/TheSingularityWorkshop.CiAi
-          ref: 395c0da563ffadcfdc801a6246356fbe1c5dcb0c
+          ref: 49a802fcab60fa7411b01892072d7e2c8a2c72a9
           path: _tools/CiAi
+          submodules: recursive
+          persist-credentials: false
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
         with:
           dotnet-version: 8.0.x
 
-      - name: Build and verify the pinned CiAi contract
+      - name: Restore and verify the pinned CiAi contract
         working-directory: _tools/CiAi
         run: |
+          set -euo pipefail
           dotnet restore CiAi.slnx
           dotnet build CiAi.slnx --configuration Release --no-restore
           dotnet run --project tests/TheSingularityWorkshop.CiAi.ContractTests --configuration Release --no-build
 
-      - name: Observe the exact completed package workflow run
+      - name: Resolve exact package and benchmark run attempts
+        id: source-runs
         shell: bash
         env:
-          CIAI_GITHUB_TOKEN: ${{ github.token }}
           GH_TOKEN: ${{ github.token }}
           TARGET_REPOSITORY: ${{ github.repository }}
           TARGET_SHA: ${{ github.sha }}
           TARGET_BRANCH: ${{ github.ref_name }}
         run: |
           set -euo pipefail
-          package_run_id=""
-          benchmark_run_id=""
-          package_state=""
-          benchmark_state=""
-          for attempt in $(seq 1 90); do
+          package_matches="[]"
+          benchmark_matches="[]"
+          package_state="missing"
+          benchmark_state="missing"
+
+          for poll in $(seq 1 90); do
             runs="$(gh api "repos/$TARGET_REPOSITORY/actions/runs?head_sha=$TARGET_SHA&per_page=100")"
-            package_run_id="$(jq -r --arg sha "$TARGET_SHA" --arg branch "$TARGET_BRANCH" '
-              [.workflow_runs[] | select(
-                (.path | split("@")[0]) == ".github/workflows/package.yml" and
-                (.head_sha | ascii_downcase) == ($sha | ascii_downcase) and
-                .event == "push" and .head_branch == $branch
-              )] | sort_by(.run_number) | last | .id // empty
+            package_matches="$(jq --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" --arg branch "$TARGET_BRANCH" '
+              [.workflow_runs[]
+                | select((.path | split("@")[0]) == ".github/workflows/package.yml")
+                | select((.head_sha | ascii_downcase) == ($sha | ascii_downcase))
+                | select(.event == "push" and .head_branch == $branch)
+                | select(.head_repository.full_name == $repo)]
             ' <<< "$runs")"
-            benchmark_run_id="$(jq -r --arg sha "$TARGET_SHA" --arg branch "$TARGET_BRANCH" '
-              [.workflow_runs[] | select(
-                (.path | split("@")[0]) == ".github/workflows/benchmarks.yml" and
-                (.head_sha | ascii_downcase) == ($sha | ascii_downcase) and
-                .event == "push" and .head_branch == $branch
-              )] | sort_by(.run_number) | last | .id // empty
+            benchmark_matches="$(jq --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" --arg branch "$TARGET_BRANCH" '
+              [.workflow_runs[]
+                | select((.path | split("@")[0]) == ".github/workflows/benchmarks.yml")
+                | select((.head_sha | ascii_downcase) == ($sha | ascii_downcase))
+                | select(.event == "push" and .head_branch == $branch)
+                | select(.head_repository.full_name == $repo)]
             ' <<< "$runs")"
 
-            package_state="missing"
-            benchmark_state="missing"
-            if [[ -n "$package_run_id" ]]; then
-              package_state="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$package_run_id" --jq '.status')"
-            fi
-            if [[ -n "$benchmark_run_id" ]]; then
-              benchmark_state="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$benchmark_run_id" --jq '.status')"
-            fi
-            if [[ "$package_state" == "completed" && "$benchmark_state" == "completed" ]]; then
+            package_count="$(jq 'length' <<< "$package_matches")"
+            benchmark_count="$(jq 'length' <<< "$benchmark_matches")"
+            if [ "$package_count" -gt 1 ] || [ "$benchmark_count" -gt 1 ]; then
+              echo "::warning::Duplicate matching workflow runs detected; preserving ambiguity instead of selecting the newest."
               break
             fi
-            echo "Waiting for required package and benchmark workflows (attempt $attempt/90; package=$package_state, benchmark=$benchmark_state)..."
+
+            if [ "$package_count" -eq 1 ]; then
+              package_state="$(jq -r '.[0].status' <<< "$package_matches")"
+            else
+              package_state="missing"
+            fi
+            if [ "$benchmark_count" -eq 1 ]; then
+              benchmark_state="$(jq -r '.[0].status' <<< "$benchmark_matches")"
+            else
+              benchmark_state="missing"
+            fi
+
+            if [ "$package_state" = "completed" ] && [ "$benchmark_state" = "completed" ]; then
+              break
+            fi
+            echo "Waiting for exact FSM_COS package and benchmark runs (poll $poll/90; package=$package_state; benchmark=$benchmark_state)."
             sleep 30
           done
-          if [[ -n "$package_run_id" ]]; then
-            package_attempt="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$package_run_id" --jq '.run_attempt')"
-            package_selector=".github/workflows/package.yml#$package_run_id#$package_attempt"
+
+          package_count="$(jq 'length' <<< "$package_matches")"
+          benchmark_count="$(jq 'length' <<< "$benchmark_matches")"
+          package_attempt=""
+          benchmark_attempt=""
+          package_id=""
+          benchmark_id=""
+          package_conclusion="missing"
+          benchmark_conclusion="missing"
+          package_url=""
+          benchmark_url=""
+
+          if [ "$package_count" -eq 1 ]; then
+            package_id="$(jq -r '.[0].id' <<< "$package_matches")"
+            package_attempt="$(jq -r '.[0].run_attempt' <<< "$package_matches")"
+            package_state="$(jq -r '.[0].status' <<< "$package_matches")"
+            package_conclusion="$(jq -r '.[0].conclusion // "none"' <<< "$package_matches")"
+            package_url="$(jq -r '.[0].html_url' <<< "$package_matches")"
+            package_selector=".github/workflows/package.yml#$package_id#$package_attempt"
+          elif [ "$package_count" -gt 1 ]; then
+            package_state="ambiguous"
+            package_selector=".github/workflows/package.yml"
           else
-            package_selector=".github/workflows/package.yml#missing"
+            package_state="missing"
+            package_selector=".github/workflows/package.yml"
           fi
-          if [[ -n "$benchmark_run_id" ]]; then
-            benchmark_attempt="$(gh api "repos/$TARGET_REPOSITORY/actions/runs/$benchmark_run_id" --jq '.run_attempt')"
-            benchmark_selector=".github/workflows/benchmarks.yml#$benchmark_run_id#$benchmark_attempt"
+
+          if [ "$benchmark_count" -eq 1 ]; then
+            benchmark_id="$(jq -r '.[0].id' <<< "$benchmark_matches")"
+            benchmark_attempt="$(jq -r '.[0].run_attempt' <<< "$benchmark_matches")"
+            benchmark_state="$(jq -r '.[0].status' <<< "$benchmark_matches")"
+            benchmark_conclusion="$(jq -r '.[0].conclusion // "none"' <<< "$benchmark_matches")"
+            benchmark_url="$(jq -r '.[0].html_url' <<< "$benchmark_matches")"
+            benchmark_selector=".github/workflows/benchmarks.yml#$benchmark_id#$benchmark_attempt"
+          elif [ "$benchmark_count" -gt 1 ]; then
+            benchmark_state="ambiguous"
+            benchmark_selector=".github/workflows/benchmarks.yml"
           else
-            benchmark_selector=".github/workflows/benchmarks.yml#missing"
+            benchmark_state="missing"
+            benchmark_selector=".github/workflows/benchmarks.yml"
           fi
-          if [[ "$package_state" != "completed" || "$benchmark_state" != "completed" ]]; then
-            echo "Required package and/or benchmark workflow did not reach a terminal state within the bounded wait; preserving a failing observation report."
-          fi
-          export CIAI_REQUIRED_WORKFLOW_PATHS="$package_selector;$benchmark_selector"
+
+          {
+            echo "package_selector=$package_selector"
+            echo "benchmark_selector=$benchmark_selector"
+            echo "package_id=$package_id"
+            echo "package_attempt=$package_attempt"
+            echo "package_state=$package_state"
+            echo "package_conclusion=$package_conclusion"
+            echo "package_url=$package_url"
+            echo "benchmark_id=$benchmark_id"
+            echo "benchmark_attempt=$benchmark_attempt"
+            echo "benchmark_state=$benchmark_state"
+            echo "benchmark_conclusion=$benchmark_conclusion"
+            echo "benchmark_url=$benchmark_url"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "Package: $package_selector ($package_state/$package_conclusion)"
+          echo "Benchmark: $benchmark_selector ($benchmark_state/$benchmark_conclusion)"
+
+      - name: Observe and validate exact FSM_COS evidence with CiAi
+        working-directory: _tools/CiAi
+        shell: bash
+        env:
+          CIAI_GITHUB_TOKEN: ${{ github.token }}
+          CIAI_REQUIRED_WORKFLOW_PATHS: ${{ steps.source-runs.outputs.package_selector }};${{ steps.source-runs.outputs.benchmark_selector }}
+          TARGET_REPOSITORY: ${{ github.repository }}
+          TARGET_SHA: ${{ github.sha }}
+          PACKAGE_SELECTOR: ${{ steps.source-runs.outputs.package_selector }}
+          BENCHMARK_SELECTOR: ${{ steps.source-runs.outputs.benchmark_selector }}
+          PACKAGE_ID: ${{ steps.source-runs.outputs.package_id }}
+          PACKAGE_ATTEMPT: ${{ steps.source-runs.outputs.package_attempt }}
+          BENCHMARK_ID: ${{ steps.source-runs.outputs.benchmark_id }}
+          BENCHMARK_ATTEMPT: ${{ steps.source-runs.outputs.benchmark_attempt }}
+        run: |
+          set -euo pipefail
           mkdir -p artifacts
-          dotnet run --project _tools/CiAi/samples/TheSingularityWorkshop.CiAi.ObserveRun --configuration Release --no-build -- "$TARGET_REPOSITORY" "$TARGET_SHA" artifacts/commit-observation.json
-          jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" --arg package_id "$package_run_id" --arg package_attempt "$package_attempt" --arg benchmark_id "$benchmark_run_id" --arg benchmark_attempt "$benchmark_attempt" '
-            .schema == "ciai.commit-observation.v2" and
-            (.repository | ascii_downcase) == ($repo | ascii_downcase) and
-            (.headSha | ascii_downcase) == ($sha | ascii_downcase) and
-            .discoveryComplete == true and
-            .complete == true and
-            (.requiredWorkflowResults | length) == 2 and
-            ([.requiredWorkflowResults[].State] | all(. == "passed")) and
-            ([.requiredWorkflowResults[].WorkflowPath] | index(".github/workflows/package.yml#" + $package_id + "#" + $package_attempt)) != null and
-            ([.requiredWorkflowResults[].WorkflowPath] | index(".github/workflows/benchmarks.yml#" + $benchmark_id + "#" + $benchmark_attempt)) != null
-          ' artifacts/commit-observation.json
+          set +e
+          dotnet run --project samples/TheSingularityWorkshop.CiAi.ObserveRun --configuration Release --no-build -- \
+            "$TARGET_REPOSITORY" "$TARGET_SHA" artifacts/commit-observation.json
+          observer_exit_code=$?
+          set -e
+          echo "CiAi observer exit code: $observer_exit_code"
+          jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" \
+            --arg package_selector "$PACKAGE_SELECTOR" --arg benchmark_selector "$BENCHMARK_SELECTOR" \
+            --arg package_id "$PACKAGE_ID" --arg package_attempt "$PACKAGE_ATTEMPT" \
+            --arg benchmark_id "$BENCHMARK_ID" --arg benchmark_attempt "$BENCHMARK_ATTEMPT" '
+              .schema == "ciai.commit-observation.v2" and
+              (.repository | ascii_downcase) == ($repo | ascii_downcase) and
+              (.headSha | ascii_downcase) == ($sha | ascii_downcase) and
+              .discoveryComplete == true and
+              .complete == true and
+              (.requiredWorkflowResults | length) == 2 and
+              ([.requiredWorkflowResults[].State] | all(. == "passed")) and
+              ([.requiredWorkflowResults[].WorkflowPath] | index($package_selector)) != null and
+              ([.requiredWorkflowResults[].WorkflowPath] | index($benchmark_selector)) != null and
+              ($package_id == "" or ($package_attempt | test("^[1-9][0-9]*$"))) and
+              ($benchmark_id == "" or ($benchmark_attempt | test("^[1-9][0-9]*$")))
+            ' artifacts/commit-observation.json >/dev/null
 
       - name: Upload CiAi observation evidence
         if: ${{ always() }}
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: ciai-commit-observation-${{ github.sha }}
           path: |
-            artifacts/commit-observation.json
-            artifacts/commit-observation.md
+            _tools/CiAi/artifacts/commit-observation.json
+            _tools/CiAi/artifacts/commit-observation.md
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 30
+
+      - name: Summarize exact workflow provenance
+        if: ${{ always() }}
+        env:
+          TARGET_REPOSITORY: ${{ github.repository }}
+          TARGET_BRANCH: ${{ github.ref_name }}
+          TARGET_SHA: ${{ github.sha }}
+          PACKAGE_ID: ${{ steps.source-runs.outputs.package_id }}
+          PACKAGE_ATTEMPT: ${{ steps.source-runs.outputs.package_attempt }}
+          PACKAGE_STATE: ${{ steps.source-runs.outputs.package_state }}
+          PACKAGE_CONCLUSION: ${{ steps.source-runs.outputs.package_conclusion }}
+          PACKAGE_URL: ${{ steps.source-runs.outputs.package_url }}
+          BENCHMARK_ID: ${{ steps.source-runs.outputs.benchmark_id }}
+          BENCHMARK_ATTEMPT: ${{ steps.source-runs.outputs.benchmark_attempt }}
+          BENCHMARK_STATE: ${{ steps.source-runs.outputs.benchmark_state }}
+          BENCHMARK_CONCLUSION: ${{ steps.source-runs.outputs.benchmark_conclusion }}
+          BENCHMARK_URL: ${{ steps.source-runs.outputs.benchmark_url }}
+        shell: bash
+        run: |
+          report="_tools/CiAi/artifacts/commit-observation.json"
+          policy_state="not-produced"
+          if [ -s "$report" ]; then
+            policy_state="$(jq -r '[.requiredWorkflowResults[].State] | join(", ")' "$report")"
+          fi
+          {
+            echo "## CiAi FSM_COS commit evidence"
+            echo
+            echo "- Repository: `$TARGET_REPOSITORY`"
+            echo "- Branch: `$TARGET_BRANCH`"
+            echo "- Source SHA: `$TARGET_SHA`"
+            echo "- Package run / attempt: ${PACKAGE_ID:-unknown} / ${PACKAGE_ATTEMPT:-unknown}"
+            echo "- Package status / conclusion: $PACKAGE_STATE / $PACKAGE_CONCLUSION"
+            echo "- Package run: ${PACKAGE_URL:-not uniquely resolved}"
+            echo "- Benchmark run / attempt: ${BENCHMARK_ID:-unknown} / ${BENCHMARK_ATTEMPT:-unknown}"
+            echo "- Benchmark status / conclusion: $BENCHMARK_STATE / $BENCHMARK_CONCLUSION"
+            echo "- Benchmark run: ${BENCHMARK_URL:-not uniquely resolved}"
+            echo "- CiAi policy states: $policy_state"
+            echo
+            echo "Read-only evidence only; this lane does not publish NuGet packages, release, or deploy."
+          } >> "$GITHUB_STEP_SUMMARY"
