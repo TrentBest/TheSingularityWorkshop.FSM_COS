@@ -1,0 +1,19 @@
+{
+  "repository": "TrentBest/TheSingularityWorkshop.FSM_COS",
+  "policy": "exactly-master-and-development",
+  "required_branches": [
+    "development",
+    "master"
+  ],
+  "actual_branches": [
+    "development",
+    "master",
+    "policy/sith-branch-activity-audit",
+    "work/ciai-evidence-hardening"
+  ],
+  "branch_count": 4,
+  "status": "NON-COMPLIANT",
+  "evaluated_at": "2026-11-05T04:34:07Z",
+  "workflow_run": "https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/41968591844",
+  "triggering_commit": "9aaae029c48e14e57054aa19d00059e3cc582899"
+}
