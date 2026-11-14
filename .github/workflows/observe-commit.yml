@@ -117,10 +117,13 @@ jobs:
             package_selector=".github/workflows/package.yml#$package_id#$package_attempt"
           elif [ "$package_count" -gt 1 ]; then
             package_state="ambiguous"
-            package_selector=".github/workflows/package.yml"
+            # CiAi treats an explicit #missing selector as a hard failure.
+            # Never fall back to a path-only selector: it can match a successful
+            # run from an unrelated event or branch context.
+            package_selector=".github/workflows/package.yml#missing"
           else
             package_state="missing"
-            package_selector=".github/workflows/package.yml"
+            package_selector=".github/workflows/package.yml#missing"
           fi
 
           if [ "$benchmark_count" -eq 1 ]; then
@@ -132,15 +135,18 @@ jobs:
             benchmark_selector=".github/workflows/benchmarks.yml#$benchmark_id#$benchmark_attempt"
           elif [ "$benchmark_count" -gt 1 ]; then
             benchmark_state="ambiguous"
-            benchmark_selector=".github/workflows/benchmarks.yml"
+            # Ambiguous and missing source evidence must both fail closed.
+            benchmark_selector=".github/workflows/benchmarks.yml#missing"
           else
             benchmark_state="missing"
-            benchmark_selector=".github/workflows/benchmarks.yml"
+            benchmark_selector=".github/workflows/benchmarks.yml#missing"
           fi
 
           {
             echo "package_selector=$package_selector"
             echo "benchmark_selector=$benchmark_selector"
+            echo "package_count=$package_count"
+            echo "benchmark_count=$benchmark_count"
             echo "package_id=$package_id"
             echo "package_attempt=$package_attempt"
             echo "package_state=$package_state"
@@ -168,8 +174,14 @@ jobs:
           BENCHMARK_SELECTOR: ${{ steps.source-runs.outputs.benchmark_selector }}
           PACKAGE_ID: ${{ steps.source-runs.outputs.package_id }}
           PACKAGE_ATTEMPT: ${{ steps.source-runs.outputs.package_attempt }}
+          PACKAGE_COUNT: ${{ steps.source-runs.outputs.package_count }}
+          PACKAGE_STATE: ${{ steps.source-runs.outputs.package_state }}
+          PACKAGE_CONCLUSION: ${{ steps.source-runs.outputs.package_conclusion }}
           BENCHMARK_ID: ${{ steps.source-runs.outputs.benchmark_id }}
           BENCHMARK_ATTEMPT: ${{ steps.source-runs.outputs.benchmark_attempt }}
+          BENCHMARK_COUNT: ${{ steps.source-runs.outputs.benchmark_count }}
+          BENCHMARK_STATE: ${{ steps.source-runs.outputs.benchmark_state }}
+          BENCHMARK_CONCLUSION: ${{ steps.source-runs.outputs.benchmark_conclusion }}
         run: |
           set -euo pipefail
           mkdir -p artifacts
@@ -182,7 +194,17 @@ jobs:
           jq -e --arg repo "$TARGET_REPOSITORY" --arg sha "$TARGET_SHA" \
             --arg package_selector "$PACKAGE_SELECTOR" --arg benchmark_selector "$BENCHMARK_SELECTOR" \
             --arg package_id "$PACKAGE_ID" --arg package_attempt "$PACKAGE_ATTEMPT" \
-            --arg benchmark_id "$BENCHMARK_ID" --arg benchmark_attempt "$BENCHMARK_ATTEMPT" '
+            --arg package_count "$PACKAGE_COUNT" --arg package_state "$PACKAGE_STATE" \
+            --arg package_conclusion "$PACKAGE_CONCLUSION" \
+            --arg benchmark_id "$BENCHMARK_ID" --arg benchmark_attempt "$BENCHMARK_ATTEMPT" \
+            --arg benchmark_count "$BENCHMARK_COUNT" --arg benchmark_state "$BENCHMARK_STATE" \
+            --arg benchmark_conclusion "$BENCHMARK_CONCLUSION" '
+              ($package_count == "1" and $package_state == "completed" and $package_conclusion == "success") and
+              ($benchmark_count == "1" and $benchmark_state == "completed" and $benchmark_conclusion == "success") and
+              ($package_id | test("^[1-9][0-9]*$")) and
+              ($package_attempt | test("^[1-9][0-9]*$")) and
+              ($benchmark_id | test("^[1-9][0-9]*$")) and
+              ($benchmark_attempt | test("^[1-9][0-9]*$")) and
               .schema == "ciai.commit-observation.v2" and
               (.repository | ascii_downcase) == ($repo | ascii_downcase) and
               (.headSha | ascii_downcase) == ($sha | ascii_downcase) and
