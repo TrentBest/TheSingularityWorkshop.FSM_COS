@@ -9,7 +9,7 @@
 [![Last commit](https://img.shields.io/github/last-commit/TrentBest/TheSingularityWorkshop.FSM_COS/development?style=flat-square&logo=github)](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commits/development/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.txt)
 
-[![Sith Policy](assets/sith-policy.svg)](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/workflows/sith-policy.yml)
+[![Sith Policy](https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.FSM_COS/master/assets/sith-policy.svg)](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/workflows/sith-policy.yml)
 <p align="center">
   <img src="docs/assets/fsm-cos-overview.svg" alt="A runtime manifest requests capabilities; FSM_COS resolves dependencies and assembles MicroBundles into a RuntimeAssembly for a host." width="1000">
 </p>
