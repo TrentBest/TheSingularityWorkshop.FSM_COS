@@ -41,7 +41,7 @@ CommandAi    -> versioned command-proposal representation
 Host         -> interpretation, trust, policy, authorization, approval, execution
 ```
 
-Start with each repository's [agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi/blob/development/AGENTS.md), [ProtocolAi agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.ProtocolAi/blob/development/AGENTS.md), [GrammarAi agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.GrammarAi/blob/development/AGENTS.md), and [CommandAi agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.CommandAi/blob/development/AGENTS.md). These are repository-specific onboarding guides subordinate to the [FSM_COS Documentation Standard](../DOCUMENTATION_STANDARD.md). Verify each repository's current source, tests, and CI before assuming cross-package interoperability.
+Start with each repository's [agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi/blob/development/AGENTS.md), [ProtocolAi agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.ProtocolAi/blob/development/AGENTS.md), [GrammarAi agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.GrammarAi/blob/development/AGENTS.md), and [CommandAi agent instructions](https://github.com/TrentBest/TheSingularityWorkshop.CommandAi/blob/development/AGENTS.md). These are repository-specific onboarding guides subordinate to the [FSM_COS Documentation Standard](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/DOCUMENTATION_STANDARD.md). Verify each repository's current source, tests, and CI before assuming cross-package interoperability.
 
 ## Visual explanation and application experiences
 
