@@ -19,7 +19,7 @@ This section supersedes the older FSM_COS candidate snapshot below. The other re
 
 ### Current source and branch state
 
-- Current `development` HEAD: `41a3a6bc0a14e073ba8c7044fab228598968a645` — fixes a dangerous Sith workflow path that could publish a development checkout to `master`.
+- Validated FSM_COS code candidate: `41a3a6bc0a14e073ba8c7044fab228598968a645` — fixes a dangerous Sith workflow path that could publish a development checkout to `master`. The latest `development` commit after that code candidate is this portfolio-only documentation refresh; no runtime source changes were made after `41a3a6bc0a14e073ba8c7044fab228598968a645`.
 - Current `master` HEAD at the audit: `cfa4ec4f6570193c09967128c4568b342ee4f8d4`.
 - Current project version: `0.1.0-alpha.7`.
 - Live branch inventory: `development`, `master`, `policy/sith-branch-activity-audit`, and `work/ciai-evidence-hardening`. The exact-two-branch policy is therefore **NON-COMPLIANT**.
@@ -36,7 +36,7 @@ The last fully completed package evidence is for predecessor SHA `5396dac79f8027
 - [CiAi evidence run 43536408146](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43536408146): in progress at the last observation.
 - [Sith Policy run 43536408135](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43536408135): failed because four branches were present. Its old workflow also attempted to push the development checkout to `master`; this was corrected in current development commit `41a3a6bc0a14e073ba8c7044fab228598968a645`. The correction has not yet received exact-HEAD workflow evidence.
 
-There are currently no reported Actions runs for `41a3a6bc0a14e073ba8c7044fab228598968a645` at the time of this update. Do not transfer predecessor results to the new HEAD.
+Exact-HEAD Actions evidence now exists for code candidate `41a3a6bc0a14e073ba8c7044fab228598968a645`: package and CodeQL succeeded; benchmark remained pending; CiAi remained in progress; Sith correctly failed on the four-branch inventory without pushing to `master`. The latest `development` ref is a portfolio-only documentation successor, not a new runtime-code candidate. Do not transfer these results to a future code SHA without rerunning the gates.
 
 ### Remaining alpha.7 release gates
 
