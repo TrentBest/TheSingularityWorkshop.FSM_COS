@@ -23,8 +23,8 @@ This section supersedes the older FSM_COS candidate snapshot below. The other re
 - Current `master` HEAD at the audit: `cfa4ec4f6570193c09967128c4568b342ee4f8d4`.
 - Current project version: `0.1.0-alpha.7`.
 - Live branch inventory: `development`, `master`, `policy/sith-branch-activity-audit`, and `work/ciai-evidence-hardening`. The exact-two-branch policy is therefore **NON-COMPLIANT**.
-- Compare result: `development` is 161 commits ahead of `master`; `master` is 15 commits ahead of `development`; merge base `56ad34dbe4722ba1edf9a4da6a00812eeaa29101`. The unique master history includes documentation and policy material that must be deliberately reviewed before any future owner-authorized master replacement.
-- Open draft PR #52 (`policy/sith-branch-activity-audit`) is 2 commits ahead / 5 behind current development; PR #53 (`work/ciai-evidence-hardening`) is 1 ahead / 5 behind. Both still target the old base SHA `cad5775fe55a6a8d0b6df8bbd22017c1179141c4` and currently report non-mergeable. Their unique changes have not been reconciled; neither branch is ready for deletion.
+- Compare result: `development` is 164 commits ahead of `master`; `master` is 15 commits ahead of `development`; merge base `56ad34dbe4722ba1edf9a4da6a00812eeaa29101`. The unique master history includes documentation and policy material that must be deliberately reviewed before any future owner-authorized master replacement.
+- Open draft PR #52 (`policy/sith-branch-activity-audit`) is 2 commits ahead / 9 behind current development; PR #53 (`work/ciai-evidence-hardening`) is 1 ahead / 9 behind. Both still target the old base SHA `cad5775fe55a6a8d0b6df8bbd22017c1179141c4` and currently report non-mergeable. Their unique changes have not been reconciled; neither branch is ready for deletion.
 
 ### Exact workflow evidence
 
