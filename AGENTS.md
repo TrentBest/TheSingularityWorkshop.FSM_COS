@@ -30,6 +30,22 @@ For every noncanonical branch:
 
 If the work is ambiguous or changes architectural direction, present the evidence and ask the owner for a directive. The default is to preserve useful, non-conflicting functionality—not to discard it and not to merge blindly.
 
+
+## Branch activity and exact evidence reporting — mandatory
+
+Whenever reporting repository health or preparing branch reconciliation:
+
+1. Enumerate the complete live branch inventory from GitHub; do not rely on a remembered list or a partial recent-commit feed.
+2. For every branch, resolve its current head and report the full SHA, committer timestamp in UTC, author, subject, and commit URL. Sort by newest activity first.
+3. Report `development` and `master` separately. A branch timestamp proves only that its ref changed; it does not prove that the branch is tested or releasable.
+4. Compare every noncanonical branch against current `development`; report ahead/behind counts, unique file changes, PR/review state, exact-head checks, and a reasoned disposition. Inspect actual file content before calling a change redundant or safe to retire.
+5. Distinguish no checks, queued/in-progress checks, failures, and successful exact-head evidence. Never transfer a green result from an older SHA.
+6. Treat `master` as the released baseline only when its exact SHA is supported by package/release evidence. Do not infer release alignment from the branch name.
+7. Keep the permanent branch set at exactly `master` and `development`. A short-lived task branch requires explicit owner authorization, must start from current `development`, and must be reconciled promptly. It is never a third permanent branch.
+8. Never merge, replace `master`, delete branches, publish packages, or deploy without the owner's explicit authorization for that exact action. Branch equality and green CI are evidence, not release authorization.
+
+Refresh `docs/BRANCH_RECONCILIATION.md` during a branch audit. Keep old snapshots visibly historical and record exact heads and evidence scope.
+
 ## Architectural and release constraints
 
 - Preserve dependency direction: lower-level packages must not depend on FSM_COS.
