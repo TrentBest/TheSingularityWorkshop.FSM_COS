@@ -13,40 +13,40 @@ This portfolio answers two different questions:
 
 A green workflow is evidence for the exact SHA and jobs that ran. It does not prove manual package inspection, deployment readiness, full consumer compatibility, or owner authorization. No readiness percentages are assigned because the projects have different scopes and their gates are not interchangeable.
 
-## Live FSM_COS update — 2026-11-13 UTC
+## Live FSM_COS update — 2026-11-15 UTC
 
-This section supersedes the older FSM_COS candidate snapshot below. The other repository entries in the original portfolio have **not** been refreshed by this update and must still be treated as historical until independently rechecked.
+This section supersedes the older FSM_COS candidate snapshots below. The other repository entries in the original portfolio have **not** been refreshed by this update and remain historical until independently rechecked.
 
 ### Current source and branch state
 
-- Validated FSM_COS code candidate: `41a3a6bc0a14e073ba8c7044fab228598968a645` — fixes a dangerous Sith workflow path that could publish a development checkout to `master`. The latest `development` commit after that code candidate is this portfolio-only documentation refresh; no runtime source changes were made after `41a3a6bc0a14e073ba8c7044fab228598968a645`.
-- Current `master` HEAD at the audit: `cfa4ec4f6570193c09967128c4568b342ee4f8d4`.
+- Exact candidate: `development` HEAD `15188ee93572188194a2b2335e51dd805ab240ac` ("Require unique exact-run evidence in CiAi observer"). This is a CI/evidence-workflow change; the alpha.7 runtime scope remains the sequential composition path described in `.github/release-readiness/0.1.0-alpha.7.md`.
+- Current `master` HEAD: `b42e505399d156bc9f80f027968f164149f5ba1f`.
 - Current project version: `0.1.0-alpha.7`.
-- Live branch inventory: `development`, `master`, `policy/sith-branch-activity-audit`, and `work/ciai-evidence-hardening`. The exact-two-branch policy is therefore **NON-COMPLIANT**.
-- Compare result: `development` is 164 commits ahead of `master`; `master` is 15 commits ahead of `development`; merge base `56ad34dbe4722ba1edf9a4da6a00812eeaa29101`. The unique master history includes documentation and policy material that must be deliberately reviewed before any future owner-authorized master replacement.
-- Open draft PR #52 (`policy/sith-branch-activity-audit`) is 2 commits ahead / 9 behind current development; PR #53 (`work/ciai-evidence-hardening`) is 1 ahead / 9 behind. Both still target the old base SHA `cad5775fe55a6a8d0b6df8bbd22017c1179141c4` and currently report non-mergeable. Their unique changes have not been reconciled; neither branch is ready for deletion.
+- Live branch inventory: `development`, `master`, `policy/sith-branch-activity-audit`, and `work/ciai-evidence-hardening`. The exact-two-branch policy remains **NON-COMPLIANT**.
+- `development` and `master` are diverged: development is 166 commits ahead and 16 behind; merge base `56ad34dbe4722ba1edf9a4da6a00812eeaa29101`. The 16 master-only commits require deliberate review before any future owner-authorized master replacement.
+- Open draft PR #52 (`policy/sith-branch-activity-audit`) and PR #53 (`work/ciai-evidence-hardening`) each remain 2 commits ahead / 11 behind development, with the older base SHA `cad5775fe55a6a8d0b6df8bbd22017c1179141c4`. Their unique changes still require reconciliation; neither branch is ready for deletion.
 
-### Exact workflow evidence
+### Exact-HEAD workflow evidence
 
-The last fully completed package evidence is for predecessor SHA `5396dac79f8027533a23747e766c1c4fa5f7aeed`:
+All five runs below target the same exact `development` SHA `15188ee93572188194a2b2335e51dd805ab240ac`:
 
-- [Pack and publish run 43536408132](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43536408132): `build-and-test`, `source-integration`, and `public-package-compatibility` succeeded; `publish_nuget` was skipped.
-- [CodeQL run 43536408139](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43536408139): succeeded.
-- [Benchmark run 43536408150](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43536408150): pending at the last observation.
-- [CiAi evidence run 43536408146](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43536408146): in progress at the last observation.
-- [Sith Policy run 43536408135](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43536408135): failed because four branches were present. Its old workflow also attempted to push the development checkout to `master`; this was corrected in current development commit `41a3a6bc0a14e073ba8c7044fab228598968a645`. The correction has not yet received exact-HEAD workflow evidence.
+- [Pack and publish run 43679382088](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43679382088): `build-and-test`, `source-integration`, and `public-package-compatibility` succeeded; package verification and artifact uploads succeeded; `publish_nuget` was **skipped**.
+- [Benchmark run 43679382083](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43679382083): stable-ID benchmark job succeeded and retained its raw evidence.
+- [CiAi commit evidence run 43679382105](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43679382105): exact package and benchmark run resolution, pinned CiAi contract verification, observation validation, and evidence upload all succeeded. Retained artifact: `ciai-commit-observation-15188ee93572188194a2b2335e51dd805ab240ac`.
+- [CodeQL run 43679382155](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43679382155): succeeded.
+- [Sith Policy run 43679382103](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43679382103): failed at permanent-branch evaluation because four branches remain. This is the expected fail-closed policy result; it did not authorize or perform a push to `master`.
 
-Exact-HEAD Actions evidence now exists for code candidate `41a3a6bc0a14e073ba8c7044fab228598968a645`: package and CodeQL succeeded; benchmark remained pending; CiAi remained in progress; Sith correctly failed on the four-branch inventory without pushing to `master`. The latest `development` ref is a portfolio-only documentation successor, not a new runtime-code candidate. Do not transfer these results to a future code SHA without rerunning the gates.
+The package workflow retained both the development-built package artifact (`fsm-cos-nuget-package`) and public-feed comparison artifact (`fsm-cos-nuget-package-public-feed`). Their presence and workflow verification are established; **manual inspection of the exact candidate package contents and artifact hash is still open**. No NuGet publication occurred.
 
 ### Remaining alpha.7 release gates
 
-1. Obtain exact-HEAD build/test, source-integration, public-package-compatibility, benchmark, CodeQL, CiAi, and Sith-policy evidence for a frozen candidate.
-2. Reconcile the two noncanonical branches and preserve any unique useful work before the owner-authorized cleanup batch.
-3. Review the 15 master-only commits, including the shared documentation standard, before any master replacement.
-4. Complete the manual package artifact inspection, exact package/hash record, packed documentation/license/XML/assets review, and clean external consumer verification required by the alpha.7 checklist.
-5. Obtain explicit owner authorization for publication.
+1. Inspect the exact-HEAD package artifact and record package ID/version, target frameworks/dependencies, README/license/XML docs/assets, packaged Markdown links, and SHA-256; independently verify a clean external consumer.
+2. Review source/public contract documentation and generated visuals against the exact candidate, recording only checks actually performed.
+3. Reconcile PR #52 and PR #53 against current development, preserve useful unique changes, and identify any branches that are genuinely ready for the eventual owner-approved deletion batch.
+4. Review the 16 master-only commits before any future master replacement.
+5. Obtain explicit owner authorization before any NuGet publication.
 
-**No NuGet package was published, no PR was merged, no branch was deleted, and `master` was not replaced.** Green package CI is not release authorization.
+**No PR was merged, no branch was deleted, no master ref was replaced, and no NuGet package was published.** Green exact-HEAD automation is strong candidate evidence, not release authorization.
 
 ## 01 — Executive priority (original 2026-10-28 snapshot; historical)
 
