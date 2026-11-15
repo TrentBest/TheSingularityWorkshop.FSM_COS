@@ -40,8 +40,9 @@ def verify(package_dir: Path, project_path: Path) -> None:
     version = project_values.get("Version")
     readme_name = project_values.get("PackageReadmeFile")
     license_name = project_values.get("PackageLicenseFile")
-    if not all((package_id, version, readme_name, license_name)):
-        fail("Project must declare PackageId, Version, PackageReadmeFile, and PackageLicenseFile.")
+    target_framework = project_values.get("TargetFramework")
+    if not all((package_id, version, readme_name, license_name, target_framework)):
+        fail("Project must declare PackageId, Version, TargetFramework, PackageReadmeFile, and PackageLicenseFile.")
 
     packages = sorted(package_dir.glob("*.nupkg"))
     if len(packages) != 1:
@@ -135,10 +136,10 @@ def verify(package_dir: Path, project_path: Path) -> None:
                         f"{target!r} (resolved to {resolved!r})."
                     )
 
-        assembly_path = f"lib/net8.0/{assembly_name}.dll"
+        assembly_path = f"lib/{target_framework}/{assembly_name}.dll"
         if assembly_path not in names:
             fail(f"Package is missing target assembly {assembly_path!r}.")
-        xml_doc_path = f"lib/net8.0/{assembly_name}.xml"
+        xml_doc_path = f"lib/{target_framework}/{assembly_name}.xml"
         if xml_doc_path not in names:
             fail(f"Package is missing XML API documentation {xml_doc_path!r}.")
 
@@ -189,6 +190,7 @@ def verify(package_dir: Path, project_path: Path) -> None:
 
         print(f"Verified {package.name}")
         print(f"  identity: {actual_id} {actual_version}")
+        print(f"  target framework: {target_framework}")
         print(f"  dependencies: {', '.join(sorted(project_dependencies))}")
         print(f"  package documentation: {len(required_files)} required files present")
         print("  assembly and XML API documentation: present")
