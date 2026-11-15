@@ -27,7 +27,7 @@ The [minimal consumer sample](https://github.com/TrentBest/TheSingularityWorksho
 
 ## Package dependencies
 
-The source candidate `0.1.0-alpha.7` targets .NET 8 and declares direct dependencies on FSM_API 1.0.13, MicroBundleDomain 1.0.1, and FSM_UserIO 0.1.0-alpha.1. FSM_UserIO supplies the optional `SemanticIntent` value exposed by `RuntimeManifest` and carried to `RuntimeAssembly`; consumers must restore that dependency even when they do not supply an intent.
+The source candidate `0.1.0-alpha.7` targets .NET 10 and declares direct dependencies on FSM_API 1.0.13, MicroBundleDomain 1.0.1, and FSM_UserIO 0.1.0-alpha.1. FSM_UserIO supplies the optional `SemanticIntent` value exposed by `RuntimeManifest` and carried to `RuntimeAssembly`; consumers must restore that dependency even when they do not supply an intent.
 
 A source project's declared version does not prove that the same version is published. Check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) before selecting a package version.
 

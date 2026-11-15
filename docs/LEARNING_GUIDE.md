@@ -85,7 +85,7 @@ FSM_COS does not download artifacts, verify artifact bytes from content hashes, 
 
 ### Run the example
 
-You need Git and the **.NET 8 SDK**.
+You need Git and the **.NET 10 SDK**.
 
 ```bash
 git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git

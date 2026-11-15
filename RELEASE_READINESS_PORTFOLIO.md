@@ -15,38 +15,48 @@ A green workflow is evidence for the exact SHA and jobs that ran. It does not pr
 
 ## Live FSM_COS update — 2026-11-15 UTC
 
-This section supersedes the older FSM_COS candidate snapshots below. The other repository entries in the original portfolio have **not** been refreshed by this update and remain historical until independently rechecked.
+This section supersedes the older FSM_COS candidate snapshots below. The other repository entries in the original portfolio have **not** been refreshed by this update and remain historical until independently rechecked. This audit snapshot is tied to the exact candidate below; the documentation refresh commit that follows it triggers a new exact-HEAD verification cycle.
 
 ### Current source and branch state
 
-- Exact candidate: `development` HEAD `15188ee93572188194a2b2335e51dd805ab240ac` ("Require unique exact-run evidence in CiAi observer"). This is a CI/evidence-workflow change; the alpha.7 runtime scope remains the sequential composition path described in `.github/release-readiness/0.1.0-alpha.7.md`.
+- Reviewed candidate: `development` HEAD `c4ff13d6521688ecefeb487f1360fce143e54343` ("fix: align package verification and consumer with .NET 10").
+- The project and its benchmark/test/sample projects now target **.NET 10**; the repository SDK is pinned to `10.0.100` with `latestFeature` roll-forward. The NuGet verifier now derives its target assembly/XML paths from the project TargetFramework, and the isolated package consumer targets .NET 10.
 - Current `master` HEAD: `b42e505399d156bc9f80f027968f164149f5ba1f`.
 - Current project version: `0.1.0-alpha.7`.
 - Live branch inventory: `development`, `master`, `policy/sith-branch-activity-audit`, and `work/ciai-evidence-hardening`. The exact-two-branch policy remains **NON-COMPLIANT**.
-- `development` and `master` are diverged: development is 166 commits ahead and 16 behind; merge base `56ad34dbe4722ba1edf9a4da6a00812eeaa29101`. The 16 master-only commits require deliberate review before any future owner-authorized master replacement.
-- Open draft PR #52 (`policy/sith-branch-activity-audit`) and PR #53 (`work/ciai-evidence-hardening`) each remain 2 commits ahead / 11 behind development, with the older base SHA `cad5775fe55a6a8d0b6df8bbd22017c1179141c4`. Their unique changes still require reconciliation; neither branch is ready for deletion.
+- `development` and `master` are diverged: development is 181 commits ahead and 16 behind; merge base `56ad34dbe4722ba1edf9a4da6a00812eeaa29101`. Review the 16 master-only commits before any future owner-authorized master replacement.
+- Draft PRs #52 and #53 were **closed as superseded, not merged**. Both task branches remain present. Their useful work has been reconciled/adapted on development; both are candidates for the owner's eventual cleanup batch, subject to a final whole-tree recheck immediately before deletion.
 
 ### Exact-HEAD workflow evidence
 
-All five runs below target the same exact `development` SHA `15188ee93572188194a2b2335e51dd805ab240ac`:
+All listed runs target the same exact `development` SHA `c4ff13d6521688ecefeb487f1360fce143e54343`:
 
-- [Pack and publish run 43679382088](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43679382088): `build-and-test`, `source-integration`, and `public-package-compatibility` succeeded; package verification and artifact uploads succeeded; `publish_nuget` was **skipped**.
-- [Benchmark run 43679382083](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43679382083): stable-ID benchmark job succeeded and retained its raw evidence.
-- [CiAi commit evidence run 43679382105](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43679382105): exact package and benchmark run resolution, pinned CiAi contract verification, observation validation, and evidence upload all succeeded. Retained artifact: `ciai-commit-observation-15188ee93572188194a2b2335e51dd805ab240ac`.
-- [CodeQL run 43679382155](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43679382155): succeeded.
-- [Sith Policy run 43679382103](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43679382103): failed at permanent-branch evaluation because four branches remain. This is the expected fail-closed policy result; it did not authorize or perform a push to `master`.
+- [Pack and publish run 43688824731](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43688824731): build/test, source integration, public-dependency compatibility, package verification, and isolated candidate-package consumer all succeeded. The isolated consumer restored the local candidate package with its dependencies from public NuGet and executed dependency-first composition, printing `PASS: installed NuGet package composed dependency-first (2 -> 1).` `publish_nuget` was **skipped**.
+- [CodeQL run 43688824755](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43688824755): succeeded.
+- [Benchmark run 43688824785](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43688824785): pending at snapshot time; no benchmark pass is claimed.
+- [CiAi commit evidence run 43688824728](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43688824728): in progress at snapshot time, waiting for the exact benchmark result.
+- [Sith Policy run 43688824775](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43688824775): failed at permanent-branch evaluation because four branches remain. This is the expected fail-closed policy result.
 
-Both package artifacts were downloaded and inspected. The development-source-mode `.nupkg` is `TheSingularityWorkshop.FSM_COS` `0.1.0-alpha.7`, targets `net8.0`, and declares `FSM_API` `1.0.13`, `FSM_UserIO` `0.1.0-alpha.1`, and `MicroBundleDomain` `1.0.1`. Its SHA-256 is `4252c2575ad3bf74536d40330d5f4b5d5c27561affdf71cf8db1ec959942c4d0` (artifact ZIP SHA-256 `1c1b6b2531b61b7f92e41bfbbff52d60092aef3e8c03bb72e72a65a908ce7ee8`). The public-dependency-mode `.nupkg` has SHA-256 `c96c771d8593c6497a65a77b51ee9cb2ebce65b55a7c5932b6dc1e4ce14dc650` (artifact ZIP SHA-256 `73ce4e0ad2c573709222a5e178a192d9628e5088372516c4d5c51534d0b04752`). Both identify source commit `15188ee93572188194a2b2335e51dd805ab240ac`; their package file sets, nuspec metadata, README, license, XML docs, and documentation/assets match, while the DLL differs between the source-dependency and published-dependency build modes (consistent with the conditional source-reference build path). The inspected package contains 24 Markdown files, 30 well-formed SVGs, one GIF, and 67 XML documentation members; all 170 relative Markdown links resolve within the package. Both archives pass ZIP integrity checks. Maintainer-only release portfolio/checklist material is not shipped. **Still open:** independently exercise a clean external consumer against the exact package and verify browser/accessibility behavior for visuals. No NuGet publication occurred.
+### Exact package artifact inspection
+
+The public-dependency-mode package identifies source commit `c4ff13d6521688ecefeb487f1360fce143e54343`, package ID `TheSingularityWorkshop.FSM_COS`, version `0.1.0-alpha.7`, target framework `net10.0`, and dependencies `FSM_API 1.0.13`, `FSM_UserIO 0.1.0-alpha.1`, and `MicroBundleDomain 1.0.1`.
+
+- Public-dependency-mode package SHA-256: `89c2b7ed0ee2fcad21c1cd30cc5137ab8112663d028e837b8e0c9889428158d6`.
+- Artifact ZIP SHA-256: `785cd4058ca62329bc8cb4c9ee19a5d0363a44d54063d3b2400a42b5456f2a97`.
+
+The inspected package contains 63 entries, including the NuGet README, MIT license, 67 XML documentation members, 24 Markdown files, 30 well-formed SVGs, and one GIF. All 170 relative Markdown links resolve within the package. The isolated consumer test exercises this public-dependency-mode package itself, not merely a project reference. Browser rendering/accessibility-tree, keyboard, and screen-reader behavior remain unverified.
+
+No package was published.
 
 ### Remaining alpha.7 release gates
 
-1. Inspect the exact-HEAD package artifact and record package ID/version, target frameworks/dependencies, README/license/XML docs/assets, packaged Markdown links, and SHA-256; independently verify a clean external consumer.
-2. Review source/public contract documentation and generated visuals against the exact candidate, recording only checks actually performed.
-3. Reconcile PR #52 and PR #53 against current development, preserve useful unique changes, and identify any branches that are genuinely ready for the eventual owner-approved deletion batch.
+1. Obtain a successful exact-HEAD benchmark run and successful CiAi evidence for the final frozen candidate.
+2. Complete browser/accessibility review for packaged visuals and record only checks actually performed.
+3. Perform the final whole-tree recheck for both superseded task branches, then present them for the owner's single authorized deletion batch. Do not delete them.
 4. Review the 16 master-only commits before any future master replacement.
-5. Obtain explicit owner authorization before any NuGet publication.
+5. Obtain explicit owner authorization before NuGet publication.
 
-**No PR was merged, no branch was deleted, no master ref was replaced, and no NuGet package was published.** Green exact-HEAD automation is strong candidate evidence, not release authorization.
+**No PR was merged, no branch was deleted, no branch ref was rewritten, and no NuGet package was published.** Passing package and CodeQL gates do not override the pending benchmark, pending CiAi evidence, Sith branch-policy failure, or owner authorization boundary.
 
 ## 01 — Executive priority (original 2026-10-28 snapshot; historical)
 

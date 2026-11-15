@@ -33,7 +33,7 @@ Check the [NuGet package page](https://www.nuget.org/packages/TheSingularityWork
 dotnet add package TheSingularityWorkshop.FSM_COS --prerelease
 ```
 
-The repository project currently targets **.NET 8** and declares **0.1.0-alpha.7**; that source version alone does not mean alpha.7 has been published.
+The repository project currently targets **.NET 10** and declares **0.1.0-alpha.7**; that source version alone does not mean alpha.7 has been published.
 
 The host supplies the catalog and optional configuration source. It also owns application lifecycle, execution, rendering, networking, storage, and presentation. FSM_COS owns composition.
 
@@ -44,7 +44,7 @@ Related packages:
 
 ## 🟢 04 — See it in a minute
 
-The source repository contains a runnable example that requests a report bundle whose prerequisite is a data-source bundle. You need Git and the .NET 8 SDK:
+The source repository contains a runnable example that requests a report bundle whose prerequisite is a data-source bundle. You need Git and the .NET 10 SDK:
 
 ```bash
 git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git

@@ -93,7 +93,7 @@ These distinctions separate implemented behavior from future architecture. See [
 
 ### Run the smallest example
 
-Install Git and the **.NET 8 SDK**, then run:
+Install Git and the **.NET 10 SDK**, then run:
 
 ```bash
 git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git

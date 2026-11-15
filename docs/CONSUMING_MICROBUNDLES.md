@@ -321,7 +321,7 @@ This is not transactional loading: if a dependency's `Load` succeeds and a later
 | Composition reports a dependency cycle | Trace the dependency chain and remove the cycle or redesign the participating contracts. FSM_COS cannot choose a meaningful substitute for a cycle. |
 | Arbitration does not converge | Review each bundle's `Arbitrate` implementation. A bundle should return `true` only when it actually changes composition-relevant state; repeated changes must eventually stop. The default limit is ten rounds. |
 | A bundle receives no configuration | Configuration is optional. Check whether your `IMicroBundleConfigurationSource` returns configuration for the runtime ID, bundle ID, and resolved version. If none is available, the bundle should use its own defaults. |
-| The sample does not start | Run it from a clone of the source repository with the .NET 8 SDK installed. The sample references the local FSM_COS project; it is not included in the NuGet package. |
+| The sample does not start | Run it from a clone of the source repository with the .NET 10 SDK installed. The sample references the local FSM_COS project; it is not included in the NuGet package. |
 | Source CI passes but a package consumer cannot restore | Check the exact package versions and the public-feed compatibility job. A local development feed and the public NuGet feed are different dependency environments. |
 
 These checks help locate the failing boundary. Avoid fixing a catalog or host problem by adding storage, UI, or transport responsibilities to FSM_COS itself.
