@@ -79,7 +79,7 @@ FSM_COS does not download artifacts, verify artifact content hashes, activate de
 
 ## 🟢 04 — See it in a minute
 
-You need Git and the **.NET 8 SDK**. Run the repository's minimal consumer:
+You need Git and the **.NET 10 SDK**. Run the repository's minimal consumer:
 
 ```bash
 git clone https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS.git
@@ -97,7 +97,7 @@ Assembly order: 2 -> 1
 
 That output is a small, concrete proof of the central behavior: the manifest requests the report, but the assembled runtime includes its prerequisite first. The sample defines its own catalog and example MicroBundles; they are not built-in types supplied by FSM_COS. For a line-by-line explanation, see the [minimal consumer recipe](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md).
 
-The project currently targets **.NET 8** and declares version **0.1.0-alpha.7**. A project version is not proof that the same version is available on the public feed; the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) is authoritative for published versions. To understand the package contract, continue with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md).
+The project currently targets **.NET 10** and declares version **0.1.0-alpha.7**. A project version is not proof that the same version is available on the public feed; the [NuGet package page](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS) is authoritative for published versions. To understand the package contract, continue with [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md).
 
 ## 🟪 05 — Choose your next step
 
