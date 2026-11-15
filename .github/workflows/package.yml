@@ -237,6 +237,33 @@ jobs:
       - name: Verify public-feed NuGet package contents and metadata
         run: python3 scripts/verify_nuget_package.py --package-dir ./artifacts-public --project src/FSM_COS/FSM_COS.csproj
 
+      - name: Restore and run isolated consumer against the candidate package
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .ci
+          cat > .ci/NuGet.PackageConsumer.config <<EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <configuration>
+            <packageSources>
+              <clear />
+              <add key="candidate" value="$GITHUB_WORKSPACE/artifacts-public" />
+              <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+            </packageSources>
+            <packageSourceMapping>
+              <packageSource key="candidate">
+                <package pattern="TheSingularityWorkshop.FSM_COS" />
+              </packageSource>
+              <packageSource key="nuget.org">
+                <package pattern="*" />
+              </packageSource>
+            </packageSourceMapping>
+          </configuration>
+          EOF
+          dotnet restore tests/FSM_COS.PackageConsumer/FSM_COS.PackageConsumer.csproj --configfile .ci/NuGet.PackageConsumer.config --force --no-cache
+          dotnet run --project tests/FSM_COS.PackageConsumer/FSM_COS.PackageConsumer.csproj --configuration Release --no-restore
+
+
       - name: Upload public-feed package artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
