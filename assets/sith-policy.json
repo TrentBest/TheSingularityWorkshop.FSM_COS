@@ -7,13 +7,14 @@
   ],
   "actual_branches": [
     "development",
+    "fix/markdown-footer-validation",
     "master",
     "policy/sith-branch-activity-audit",
     "work/ciai-evidence-hardening"
   ],
-  "branch_count": 4,
+  "branch_count": 5,
   "status": "NON-COMPLIANT",
-  "evaluated_at": "2026-11-15T11:56:05Z",
-  "workflow_run": "https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43711288158",
-  "triggering_commit": "b42e505399d156bc9f80f027968f164149f5ba1f"
+  "evaluated_at": "2026-11-16T12:42:35Z",
+  "workflow_run": "https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/43869012148",
+  "triggering_commit": "41b736767b21922ace744b81687f040533c7deef"
 }
