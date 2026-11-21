@@ -40,13 +40,32 @@ The source can be an in-memory catalog, a repository adapter, local artifacts, g
 
 FSM_COS does not require a particular storage or delivery mechanism.
 
+### Portable Experience identity and the current runtime boundary
+
+The portable Experience manifest is defined by canonical ontology identity + exact version, with SHA-256 where the immutable artifact contract supplies or requires it. It must not contain either a Repository storage handle or a platform-local runtime slot.
+
+The loading boundary has three distinct identities:
+
+| Identity | Owner | Purpose |
+|---|---|---|
+| Portable artifact identity: ontology + exact version + digest | Experience authoring / Domain contract | Names the capability and selects immutable bytes across repositories and machines |
+| Repository storage address | MicroBundleRepository | Locates bytes inside one repository; never a runtime ID |
+| Platform-local runtime slot | Platform cache / FSM_COS | Resolves ontology identities to fast local numeric array/index access; may differ across machines |
+
+The existing Domain runtime object also exposes a numeric `MicroBundleDescriptor.Id` / `IMicroBundle.Id`. That is a compatibility contract, not the Repository address and not automatically the FSM_COS slot. The materialization adapter must explicitly reconcile the assigned local slot with the Domain object's numeric identity. It must not assume equality, silently rewrite the descriptor, or copy a Repository handle into either value.
+
+**Implementation status:** the current `RuntimeManifest` and `IMicroBundleCatalog` API documented below are still the numeric in-process compatibility path. They do not yet accept the portable ontology-string Experience manifest directly. The portable resolver, local-slot persistence, explicit materialization mapping, and atomic preload path remain integration work tracked by [MicroBundleDomain #28](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/issues/28) and [FSM_COS #51](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/issues/51). Do not treat a repository-local address as a substitute for any runtime ID.
+
+For the target portable path, exact version and declared digest must be verified before materialization or activation; every root and transitive dependency must resolve through the same platform-local mapping. Missing, unknown, ambiguous, stale, colliding, or mismatched entries fail closed. Creator updates remain opt-in and require a newly published Experience-manifest version.
+
+
 ### What FSM_COS consumes
 
 FSM_COS consumes three intentionally small inputs.
 
-### 1. Runtime Manifest
+### 1. Numeric RuntimeManifest (current compatibility API)
 
-The manifest identifies the runtime and the root MicroBundles it requests.
+The current FSM_COS RuntimeManifest identifies the runtime and requests root MicroBundles by numeric Domain/runtime ID. This is the existing in-process compatibility contract, not the portable Experience-manifest format.
 
 Each root carries:
 
@@ -73,7 +92,7 @@ bool TryResolve(
     out IMicroBundle? bundle);
 ```
 
-For domain-declared dependencies, FSM_COS asks:
+For dependencies declared by the current numeric Domain API, FSM_COS asks:
 
 ```csharp
 bool TryResolve(
@@ -81,7 +100,7 @@ bool TryResolve(
     out IMicroBundle? bundle);
 ```
 
-This lets you decide how resolution works.
+This lets you decide how resolution works for the current numeric compatibility API. A future portable-manifest adapter must resolve ontology + exact version (+ digest) through the platform-local cache and then explicitly materialize the corresponding Domain runtime objects; it must not forward Repository storage addresses as bundle IDs.
 
 You can resolve from:
 
@@ -315,8 +334,8 @@ This is not transactional loading: if a dependency's `Load` succeeds and a later
 
 | Symptom | What to check |
 |---|---|
-| A requested root cannot be resolved | Confirm the catalog contains the requested bundle ID **and exact manifest version**. Root resolution uses both values. |
-| A dependency cannot be resolved | Confirm the catalog can resolve every dependency ID declared by the bundle. Dependency lookup uses the domain-declared identity. |
+| A requested numeric root cannot be resolved | Confirm the compatibility catalog contains the requested Domain/runtime ID **and exact manifest version**. Root resolution uses both values. A portable ontology declaration requires the separate platform-local resolver path described above. |
+| A numeric dependency cannot be resolved | Confirm the catalog can resolve every numeric dependency ID declared by the current Domain contract. Portable ontology dependencies require the separate local-slot resolution and materialization adapter path described above. |
 | The catalog returns the wrong bundle or version | Check the catalog's identity mapping. FSM_COS validates root identity and version rather than silently accepting a substitute. |
 | Composition reports a dependency cycle | Trace the dependency chain and remove the cycle or redesign the participating contracts. FSM_COS cannot choose a meaningful substitute for a cycle. |
 | Arbitration does not converge | Review each bundle's `Arbitrate` implementation. A bundle should return `true` only when it actually changes composition-relevant state; repeated changes must eventually stop. The default limit is ten rounds. |
