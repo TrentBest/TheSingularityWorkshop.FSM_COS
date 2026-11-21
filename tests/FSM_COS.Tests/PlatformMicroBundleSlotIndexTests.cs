@@ -100,6 +100,88 @@ public sealed class PlatformMicroBundleSlotIndexTests
         Assert.Throws<ArgumentOutOfRangeException>(() => new PlatformMicroBundleSlot(0));
     }
 
+
+    [Fact]
+    public void File_system_store_persists_assignments_across_store_instances()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "fsm-cos-slot-tests", Guid.NewGuid().ToString("N"));
+        try
+        {
+            var firstStore = new FileSystemPlatformMicroBundleSlotStore(root);
+            var firstIndex = new PlatformMicroBundleSlotIndex(firstStore);
+            var assigned = firstIndex.ResolveOrAssign("workshop:capability/render");
+
+            var restartedStore = new FileSystemPlatformMicroBundleSlotStore(root);
+            var restartedIndex = new PlatformMicroBundleSlotIndex(restartedStore);
+
+            Assert.True(restartedIndex.TryResolve("workshop:capability/render", out var recovered));
+            Assert.Equal(assigned, recovered);
+            Assert.Equal(1, restartedStore.Read().Revision);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void File_system_store_rejects_stale_compare_and_swap_writes()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "fsm-cos-slot-tests", Guid.NewGuid().ToString("N"));
+        try
+        {
+            var store = new FileSystemPlatformMicroBundleSlotStore(root);
+            var stale = store.Read();
+            var first = new PlatformMicroBundleSlotSnapshot(
+                1,
+                new Dictionary<string, PlatformMicroBundleSlot>(StringComparer.Ordinal)
+                {
+                    ["workshop:capability/render"] = new(1)
+                });
+            Assert.True(store.TryWrite(0, first, out _));
+
+            var conflicting = new PlatformMicroBundleSlotSnapshot(
+                1,
+                new Dictionary<string, PlatformMicroBundleSlot>(StringComparer.Ordinal)
+                {
+                    ["workshop:capability/physics"] = new(1)
+                });
+
+            Assert.False(store.TryWrite(stale.Revision, conflicting, out var current));
+            Assert.Equal(1, current.Revision);
+            Assert.Contains("workshop:capability/render", current.Assignments.Keys);
+            Assert.DoesNotContain("workshop:capability/physics", current.Assignments.Keys);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void File_system_store_fails_closed_on_corrupt_snapshot()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "fsm-cos-slot-tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(root);
+        try
+        {
+            File.WriteAllText(
+                Path.Combine(root, "platform-microbundle-slots.json"),
+                "{ this is not valid json");
+
+            var store = new FileSystemPlatformMicroBundleSlotStore(root);
+
+            Assert.Throws<InvalidDataException>(() => store.Read());
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, recursive: true);
+        }
+    }
+
     private sealed class InMemoryCompareAndSwapSlotStore : IPlatformMicroBundleSlotStore
     {
         private PlatformMicroBundleSlotSnapshot _snapshot =
