@@ -53,6 +53,13 @@ FSM_COS owns local ontology-to-slot resolution, dependency closure, atomic stagi
 
 The materialization adapter must explicitly reconcile the assigned FSM_COS slot with the numeric identity exposed by the existing Domain runtime object. Do not assume those values are equal, silently rewrite a descriptor, or copy a Repository handle into either field. If the adapter cannot establish the relationship, composition fails closed.
 
+The current implementation now provides the two lower-level pieces of that boundary:
+
+- `FileSystemPlatformMicroBundleSlotStore` persists the platform's ontology-to-slot snapshot in `platform-microbundle-slots.json`. Writers serialize through an exclusive lock file, re-read the revision under that lock, and atomically replace the snapshot. This file contains runtime identity metadata only; it is not the Repository artifact cache.
+- `PlatformMicroBundleDomainBinding` records the explicit ontology + platform slot + Domain ID + materialized `IMicroBundle` + exact version relationship. Construction rejects a materialized bundle whose `Id`, `Descriptor.Id`, or version differs from the supplied Domain binding. `PlatformMicroBundleDomainBindingSet` rejects duplicate ontology, platform-slot, or Domain-ID assignments.
+
+These are additive primitives, not yet an end-to-end portable manifest executor. The existing numeric `RuntimeManifest`, `IMicroBundleCatalog`, and `FsmCos.Execute` path remains unchanged.
+
 The target portable declaration pins ontology + exact version + digest where available. If a digest is absent upstream, a trusted resolver must select exactly one immutable revision and verify its digest before materialization. Missing/ambiguous identity, stale cache mapping, collision, version mismatch, digest mismatch, or missing bytes fails before activation.
 
 A newer creator revision does not mutate an existing manifest or running assembly. The author approves the update and publishes a new Experience manifest version.
