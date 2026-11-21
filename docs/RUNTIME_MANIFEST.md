@@ -23,6 +23,45 @@ It deliberately does **not** answer:
 
 *Scope note: this is the intended authoring/publication pipeline, not a claim that FSM_COS currently ships those editor, validation, closure-baking, or manifest-publication stages. The implemented contract begins with `RuntimeManifest`; `FsmCos.Execute` validates and composes that request.*
 
+## Portable Experience manifest versus the current numeric runtime manifest
+
+The ontology-string manifest is the portable authoring/publication contract defined by [MicroBundleDomain issue #28](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/issues/28). It contains canonical ontology strings + exact versions (and SHA-256 where the artifact contract supplies/requires it). It must never contain repository-local storage handles or platform-local runtime slots.
+
+The current FSM_COS RuntimeManifest shown below is still numeric: its roots use BundleId + Version, and the catalog resolves numeric IDs. Treat that as the existing in-process compatibility contract, not as the final portable Experience manifest format.
+
+The target adapter flow is:
+
+~~~text
+portable Experience manifest
+  ontology + exact version (+ digest)
+             |
+             v
+MicroBundleRepository
+  private storage index -> verified bytes
+             |
+             v
+platform cache / FSM_COS
+  ontology -> platform-local numeric slot
+             |
+             v
+existing Domain/FSM_COS numeric composition path
+~~~
+
+Repository storage handles and platform runtime slots are separate namespaces. The Repository handle never enters FSM_COS. The platform-local slot may differ across machines and is not serialized back into the portable manifest.
+
+FSM_COS owns local ontology-to-slot resolution, dependency closure, atomic staging, and composition. MicroBundleDomain owns capability/dependency meaning. Request configuration remains separate from artifact identity and is applied after the exact revision is resolved.
+
+The materialization adapter must explicitly reconcile the assigned FSM_COS slot with the numeric identity exposed by the existing Domain runtime object. Do not assume those values are equal, silently rewrite a descriptor, or copy a Repository handle into either field. If the adapter cannot establish the relationship, composition fails closed.
+
+The target portable declaration pins ontology + exact version + digest where available. If a digest is absent upstream, a trusted resolver must select exactly one immutable revision and verify its digest before materialization. Missing/ambiguous identity, stale cache mapping, collision, version mismatch, digest mismatch, or missing bytes fails before activation.
+
+A newer creator revision does not mutate an existing manifest or running assembly. The author approves the update and publishes a new Experience manifest version.
+
+Related decisions:
+- [MicroBundleDomain #28](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/issues/28)
+- [MicroBundleDomain #17](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/issues/17)
+- [FSM_COS portable dependency resolution #51](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/issues/51)
+
 ## 01 — What is a RuntimeManifest?
 
 ### UML class diagram: manifest and published plan
