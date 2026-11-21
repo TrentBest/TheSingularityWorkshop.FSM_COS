@@ -1,4 +1,5 @@
 using TheSingularityWorkshop.FSM_COS;
+using TheSingularityWorkshop.MicroBundleDomain;
 using Xunit;
 
 namespace FSM_COS.Tests;
@@ -100,6 +101,65 @@ public sealed class PlatformMicroBundleSlotIndexTests
         Assert.Throws<ArgumentOutOfRangeException>(() => new PlatformMicroBundleSlot(0));
     }
 
+
+
+    [Fact]
+    public void Domain_binding_keeps_platform_slot_separate_from_domain_id()
+    {
+        var bundle = new TestMicroBundle(42, "1.2.3");
+        var binding = new PlatformMicroBundleDomainBinding(
+            "workshop:capability/render",
+            new PlatformMicroBundleSlot(10),
+            42,
+            bundle,
+            "1.2.3");
+
+        Assert.Equal(10UL, binding.PlatformSlot.Value);
+        Assert.Equal(42UL, binding.DomainBundleId);
+        Assert.NotEqual(binding.PlatformSlot.Value, binding.DomainBundleId);
+        Assert.Same(bundle, binding.Bundle);
+    }
+
+    [Fact]
+    public void Domain_binding_rejects_implicit_or_mismatched_domain_identity()
+    {
+        var bundle = new TestMicroBundle(42, "1.2.3");
+
+        Assert.Throws<ArgumentException>(() =>
+            new PlatformMicroBundleDomainBinding(
+                "workshop:capability/render",
+                new PlatformMicroBundleSlot(10),
+                10,
+                bundle,
+                "1.2.3"));
+    }
+
+    [Fact]
+    public void Binding_set_rejects_duplicate_platform_slots_and_domain_ids()
+    {
+        var first = new PlatformMicroBundleDomainBinding(
+            "workshop:capability/render", new(10), 42, new TestMicroBundle(42, "1.0"), "1.0");
+        var duplicateSlot = new PlatformMicroBundleDomainBinding(
+            "workshop:capability/physics", new(10), 43, new TestMicroBundle(43, "1.0"), "1.0");
+        var duplicateDomainId = new PlatformMicroBundleDomainBinding(
+            "workshop:capability/input", new(11), 42, new TestMicroBundle(42, "1.0"), "1.0");
+
+        Assert.Throws<ArgumentException>(() =>
+            new PlatformMicroBundleDomainBindingSet([first, duplicateSlot]));
+        Assert.Throws<ArgumentException>(() =>
+            new PlatformMicroBundleDomainBindingSet([first, duplicateDomainId]));
+    }
+
+    private sealed class TestMicroBundle : IMicroBundle
+    {
+        public TestMicroBundle(ulong id, string version) =>
+            Descriptor = new MicroBundleDescriptor(id, version);
+
+        public MicroBundleDescriptor Descriptor { get; }
+        public IReadOnlyList<MicroBundleDependencyRequest> Dependencies => Array.Empty<MicroBundleDependencyRequest>();
+        public void Load(IMicroBundleLoadContext context) => throw new NotSupportedException();
+        public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex) => false;
+    }
 
     [Fact]
     public void File_system_store_persists_assignments_across_store_instances()
