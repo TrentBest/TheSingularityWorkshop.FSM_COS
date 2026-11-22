@@ -38,16 +38,53 @@ public sealed class FileSystemPlatformMicroBundleSlotStore : IPlatformMicroBundl
             using var stream = new FileStream(
                 _snapshotPath, FileMode.Open, FileAccess.Read, FileShare.Read,
                 bufferSize: 4096, options: FileOptions.SequentialScan);
-            var persisted = JsonSerializer.Deserialize<PersistedSnapshot>(stream, JsonOptions)
-                ?? throw new InvalidDataException("The platform slot snapshot must not be null.");
-            if (persisted.Assignments is null)
-                throw new InvalidDataException("The platform slot snapshot has no assignments map.");
+            using var document = JsonDocument.Parse(stream);
+            var root = document.RootElement;
+            if (root.ValueKind != JsonValueKind.Object)
+                throw new InvalidDataException("The platform slot snapshot must be a JSON object.");
+
+            long? revision = null;
+            JsonElement assignmentsElement = default;
+            var seenRootProperties = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var property in root.EnumerateObject())
+            {
+                if (!seenRootProperties.Add(property.Name))
+                    throw new InvalidDataException($"The platform slot snapshot contains duplicate property '{property.Name}'.");
+
+                switch (property.Name)
+                {
+                    case "Revision":
+                        if (property.Value.ValueKind != JsonValueKind.Number ||
+                            !property.Value.TryGetInt64(out var parsedRevision) ||
+                            parsedRevision < 0)
+                            throw new InvalidDataException("The platform slot snapshot revision must be a non-negative integer.");
+                        revision = parsedRevision;
+                        break;
+                    case "Assignments":
+                        assignmentsElement = property.Value;
+                        break;
+                    default:
+                        throw new InvalidDataException($"The platform slot snapshot contains unknown property '{property.Name}'.");
+                }
+            }
+
+            if (revision is null)
+                throw new InvalidDataException("The platform slot snapshot is missing its required revision.");
+            if (assignmentsElement.ValueKind != JsonValueKind.Object)
+                throw new InvalidDataException("The platform slot snapshot is missing its assignments object.");
 
             var assignments = new Dictionary<string, PlatformMicroBundleSlot>(StringComparer.Ordinal);
-            foreach (var (ontology, value) in persisted.Assignments)
-                assignments.Add(ontology, new PlatformMicroBundleSlot(value));
+            foreach (var property in assignmentsElement.EnumerateObject())
+            {
+                if (property.Value.ValueKind != JsonValueKind.Number ||
+                    !property.Value.TryGetUInt64(out var slotValue))
+                    throw new InvalidDataException($"The platform slot assignment '{property.Name}' must be an unsigned integer.");
 
-            return new PlatformMicroBundleSlotSnapshot(persisted.Revision, assignments);
+                if (!assignments.TryAdd(property.Name, new PlatformMicroBundleSlot(slotValue)))
+                    throw new InvalidDataException($"The platform slot snapshot contains duplicate ontology '{property.Name}'.");
+            }
+
+            return new PlatformMicroBundleSlotSnapshot(revision.Value, assignments);
         }
         catch (Exception exception) when (
             exception is JsonException or ArgumentException or OverflowException)
