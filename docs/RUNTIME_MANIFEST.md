@@ -398,6 +398,20 @@ It means the composition request remains meaningful when moved between hosts.
 
 A newer manifest is a new versioned request, not an in-place update to an active `RuntimeAssembly`. The current kernel does not retrieve or refresh manifests, obtain developer consent for side-by-side replacement, switch a running composition to a new generation, or retire an older generation. This package does not define those lifecycle contracts.
 
+### Filesystem slot snapshot integrity
+
+The filesystem-backed platform slot store treats its JSON snapshot as a strict persistence contract:
+
+- `Revision` is required and must be a non-negative integer; a missing revision is not interpreted as revision zero.
+- `Assignments` is required and must be an object of ontology strings to non-zero unsigned slot values.
+- Duplicate JSON property names, duplicate ontology assignments, unknown root properties, malformed values, and duplicate slot values fail closed.
+- Writers hold an exclusive lock across the revision read and compare-and-swap decision, then replace the snapshot through a same-directory temporary file and atomic move.
+- Independent store instances therefore share one serialized allocation namespace when they point at the same platform directory.
+
+A missing snapshot alone represents a new, empty platform namespace at revision zero. A present but invalid snapshot is never silently reset.
+
+The regression suite includes malformed-contract cases and concurrent allocations through independent store instances. These tests are committed but have not yet been executed by CI.
+
 ## 04 — See it in a minute
 
 ### Example
