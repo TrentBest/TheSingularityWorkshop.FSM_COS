@@ -242,6 +242,31 @@ public sealed class PlatformMicroBundleSlotIndexTests
         }
     }
 
+    [Theory]
+    [InlineData("{\"Assignments\":{}}")]
+    [InlineData("{\"Revision\":0,\"Revision\":1,\"Assignments\":{}}")]
+    [InlineData("{\"Revision\":0,\"Assignments\":{},\"Unexpected\":true}")]
+    [InlineData("{\"Revision\":-1,\"Assignments\":{}}")]
+    [InlineData("{\"Revision\":0,\"Assignments\":{\"workshop:capability/render\":0}}")]
+    [InlineData("{\"Revision\":0,\"Assignments\":{\"workshop:capability/render\":1,\"workshop:capability/render\":2}}")]
+    public void File_system_store_rejects_invalid_or_ambiguous_snapshot_contracts(string json)
+    {
+        var root = Path.Combine(Path.GetTempPath(), "fsm-cos-slot-tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(root);
+        try
+        {
+            File.WriteAllText(Path.Combine(root, "platform-microbundle-slots.json"), json);
+            var store = new FileSystemPlatformMicroBundleSlotStore(root);
+
+            Assert.Throws<InvalidDataException>(() => store.Read());
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, recursive: true);
+        }
+    }
+
     private sealed class InMemoryCompareAndSwapSlotStore : IPlatformMicroBundleSlotStore
     {
         private PlatformMicroBundleSlotSnapshot _snapshot =
