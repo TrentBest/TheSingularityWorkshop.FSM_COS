@@ -267,6 +267,47 @@ public sealed class PlatformMicroBundleSlotIndexTests
         }
     }
 
+    [Fact]
+    public async Task Independent_file_store_instances_serialize_concurrent_slot_allocations()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "fsm-cos-slot-tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(root);
+        try
+        {
+            const int writerCount = 8;
+            const int assignmentsPerWriter = 8;
+            var tasks = Enumerable.Range(0, writerCount)
+                .Select(writer => Task.Run(() =>
+                {
+                    var index = new PlatformMicroBundleSlotIndex(
+                        new FileSystemPlatformMicroBundleSlotStore(root));
+                    var slots = new List<ulong>();
+                    for (var item = 0; item < assignmentsPerWriter; item++)
+                    {
+                        var ontology = $"workshop:concurrency/{writer}/{item}";
+                        slots.Add(index.ResolveOrAssign(ontology).Value);
+                    }
+
+                    return slots;
+                }))
+                .ToArray();
+
+            var results = await Task.WhenAll(tasks);
+            var allSlots = results.SelectMany(static slots => slots).ToArray();
+            var persisted = new FileSystemPlatformMicroBundleSlotStore(root).Read();
+
+            Assert.Equal(writerCount * assignmentsPerWriter, allSlots.Length);
+            Assert.Equal(allSlots.Length, allSlots.Distinct().Count());
+            Assert.Equal(allSlots.Length, persisted.Assignments.Count);
+            Assert.Equal(allSlots.Length, persisted.Revision);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, recursive: true);
+        }
+    }
+
     private sealed class InMemoryCompareAndSwapSlotStore : IPlatformMicroBundleSlotStore
     {
         private PlatformMicroBundleSlotSnapshot _snapshot =
