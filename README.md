@@ -106,7 +106,8 @@ You do not need to read the whole documentation set before building.
 - **Make it work:** [Run and adapt the minimal consumer](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/blob/development/samples/FSM_COS.MinimalConsumer/Program.md).
 - **Build your own composition:** [Consuming MicroBundles](docs/CONSUMING_MICROBUNDLES.md).
 - **See what the kernel does:** [Living Gallery](docs/GALLERY.md).
-- **Check a specific contract or boundary:** use the [documentation index](DOCUMENTATION_INDEX.md) to open the relevant reference when you need it.\n- **Follow the shared publication, theory, and graphics rules:** [Workshop Documentation Standard](DOCUMENTATION_STANDARD.md).
+- **Check a specific contract or boundary:** use the [documentation index](DOCUMENTATION_INDEX.md) to open the relevant reference when you need it.
+- **Follow the shared publication, theory, and graphics rules:** [Workshop Documentation Standard](DOCUMENTATION_STANDARD.md).
 - **Check release and trust limits:** [Alpha.7 candidate notes](docs/releases/0.1.0-alpha.7.md) · [Security](SECURITY.md).
 
 ---
