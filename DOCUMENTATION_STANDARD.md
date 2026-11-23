@@ -213,3 +213,79 @@ This footer mark is distinct from the animated moniker used as a document header
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
+
+## SURPS participation, sourcebooks, and enrollment
+
+SURPS participation is an explicit repository-level capability. A repository participates when it contributes a domain-owned sourcebook, rulebook, provider, ontology, scenario, or other declared output that SURPS can discover and compose. Merely linking to SURPS, mentioning roleplaying, or consuming an unrelated package does not qualify.
+
+SURPS is the shared composition and publishing system; it does not take ownership of the participating repository's domain. Each participant remains authoritative for its own concepts, theory, implementation, evidence, and sourcebook content. SURPS owns shared ontology, rulebook identity and composition, CORE rules, LOD/campaign selection, and the cross-domain authoring and enrollment contract. Domain books link to neighboring authoritative theory rather than copying it.
+
+### Enrollment manifest
+
+A participating repository maintains one machine-readable manifest at `.surps/participation.json`. The manifest is the source of truth for its enrollment status and book catalogue. At minimum it declares:
+
+- schema version and repository identity;
+- participation status (**draft**, **active**, **suspended**, or **retired**);
+- the owning domain and a concise statement of its SURPS contribution;
+- each locally produced book's stable ID, title, category, LOD, version, status, canonical book path, descriptor path, and cover path;
+- the book's source/evidence status and the repository revision or release to which claims apply;
+- optional cross-repository dependencies by stable identity, never by copied book content.
+
+A book may be listed only when its authoritative content and descriptor are present in the producing repository. A planned title may appear in a clearly separated **planned** section, but must never be presented as a published/available book. A participant with no book output may enroll as a provider/contributor, but its badge must say so rather than implying it publishes books.
+
+### Book and cover enrollment gate
+
+Every published book output must have one canonical home under `docs/books/`, one machine-readable descriptor beside or linked from its book record, and one owned cover under `docs/books/covers/` (or the repository's documented equivalent during migration). The cover is part of the book's identity and enrollment—not a decorative afterthought.
+
+The cover gate verifies that the asset exists in the producing repository, is linked from the book descriptor and catalogue, has a descriptive title/alt text and provenance, and visually identifies the book title, owning domain/publisher, and LOD/category where applicable. Prefer editable SVG with a static, accessible fallback where required. Do not fabricate a cover from a title, use an unrelated repository avatar, or claim that a conceptual cover depicts implemented content. A cover may be authored progressively, but the book remains **draft / cover in progress** until its required identity elements are present. Preserve the original source asset and document its generation/editing path.
+
+### Automatically maintained README badge
+
+Enrollment automatically adds a SURPS badge block to the repository README. The badge is generated from `.surps/participation.json`; it is not manually maintained text and must never be inferred from repository name, topics, or a link to SURPS.
+
+Use these stable README markers exactly once:
+
+```markdown
+<!-- SURPS:PARTICIPATION:START -->
+[![SURPS participation](docs/assets/badges/surps-participation.svg)](https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem)
+<!-- SURPS:PARTICIPATION:END -->
+```
+
+The generated SVG lives at `docs/assets/badges/surps-participation.svg`. It identifies the repository as a SURPS participant and lists the actual book outputs by title and LOD. If the repository contributes providers but no books, the badge lists the contribution type instead. Long catalogues may use a compact first line plus a linked book-count/catalogue line; the full catalogue remains available at `docs/books/`. The badge must not imply a book is released when its manifest status is draft, planned, or under review.
+
+The enrollment workflow must validate the manifest, verify every referenced book/descriptor/cover path, regenerate the SVG deterministically, and update only the README region between the markers. It must fail on duplicate book IDs, missing assets, unknown status/LOD values, malformed links, or a badge that does not match the manifest. It must not rewrite unrelated README content. A repository is not enrolled until this workflow and its output are verified on its active development branch.
+
+### Shared book identity and visual system
+
+Use the shared SURPS book identity/cover specification for descriptor fields, title hierarchy, publisher identity, LOD marks, and cover proportions. Domain identity remains visible; the SURPS mark communicates shared participation, not ownership or authorship of every book. A book can be referenced by multiple experiences, but its authoritative content has exactly one producing repository.
+
+The first enrollment example is SURPS CORE — **Spying**, currently identified as a tabletop playtest draft. Its status must remain explicit; the badge must not imply completed group playtesting or digital runtime implementation.
+
+### Gauntlet extension and conformance
+
+The Gauntlet is a first-class SURPS proving ground. SURPS must extend Gauntlet so it can exercise composed domain rulebooks and providers as integrated experiences, rather than treating each domain's isolated demo as sufficient evidence.
+
+The integration contract is layered:
+
+1. **Gauntlet owns the proving-ground harness and its challenge/encounter progression.** It defines how a test run is staged, observed, recorded, replayed, and judged.
+2. **SURPS owns the shared rulebook composition and campaign/LOD selection.** A SURPS-enabled Gauntlet run selects an explicit SURPS profile and the rulebooks/providers under test.
+3. **Participating domains own their rules and capabilities.** Physics resolves physical consequences; Gestures supplies posture/motion/recognition/coordination; Dungeon owns underground environments; City owns civic systems; Laboratories owns experiments/apparatus/procedures; StoryBuilder owns narrative construction. Each contributes evidence at its own boundary.
+4. **A Gauntlet scenario is a conformance fixture, not a substitute for domain tests.** It records the selected rulebook IDs/versions, manifest, initial conditions, actions/inputs, expected invariants, observed outputs, evidence references, and unresolved limitations.
+5. **Offline tabletop equivalence remains a SURPS requirement.** A Gauntlet scenario may automate or visualize a procedure, but it cannot make the corresponding SURPS rule unintelligible or unplayable without the application.
+
+The initial SURPS extension should be a thin adapter/fixture set in Gauntlet that proves opt-in composition, explicit LOD selection, provider discovery, cross-domain event flow, time/turn behavior, and evidence capture. Do not move the Gauntlet harness into SURPS or duplicate domain simulation code. Mark any adapter or scenario as planned until it exists and is verified.
+
+### Enrollment and adoption checklist
+
+- [ ] Repository owner and domain contribution are identified.
+- [ ] `.surps/participation.json` exists and validates.
+- [ ] Each listed book has one authoritative content path and descriptor.
+- [ ] Each published book has its own owned, provenance-recorded cover.
+- [ ] Book status and LOD are accurate; planned work is not advertised as published.
+- [ ] README badge is generated from the manifest and lists actual outputs.
+- [ ] Badge links to the SURPS catalogue and the local catalogue links back to the book.
+- [ ] Domain ownership and cross-repository dependencies are explicit.
+- [ ] Gauntlet scenarios exist or are explicitly marked planned, with reproducible evidence.
+- [ ] Offline tabletop rules remain understandable independently of the digital harness.
+- [ ] Existing links, Pages workflows, and CI are verified after adoption.
+
