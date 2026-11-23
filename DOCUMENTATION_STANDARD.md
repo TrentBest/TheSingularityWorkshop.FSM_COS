@@ -218,6 +218,8 @@ This footer mark is distinct from the animated moniker used as a document header
 
 SURPS participation is an explicit repository-level capability. A repository participates when it contributes a domain-owned sourcebook, rulebook, provider, ontology, scenario, or other declared output that SURPS can discover and compose. Merely linking to SURPS, mentioning roleplaying, or consuming an unrelated package does not qualify.
 
+**Repository participation does not make SURPS mandatory for every experience.** SURPS is enabled per experience, not globally. When the experience's SURPS option is disabled, it runs without SURPS rulebook discovery or dependency; FSM_API, FSM_COS, and FSM_Foundry remain independently usable. When enabled, the host composes the SURPS master system and the explicitly selected rulebooks/providers for that experience. The README badge advertises repository outputs; it does not imply that every consumer or runtime must enable SURPS.
+
 SURPS is the shared composition and publishing system; it does not take ownership of the participating repository's domain. Each participant remains authoritative for its own concepts, theory, implementation, evidence, and sourcebook content. SURPS owns shared ontology, rulebook identity and composition, CORE rules, LOD/campaign selection, and the cross-domain authoring and enrollment contract. Domain books link to neighboring authoritative theory rather than copying it.
 
 ### Enrollment manifest
