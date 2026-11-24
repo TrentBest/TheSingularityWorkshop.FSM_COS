@@ -10,7 +10,7 @@
 
 ## Coverage summary
 
-The current core project contains 20 C# source files plus its project file. The `docs/UML/src/FSM_COS/` directory now has companion Markdown pages for all 20 source files, including individual UML neighborhood companions for declarations without a dedicated focused SVG. The four initially missing source companions have now been added:
+The current core project contains 24 C# source files plus its project file. The `docs/UML/src/FSM_COS/` directory now has companion Markdown pages for all 24 source files, including individual UML neighborhood companions for declarations without a dedicated focused SVG. The four initially missing source companions have now been added:
 
 - [IMicroBundleRollback](src/FSM_COS/IMicroBundleRollback.md) · [UML](src/FSM_COS/IMicroBundleRollbackUML.md)
 - [RuntimeCompositionResult](src/FSM_COS/RuntimeCompositionResult.md) · [UML](src/FSM_COS/RuntimeCompositionResultUML.md)
@@ -23,9 +23,9 @@ The existing documentation includes a separate class-diagram area and several SV
 
 | View | Status | Notes |
 |---|---|---|
-| Per-type source documentation | **20/20 files have a companion page; manual** | All 20 current C# source files have a companion page. Keep signatures/member details validated against source as code changes. |
+| Per-type source documentation | **24/24 files have a companion page; manual** | All 24 current C# source files have a companion page. Keep signatures/member details validated against source as code changes. |
 | Target-centered class neighborhoods | **Partial / manual** | Existing `docs/UML/ClassDiagram/` diagrams; complete consumer/dependency/package coverage is not yet verified. |
-| Companion `TypeNameUML.md` per declaration | **20/20 source files represented; manual** | Individual UML neighborhood pages now exist for all declared source files; `FsmCos` and `RuntimeManifestSchedule` use the focused `docs/UML/ClassDiagram/*UML.md` companions. Diagrams are authored, not generated. |
+| Companion `TypeNameUML.md` per declaration | **24/24 source files represented; manual** | Individual UML neighborhood pages now exist for all declared source files; `FsmCos` and `RuntimeManifestSchedule` use the focused `docs/UML/ClassDiagram/*UML.md` companions. Diagrams are authored, not generated. |
 | Sequence diagrams | **Partial / manual** | Added source-reviewed `SEQ-FSMCOS-001` for ordinary runtime composition, `SEQ-FSMCOS-002` for the conditional published/pre-resolved path, and `SEQ-FSMCOS-003` for experience composition/registration/selection/removal. All three are manual diagrams; published-path coverage is limited to the `WORKSHOP_USE_REPOSITORY_SOURCES` build condition, and other workflows remain open. |
 | Activity/control flow | **Partial / manual** | Complex dependency resolution, load, and arbitration branches require systematic coverage. |
 | State/lifecycle | **Partial / manual** | Added `STATE-FSMCOS-001` for registry membership/selection metadata; load/rollback lifecycle and other stateful workflows still need explicit views. |
@@ -45,6 +45,10 @@ The existing documentation includes a separate class-diagram area and several SV
 |---|---|
 | `ArbitrationContext.cs` | [ArbitrationContext.md](src/FSM_COS/ArbitrationContext.md) |
 | `FsmCos.cs` | [FsmCos.md](src/FSM_COS/FsmCos.md) |
+| `FileSystemPlatformMicroBundleSlotStore.cs` | [FileSystemPlatformMicroBundleSlotStore.md](src/FSM_COS/FileSystemPlatformMicroBundleSlotStore.md) |
+| `MicroBundlePreparationContext.cs` | [MicroBundlePreparationContext.md](src/FSM_COS/MicroBundlePreparationContext.md) |
+| `PlatformMicroBundleDomainBinding.cs` | [PlatformMicroBundleDomainBinding.md](src/FSM_COS/PlatformMicroBundleDomainBinding.md) |
+| `PlatformMicroBundleSlotIndex.cs` | [PlatformMicroBundleSlotIndex.md](src/FSM_COS/PlatformMicroBundleSlotIndex.md) |
 | `IFsmCos.cs` | [IFsmCos.md](src/FSM_COS/IFsmCos.md) |
 | `IManifestLoadEvaluator.cs` | [IManifestLoadEvaluator.md](src/FSM_COS/IManifestLoadEvaluator.md) |
 | `IMicroBundleCatalog.cs` | [IMicroBundleCatalog.md](src/FSM_COS/IMicroBundleCatalog.md) |
@@ -70,7 +74,7 @@ The core project defines **contracts and manifest/data types** used to describe,
 
 ## Next completion gates
 
-1. Review all 20 authored UML neighborhoods against current source and validate links/member relationships; presence does not imply exhaustive caller coverage.
+1. Review all 24 authored UML neighborhoods against current source and validate links/member relationships; presence does not imply exhaustive caller coverage.
 2. Extend source-backed sequence, activity, state, and data-lineage views beyond the initial ordinary-composition sequence; cover failure/rollback and remaining host workflows more deeply; ordinary composition, published/pre-resolved composition, and runtime experience selection now have dedicated manual sequence diagrams.
 3. Reconcile use cases with product intent and link each to source and tests.
 4. Add a deterministic inventory/generation tool and CI freshness/coverage checks.
