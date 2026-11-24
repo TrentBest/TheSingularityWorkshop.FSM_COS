@@ -98,7 +98,7 @@ public sealed class PortableMicroBundleBindingTests
                 providerResolver: null,
                 domainBindingSet: bindings));
 
-        Assert.Contains("has no matching explicit platform binding", exception.Message);
+        Assert.Contains("unbound dependency", exception.Message);
         Assert.Equal(0, root.LoadCalls);
         Assert.Equal(0, dependency.LoadCalls);
     }
