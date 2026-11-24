@@ -47,7 +47,7 @@ public sealed class ProviderPreparationTests
             .TryExecute(
                 new RuntimeManifest(42, [new MicroBundleManifestEntry(7, "1.0.0")]),
                 configurationSource: null,
-                new TestProviderResolver(new DemoCapability()));
+                providerResolver: new TestProviderResolver(new DemoCapability()));
 
         Assert.True(result.Succeeded);
         Assert.False(bundle.UnpinnedProviderResolved);
