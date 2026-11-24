@@ -11,6 +11,7 @@
 
 | Test | Contract verified |
 |---|---|
+| `Provider_preparation_phase_preserves_existing_numeric_phase_values` | The additive phase keeps historical BundleLoading=2 and Arbitration=3 assignments, appending ProviderPreparation=4. |
 | `Execute_prepares_every_bundle_in_deterministic_order_before_any_load` | All opt-in preparation callbacks run in ascending bundle-ID order before the first `Load`; exact typed provider references resolve from the closure snapshot. |
 | `Preparation_context_rejects_unpinned_or_mismatched_provider_references` | Unversioned and owner-version-mismatched references return false without invoking the host resolver. |
 | `TryExecute_reports_provider_preparation_failure_before_loading` | A preparation exception is reported in `RuntimeCompositionPhase.ProviderPreparation`; no load callback is attempted. |
