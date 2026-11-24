@@ -52,7 +52,13 @@ internal sealed class MicroBundlePreparationContext : IMicroBundlePreparationCon
         if (!declared)
             return false;
 
-        return _providerResolver.TryResolve(reference, out provider) && provider is not null;
+        if (!_providerResolver.TryResolve(reference, out provider) || provider is null)
+        {
+            provider = null;
+            return false;
+        }
+
+        return true;
     }
 }
 
