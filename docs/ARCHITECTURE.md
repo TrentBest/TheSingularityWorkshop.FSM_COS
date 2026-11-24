@@ -165,6 +165,8 @@ optional configuration source
         ↓
 dependency closure and preflight validation
         ↓
+optional typed-provider preparation (source integration)
+        ↓
 Load() in dependency-first order
         ↓
 bounded Arbitrate() rounds
