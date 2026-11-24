@@ -10,12 +10,19 @@
 
 ## Coverage summary
 
-The current core project contains 24 C# source files plus its project file. The `docs/UML/src/FSM_COS/` directory now has companion Markdown pages for all 24 source files, including individual UML neighborhood companions for declarations without a dedicated focused SVG. The four initially missing source companions have now been added:
+The current core project contains 24 C# source files plus its project file. The `docs/UML/src/FSM_COS/` directory now has companion Markdown pages for all 24 source files, including individual UML neighborhood companions for declarations without a dedicated focused SVG. Earlier reconciliation added these four companions:
 
 - [IMicroBundleRollback](src/FSM_COS/IMicroBundleRollback.md) · [UML](src/FSM_COS/IMicroBundleRollbackUML.md)
 - [RuntimeCompositionResult](src/FSM_COS/RuntimeCompositionResult.md) · [UML](src/FSM_COS/RuntimeCompositionResultUML.md)
 - [RuntimeExperienceHost](src/FSM_COS/RuntimeExperienceHost.md) · [UML](src/FSM_COS/RuntimeExperienceHostUML.md)
 - [RuntimeExperienceRegistry](src/FSM_COS/RuntimeExperienceRegistry.md) · [UML](src/FSM_COS/RuntimeExperienceRegistryUML.md)
+
+This pass closed four additional file-level gaps, including the new preparation adapter:
+
+- [FileSystemPlatformMicroBundleSlotStore](src/FSM_COS/FileSystemPlatformMicroBundleSlotStore.md) · [UML](src/FSM_COS/FileSystemPlatformMicroBundleSlotStoreUML.md)
+- [MicroBundlePreparationContext](src/FSM_COS/MicroBundlePreparationContext.md) · [UML](src/FSM_COS/MicroBundlePreparationContextUML.md)
+- [PlatformMicroBundleDomainBinding](src/FSM_COS/PlatformMicroBundleDomainBinding.md) · [UML](src/FSM_COS/PlatformMicroBundleDomainBindingUML.md)
+- [PlatformMicroBundleSlotIndex](src/FSM_COS/PlatformMicroBundleSlotIndex.md) · [UML](src/FSM_COS/PlatformMicroBundleSlotIndexUML.md)
 
 The existing documentation includes a separate class-diagram area and several SVGs, but the inventory below distinguishes existing artifacts from the full standard. Existing diagram files are not assumed to meet every new requirement without individual review.
 
