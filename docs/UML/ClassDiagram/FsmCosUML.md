@@ -13,6 +13,10 @@
 
 `FsmCos` implements `IFsmCos`. Its public composition entry point accepts a `RuntimeManifest` and an optional `IMicroBundleConfigurationSource`, resolves requested MicroBundles through a consumer-supplied `IMicroBundleCatalog`, validates and loads the dependency closure in dependency order, performs bounded arbitration, and returns a `RuntimeAssembly` when composition succeeds. The host remains responsible for executing and presenting the resulting application.
 
+## Portable composition boundary
+
+In repository-source integration, FsmCos exposes an overload that accepts a PlatformMicroBundleDomainBindingSet. Any resolved IPortableMicroBundle requires this set; otherwise composition fails before provider preparation or Load. The binding set verifies portable identity/version/digest against the materialized bundle and validates that portable dependencies map one-to-one to platform slots and Domain IDs, with matching descriptor declarations, runtime request versions, and configuration bytes.
+
 ## Use cases
 
 ### 1. A host composes a requested capability
@@ -30,7 +34,14 @@
 - **Entry point:** the optional configuration-source argument to `Execute`.
 - **Result:** composition evaluates configuration through the supplied boundary while FSM_COS retains responsibility for composition.
 
-### 3. A requested composition is invalid or cannot be completed
+### 3. A portable composition is not fully reconciled
+
+- **Goal:** prevent a portable dependency declaration from silently disagreeing with its numeric runtime representation.
+- **Consumer provides:** a PlatformMicroBundleDomainBindingSet containing one explicit mapping for each resolved portable bundle.
+- **Gate:** FSM_COS validates portable identity, dependency closure, exact versions, optional verified digests, descriptor/request parity, and request configuration before activation.
+- **Failure:** a missing or mismatched mapping fails before any bundle Load callback.
+
+### 4. A requested composition is invalid or cannot be completed
 
 - **Goal:** avoid handing the host a successful assembly when the requested dependency graph cannot be resolved or validated.
 - **Consumer observes:** an unsuccessful composition when required bundles are missing, dependencies are invalid, resource bounds are exceeded, or bounded arbitration fails to converge.
