@@ -142,11 +142,11 @@ A host that needs to expose typed capabilities during composition can implement 
 RuntimeAssembly assembly = cos.Execute(manifest, configurationSource, providerResolver);
 ```
 
-A provider declaration must include an exact contract version (`new MicroBundleProvider("tooling", "2.1.0")`). The reference also pins its owning bundle ID and version. FSM_COS validates that the referenced provider is declared by a participating bundle before asking the host resolver for the requested CLR type.
+A provider declaration must include an exact contract version (`new MicroBundleProvider("tooling", "2.1.0")`). The preparation context exposes a deterministic `Providers` snapshot of version-pinned declarations across the resolved dependency closure, so bundles can discover candidates without knowing their host implementation. A reference pins its owning bundle ID and version as well as the provider ID and contract version. FSM_COS validates the exact declaration before asking the host resolver for the requested CLR type.
 
 Opt-in bundles implement `IMicroBundlePreparable`. FSM_COS invokes each preparable bundle once, in deterministic bundle-ID order, after the complete dependency closure is validated and before any `Load` callback. Bundles without the optional interface are unchanged. A missing resolver or non-matching declaration returns `false`; resolver exceptions fail composition in the `ProviderPreparation` phase.
 
-This new contract is available when building against the MicroBundleDomain development source with `WorkshopUseRepositorySources=true`. The normal package build remains compatible with the currently published MicroBundleDomain 1.0.1 surface until the additive domain contract is released and the package dependency is intentionally advanced. No package is published by this work.
+This new contract is enabled for integration tests with `WorkshopEnableTypedProviderPreparation=true` while restoring the local MicroBundleDomain development package; sibling-source builds can use `WorkshopUseRepositorySources=true`. The public-package compatibility build deliberately leaves the feature disabled and continues to target the currently published MicroBundleDomain 1.0.1 surface until the additive domain contract is released and the package dependency is intentionally advanced. No package is published by this work.
 
 > For a fair comparison between direct workload execution and FSM_COS, see [Workload Benchmarking](WORKLOAD_BENCHMARKING.md): composition, activation, warm-up, and steady-state timing are separate measurements.
 
