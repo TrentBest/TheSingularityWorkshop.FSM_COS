@@ -635,6 +635,7 @@ public sealed class FsmCos : IFsmCos
                 var dependencyId = dependency.BundleId;
                 if (discovered.TryGetValue(dependencyId, out var alreadyDiscovered))
                 {
+#if WORKSHOP_USE_REPOSITORY_SOURCES
                     if (dependency.Version is not null &&
                         !string.Equals(alreadyDiscovered.Descriptor.Version, dependency.Version, StringComparison.Ordinal))
                     {
@@ -642,6 +643,7 @@ public sealed class FsmCos : IFsmCos
                             $"MicroBundle {id} requires dependency {dependencyId} version '{dependency.Version}', " +
                             $"but the resolved bundle is '{alreadyDiscovered.Descriptor.Version}'.");
                     }
+#endif
 
                     continue;
                 }
@@ -657,6 +659,7 @@ public sealed class FsmCos : IFsmCos
                 }
 
                 ValidateResolvedDescriptorIdentity(dependencyId, dependencyBundle);
+#if WORKSHOP_USE_REPOSITORY_SOURCES
                 if (dependency.Version is not null &&
                     !string.Equals(dependencyBundle.Descriptor.Version, dependency.Version, StringComparison.Ordinal))
                 {
@@ -664,6 +667,7 @@ public sealed class FsmCos : IFsmCos
                         $"MicroBundle {id} requires dependency {dependencyId} version '{dependency.Version}', " +
                         $"but the resolved bundle is '{dependencyBundle.Descriptor.Version}'.");
                 }
+#endif
 
                 discovered.Add(dependencyId, dependencyBundle);
                 pending.Push(dependencyId);
@@ -828,10 +832,11 @@ public sealed class FsmCos : IFsmCos
                 request.Configuration,
                 ref totalConfigurationBytes,
                 $"dependency request for MicroBundle {bundleId}");
-            snapshot.Add(new MicroBundleDependencyRequest(request.BundleId, configuration)
-            {
-                Version = request.Version
-            });
+            var snapshotRequest = new MicroBundleDependencyRequest(request.BundleId, configuration);
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+            snapshotRequest = snapshotRequest with { Version = request.Version };
+#endif
+            snapshot.Add(snapshotRequest);
         }
 
         dependencyRequestCount += snapshot.Count;
