@@ -808,7 +808,10 @@ public sealed class FsmCos : IFsmCos
                 request.Configuration,
                 ref totalConfigurationBytes,
                 $"dependency request for MicroBundle {bundleId}");
-            snapshot.Add(new MicroBundleDependencyRequest(request.BundleId, configuration));
+            snapshot.Add(new MicroBundleDependencyRequest(request.BundleId, configuration)
+            {
+                Version = request.Version
+            });
         }
 
         dependencyRequestCount += snapshot.Count;
