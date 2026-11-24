@@ -20,7 +20,7 @@ public interface IFsmCos
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource,
         TheSingularityWorkshop.MicroBundleDomain.IMicroBundleProviderResolver? providerResolver,
-        PlatformMicroBundleDomainBindingSet domainBindingSet);
+        PlatformMicroBundleDomainBindingSet? domainBindingSet);
 #endif
 #endif
 
