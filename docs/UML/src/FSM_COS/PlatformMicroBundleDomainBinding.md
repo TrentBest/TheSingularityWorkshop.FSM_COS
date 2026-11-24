@@ -16,6 +16,8 @@
 | `TryGetByOntology(...)` | Looks up by canonical portable ontology. |
 | `TryGetByPlatformSlot(...)` | Looks up by platform-local slot. |
 | `TryGetByDomainBundleId(...)` | Looks up by Domain runtime identity. |
+| `VerifiedSha256` | Optional artifact digest that the platform materializer has already verified against the materialized bytes. |
+| `ValidatePortableDependencyProjection(resolvedBundles)` | In source integration, verifies every portable bundle has a matching binding and that portable dependencies project exactly onto descriptor IDs/versions and runtime request IDs/versions/configuration. |
 | `Bindings` | Returns a read-only snapshot of all bindings. |
 
 ## Identity invariants
@@ -25,6 +27,10 @@
 - The materialized descriptor version must exactly equal the requested version.
 - The constructor does not rewrite the descriptor or infer a numeric identity from the portable ontology.
 - The set provides three lookup indexes over the same immutable binding records.
+- Portable composition requires an explicit binding set; FSM_COS validates it after dependency resolution and before provider preparation or `Load`.
+- Each portable dependency must resolve by ontology to exactly one binding in the set and must also be present in the resolved closure.
+- The descriptor dependency set and `IMicroBundle.Dependencies` request set must both match the portable declarations, including exact versions; request configuration bytes must match exactly.
+- A portable SHA-256 pin is accepted only when it equals the digest supplied as already verified by the materializer. The binding records that assertion; it does not hash or authenticate artifacts itself.
 
 ## Use cases
 
@@ -35,7 +41,7 @@
 ## Evidence
 
 - Source: [PlatformMicroBundleDomainBinding.cs](../../../../src/FSM_COS/PlatformMicroBundleDomainBinding.cs)
-- Tests: [PlatformMicroBundleSlotIndexTests.cs](../../../../tests/FSM_COS.Tests/PlatformMicroBundleSlotIndexTests.cs)
+- Tests: [PlatformMicroBundleSlotIndexTests.cs](../../../../tests/FSM_COS.Tests/PlatformMicroBundleSlotIndexTests.cs), [PortableMicroBundleBindingTests.cs](../../../../tests/FSM_COS.Tests/PortableMicroBundleBindingTests.cs)
 - Related types: [PlatformMicroBundleSlotIndex](PlatformMicroBundleSlotIndex.md), [MicroBundleReference](MicroBundleReference.md)
 - Provenance: manually authored and checked against the development source.
 
