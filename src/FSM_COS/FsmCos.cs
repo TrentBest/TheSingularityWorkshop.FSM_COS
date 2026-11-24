@@ -379,8 +379,9 @@ public sealed class FsmCos : IFsmCos
                 preparable.Prepare(context);
         }
     }
+#endif
 
-
+#if WORKSHOP_USE_REPOSITORY_SOURCES
     private Dictionary<ulong, ReadOnlyMemory<byte>> CaptureResolvedConfigurations(
         IReadOnlyList<IMicroBundle> loaded,
         MicroBundleLoadContext loadContext,
