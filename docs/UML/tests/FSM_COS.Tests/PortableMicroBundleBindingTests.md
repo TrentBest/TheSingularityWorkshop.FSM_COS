@@ -14,6 +14,8 @@
 | Execute_requires_explicit_binding_set_for_portable_bundles | Portable bundles cannot enter activation without an explicit binding set. |
 | Execute_validates_portable_projection_before_loading_the_dependency_closure | A valid portable dependency closure maps to exact numeric dependencies and loads in dependency order. |
 | Execute_rejects_runtime_configuration_that_differs_from_portable_declaration_before_loading | Runtime request configuration must byte-match the portable declaration. |
+| Execute_rejects_descriptor_dependency_version_mismatch_before_loading | Descriptor dependency versions must exactly match portable references. |
+| Execute_rejects_runtime_dependency_version_mismatch_before_loading | Runtime request versions must exactly match portable references. |
 | Execute_rejects_an_unbound_portable_dependency_before_loading | Every portable dependency must map to a binding and appear in the resolved closure. |
 | Execute_rejects_portable_digest_that_differs_from_materializer_verified_digest | An optional portable SHA-256 pin must match the materializer-verified digest. |
 
