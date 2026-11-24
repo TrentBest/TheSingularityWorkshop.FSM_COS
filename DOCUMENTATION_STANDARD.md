@@ -1,5 +1,4 @@
 <!-- The Singularity Workshop moniker -->
-<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
 
 # Documentation Standard
 
@@ -192,7 +191,7 @@ The Workshop's static brand mark is the canonical footer image for Markdown docu
 Append the following block at the very end of each Markdown document, after all substantive content and links:
 
 ```html
-<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
+
 ```
 
 This footer mark is distinct from the animated moniker used as a document header or the author's GitHub avatar. Do not substitute `Avatar.jpg`, a personal avatar, an SVG moniker, a repository-relative image, or a guessed mirror for this canonical asset. Keep the exact raw URL so the image resolves consistently across repositories. The footer block must appear once, at the end; do not duplicate it or add competing workshop-logo footers. Existing documents should be migrated to this exact block when they are next edited as part of documentation-standard alignment.
@@ -211,8 +210,8 @@ This footer mark is distinct from the animated moniker used as a document header
 - [ ] Examples, links, and verification instructions match the target branch.
 - [ ] No publication, deployment, or release operation is implied by documentation-only work.
 
-<!-- THE SINGULARITY WORKSHOP FOOTER -->
-<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
+
+
 
 ## SURPS participation, sourcebooks, and enrollment
 
@@ -293,3 +292,5 @@ The initial SURPS extension should be a thin adapter/fixture set in Gauntlet tha
 - [ ] Offline tabletop rules remain understandable independently of the digital harness.
 - [ ] Existing links, Pages workflows, and CI are verified after adoption.
 
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
