@@ -1,3 +1,6 @@
+<!-- The Singularity Workshop moniker -->
+<p align="center"><a href="https://github.com/TrentBest"><img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker" width="720" /></a></p>
+
 # Agent Onboarding
 
 ## Why this file exists
@@ -47,3 +50,6 @@ Every assigned task should conclude with:
 - authoritative CI run URLs and exact SHA correlation, or an explicit statement that evidence is unavailable;
 - known gaps, risks, and follow-up Issues/PRs;
 - confirmation that no unauthorized merge, release, publication, deployment, or destructive ref operation occurred.
+
+<!-- THE SINGULARITY WORKSHOP FOOTER -->
+<p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
