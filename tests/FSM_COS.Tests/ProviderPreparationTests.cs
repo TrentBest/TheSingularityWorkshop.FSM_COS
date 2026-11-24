@@ -1,3 +1,4 @@
+#if WORKSHOP_USE_REPOSITORY_SOURCES
 using TheSingularityWorkshop.FSM_COS;
 using TheSingularityWorkshop.MicroBundleDomain;
 using Xunit;
@@ -24,7 +25,7 @@ public sealed class ProviderPreparationTests
             [new MicroBundleManifestEntry(2, "1.0.0"), new MicroBundleManifestEntry(1, "1.0.0")]);
 
         var assembly = new FsmCos(new TestCatalog(consumerBundle, providerBundle))
-            .Execute(manifest, configurationSource: null, new TestProviderResolver(provider));
+            .Execute(manifest, configurationSource: null, providerResolver: new TestProviderResolver(provider));
 
         Assert.Equal(new[] { "prepare:1", "prepare:2", "load:2", "load:1" }, events);
         Assert.Same(provider, consumerBundle.ResolvedProvider);
@@ -68,7 +69,7 @@ public sealed class ProviderPreparationTests
         Assert.Empty(events);
     }
 
-    private sealed class DemoCapability;
+    private sealed class DemoCapability { }
 
     private sealed class TestProviderResolver(object value) : IMicroBundleProviderResolver
     {
@@ -156,3 +157,5 @@ public sealed class ProviderPreparationTests
         public bool Arbitrate(IMicroBundleArbitrationContext context, int roundIndex) => false;
     }
 }
+
+#endif
