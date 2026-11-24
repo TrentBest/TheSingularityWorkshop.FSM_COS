@@ -79,6 +79,58 @@ public sealed class PortableMicroBundleBindingTests
     }
 
     [Fact]
+    public void Execute_rejects_descriptor_dependency_version_mismatch_before_loading()
+    {
+        var dependencyReference = new PortableMicroBundleReference("workshop:capability/dependency", "2.0.0");
+        var dependency = new TestPortableBundle(2, dependencyReference.Ontology, dependencyReference.Version);
+        var root = new TestPortableBundle(
+            1,
+            "workshop:capability/root",
+            "1.0.0",
+            [new PortableMicroBundleDependency(dependencyReference)],
+            [2],
+            descriptorDependencyVersionOverride: "3.0.0");
+        var bindings = new PlatformMicroBundleDomainBindingSet([Binding(root, 10), Binding(dependency, 20)]);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, dependency)).Execute(
+                new RuntimeManifest(42, [new MicroBundleManifestEntry(1, "1.0.0")]),
+                configurationSource: null,
+                providerResolver: null,
+                domainBindingSet: bindings));
+
+        Assert.Contains("descriptor dependency 2", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, dependency.LoadCalls);
+    }
+
+    [Fact]
+    public void Execute_rejects_runtime_dependency_version_mismatch_before_loading()
+    {
+        var dependencyReference = new PortableMicroBundleReference("workshop:capability/dependency", "2.0.0");
+        var dependency = new TestPortableBundle(2, dependencyReference.Ontology, dependencyReference.Version);
+        var root = new TestPortableBundle(
+            1,
+            "workshop:capability/root",
+            "1.0.0",
+            [new PortableMicroBundleDependency(dependencyReference)],
+            [2],
+            runtimeDependencyVersionOverride: "3.0.0");
+        var bindings = new PlatformMicroBundleDomainBindingSet([Binding(root, 10), Binding(dependency, 20)]);
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, dependency)).Execute(
+                new RuntimeManifest(42, [new MicroBundleManifestEntry(1, "1.0.0")]),
+                configurationSource: null,
+                providerResolver: null,
+                domainBindingSet: bindings));
+
+        Assert.Contains("runtime dependency request 2", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, dependency.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_rejects_an_unbound_portable_dependency_before_loading()
     {
         var dependencyReference = new PortableMicroBundleReference("workshop:capability/dependency", "2.0.0");
@@ -143,13 +195,17 @@ public sealed class PortableMicroBundleBindingTests
             string version,
             IReadOnlyList<PortableMicroBundleDependency>? portableDependencies = null,
             IReadOnlyList<ulong>? domainDependencyIds = null,
-            byte[]? runtimeConfigurationOverride = null)
+            byte[]? runtimeConfigurationOverride = null,
+            string? descriptorDependencyVersionOverride = null,
+            string? runtimeDependencyVersionOverride = null)
             : this(
                 id,
                 new PortableMicroBundleReference(ontology, version),
                 portableDependencies,
                 domainDependencyIds,
-                runtimeConfigurationOverride)
+                runtimeConfigurationOverride,
+                descriptorDependencyVersionOverride,
+                runtimeDependencyVersionOverride)
         {
         }
 
@@ -158,7 +214,9 @@ public sealed class PortableMicroBundleBindingTests
             PortableMicroBundleReference identity,
             IReadOnlyList<PortableMicroBundleDependency>? portableDependencies = null,
             IReadOnlyList<ulong>? domainDependencyIds = null,
-            byte[]? runtimeConfigurationOverride = null)
+            byte[]? runtimeConfigurationOverride = null,
+            string? descriptorDependencyVersionOverride = null,
+            string? runtimeDependencyVersionOverride = null)
         {
             Id = id;
             PortableIdentity = identity;
@@ -170,14 +228,14 @@ public sealed class PortableMicroBundleBindingTests
             var descriptorDependencies = PortableDependencies
                 .Select((dependency, index) => MicroBundleDependency.Pinned(
                     ids[index],
-                    dependency.Reference.Version))
+                    descriptorDependencyVersionOverride ?? dependency.Reference.Version))
                 .ToArray();
             Descriptor = new MicroBundleDescriptor(id, identity.Version, descriptorDependencies);
 
             _dependencies = Array.AsReadOnly(PortableDependencies
                 .Select((dependency, index) => MicroBundleDependencyRequest.Pinned(
                     ids[index],
-                    dependency.Reference.Version,
+                    runtimeDependencyVersionOverride ?? dependency.Reference.Version,
                     runtimeConfigurationOverride is null
                         ? dependency.Configuration
                         : runtimeConfigurationOverride))
