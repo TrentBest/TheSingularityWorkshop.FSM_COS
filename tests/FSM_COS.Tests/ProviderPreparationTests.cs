@@ -8,6 +8,14 @@ namespace FSM_COS.Tests;
 public sealed class ProviderPreparationTests
 {
     [Fact]
+    public void Provider_preparation_phase_preserves_existing_numeric_phase_values()
+    {
+        Assert.Equal(2, (int)RuntimeCompositionPhase.BundleLoading);
+        Assert.Equal(3, (int)RuntimeCompositionPhase.Arbitration);
+        Assert.Equal(4, (int)RuntimeCompositionPhase.ProviderPreparation);
+    }
+
+    [Fact]
     public void Execute_prepares_every_bundle_in_deterministic_order_before_any_load()
     {
         var events = new List<string>();
