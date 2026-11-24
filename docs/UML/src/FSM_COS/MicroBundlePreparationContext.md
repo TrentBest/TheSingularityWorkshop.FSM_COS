@@ -36,7 +36,7 @@ Preparation is invoked for all `IMicroBundlePreparable` bundles in deterministic
 ## Evidence
 
 - Source: [MicroBundlePreparationContext.cs](../../../../src/FSM_COS/MicroBundlePreparationContext.cs)
-- Domain contract: [IMicroBundlePreparationContext](../../../../_dependencies/MicroBundleDomain/IMicroBundlePreparationContext.cs) (development-source integration only; the public package dependency is not yet advanced)
+- Domain contract: [IMicroBundlePreparationContext](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/blob/development/IMicroBundlePreparationContext.cs) (development-source integration only; the public package dependency is not yet advanced)
 - Tests: [ProviderPreparationTests.cs](../../../../tests/FSM_COS.Tests/ProviderPreparationTests.cs)
 - Provenance: manually authored and checked against the development source.
 
