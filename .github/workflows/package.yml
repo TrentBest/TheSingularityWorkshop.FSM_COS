@@ -111,7 +111,7 @@ jobs:
         run: dotnet restore TheSingularityWorkshop.FSM_COS.sln --source https://api.nuget.org/v3/index.json
 
       - name: Build
-        run: dotnet build TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore
+        run: dotnet build TheSingularityWorkshop.FSM_COS.sln --configuration Release --no-restore -p:WorkshopEnableTypedProviderPreparation=true
 
       - name: Run .NET security analyzers on the runtime assembly
         run: >
@@ -119,6 +119,7 @@ jobs:
           --configuration Release
           --no-restore
           -p:EnableNETAnalyzers=true
+          -p:WorkshopEnableTypedProviderPreparation=true
           -p:AnalysisLevel=latest-all
           -p:BuildProjectReferences=false
           -warnaserror
@@ -140,6 +141,7 @@ jobs:
           --collect:"XPlat Code Coverage;Format=cobertura"
           --results-directory ./TestResults
           --logger "trx;LogFileName=testresults.trx"
+          -p:WorkshopEnableTypedProviderPreparation=true
 
       - name: Prepare coverage report
         shell: bash
@@ -171,6 +173,12 @@ jobs:
           slug: TrentBest/TheSingularityWorkshop.FSM_COS
           files: ./TestResults/coverage.cobertura.xml
           fail_ci_if_error: true
+
+      # The typed provider integration is tested against the local development package above.
+      # Rebuild without that opt-in symbol so the candidate NuGet package remains compatible
+      # with the currently published MicroBundleDomain dependency until its release is authorized.
+      - name: Rebuild published FSM_COS package surface
+        run: dotnet build src/FSM_COS/FSM_COS.csproj --configuration Release --no-restore
 
       - name: Pack
         run: dotnet pack src/FSM_COS/FSM_COS.csproj --configuration Release --no-build --output ./artifacts
