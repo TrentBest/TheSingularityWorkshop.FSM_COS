@@ -129,6 +129,7 @@ public sealed class FsmCos : IFsmCos
     }
 #endif
 
+#if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
 #if WORKSHOP_USE_REPOSITORY_SOURCES
     /// <summary>Attempts composition with an optional typed provider resolver.</summary>
     public RuntimeCompositionResult TryExecute(
@@ -171,6 +172,7 @@ public sealed class FsmCos : IFsmCos
             return RuntimeCompositionResult.Failed(phase, exception);
         }
     }
+#endif
 
     private RuntimeAssembly ExecuteCore(
         RuntimeManifest manifest,
