@@ -25,6 +25,12 @@ flowchart TB
     Set --> ByOntology
     Set --> BySlot
     Set --> ById
+    PortableDeps["IPortableMicroBundle.PortableDependencies"] --> Validate["ValidatePortableDependencyProjection"]
+    Set --> Validate
+    Validate -->|"ontology + version + digest"| Binding
+    Validate -->|"mapped Domain IDs"| Descriptor
+    Validate -->|"IDs + versions + config bytes"| Requests["IMicroBundle.Dependencies"]
+    Validate -->|"before activation"| Gate["Provider preparation / Load"]
 ```
 
 ## Use cases
@@ -32,10 +38,12 @@ flowchart TB
 1. Materialize a verified portable capability and explicitly record its platform slot and Domain numeric ID.
 2. Resolve the same binding by ontology, platform slot, or Domain ID without treating those values as interchangeable.
 3. Reject duplicate or mismatched identities before the binding set enters a staged runtime.
+4. Validate the entire resolved portable closure against the binding set before any bundle is prepared or loaded.
+5. Reject a mismatch between portable dependencies, descriptor dependencies, runtime requests, exact versions, configuration bytes, or a materializer-verified digest.
 
 ## Limits
 
-This file records the identity projection boundary. It does not resolve portable artifacts, allocate slots, load MicroBundles, or establish that an artifact is trusted.
+This file records the identity projection boundary. It does not resolve portable artifacts, allocate slots, or load MicroBundles. A supplied verified digest is an assertion from the materializer, not independent proof of publisher trust.
 
 See [source companion](PlatformMicroBundleDomainBinding.md), [slot-index companion](PlatformMicroBundleSlotIndex.md), and [runtime boundary](../../../RUNTIME_BOUNDARY.md).
 
