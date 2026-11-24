@@ -1,3 +1,4 @@
+#if WORKSHOP_USE_REPOSITORY_SOURCES
 using TheSingularityWorkshop.MicroBundleDomain;
 
 namespace TheSingularityWorkshop.FSM_COS;
@@ -41,3 +42,5 @@ internal sealed class MicroBundlePreparationContext : IMicroBundlePreparationCon
         return _providerResolver.TryResolve(reference, out provider) && provider is not null;
     }
 }
+
+#endif
