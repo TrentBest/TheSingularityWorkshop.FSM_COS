@@ -236,6 +236,22 @@ public sealed class FsmCosTests
     }
 
     [Fact]
+    public void Execute_rejects_a_pinned_dependency_version_mismatch_before_loading()
+    {
+        var dependency = new TestBundle(2, "1.0.0");
+        var root = new TestBundle(1, MicroBundleDependencyRequest.Pinned(2, "2.0.0"));
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            new FsmCos(new TestCatalog(root, dependency))
+                .Execute(new RuntimeManifest(42, new[] { Entry(1) })));
+
+        Assert.Contains("requires dependency 2 version '2.0.0'", exception.Message);
+        Assert.Contains("resolved bundle is '1.0.0'", exception.Message);
+        Assert.Equal(0, root.LoadCalls);
+        Assert.Equal(0, dependency.LoadCalls);
+    }
+
+    [Fact]
     public void Execute_loads_dependencies_before_requesting_bundle()
     {
         var catalog = new TestCatalog(new TestBundle(2), new TestBundle(1, MicroBundleDependencyRequest.Unconfigured(2)));
