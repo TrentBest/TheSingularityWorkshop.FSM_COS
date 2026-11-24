@@ -43,15 +43,17 @@ public sealed class ProviderPreparationTests
             ProbeUnpinnedProvider = true
         };
 
+        var resolver = new TestProviderResolver(new DemoCapability());
         var result = new FsmCos(new TestCatalog(bundle))
             .TryExecute(
                 new RuntimeManifest(42, [new MicroBundleManifestEntry(7, "1.0.0")]),
                 configurationSource: null,
-                providerResolver: new TestProviderResolver(new DemoCapability()));
+                providerResolver: resolver);
 
         Assert.True(result.Succeeded);
         Assert.False(bundle.UnpinnedProviderResolved);
         Assert.False(bundle.MismatchedProviderResolved);
+        Assert.Equal(0, resolver.ResolveCalls);
     }
 
     [Fact]
@@ -74,11 +76,14 @@ public sealed class ProviderPreparationTests
 
     private sealed class TestProviderResolver(object value) : IMicroBundleProviderResolver
     {
+        public int ResolveCalls { get; private set; }
+
         public bool TryResolve<TProvider>(
             MicroBundleProviderReference reference,
             out TProvider? provider)
             where TProvider : class
         {
+            ResolveCalls++;
             provider = value as TProvider;
             return provider is not null;
         }
