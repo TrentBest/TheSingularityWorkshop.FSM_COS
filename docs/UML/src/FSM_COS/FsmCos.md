@@ -19,6 +19,8 @@ classDiagram
     class IFsmCos {
         <<interface>>
         +Execute(manifest, configurationSource) RuntimeAssembly
+        +Execute(manifest, configurationSource, providerResolver) RuntimeAssembly
+        +TryExecute(manifest, configurationSource, providerResolver) RuntimeCompositionResult
     }
     class FsmCos {
         +DefaultMaximumArbitrationRounds$
@@ -39,6 +41,20 @@ classDiagram
         <<interface>>
         +TryGetConfiguration(runtimeId, bundleId, version, configuration) bool
     }
+    class IMicroBundleProviderResolver {
+        <<interface>>
+        +TryResolve<TProvider>(reference, provider) bool
+    }
+    class IMicroBundlePreparable {
+        <<interface>>
+        +Prepare(context) void
+    }
+    class IMicroBundlePreparationContext {
+        <<interface>>
+        +RuntimeId
+        +Providers
+        +TryGetProvider<TProvider>(reference, provider) bool
+    }
     class RuntimeManifest
     class RuntimeAssembly
     class IMicroBundle
@@ -46,6 +62,9 @@ classDiagram
     FsmCos ..|> IFsmCos
     FsmCos --> IMicroBundleCatalog : required catalog
     FsmCos ..> IMicroBundleConfigurationSource : optional configuration
+    FsmCos ..> IMicroBundleProviderResolver : optional source-integration resolver
+    FsmCos ..> IMicroBundlePreparable : pre-load callbacks
+    FsmCos ..> IMicroBundlePreparationContext : supplies to preparable bundles
     FsmCos ..> RuntimeManifest : consumes
     FsmCos ..> RuntimeAssembly : returns
     RuntimeAssembly o-- "0..*" IMicroBundle : assembled bundles
@@ -57,6 +76,7 @@ The diagram abbreviates parameter and nullable annotations for readability. For 
 
 - **Catalog vs. composition:** `IMicroBundleCatalog` resolves domain-owned bundles. `FsmCos` validates and composes them; it does not own the domain's MicroBundle implementation.
 - **Configuration:** the optional `IMicroBundleConfigurationSource` provides per-runtime, per-bundle configuration. It is not a repository or artifact-localization API.
+- **Provider preparation:** in the development-source integration build, the host may supply an exact typed provider resolver. FSM_COS validates declared owner/provider versions and invokes optional `IMicroBundlePreparable` callbacks in deterministic bundle-ID order before any `Load` callback. This source integration does not define GUI-specific types.
 - **Arbitration:** the default maximum is 10 rounds. Bounded convergence is a resource/safety boundary, not proof that arbitrary bundle semantics are compatible.
 - **Returned assembly:** `RuntimeAssembly` is a result model for the host. It is not a UI renderer, process scheduler, or rollback boundary.
 
