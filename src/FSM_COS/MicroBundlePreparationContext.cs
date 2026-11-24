@@ -8,6 +8,7 @@ internal sealed class MicroBundlePreparationContext : IMicroBundlePreparationCon
 {
     private readonly IReadOnlyDictionary<ulong, IMicroBundle> _bundles;
     private readonly IMicroBundleProviderResolver? _providerResolver;
+    private readonly IReadOnlyList<MicroBundleProviderReference> _providers;
 
     internal MicroBundlePreparationContext(
         ulong runtimeId,
@@ -17,9 +18,21 @@ internal sealed class MicroBundlePreparationContext : IMicroBundlePreparationCon
         RuntimeId = runtimeId;
         _bundles = bundles;
         _providerResolver = providerResolver;
+        _providers = Array.AsReadOnly(bundles.Values
+            .OrderBy(bundle => bundle.Id)
+            .SelectMany(bundle => bundle.Descriptor.Providers
+                .Where(provider => !string.IsNullOrWhiteSpace(provider.ContractVersion))
+                .OrderBy(provider => provider.Id, StringComparer.Ordinal)
+                .Select(provider => new MicroBundleProviderReference(
+                    bundle.Id,
+                    bundle.Descriptor.Version,
+                    provider.Id,
+                    provider.ContractVersion!)))
+            .ToArray());
     }
 
     public ulong RuntimeId { get; }
+    public IReadOnlyList<MicroBundleProviderReference> Providers => _providers;
 
     public bool TryGetProvider<TProvider>(
         MicroBundleProviderReference reference,
