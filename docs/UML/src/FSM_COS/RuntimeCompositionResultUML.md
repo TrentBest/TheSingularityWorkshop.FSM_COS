@@ -10,7 +10,7 @@ flowchart TB
     Consumer["Caller of non-throwing composition API"]
     Target["RuntimeCompositionResult<br/>Succeeded / Assembly / FailurePhase / Exception"]
     Assembly["RuntimeAssembly"]
-    Phase["RuntimeCompositionPhase<br/>RequestValidation / DependencyResolution / BundleLoading / Arbitration"]
+    Phase["RuntimeCompositionPhase<br/>RequestValidation / DependencyResolution / ProviderPreparation / BundleLoading / Arbitration"]
     Exception["System.Exception"]
     Consumer -->|"inspects outcome"| Target
     Target -->|"success payload"| Assembly
