@@ -63,8 +63,9 @@ public sealed class FsmCos : IFsmCos
 
     public RuntimeAssembly Execute(
         RuntimeManifest manifest,
-        IMicroBundleConfigurationSource? configurationSource = null) =>
-        Execute(manifest, configurationSource, providerResolver: null);
+        IMicroBundleConfigurationSource? configurationSource = null)
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+        => Execute(manifest, configurationSource, providerResolver: null);
 
     /// <summary>
     /// Composes a runtime with an optional host-supplied resolver for exact typed provider handles.
@@ -75,6 +76,9 @@ public sealed class FsmCos : IFsmCos
         IMicroBundleConfigurationSource? configurationSource,
         IMicroBundleProviderResolver? providerResolver) =>
         ExecuteCore(manifest, configurationSource, providerResolver, onStageChanged: null);
+#else
+        => ExecuteCore(manifest, configurationSource, onStageChanged: null);
+#endif
 
     /// <summary>
     /// Attempts composition and returns the phase and original exception when composition fails.
@@ -83,19 +87,29 @@ public sealed class FsmCos : IFsmCos
     /// </summary>
     public RuntimeCompositionResult TryExecute(
         RuntimeManifest manifest,
-        IMicroBundleConfigurationSource? configurationSource = null) =>
-        TryExecute(manifest, configurationSource, providerResolver: null);
+        IMicroBundleConfigurationSource? configurationSource = null)
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+        => TryExecute(manifest, configurationSource, providerResolver: null);
 
     /// <summary>Attempts composition with an optional host-supplied typed provider resolver.</summary>
     public RuntimeCompositionResult TryExecute(
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource,
         IMicroBundleProviderResolver? providerResolver)
+#else
+    {
+        var phase = RuntimeCompositionPhase.RequestValidation;
+        try
+        {
+            var assembly = ExecuteCore(manifest, configurationSource, next => phase = next);
+#endif
+#if WORKSHOP_USE_REPOSITORY_SOURCES
     {
         var phase = RuntimeCompositionPhase.RequestValidation;
         try
         {
             var assembly = ExecuteCore(manifest, configurationSource, providerResolver, next => phase = next);
+#endif
             return RuntimeCompositionResult.Success(assembly);
         }
         // The result API deliberately preserves exceptions from catalog, configuration,
@@ -111,7 +125,9 @@ public sealed class FsmCos : IFsmCos
     private RuntimeAssembly ExecuteCore(
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource,
+#if WORKSHOP_USE_REPOSITORY_SOURCES
         IMicroBundleProviderResolver? providerResolver,
+#endif
         Action<RuntimeCompositionPhase>? onStageChanged)
     {
         onStageChanged?.Invoke(RuntimeCompositionPhase.RequestValidation);
@@ -216,8 +232,10 @@ public sealed class FsmCos : IFsmCos
         if (manifest.Schedule is not null)
             ValidateScheduleAgainstResolvedGraph(manifest, resolvedBundles, dependencyRequestsById);
 
+#if WORKSHOP_USE_REPOSITORY_SOURCES
         onStageChanged?.Invoke(RuntimeCompositionPhase.ProviderPreparation);
         PrepareBundles(manifest.RuntimeId, resolvedBundles, providerResolver);
+#endif
 
         onStageChanged?.Invoke(RuntimeCompositionPhase.BundleLoading);
         var loaded = new List<IMicroBundle>();
@@ -348,6 +366,7 @@ public sealed class FsmCos : IFsmCos
         }
     }
 
+#if WORKSHOP_USE_REPOSITORY_SOURCES
     private static void PrepareBundles(
         ulong runtimeId,
         IReadOnlyDictionary<ulong, IMicroBundle> resolvedBundles,
@@ -361,7 +380,7 @@ public sealed class FsmCos : IFsmCos
         }
     }
 
-#if WORKSHOP_USE_REPOSITORY_SOURCES
+
     private Dictionary<ulong, ReadOnlyMemory<byte>> CaptureResolvedConfigurations(
         IReadOnlyList<IMicroBundle> loaded,
         MicroBundleLoadContext loadContext,
