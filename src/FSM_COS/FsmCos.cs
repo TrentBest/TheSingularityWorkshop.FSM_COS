@@ -656,6 +656,14 @@ public sealed class FsmCos : IFsmCos
                     throw new InvalidOperationException($"{kind} {dependencyId} could not be resolved.");
                 }
 
+                if (dependency.Version is not null &&
+                    !string.Equals(dependencyBundle.Descriptor.Version, dependency.Version, StringComparison.Ordinal))
+                {
+                    throw new InvalidOperationException(
+                        $"MicroBundle {id} requires dependency {dependencyId} version '{dependency.Version}', " +
+                        $"but the resolved bundle is '{dependencyBundle.Descriptor.Version}'.");
+                }
+
                 discovered.Add(dependencyId, dependencyBundle);
                 pending.Push(dependencyId);
             }
