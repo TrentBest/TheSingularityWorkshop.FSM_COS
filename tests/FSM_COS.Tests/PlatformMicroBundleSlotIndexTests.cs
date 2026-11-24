@@ -55,7 +55,7 @@ public sealed class PlatformMicroBundleSlotIndexTests
         var assigned = index.ResolveOrAssign("workshop:capability/render");
 
         Assert.Equal(new PlatformMicroBundleSlot(7), assigned);
-        Assert.Equal(2, store.WriteAttempts);
+        Assert.Equal(1, store.WriteAttempts);
     }
 
     [Fact]
