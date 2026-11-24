@@ -64,7 +64,7 @@ public sealed class FsmCos : IFsmCos
     public RuntimeAssembly Execute(
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource = null)
-#if WORKSHOP_USE_REPOSITORY_SOURCES
+#if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
         => Execute(manifest, configurationSource, providerResolver: null);
 
     /// <summary>
@@ -88,7 +88,7 @@ public sealed class FsmCos : IFsmCos
     public RuntimeCompositionResult TryExecute(
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource = null)
-#if WORKSHOP_USE_REPOSITORY_SOURCES
+#if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
         => TryExecute(manifest, configurationSource, providerResolver: null);
 
     /// <summary>Attempts composition with an optional host-supplied typed provider resolver.</summary>
@@ -125,7 +125,7 @@ public sealed class FsmCos : IFsmCos
     private RuntimeAssembly ExecuteCore(
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource,
-#if WORKSHOP_USE_REPOSITORY_SOURCES
+#if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
         IMicroBundleProviderResolver? providerResolver,
 #endif
         Action<RuntimeCompositionPhase>? onStageChanged)
@@ -232,7 +232,7 @@ public sealed class FsmCos : IFsmCos
         if (manifest.Schedule is not null)
             ValidateScheduleAgainstResolvedGraph(manifest, resolvedBundles, dependencyRequestsById);
 
-#if WORKSHOP_USE_REPOSITORY_SOURCES
+#if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
         onStageChanged?.Invoke(RuntimeCompositionPhase.ProviderPreparation);
         PrepareBundles(manifest.RuntimeId, resolvedBundles, providerResolver);
 #endif
@@ -366,7 +366,7 @@ public sealed class FsmCos : IFsmCos
         }
     }
 
-#if WORKSHOP_USE_REPOSITORY_SOURCES
+#if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
     private static void PrepareBundles(
         ulong runtimeId,
         IReadOnlyDictionary<ulong, IMicroBundle> resolvedBundles,
