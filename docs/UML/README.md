@@ -85,7 +85,7 @@ These references summarize selected test scenarios. The test source is authorita
 - [RuntimeManifestPlanningTests](tests/FSM_COS.Tests/RuntimeManifestPlanningTests.md) — manifest validation, dependency schedules, staged-load state, and promotion evaluation.
 - [SnapshotIsolationTests](tests/FSM_COS.Tests/SnapshotIsolationTests.md) — defensive snapshots and read-only collection behavior.
 - [AiGuiCapabilityHandoffTests](tests/FSM_COS.Tests/AiGuiCapabilityHandoffTests.md) — proof that AI/GUI capabilities can be composed without adding AI or GUI package dependencies to the FSM_COS core.
-- [ProviderPreparationTests](../../tests/FSM_COS.Tests/ProviderPreparationTests.cs) — exact provider discovery, typed resolution, deterministic preparation order, and failure-phase coverage.
+- [ProviderPreparationTests](tests/FSM_COS.Tests/ProviderPreparationTests.md) — exact provider discovery, typed resolution, deterministic preparation order, and failure-phase coverage.
 
 ## Scope and known gaps
 
