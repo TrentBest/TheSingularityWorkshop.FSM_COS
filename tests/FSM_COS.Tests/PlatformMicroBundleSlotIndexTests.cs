@@ -16,7 +16,7 @@ public sealed class PlatformMicroBundleSlotIndexTests
         var second = index.ResolveOrAssign("workshop:capability/render");
 
         Assert.Equal(first, second);
-        Assert.Equal(1, first.Value);
+        Assert.Equal(1UL, first.Value);
         Assert.Equal(1, store.Read().Revision);
     }
 
