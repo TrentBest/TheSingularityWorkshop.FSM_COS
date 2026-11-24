@@ -62,6 +62,17 @@ The standard defines the intended coverage model. This index is still a manually
 | `RuntimeExperienceHost` | Coordinates composition, registration, and explicit selection. | [Type companion](src/FSM_COS/RuntimeExperienceHost.md) · [UML neighborhood](src/FSM_COS/RuntimeExperienceHostUML.md) · [Source](../../src/FSM_COS/RuntimeExperienceHost.cs) |
 | `RuntimeExperienceRegistry` | Thread-safe retention and selection metadata for composed assemblies. | [Type companion](src/FSM_COS/RuntimeExperienceRegistry.md) · [UML neighborhood](src/FSM_COS/RuntimeExperienceRegistryUML.md) · [Source](../../src/FSM_COS/RuntimeExperienceRegistry.cs) |
 
+## Platform identity and provider preparation
+
+| Type | Responsibility | Reference |
+|---|---|---|
+| `PlatformMicroBundleSlotIndex` | Allocates stable platform-local numeric slots for portable ontology identities. | [Type companion](src/FSM_COS/PlatformMicroBundleSlotIndex.md) · [UML neighborhood](src/FSM_COS/PlatformMicroBundleSlotIndexUML.md) · [Source](../../src/FSM_COS/PlatformMicroBundleSlotIndex.cs) |
+| `FileSystemPlatformMicroBundleSlotStore` | Persists slot snapshots with cross-process compare-and-swap and atomic replacement. | [Type companion](src/FSM_COS/FileSystemPlatformMicroBundleSlotStore.md) · [UML neighborhood](src/FSM_COS/FileSystemPlatformMicroBundleSlotStoreUML.md) · [Source](../../src/FSM_COS/FileSystemPlatformMicroBundleSlotStore.cs) |
+| `PlatformMicroBundleDomainBinding` / `PlatformMicroBundleDomainBindingSet` | Explicitly reconcile platform slots with Domain IDs and materialized bundles. | [Type companion](src/FSM_COS/PlatformMicroBundleDomainBinding.md) · [UML neighborhood](src/FSM_COS/PlatformMicroBundleDomainBindingUML.md) · [Source](../../src/FSM_COS/PlatformMicroBundleDomainBinding.cs) |
+| `MicroBundlePreparationContext` | Exposes deterministic provider discovery and exact typed provider resolution during pre-load preparation. | [Type companion](src/FSM_COS/MicroBundlePreparationContext.md) · [UML neighborhood](src/FSM_COS/MicroBundlePreparationContextUML.md) · [Source](../../src/FSM_COS/MicroBundlePreparationContext.cs) |
+
+The provider-preparation adapter is available in the development-source integration build. It does not define GUI-specific provider interfaces or alter the public package surface until MicroBundleDomain's additive contracts are released.
+
 ## Optional rollback contract
 
 - `IMicroBundleRollback` — [Type companion](src/FSM_COS/IMicroBundleRollback.md) · [UML neighborhood](src/FSM_COS/IMicroBundleRollbackUML.md) · [Source](../../src/FSM_COS/IMicroBundleRollback.cs)
@@ -74,6 +85,7 @@ These references summarize selected test scenarios. The test source is authorita
 - [RuntimeManifestPlanningTests](tests/FSM_COS.Tests/RuntimeManifestPlanningTests.md) — manifest validation, dependency schedules, staged-load state, and promotion evaluation.
 - [SnapshotIsolationTests](tests/FSM_COS.Tests/SnapshotIsolationTests.md) — defensive snapshots and read-only collection behavior.
 - [AiGuiCapabilityHandoffTests](tests/FSM_COS.Tests/AiGuiCapabilityHandoffTests.md) — proof that AI/GUI capabilities can be composed without adding AI or GUI package dependencies to the FSM_COS core.
+- [ProviderPreparationTests](../../tests/FSM_COS.Tests/ProviderPreparationTests.cs) — exact provider discovery, typed resolution, deterministic preparation order, and failure-phase coverage.
 
 ## Scope and known gaps
 
