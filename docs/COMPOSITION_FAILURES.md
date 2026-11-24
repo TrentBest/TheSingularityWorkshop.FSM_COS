@@ -29,6 +29,7 @@ A successful result contains an assembly and no failure details. A failed result
 |---|---|---|
 | RequestValidation | Checking manifest roots and published planning metadata | Invalid manifest, conflicting requested versions, malformed plan metadata, input limits |
 | DependencyResolution | Resolving roots and validating the reachable dependency graph | Missing bundle, identity/version mismatch, invalid dependency declaration, cycle, graph limit, schedule mismatch |
+| ProviderPreparation | Resolving exact typed provider handles and invoking optional preparation callbacks | Provider resolution failure, undeclared or version-mismatched provider, exception from `IMicroBundlePreparable.Prepare` |
 | BundleLoading | Obtaining configuration and calling bundle load methods | Configuration-source failure, configuration limit, exception from bundle loading |
 | Arbitration | Reconciling loaded bundles until a round reports no changes | Arbitration callback failure or failure to converge within the configured bound |
 
@@ -38,7 +39,7 @@ The phase tells the host where composition stopped; it does not guarantee a root
 
 ### Side-effect boundary
 
-FSM_COS validates the complete reachable dependency graph before bundle loading begins. Once loading starts, bundle code and host-supplied callbacks can produce side effects. A failed result does not guarantee those effects are undone. If a bundle implements `IMicroBundleRollback`, FSM_COS attempts compensation in reverse load-attempt order after a load or arbitration failure. A failure during arbitration can still leave irreversible external effects.
+FSM_COS validates the complete reachable dependency graph, then runs optional provider preparation before bundle loading begins. Preparation is intended for validation and typed-handle acquisition, not irreversible effects. Once loading starts, bundle code and host-supplied callbacks can produce side effects. A failed result does not guarantee those effects are undone. If a bundle implements `IMicroBundleRollback`, FSM_COS attempts compensation in reverse load-attempt order after a load or arbitration failure. A failure during arbitration can still leave irreversible external effects.
 
 The result is diagnostic information, not a transaction or sandbox. Compensation is opt-in and best-effort, not atomic rollback.
 
