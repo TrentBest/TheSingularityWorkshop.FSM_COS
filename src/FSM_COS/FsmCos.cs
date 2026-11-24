@@ -102,52 +102,69 @@ public sealed class FsmCos : IFsmCos
 
     /// <summary>
     /// Attempts composition and returns the phase and original exception when composition fails.
-    /// This does not change the behavior of <see cref="Execute"/>; it is an opt-in alternative
+    /// This does not change the behavior of Execute; it is an opt-in alternative
     /// for hosts that want to report composition failures without parsing exception messages.
     /// </summary>
     public RuntimeCompositionResult TryExecute(
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource = null)
-#if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
-        => TryExecute(manifest, configurationSource, providerResolver: null);
-
-    /// <summary>Attempts composition with an optional host-supplied typed provider resolver.</summary>
-    public RuntimeCompositionResult TryExecute(
-        RuntimeManifest manifest,
-        IMicroBundleConfigurationSource? configurationSource,
-        IMicroBundleProviderResolver? providerResolver)
 #if WORKSHOP_USE_REPOSITORY_SOURCES
-        => TryExecute(manifest, configurationSource, providerResolver, domainBindingSet: null);
-
-    /// <summary>Attempts portable composition with an explicit validated platform binding set.</summary>
-    public RuntimeCompositionResult TryExecute(
-        RuntimeManifest manifest,
-        IMicroBundleConfigurationSource? configurationSource,
-        IMicroBundleProviderResolver? providerResolver,
-        PlatformMicroBundleDomainBindingSet domainBindingSet)
+        => TryExecute(manifest, configurationSource, providerResolver: null, domainBindingSet: null);
+#elif WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
+        => TryExecute(manifest, configurationSource, providerResolver: null);
 #else
     {
         var phase = RuntimeCompositionPhase.RequestValidation;
         try
         {
             var assembly = ExecuteCore(manifest, configurationSource, next => phase = next);
+            return RuntimeCompositionResult.Success(assembly);
+        }
+#pragma warning disable CA1031
+        catch (Exception exception)
+#pragma warning restore CA1031
+        {
+            return RuntimeCompositionResult.Failed(phase, exception);
+        }
+    }
 #endif
-#if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
+
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+    /// <summary>Attempts composition with an optional typed provider resolver.</summary>
+    public RuntimeCompositionResult TryExecute(
+        RuntimeManifest manifest,
+        IMicroBundleConfigurationSource? configurationSource,
+        IMicroBundleProviderResolver? providerResolver) =>
+        TryExecute(manifest, configurationSource, providerResolver, domainBindingSet: null);
+
+    /// <summary>Attempts portable composition with an explicit platform-to-Domain binding set.</summary>
+    public RuntimeCompositionResult TryExecute(
+        RuntimeManifest manifest,
+        IMicroBundleConfigurationSource? configurationSource,
+        IMicroBundleProviderResolver? providerResolver,
+        PlatformMicroBundleDomainBindingSet? domainBindingSet)
+#elif WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
+    /// <summary>Attempts composition with an optional typed provider resolver.</summary>
+    public RuntimeCompositionResult TryExecute(
+        RuntimeManifest manifest,
+        IMicroBundleConfigurationSource? configurationSource,
+        IMicroBundleProviderResolver? providerResolver)
+#endif
     {
         var phase = RuntimeCompositionPhase.RequestValidation;
         try
         {
 #if WORKSHOP_USE_REPOSITORY_SOURCES
             var assembly = ExecuteCore(manifest, configurationSource, providerResolver, domainBindingSet, next => phase = next);
-#else
+#elif WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
             var assembly = ExecuteCore(manifest, configurationSource, providerResolver, next => phase = next);
-#endif
+#else
+            var assembly = ExecuteCore(manifest, configurationSource, next => phase = next);
 #endif
             return RuntimeCompositionResult.Success(assembly);
         }
-        // The result API deliberately preserves exceptions from catalog, configuration,
-        // bundle-loading, and arbitration callbacks without requiring consumers to parse messages.
-#pragma warning disable CA1031 // Broad capture is the explicit TryExecute contract; Execute remains exception-based.
+        // Preserve the original failure for catalog, configuration, bundle-loading, and arbitration callbacks.
+#pragma warning disable CA1031
         catch (Exception exception)
 #pragma warning restore CA1031
         {
