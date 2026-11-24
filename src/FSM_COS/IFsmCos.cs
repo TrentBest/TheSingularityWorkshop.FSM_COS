@@ -7,7 +7,7 @@ public interface IFsmCos
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource = null);
 
-#if WORKSHOP_USE_REPOSITORY_SOURCES
+#if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
     /// <summary>Composes with an optional host-supplied typed provider resolver.</summary>
     RuntimeAssembly Execute(
         RuntimeManifest manifest,
@@ -20,7 +20,7 @@ public interface IFsmCos
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource = null);
 
-#if WORKSHOP_USE_REPOSITORY_SOURCES
+#if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
     /// <summary>Attempts composition with an optional host-supplied typed provider resolver.</summary>
     RuntimeCompositionResult TryExecute(
         RuntimeManifest manifest,
