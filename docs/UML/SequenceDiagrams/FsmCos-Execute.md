@@ -6,7 +6,7 @@
 **ID:** SEQ-FSMCOS-001  
 **Status:** Source-reviewed, manually authored  
 **Branch assessed:** `development`  
-**Focal operation:** `FsmCos.Execute(RuntimeManifest, IMicroBundleConfigurationSource?)`  
+**Focal operation:** `FsmCos.Execute(RuntimeManifest, IMicroBundleConfigurationSource?)` (plus optional typed-provider source-integration overload)  
 **Related API:** `FsmCos.TryExecute(...)`  
 **Evidence class:** Static source reading; not runtime-captured and not generated.
 
@@ -24,6 +24,8 @@ sequenceDiagram
     participant Manifest as RuntimeManifest
     participant Catalog as IMicroBundleCatalog
     participant Bundles as Resolved MicroBundles
+    participant Prep as MicroBundlePreparationContext
+    participant Resolver as Host IMicroBundleProviderResolver
     participant Context as MicroBundleLoadContext
     participant Assembly as RuntimeAssembly
 
@@ -41,6 +43,20 @@ sequenceDiagram
     opt Schedule supplied
         Engine->>Engine: Compare schedule IDs, versions, and edges with resolved graph
     end
+    opt Typed-provider integration build enabled
+        Engine->>Engine: Set ProviderPreparation phase
+        Engine->>Prep: Create context(runtimeId, resolvedBundles, resolver?)
+        loop Preparable bundles ordered by bundle ID
+            Engine->>Bundles: Prepare(preparationContext)
+            Bundles->>Prep: Read Providers / TryGetProvider<T>(reference)
+            Prep->>Prep: Validate exact owner and provider declaration
+            opt Exact declaration and host resolver supplied
+                Prep->>Resolver: TryResolve<T>(reference)
+                Resolver-->>Prep: typed handle or no match
+            end
+            Prep-->>Bundles: typed handle or false + null
+        end
+    end
     Engine->>Context: Create load context(runtimeId)
     loop Root bundles in manifest order
         Engine->>Bundles: Load root and dependencies in dependency order
@@ -55,7 +71,7 @@ sequenceDiagram
     Assembly-->>Engine: RuntimeAssembly
     Engine-->>Host: RuntimeAssembly
 
-    alt Validation, resolution, loading, or arbitration fails
+    alt Validation, resolution, provider preparation, loading, or arbitration fails
         Engine->>Bundles: RollbackLoad(context), reverse attempted-load order
         Note over Engine,Bundles: Only attempted bundles implementing IMicroBundleRollback are compensated.
         alt Any compensation callback also fails
@@ -69,11 +85,12 @@ sequenceDiagram
 ### Important qualifications
 
 - The dependency graph is resolved and validated **before** bundle loading begins; invalid root/dependency identities are rejected before load callbacks.
+- When the typed-provider integration build is enabled, optional preparation callbacks run after graph validation and before any load callback. Provider discovery is a deterministic snapshot; typed resolution requires an exact owner/version/provider declaration and a host resolver.
 - The exact traversal is implemented by private helpers in `FsmCos.cs`. This diagram intentionally abstracts helper internals; it is not a compiler-derived call graph.
 - Arbitration exits when a round reports no changes. If every allowed round reports changes, composition fails rather than returning a non-converged assembly.
 - Compensation is opt-in per bundle through `IMicroBundleRollback`. It is not a universal transaction: side effects from bundles without that contract are not automatically undone.
 - `TryExecute` wraps the same core path and returns the active `RuntimeCompositionPhase` plus the original exception on failure. `Execute` remains exception-based.
-- Conditional `WORKSHOP_USE_REPOSITORY_SOURCES` builds include a published/pre-resolved path with different loading/arbitration behavior. The sequence above represents the ordinary authoring-composition path; published execution needs its own focused diagram.
+- Conditional `WORKSHOP_USE_REPOSITORY_SOURCES` builds include a published/pre-resolved path with different loading/arbitration behavior. The provider-preparation surface is enabled in that source mode and in the dedicated local-development-package test mode; it is not part of the public-package compatibility surface yet. The sequence above represents the ordinary authoring-composition path; published execution needs its own focused diagram.
 
 ## Complexity notes (static estimate, not benchmark evidence)
 
@@ -95,6 +112,7 @@ These are algorithm-shape estimates from source, not measured timing or hard wal
 - [RuntimeManifest.cs](../../../src/FSM_COS/RuntimeManifest.cs) — manifest fields and staged-plan validation.
 - [RuntimeAssembly.cs](../../../src/FSM_COS/RuntimeAssembly.cs) — read-only assembly snapshot and lookup helpers.
 - [RuntimeCompositionResult.cs](../../../src/FSM_COS/RuntimeCompositionResult.cs) — failure phases and non-throwing result contract.
+- [MicroBundlePreparationContext.cs](../../../src/FSM_COS/MicroBundlePreparationContext.cs) and [ProviderPreparationTests.cs](../../../tests/FSM_COS.Tests/ProviderPreparationTests.cs) — exact typed provider discovery and pre-load preparation.
 - [FsmCosTests.cs](../../../tests/FSM_COS.Tests/FsmCosTests.cs) — composition, failure, rollback, bounds, arbitration, and TryExecute behavior.
 
 **Verification state:** Source files inspected on `development`; tests were not run for this documentation change. Diagram freshness is not automated.
