@@ -15,7 +15,8 @@ public sealed class ProviderPreparationTests
         var providerBundle = new PreparatoryBundle(
             2,
             events,
-            new MicroBundleProvider("tooling", "2.1.0"));
+            new MicroBundleProvider("tooling", "2.1.0"),
+            new MicroBundleProvider("legacy-tooling"));
         var consumerBundle = new PreparatoryBundle(1, events)
         {
             ProviderReference = new MicroBundleProviderReference(2, "1.0.0", "tooling", "2.1.0")
@@ -137,7 +138,9 @@ public sealed class ProviderPreparationTests
             _events.Add($"prepare:{Id}");
             if (Id == 1 && ProviderReference.IsValid)
             {
-                Assert.True(context.TryGetProvider<DemoCapability>(ProviderReference, out var capability));
+                var discovered = Assert.Single(context.Providers);
+                Assert.Equal(ProviderReference, discovered);
+                Assert.True(context.TryGetProvider<DemoCapability>(discovered, out var capability));
                 ResolvedProvider = capability;
             }
 
