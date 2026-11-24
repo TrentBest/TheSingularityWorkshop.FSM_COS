@@ -134,6 +134,20 @@ FSM_COS does not read the file or interpret its format.
 
 If no configuration exists, the bundle receives no external configuration and uses its own defaults.
 
+### Optional typed provider resolution and preparation
+
+A host that needs to expose typed capabilities during composition can implement the domain-owned `IMicroBundleProviderResolver` and pass it as the third argument:
+
+```csharp
+RuntimeAssembly assembly = cos.Execute(manifest, configurationSource, providerResolver);
+```
+
+A provider declaration must include an exact contract version (`new MicroBundleProvider("tooling", "2.1.0")`). The reference also pins its owning bundle ID and version. FSM_COS validates that the referenced provider is declared by a participating bundle before asking the host resolver for the requested CLR type.
+
+Opt-in bundles implement `IMicroBundlePreparable`. FSM_COS invokes each preparable bundle once, in deterministic bundle-ID order, after the complete dependency closure is validated and before any `Load` callback. Bundles without the optional interface are unchanged. A missing resolver or non-matching declaration returns `false`; resolver exceptions fail composition in the `ProviderPreparation` phase.
+
+This new contract is available when building against the MicroBundleDomain development source with `WorkshopUseRepositorySources=true`. The normal package build remains compatible with the currently published MicroBundleDomain 1.0.1 surface until the additive domain contract is released and the package dependency is intentionally advanced. No package is published by this work.
+
 > For a fair comparison between direct workload execution and FSM_COS, see [Workload Benchmarking](WORKLOAD_BENCHMARKING.md): composition, activation, warm-up, and steady-state timing are separate measurements.
 
 ## 02 — Why use one composition algorithm?
