@@ -631,9 +631,20 @@ public sealed class FsmCos : IFsmCos
 
             for (var index = dependencySnapshot.Length - 1; index >= 0; index--)
             {
-                var dependencyId = dependencySnapshot[index].BundleId;
-                if (discovered.ContainsKey(dependencyId))
+                var dependency = dependencySnapshot[index];
+                var dependencyId = dependency.BundleId;
+                if (discovered.TryGetValue(dependencyId, out var alreadyDiscovered))
+                {
+                    if (dependency.Version is not null &&
+                        !string.Equals(alreadyDiscovered.Descriptor.Version, dependency.Version, StringComparison.Ordinal))
+                    {
+                        throw new InvalidOperationException(
+                            $"MicroBundle {id} requires dependency {dependencyId} version '{dependency.Version}', " +
+                            $"but the resolved bundle is '{alreadyDiscovered.Descriptor.Version}'.");
+                    }
+
                     continue;
+                }
 
                 if (discovered.Count >= _maximumBundleCount)
                     throw new InvalidOperationException(
