@@ -125,7 +125,7 @@ public sealed class PortableMicroBundleBindingTests
                 providerResolver: null,
                 domainBindingSet: bindings));
 
-        Assert.Contains("runtime dependency request 2", exception.Message);
+        Assert.Contains("requires dependency 2 version '3.0.0'", exception.Message);
         Assert.Equal(0, root.LoadCalls);
         Assert.Equal(0, dependency.LoadCalls);
     }
