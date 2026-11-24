@@ -103,7 +103,7 @@ public sealed class FsmCos : IFsmCos
         {
             var assembly = ExecuteCore(manifest, configurationSource, next => phase = next);
 #endif
-#if WORKSHOP_USE_REPOSITORY_SOURCES
+#if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
     {
         var phase = RuntimeCompositionPhase.RequestValidation;
         try
