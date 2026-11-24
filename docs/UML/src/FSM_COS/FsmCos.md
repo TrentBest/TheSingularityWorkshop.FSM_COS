@@ -21,6 +21,8 @@ classDiagram
         +Execute(manifest, configurationSource) RuntimeAssembly
         +Execute(manifest, configurationSource, providerResolver) RuntimeAssembly
         +TryExecute(manifest, configurationSource, providerResolver) RuntimeCompositionResult
+        +Execute(manifest, configurationSource, providerResolver, domainBindingSet) RuntimeAssembly
+        +TryExecute(manifest, configurationSource, providerResolver, domainBindingSet) RuntimeCompositionResult
     }
     class FsmCos {
         +DefaultMaximumArbitrationRounds$
@@ -55,6 +57,7 @@ classDiagram
         +Providers
         +TryGetProvider<TProvider>(reference, provider) bool
     }
+    class PlatformMicroBundleDomainBindingSet
     class RuntimeManifest
     class RuntimeAssembly
     class IMicroBundle
@@ -65,6 +68,7 @@ classDiagram
     FsmCos ..> IMicroBundleProviderResolver : optional source-integration resolver
     FsmCos ..> IMicroBundlePreparable : pre-load callbacks
     FsmCos ..> IMicroBundlePreparationContext : supplies to preparable bundles
+    FsmCos ..> PlatformMicroBundleDomainBindingSet : validates portable closure before activation
     FsmCos ..> RuntimeManifest : consumes
     FsmCos ..> RuntimeAssembly : returns
     RuntimeAssembly o-- "0..*" IMicroBundle : assembled bundles
@@ -76,6 +80,7 @@ The diagram abbreviates parameter and nullable annotations for readability. For 
 
 - **Catalog vs. composition:** `IMicroBundleCatalog` resolves domain-owned bundles. `FsmCos` validates and composes them; it does not own the domain's MicroBundle implementation.
 - **Configuration:** the optional `IMicroBundleConfigurationSource` provides per-runtime, per-bundle configuration. It is not a repository or artifact-localization API.
+- **Portable dependency projection:** source integration requires an explicit `PlatformMicroBundleDomainBindingSet` whenever the resolved closure contains `IPortableMicroBundle`. FSM_COS checks each portable identity, exact version, optional materializer-verified digest, unique platform-slot/Domain-ID mapping, descriptor dependency set, runtime request set, and configuration bytes after resolution and before provider preparation or `Load`.
 - **Provider preparation:** in the development-source integration build, the host may supply an exact typed provider resolver. FSM_COS validates declared owner/provider versions and invokes optional `IMicroBundlePreparable` callbacks in deterministic bundle-ID order before any `Load` callback. This source integration does not define GUI-specific types.
 - **Arbitration:** the default maximum is 10 rounds. Bounded convergence is a resource/safety boundary, not proof that arbitrary bundle semantics are compatible.
 - **Returned assembly:** `RuntimeAssembly` is a result model for the host. It is not a UI renderer, process scheduler, or rollback boundary.
