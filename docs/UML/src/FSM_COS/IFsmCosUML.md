@@ -11,7 +11,7 @@
 
 ## Purpose
 
-Public composition abstraction that executes a runtime manifest and optionally accepts an external configuration source.
+Public composition abstraction that executes a runtime manifest and optionally accepts an external configuration source. Repository-source integration adds provider-preparation and explicit portable-binding overloads.
 
 ## Target type model
 
@@ -20,6 +20,9 @@ classDiagram
     class IFsmCos {
         <<interface>>
         +Execute(manifest, configurationSource) RuntimeAssembly
+        +Execute(manifest, configurationSource, providerResolver) RuntimeAssembly
+        +Execute(manifest, configurationSource, providerResolver, domainBindingSet) RuntimeAssembly
+        +TryExecute(manifest, configurationSource, providerResolver, domainBindingSet) RuntimeCompositionResult
     }
     class FsmCos
     class RuntimeManifest
@@ -38,6 +41,7 @@ The relationships shown in the class model above are limited to the relationship
 1. Depend on `IFsmCos` when host code needs the composition operation without coupling callers to the concrete `FsmCos` implementation.
 2. Pass a `RuntimeManifest` and, when needed, an `IMicroBundleConfigurationSource` to `Execute`.
 3. Substitute a test implementation at a host boundary when testing orchestration separately from the real composition engine.
+4. In portable source integration, supply a binding set so FSM_COS can validate the complete portable dependency projection before activation.
 
 ## Coverage notes
 
