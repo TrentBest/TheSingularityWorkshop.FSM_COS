@@ -235,6 +235,7 @@ public sealed class FsmCosTests
         Assert.Equal(0, root.LoadCalls);
     }
 
+#if WORKSHOP_USE_REPOSITORY_SOURCES
     [Fact]
     public void Execute_rejects_a_pinned_dependency_version_mismatch_before_loading()
     {
@@ -250,6 +251,7 @@ public sealed class FsmCosTests
         Assert.Equal(0, root.LoadCalls);
         Assert.Equal(0, dependency.LoadCalls);
     }
+#endif
 
     [Fact]
     public void Execute_loads_dependencies_before_requesting_bundle()
