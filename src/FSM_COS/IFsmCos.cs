@@ -13,6 +13,15 @@ public interface IFsmCos
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource,
         TheSingularityWorkshop.MicroBundleDomain.IMicroBundleProviderResolver? providerResolver);
+
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+    /// <summary>Composes portable MicroBundles only after validating their platform-to-Domain dependency projection.</summary>
+    RuntimeAssembly Execute(
+        RuntimeManifest manifest,
+        IMicroBundleConfigurationSource? configurationSource,
+        TheSingularityWorkshop.MicroBundleDomain.IMicroBundleProviderResolver? providerResolver,
+        PlatformMicroBundleDomainBindingSet domainBindingSet);
+#endif
 #endif
 
     /// <summary>Attempts composition and returns phase-aware diagnostics instead of throwing.</summary>
@@ -26,5 +35,14 @@ public interface IFsmCos
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource,
         TheSingularityWorkshop.MicroBundleDomain.IMicroBundleProviderResolver? providerResolver);
+
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+    /// <summary>Attempts portable composition with an explicit platform-to-Domain binding set.</summary>
+    RuntimeCompositionResult TryExecute(
+        RuntimeManifest manifest,
+        IMicroBundleConfigurationSource? configurationSource,
+        TheSingularityWorkshop.MicroBundleDomain.IMicroBundleProviderResolver? providerResolver,
+        PlatformMicroBundleDomainBindingSet domainBindingSet);
+#endif
 #endif
 }
