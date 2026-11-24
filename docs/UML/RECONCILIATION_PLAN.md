@@ -11,14 +11,14 @@ This plan is an implementation ledger, not a claim that the work is already comp
 
 ## Decision: reconcile in place, preserve useful work
 
-Do not delete and recreate the UML tree wholesale. The current tree has companion Markdown pages for the 20 core C# source files, a limited set of SVG diagrams, focused view specifications, and a manual coverage inventory. Reuse verified content and migrate artifacts deliberately. Replace or retire an individual artifact only when its replacement is validated and its inbound links have been reconciled.
+Do not delete and recreate the UML tree wholesale. The current tree has companion Markdown pages for the 24 core C# source files, a limited set of SVG diagrams, focused view specifications, and a manual coverage inventory. Reuse verified content and migrate artifacts deliberately. Replace or retire an individual artifact only when its replacement is validated and its inbound links have been reconciled.
 
 The canonical target families are defined in [the Artifact Catalog](Standard/ARTIFACT_CATALOG.md). Existing `ClassDiagram/`, `src/`, and `tests/` locations remain valid during reconciliation; avoid a broad move that creates link churn before the target inventory is real.
 
 ## Baseline observed
 
 - The core project tree contains 20 C# source files.
-- The current UML inventory reports companion pages for all 20 source files and UML-neighborhood companions for the declarations represented by those files.
+- The current UML inventory reports companion pages for all 24 source files and UML-neighborhood companions for the declarations represented by those files.
 - Dedicated SVGs exist for only a small subset of the source surface; presence alone does not prove that a diagram satisfies the new layout, semantic-relationship, provenance, accessibility, or visual-review requirements.
 - Sequence, activity/control-flow, state/lifecycle, use-case, architecture, data-lineage, and traceability coverage is described as partial in the current inventory.
 - The repository does not currently claim a repository-wide source-derived generator or stale-output CI gate.
