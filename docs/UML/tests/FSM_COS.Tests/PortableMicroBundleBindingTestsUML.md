@@ -12,8 +12,8 @@ flowchart TB
     Bindings --> Slots["Unique platform slots"]
     Bindings --> IDs["Unique Domain runtime IDs"]
     Declared --> Projection["Dependency projection validation"]
-    Projection --> Descriptor["MicroBundleDescriptor.Dependencies"]
-    Projection --> Requests["IMicroBundle.Dependencies"]
+    Projection -->|"IDs + exact versions"| Descriptor["MicroBundleDescriptor.Dependencies"]
+    Projection -->|"IDs + exact versions + config bytes"| Requests["IMicroBundle.Dependencies"]
     Projection --> Config["Exact configuration bytes"]
     Projection --> Digest["Optional verified SHA-256"]
     Projection --> Gate{"All checks pass?"}
