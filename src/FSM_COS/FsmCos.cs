@@ -75,7 +75,27 @@ public sealed class FsmCos : IFsmCos
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource,
         IMicroBundleProviderResolver? providerResolver) =>
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+        ExecuteCore(manifest, configurationSource, providerResolver, domainBindingSet: null, onStageChanged: null);
+
+    /// <summary>
+    /// Composes a runtime after validating the complete portable dependency projection
+    /// against explicit platform-slot and Domain-ID bindings.
+    /// </summary>
+    public RuntimeAssembly Execute(
+        RuntimeManifest manifest,
+        IMicroBundleConfigurationSource? configurationSource,
+        IMicroBundleProviderResolver? providerResolver,
+        PlatformMicroBundleDomainBindingSet domainBindingSet) =>
+        ExecuteCore(
+            manifest,
+            configurationSource,
+            providerResolver,
+            domainBindingSet ?? throw new ArgumentNullException(nameof(domainBindingSet)),
+            onStageChanged: null);
+#else
         ExecuteCore(manifest, configurationSource, providerResolver, onStageChanged: null);
+#endif
 #else
         => ExecuteCore(manifest, configurationSource, onStageChanged: null);
 #endif
@@ -96,6 +116,15 @@ public sealed class FsmCos : IFsmCos
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource,
         IMicroBundleProviderResolver? providerResolver)
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+        => TryExecute(manifest, configurationSource, providerResolver, domainBindingSet: null);
+
+    /// <summary>Attempts portable composition with an explicit validated platform binding set.</summary>
+    public RuntimeCompositionResult TryExecute(
+        RuntimeManifest manifest,
+        IMicroBundleConfigurationSource? configurationSource,
+        IMicroBundleProviderResolver? providerResolver,
+        PlatformMicroBundleDomainBindingSet domainBindingSet)
 #else
     {
         var phase = RuntimeCompositionPhase.RequestValidation;
@@ -108,7 +137,11 @@ public sealed class FsmCos : IFsmCos
         var phase = RuntimeCompositionPhase.RequestValidation;
         try
         {
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+            var assembly = ExecuteCore(manifest, configurationSource, providerResolver, domainBindingSet, next => phase = next);
+#else
             var assembly = ExecuteCore(manifest, configurationSource, providerResolver, next => phase = next);
+#endif
 #endif
             return RuntimeCompositionResult.Success(assembly);
         }
@@ -127,6 +160,9 @@ public sealed class FsmCos : IFsmCos
         IMicroBundleConfigurationSource? configurationSource,
 #if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
         IMicroBundleProviderResolver? providerResolver,
+#endif
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+        PlatformMicroBundleDomainBindingSet? domainBindingSet,
 #endif
         Action<RuntimeCompositionPhase>? onStageChanged)
     {
@@ -231,6 +267,16 @@ public sealed class FsmCos : IFsmCos
 
         if (manifest.Schedule is not null)
             ValidateScheduleAgainstResolvedGraph(manifest, resolvedBundles, dependencyRequestsById);
+
+#if WORKSHOP_USE_REPOSITORY_SOURCES
+        if (resolvedBundles.Values.Any(bundle => bundle is IPortableMicroBundle))
+        {
+            if (domainBindingSet is null)
+                throw new InvalidOperationException(
+                    "Portable MicroBundles require an explicit PlatformMicroBundleDomainBindingSet before activation.");
+            domainBindingSet.ValidatePortableDependencyProjection(resolvedBundles.Values);
+        }
+#endif
 
 #if WORKSHOP_USE_REPOSITORY_SOURCES || WORKSHOP_ENABLE_TYPED_PROVIDER_PREPARATION
         onStageChanged?.Invoke(RuntimeCompositionPhase.ProviderPreparation);
