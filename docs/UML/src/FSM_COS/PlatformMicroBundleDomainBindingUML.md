@@ -37,7 +37,7 @@ flowchart TB
 
 This file records the identity projection boundary. It does not resolve portable artifacts, allocate slots, load MicroBundles, or establish that an artifact is trusted.
 
-See [source companion](PlatformMicroBundleDomainBinding.md), [slot-index companion](PlatformMicroBundleSlotIndex.md), and [runtime boundary](../../RUNTIME_BOUNDARY.md).
+See [source companion](PlatformMicroBundleDomainBinding.md), [slot-index companion](PlatformMicroBundleSlotIndex.md), and [runtime boundary](../../../RUNTIME_BOUNDARY.md).
 
 <!-- THE SINGULARITY WORKSHOP FOOTER -->
 <p align="center"><img src="https://raw.githubusercontent.com/TrentBest/FSM_API/master/Documentation/Branding/TheSingularityWorkshop.png" alt="The Singularity Workshop avatar" width="200" /></p>
