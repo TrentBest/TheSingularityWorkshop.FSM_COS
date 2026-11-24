@@ -656,6 +656,7 @@ public sealed class FsmCos : IFsmCos
                     throw new InvalidOperationException($"{kind} {dependencyId} could not be resolved.");
                 }
 
+                ValidateResolvedDescriptorIdentity(dependencyId, dependencyBundle);
                 if (dependency.Version is not null &&
                     !string.Equals(dependencyBundle.Descriptor.Version, dependency.Version, StringComparison.Ordinal))
                 {
