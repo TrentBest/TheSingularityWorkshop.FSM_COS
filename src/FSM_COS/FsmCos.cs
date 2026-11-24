@@ -64,7 +64,17 @@ public sealed class FsmCos : IFsmCos
     public RuntimeAssembly Execute(
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource = null) =>
-        ExecuteCore(manifest, configurationSource, onStageChanged: null);
+        Execute(manifest, configurationSource, providerResolver: null);
+
+    /// <summary>
+    /// Composes a runtime with an optional host-supplied resolver for exact typed provider handles.
+    /// Provider preparation completes before any MicroBundle Load callback is invoked.
+    /// </summary>
+    public RuntimeAssembly Execute(
+        RuntimeManifest manifest,
+        IMicroBundleConfigurationSource? configurationSource,
+        IMicroBundleProviderResolver? providerResolver) =>
+        ExecuteCore(manifest, configurationSource, providerResolver, onStageChanged: null);
 
     /// <summary>
     /// Attempts composition and returns the phase and original exception when composition fails.
@@ -73,12 +83,19 @@ public sealed class FsmCos : IFsmCos
     /// </summary>
     public RuntimeCompositionResult TryExecute(
         RuntimeManifest manifest,
-        IMicroBundleConfigurationSource? configurationSource = null)
+        IMicroBundleConfigurationSource? configurationSource = null) =>
+        TryExecute(manifest, configurationSource, providerResolver: null);
+
+    /// <summary>Attempts composition with an optional host-supplied typed provider resolver.</summary>
+    public RuntimeCompositionResult TryExecute(
+        RuntimeManifest manifest,
+        IMicroBundleConfigurationSource? configurationSource,
+        IMicroBundleProviderResolver? providerResolver)
     {
         var phase = RuntimeCompositionPhase.RequestValidation;
         try
         {
-            var assembly = ExecuteCore(manifest, configurationSource, next => phase = next);
+            var assembly = ExecuteCore(manifest, configurationSource, providerResolver, next => phase = next);
             return RuntimeCompositionResult.Success(assembly);
         }
         // The result API deliberately preserves exceptions from catalog, configuration,
@@ -94,6 +111,7 @@ public sealed class FsmCos : IFsmCos
     private RuntimeAssembly ExecuteCore(
         RuntimeManifest manifest,
         IMicroBundleConfigurationSource? configurationSource,
+        IMicroBundleProviderResolver? providerResolver,
         Action<RuntimeCompositionPhase>? onStageChanged)
     {
         onStageChanged?.Invoke(RuntimeCompositionPhase.RequestValidation);
@@ -197,6 +215,9 @@ public sealed class FsmCos : IFsmCos
 
         if (manifest.Schedule is not null)
             ValidateScheduleAgainstResolvedGraph(manifest, resolvedBundles, dependencyRequestsById);
+
+        onStageChanged?.Invoke(RuntimeCompositionPhase.ProviderPreparation);
+        PrepareBundles(manifest.RuntimeId, resolvedBundles, providerResolver);
 
         onStageChanged?.Invoke(RuntimeCompositionPhase.BundleLoading);
         var loaded = new List<IMicroBundle>();
@@ -324,6 +345,19 @@ public sealed class FsmCos : IFsmCos
             }
 
             throw;
+        }
+    }
+
+    private static void PrepareBundles(
+        ulong runtimeId,
+        IReadOnlyDictionary<ulong, IMicroBundle> resolvedBundles,
+        IMicroBundleProviderResolver? providerResolver)
+    {
+        var context = new MicroBundlePreparationContext(runtimeId, resolvedBundles, providerResolver);
+        foreach (var bundle in resolvedBundles.Values.OrderBy(bundle => bundle.Id))
+        {
+            if (bundle is IMicroBundlePreparable preparable)
+                preparable.Prepare(context);
         }
     }
 
