@@ -7,10 +7,12 @@ public enum RuntimeCompositionPhase
     RequestValidation = 0,
     /// <summary>Root bundles and the dependency closure are resolved and validated.</summary>
     DependencyResolution = 1,
+    /// <summary>Typed providers are resolved and optional bundles prepare before loading.</summary>
+    ProviderPreparation = 2,
     /// <summary>Bundles and their configuration are loaded.</summary>
-    BundleLoading = 2,
+    BundleLoading = 3,
     /// <summary>Loaded bundles are arbitrated to convergence.</summary>
-    Arbitration = 3
+    Arbitration = 4
 }
 
 /// <summary>Outcome of an opt-in, non-throwing composition attempt.</summary>
