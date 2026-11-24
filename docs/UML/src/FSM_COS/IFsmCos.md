@@ -18,6 +18,9 @@ classDiagram
     class IFsmCos {
         <<interface>>
         +Execute(manifest, configurationSource) RuntimeAssembly
+        +Execute(manifest, configurationSource, providerResolver) RuntimeAssembly
+        +Execute(manifest, configurationSource, providerResolver, domainBindingSet) RuntimeAssembly
+        +TryExecute(manifest, configurationSource, providerResolver, domainBindingSet) RuntimeCompositionResult
     }
     class FsmCos
     class RuntimeManifest
@@ -30,6 +33,7 @@ classDiagram
 ## Important boundaries
 
 - The interface defines composition entry; catalog resolution and bounded arbitration are implementation responsibilities.
+- In repository-source integration, the portable overload accepts an explicit PlatformMicroBundleDomainBindingSet. FsmCos fails closed if a resolved IPortableMicroBundle closure is composed without that binding set.
 - It does not promise rollback or arbitrary semantic compatibility.
 
 ## Use cases
