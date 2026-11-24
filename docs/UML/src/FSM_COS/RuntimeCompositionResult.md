@@ -15,7 +15,7 @@
 | `Assembly` | Composed `RuntimeAssembly`, or null on failure. |
 | `FailurePhase` | Failed composition phase, or null on success. |
 | `Exception` | Preserved exception, or null on success. |
-| `RuntimeCompositionPhase` | Distinguishes request validation, dependency resolution, bundle loading, and arbitration. |
+| `RuntimeCompositionPhase` | Distinguishes request validation, dependency resolution, provider preparation, bundle loading, and arbitration. |
 
 Construction and `Success`/`Failed` factories are private/internal implementation details; callers consume results from the public composition API.
 
