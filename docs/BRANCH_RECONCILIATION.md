@@ -5,6 +5,67 @@
 
 **Maintainer-only release record.** This ledger documents branch policy and the current observed state; it is not consumer documentation.
 
+## Live Sith activity audit — 2026-11-25 UTC
+
+This is the current FSM_COS branch snapshot, refreshed from live GitHub refs and exact commit metadata. Older snapshots below are historical evidence and must not be read as the current branch state.
+
+### Branch activity — newest first
+
+| UTC committer time | Branch | Author / committer | Latest subject | Head SHA |
+|---|---|---|---|---|
+| 2026-11-25 03:50:08 | [development](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/development) | TrentBest / TrentBest | Clarify animated moniker alternative text | [fb84797451736459ee9cd77331c1ed13cd9d342a](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/fb84797451736459ee9cd77331c1ed13cd9d342a) |
+| 2026-11-24 14:50:39 | [master](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/master) | github-actions[bot] / github-actions[bot] | chore: refresh Sith policy evidence | [e4f2e3edc79980c1580ce24b93dae3a683aa1b82](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/e4f2e3edc79980c1580ce24b93dae3a683aa1b82) |
+| 2026-11-16 05:49:11 | [fix/markdown-footer-validation](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/fix/markdown-footer-validation) | TrentBest / TrentBest | fix: safely quote CiAi evidence summary fields | [1e1b139f13d049835ed02e84f75831d9c88580f5](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/1e1b139f13d049835ed02e84f75831d9c88580f5) |
+| 2026-11-14 09:58:35 | [work/ciai-evidence-hardening](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/work/ciai-evidence-hardening) | TrentBest / TrentBest | Fail closed on missing or ambiguous CiAi source runs | [0158272cd516312e41e8ffa6282882325ddde22a](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/0158272cd516312e41e8ffa6282882325ddde22a) |
+| 2026-11-03 21:05:08 | [policy/sith-branch-activity-audit](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/policy/sith-branch-activity-audit) | TrentBest / TrentBest | Record live Sith branch activity and verification audit | [26fcd53770efdf01cedad8e9d884e0b3e13b8790](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/26fcd53770efdf01cedad8e9d884e0b3e13b8790) |
+
+### Reconciliation and verification
+
+- Live FSM_COS inventory: **five branches** — `development`, `master`, and three noncanonical branches. Sith is **NON-COMPLIANT** until the owner removes the reviewed extras.
+- Divergence: `development` is 306 commits ahead of `master`; `master` is 28 commits ahead of `development`; merge base `56ad34dbe4722ba1edf9a4da6a00812eeaa29101`. Master-only differences include source, tests, benchmarks, documentation, and workflow files. Preserve this history; do not force-reset or replace master as part of branch cleanup.
+- Exact-head verification for development `fb84797451736459ee9cd77331c1ed13cd9d342a`:
+  - [Pack and publish run 45542682163](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45542682163): build, test/coverage, package verification, public-package compatibility, and source integration passed. NuGet publication was **skipped**; only artifacts were produced.
+  - [CodeQL run 45542682047](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45542682047): passed.
+  - [Sith policy run 45542682049](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45542682049): failed because the repository has five branches rather than two.
+  - [Benchmark evidence run 45542682094](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45542682094): pending at snapshot time.
+  - [CiAi commit evidence run 45542682028](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45542682028): in progress at snapshot time.
+- Release baseline: no exact public-package-to-master-SHA association was established by this audit. Do not infer one from the branch name.
+
+### Noncanonical branch dispositions
+
+| Branch | Compare to development | PR state | Disposition |
+|---|---:|---|---|
+| `policy/sith-branch-activity-audit` | 2 ahead / 151 behind | [PR #52](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/52) closed unmerged | Its useful portfolio-reporting requirements were incorporated into development `AGENTS.md`. Its 2026-11-03 ledger snapshot is superseded by the development ledger. **Ready for owner deletion** after a final ref check. |
+| `work/ciai-evidence-hardening` | 2 ahead / 151 behind | [PR #53](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/53) closed unmerged | Its workflow pins an older CiAi commit and .NET 8; development now pins the newer CiAi contract and .NET 10. The behavior is superseded. **Ready for owner deletion** after a final ref check. |
+| `fix/markdown-footer-validation` | 5 ahead / 119 behind | [PR #56](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/56) open | The safer `printf` summary formatting and moniker alt-text improvement were ported to development. The PR also removes the canonical Workshop footer from `AGENTS.md`, `CiAiLLM.md`, `FiAiLLM.md`, and `GUILLM.md`; that conflicts with the documentation standard and was **not** ported. Retain pending owner review or a revised PR. **Not ready for deletion.** |
+
+No branch was deleted, no branch ref was rewritten, master was not changed, and no NuGet package was published in this audit.
+
+## Portfolio branch-reduction snapshot — 2026-11-25 UTC
+
+The live inventory covered 52 Workshop ecosystem repositories, including FSM_Dungeon. It contained 249 branch refs: 29 repositories already had exactly `master` and `development`; 23 repositories had extra branches; 145 refs were above the two-branch target.
+
+The highest-churn repositories were FSM_Execution (27 branches), GUI (26), MyVR (16), MicroBundleRepository (15), and MicroBundleDomain (14). Across the portfolio, 42 repositories had master-only commit history relative to development. Several master diffs contain real source, tests, or documentation, not just policy badges. Do not replace master until each repository's release baseline and master-only work have been reviewed under the release procedure.
+
+### Cross-repository branches currently verified as deletion candidates
+
+These branch tips are ancestors of their repository's current development branch (`ahead_by = 0`), or their unique work has been preserved/superseded as noted. The owner performs deletion; recheck each live ref and PR immediately before the deletion batch.
+
+| Repository / branch | Exact branch head | Latest committer UTC | Latest subject | Evidence / disposition |
+|---|---|---|---|---|
+| [TheSingularityWorkshop `feature/singularity-hub-microbundles`](https://github.com/TrentBest/TheSingularityWorkshop/tree/feature/singularity-hub-microbundles) | [93a7932ba9c68312c65b858fd5e776d049094c66](https://github.com/TrentBest/TheSingularityWorkshop/commit/93a7932ba9c68312c65b858fd5e776d049094c66) | 2025-06-21 02:01:54 | Add project files. | 0 ahead / 10 behind development; no PR found. |
+| [MicroBundleRepository `adp/rest-identity-workshop-auth`](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/tree/adp/rest-identity-workshop-auth) | [b81de0792ad093c5c569cf2e496cc0ff6c27f03c](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/commit/b81de0792ad093c5c569cf2e496cc0ff6c27f03c) | 2026-11-20 04:56:49 | test(rest): reject legacy generic repository write key | 0 ahead / 74 behind; [PR #40](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/pull/40) merged into development. |
+| [MicroBundleRepository `adp/revision-identity-reconcile`](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/tree/adp/revision-identity-reconcile) | [fdbe30f57f10ca300aab615bf5a81c6682aeecd0](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/commit/fdbe30f57f10ca300aab615bf5a81c6682aeecd0) | 2026-11-21 06:19:24 | docs: sync domain map with current integration status | 0 ahead / 80 behind; [PR #39](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/pull/39) merged into development. |
+| [MicroBundleDomain `architecture/runtime-contract-ownership`](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/tree/architecture/runtime-contract-ownership) | [e81747aa3741ad6de5ae1b6077bf1d30ea0a3a4c](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/commit/e81747aa3741ad6de5ae1b6077bf1d30ea0a3a4c) | 2026-10-03 05:47:56 | Merge pull request #7 from TrentBest/docs/benchmarking | 0 ahead / 83 behind development; its runtime-contract PR was merged to master and its tip is now contained in development. |
+| [MicroBundleDomain `docs/benchmarking`](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/tree/docs/benchmarking) | [b400a16f850a22edc841fb0acc824073770ce906](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/commit/b400a16f850a22edc841fb0acc824073770ce906) | 2026-10-03 00:31:59 | docs: add MicroBundleDomain performance baseline | 0 ahead / 88 behind; [PR #7](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleDomain/pull/7) merged into the architecture branch, whose tip is contained in development. |
+| [MyVR `feature/myvr-fsm-foundry-reference-migration`](https://github.com/TrentBest/TheSingularityWorkshop.MyVR/tree/feature/myvr-fsm-foundry-reference-migration) | [3368e16db56b8d2b976f578a1c4fc754f9b807e3](https://github.com/TrentBest/TheSingularityWorkshop.MyVR/commit/3368e16db56b8d2b976f578a1c4fc754f9b807e3) | 2026-11-01 01:05:39 | Link README moniker to MyVR Pages site | 0 ahead / 4 behind development; no PR found. |
+| [HeadlessAi `feature/bounded-artifact-http-adapter`](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi/tree/feature/bounded-artifact-http-adapter) | [f61990c78a9e228aba564a158a5478d227db4e13](https://github.com/TrentBest/TheSingularityWorkshop.HeadlessAi/commit/f61990c78a9e228aba564a158a5478d227db4e13) | 2026-11-01 06:52:12 | Clarify adapter normalized output contract | 0 ahead / 14 behind development; no PR found. |
+| [FSM_COS `policy/sith-branch-activity-audit`](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/policy/sith-branch-activity-audit) | [26fcd53770efdf01cedad8e9d884e0b3e13b8790](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/26fcd53770efdf01cedad8e9d884e0b3e8790) | 2026-11-03 21:05:08 | Record live Sith branch activity and verification audit | Useful AGENTS.md rules preserved in development; old ledger snapshot superseded; [PR #52](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/52) closed unmerged. |
+| [FSM_COS `work/ciai-evidence-hardening`](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/work/ciai-evidence-hardening) | [0158272cd516312e41e8ffa6282882325ddde22a](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/0158272cd516312e41e8ffa6282882325ddde22a) | 2026-11-14 09:58:35 | Fail closed on missing or ambiguous CiAi source runs | Superseded by newer development pin/runtime; [PR #53](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/pull/53) closed unmerged. |
+
+This is an initial, verified deletion-ready set, not the final portfolio batch. Remaining branches with unique work are being grouped into coherent preservation/consolidation candidates. No deletion is authorized or performed here.
+
+
 ## Canonical branch policy
 
 Exactly two persistent branches are intended:
