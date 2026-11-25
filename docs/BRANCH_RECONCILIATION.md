@@ -43,9 +43,9 @@ No branch was deleted, no branch ref was rewritten, master was not changed, and 
 
 ## Portfolio branch-reduction snapshot — 2026-11-25 UTC
 
-The live inventory covered 52 Workshop ecosystem repositories, including FSM_Dungeon. It contained 249 branch refs: 29 repositories already had exactly `master` and `development`; 23 repositories had extra branches; 145 refs were above the two-branch target.
+The live inventory covered 53 Workshop ecosystem repositories, including FSM_Dungeon. It contained 251 branch refs: 30 repositories already had exactly `master` and `development`; 23 repositories had extra branches; 145 refs were above the two-branch target.
 
-The highest-churn repositories were FSM_Execution (27 branches), GUI (26), MyVR (16), MicroBundleRepository (15), and MicroBundleDomain (14). Across the portfolio, 42 repositories had master-only commit history relative to development. Several master diffs contain real source, tests, or documentation, not just policy badges. Do not replace master until each repository's release baseline and master-only work have been reviewed under the release procedure.
+The highest-churn repositories were FSM_Execution (27 branches), GUI (26), MyVR (16), MicroBundleRepository (15), and MicroBundleDomain (14). Across the portfolio, 43 repositories had master-only commit history relative to development. Several master diffs contain real source, tests, or documentation, not just policy badges. Do not replace master until each repository's release baseline and master-only work have been reviewed under the release procedure.
 
 ### Cross-repository branches currently verified as deletion candidates
 
