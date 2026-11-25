@@ -70,7 +70,7 @@ These branch tips are ancestors of their repository's current development branch
 
 MicroBundleRepository's own current development ledger identifies seven deletion-ready refs out of its 13 extras; its six retained branches are `feature/ontology-address-mapping`, `work/microbundle-artifact-discovery`, `docs/visual-readme`, `fix/repository-boundary`, `release-prep/core-1.0.0`, and `release-prep/rest-1.0.0`. See [its branch reconciliation ledger](https://github.com/TrentBest/TheSingularityWorkshop.MicroBundleRepository/blob/development/docs/BRANCH_RECONCILIATION.md) for the detailed identity and pagination boundary decisions.
 
-This is an initial, verified deletion-ready set, not the final portfolio batch. Remaining branches with unique work are being grouped into coherent preservation/consolidation candidates. No deletion is authorized or performed here.
+This is the currently verified deletion-ready set of **14 branches**, not the final portfolio batch. Remaining branches with unique work in GUI, FSM_Execution, MyVR, Experiences, ServerApp, FSM_Serialization, CommandAi, and other repositories still require reconciliation. Remaining branches with unique work are being grouped into coherent preservation/consolidation candidates. No deletion is authorized or performed here.
 
 
 ### Active consolidation queue — 2026-11-25 UTC
