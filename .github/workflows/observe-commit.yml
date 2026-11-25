@@ -255,9 +255,9 @@ jobs:
           {
             echo "## CiAi FSM_COS commit evidence"
             echo
-            echo "- Repository: `$TARGET_REPOSITORY`"
-            echo "- Branch: `$TARGET_BRANCH`"
-            echo "- Source SHA: `$TARGET_SHA`"
+            printf -- '- Repository: `%s`\n' "$TARGET_REPOSITORY"
+            printf -- '- Branch: `%s`\n' "$TARGET_BRANCH"
+            printf -- '- Source SHA: `%s`\n' "$TARGET_SHA"
             echo "- Package run / attempt: ${PACKAGE_ID:-unknown} / ${PACKAGE_ATTEMPT:-unknown}"
             echo "- Package status / conclusion: $PACKAGE_STATE / $PACKAGE_CONCLUSION"
             echo "- Package run: ${PACKAGE_URL:-not uniquely resolved}"
