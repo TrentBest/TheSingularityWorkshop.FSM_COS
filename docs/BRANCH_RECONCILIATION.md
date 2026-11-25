@@ -66,6 +66,33 @@ These branch tips are ancestors of their repository's current development branch
 This is an initial, verified deletion-ready set, not the final portfolio batch. Remaining branches with unique work are being grouped into coherent preservation/consolidation candidates. No deletion is authorized or performed here.
 
 
+### Active consolidation queue — 2026-11-25 UTC
+
+These are existing review lanes, not permission to merge. No PR was merged as part of this audit. The repository policy requires owner authorization before merge; branch deletion remains owner-only.
+
+#### MyVR — one consolidated device/core proposal
+
+- [PR #38: Consolidate Quest 2 Android session lifecycle work](https://github.com/TrentBest/TheSingularityWorkshop.MyVR/pull/38) — head `3000e9669a0dffb91f0c85f66672a3f9ff329759`, 86 commits, 26 changed files, base `development`. GitHub reports mergeable; merge state is unstable because Sith policy fails while extra branches exist.
+- Exact-head [MyVR CI](https://github.com/TrentBest/TheSingularityWorkshop.MyVR/actions/runs/45543932911) passed. Exact-head [Quest 2 Android Host](https://github.com/TrentBest/TheSingularityWorkshop.MyVR/actions/runs/45543933036) passed, including Release build, signed APK publication, OpenXR loader verification, and artifact upload. Exact-head [Sith Policy](https://github.com/TrentBest/TheSingularityWorkshop.MyVR/actions/runs/45543922436) failed because the repository still has extra branches.
+- PR #38 now includes the portable session core, device-session lifecycle bridge, typed tactical command workflow/tests, Quest 2 Android host, and OpenXR feasibility report. The OpenXR report explicitly says physical-headset behavior is **not** verified.
+- [PR #37](https://github.com/TrentBest/TheSingularityWorkshop.MyVR/pull/37) was closed as superseded; its tactical contracts/workflow/tests are included in #38. No source branch was deleted.
+- After #38 is merged, the following source branches become deletion candidates because their work is included in the consolidated PR: `feature/myvr-device-session-core`, `feature/myvr-tactical-command-facade`, `feature/myvr-tactical-command-workflow`, `feature/myvr-tactical-execution-lifecycle`, `feature/quest2-android-host-bootstrap`, and `feature/quest2-openxr-host-spike`. The separate `feature/myvr-fsm-foundry-reference-migration` is already in the deletion-ready set above.
+
+#### FSM_Execution — active PR stack
+
+| PR | Head branch / SHA | Base | Scope | Exact-head evidence / state |
+|---|---|---|---|---|
+| [#50 ADP approval queue](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Execution/pull/50) | `feature/adp-human-approval-queue-dev` / `6b0a0c2c1a915bbd7494f35ff9d56820153ee424` | development | 149 commits, 50 files | [Execution proof passed](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Execution/actions/runs/45340859254); mergeable; Sith check fails on extra refs. |
+| [#48 Execution workbench Pages](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Execution/pull/48) | `feature/execution-hub-pages-workbench` / `78e7533ff3fd48b0f9dc29e15b854189853507e4` | development | 16 commits, 4 files | [Pages build passed](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Execution/actions/runs/45328750936) and [execution proof passed](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Execution/actions/runs/45328751109); mergeable; Sith check fails on extra refs. |
+| [#40 AgentOnboarding host integration](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Execution/pull/40) | `feature/foundry-agent-onboarding-host-integration` / `3bd2962c9bce66c9b9ba2fa37052002a39196934` | development | 105 commits, 65 files | [Foundry CI passed](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Execution/actions/runs/45015200825); merge conflicts remain. |
+| [#44 dependency admission](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Execution/pull/44) | `feature/dependency-admission-dormancy` / `259ef9bcb4477f2339d23ab5215602cdd7a0973c` | PR #40 head branch | 110 commits, 51 files | Mergeable as a stacked PR, but [exact-head CI failed](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Execution/actions/runs/45329662528): pinned CiAi commit `d4d2aa01985cc03b1a102b00f98e4b77eb666ac6` does not match current CiAi development `2ea02e7f3f365ce8fbced48649e13fd6e2c34514`. Reconcile the dependency pin before considering merge. |
+| [#26 host repository operation gate](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Execution/pull/26) | `feature/foundry-host-repository-operation-gate` / `42fc3c7bd0645fa3cb35be7d6b7114d3712ce6c7` | development | 286 commits, 53 files | [Foundry CI passed](https://github.com/TrentBest/TheSingularityWorkshop.FSM_Execution/actions/runs/44935120846); merge conflicts remain. |
+
+The #44 branch is intentionally stacked on #40; do not retarget or merge it independently without reconciling the parent PR. The `feature/foundry-agent-onboarding-admission` branch is contained in the later host-integration branch and can become a deletion candidate after #40 is merged. The other FSM_Execution branches still need unique-work review; these five PRs do not account for every extra ref.
+
+
+
+
 ## Canonical branch policy
 
 Exactly two persistent branches are intended:
