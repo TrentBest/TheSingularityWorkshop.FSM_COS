@@ -46,6 +46,19 @@ Whenever reporting repository health or preparing branch reconciliation:
 
 Refresh `docs/BRANCH_RECONCILIATION.md` during a branch audit. Keep old snapshots visibly historical and record exact heads and evidence scope.
 
+## Portfolio-level Sith reporting — mandatory
+
+A branch selector is not an adequate portfolio status system. Whenever reporting repository status or beginning branch cleanup:
+
+- Enumerate the complete live branch inventory from GitHub, paginating until complete.
+- For every branch, resolve its current head and record the full SHA, committer timestamp in UTC, author, subject, and commit URL. Sort newest activity first; preserve author and committer separately when they differ.
+- Report `development` and `master` separately with exact SHAs and timestamps. Recent activity proves only that a ref changed, not that it works.
+- Treat `master` as the last released/known-working baseline only when its exact SHA is supported by release/package evidence. Otherwise state that the association is unverified.
+- For every noncanonical branch, compare against current `development`, report ahead/behind counts, unique file changes, PR/review state, exact-head checks, and a reasoned disposition. Inspect actual source, tests, docs, and workflows before calling work redundant or safe to retire.
+- Distinguish no checks, queued/in-progress checks, failures, and successful exact-head evidence. Never transfer a green result from an older SHA.
+- Every portfolio summary must distinguish latest activity, divergence/reconciliation, exact-head verification, PR/review state, release baseline, and release authorization. Include links to branch heads and evidence.
+- Keep a dated, newest-first activity snapshot in the maintainer ledger. Refresh it during portfolio audits and label older snapshots historical. The Workshop command center should aggregate this across repositories so the owner does not have to inspect branch-selector menus one repository at a time.
+
 ## Architectural and release constraints
 
 - Preserve dependency direction: lower-level packages must not depend on FSM_COS.
