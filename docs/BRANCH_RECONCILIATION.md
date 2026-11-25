@@ -13,7 +13,7 @@ This is the current FSM_COS branch snapshot, refreshed from live GitHub refs and
 
 | UTC committer time | Branch | Author / committer | Latest subject | Head SHA |
 |---|---|---|---|---|
-| 2026-11-25 03:50:08 | [development](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/development) | TrentBest / TrentBest | Clarify animated moniker alternative text | [fb84797451736459ee9cd77331c1ed13cd9d342a](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/fb84797451736459ee9cd77331c1ed13cd9d342a) |
+| 2026-11-25 04:11:28 | [development](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/development) | TrentBest / TrentBest | Mark all fourteen verified branch refs explicitly deletion-ready | [6bab6fdd06d9d315c21aff64df0982501b5bae1c](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/6bab6fdd06d9d315c21aff64df0982501b5bae1c) |
 | 2026-11-24 14:50:39 | [master](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/master) | github-actions[bot] / github-actions[bot] | chore: refresh Sith policy evidence | [e4f2e3edc79980c1580ce24b93dae3a683aa1b82](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/e4f2e3edc79980c1580ce24b93dae3a683aa1b82) |
 | 2026-11-16 05:49:11 | [fix/markdown-footer-validation](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/fix/markdown-footer-validation) | TrentBest / TrentBest | fix: safely quote CiAi evidence summary fields | [1e1b139f13d049835ed02e84f75831d9c88580f5](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/1e1b139f13d049835ed02e84f75831d9c88580f5) |
 | 2026-11-14 09:58:35 | [work/ciai-evidence-hardening](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/tree/work/ciai-evidence-hardening) | TrentBest / TrentBest | Fail closed on missing or ambiguous CiAi source runs | [0158272cd516312e41e8ffa6282882325ddde22a](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/commit/0158272cd516312e41e8ffa6282882325ddde22a) |
@@ -22,13 +22,14 @@ This is the current FSM_COS branch snapshot, refreshed from live GitHub refs and
 ### Reconciliation and verification
 
 - Live FSM_COS inventory: **five branches** — `development`, `master`, and three noncanonical branches. Sith is **NON-COMPLIANT** until the owner removes the reviewed extras.
-- Divergence: `development` is 306 commits ahead of `master`; `master` is 28 commits ahead of `development`; merge base `56ad34dbe4722ba1edf9a4da6a00812eeaa29101`. Master-only differences include source, tests, benchmarks, documentation, and workflow files. Preserve this history; do not force-reset or replace master as part of branch cleanup.
-- Exact-head verification for development `fb84797451736459ee9cd77331c1ed13cd9d342a`:
-  - [Pack and publish run 45542682163](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45542682163): build, test/coverage, package verification, public-package compatibility, and source integration passed. NuGet publication was **skipped**; only artifacts were produced.
-  - [CodeQL run 45542682047](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45542682047): passed.
-  - [Sith policy run 45542682049](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45542682049): failed because the repository has five branches rather than two.
-  - [Benchmark evidence run 45542682094](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45542682094): pending at snapshot time.
-  - [CiAi commit evidence run 45542682028](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45542682028): in progress at snapshot time.
+- Divergence: `development` is 312 commits ahead of `master`; `master` is 28 commits ahead of `development`; merge base `56ad34dbe4722ba1edf9a4da6a00812eeaa29101`. Master-only differences include source, tests, benchmarks, documentation, and workflow files. Preserve this history; do not force-reset or replace master as part of branch cleanup.
+- Exact-head verification for development `6bab6fdd06d9d315c21aff64df0982501b5bae1c`:
+  - [Pack and publish run 45545064264](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45545064264): in progress at snapshot time. Do not infer publication; NuGet publishing remains unauthorized.
+  - [CodeQL run 45545064228](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45545064228): in progress at snapshot time.
+  - [Sith policy run 45545064250](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45545064250): in progress at snapshot time; the repository still has five branches, so expect the two-branch policy to fail until the owner deletes reviewed extras.
+  - [Benchmark evidence run 45545064285](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45545064285): pending at snapshot time.
+  - [CiAi commit evidence run 45545064252](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/runs/45545064252): in progress at snapshot time.
+  - Previous development head `fb84797451736459ee9cd77331c1ed13cd9d342a` had passing build/test, CodeQL, and package-verification evidence, with publication skipped. Those results are historical and are not substituted for the current exact-head checks.
 - Release baseline: no exact public-package-to-master-SHA association was established by this audit. Do not infer one from the branch name.
 
 ### Noncanonical branch dispositions
