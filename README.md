@@ -2,6 +2,11 @@
 
 # FSM_COS — The Compute Operating System for Composable Runtime Systems
 
+[![FSM_COS Pages](https://img.shields.io/website?url=https%3A%2F%2Ftrentbest.github.io%2FTheSingularityWorkshop.FSM_COS%2F&label=Pages&style=flat-square)](https://trentbest.github.io/TheSingularityWorkshop.FSM_COS/)
+[![Pages workflow](https://img.shields.io/github/actions/workflow/status/TrentBest/TheSingularityWorkshop.FSM_COS/pages.yml?branch=development&style=flat-square&label=Pages%20build)](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/workflows/pages.yml)
+
+**Explore the [FSM_COS composition portal](https://trentbest.github.io/TheSingularityWorkshop.FSM_COS/)** — a static guide to the composition boundary, contracts, and consumer evidence.
+
 [![Build Status](https://img.shields.io/github/actions/workflow/status/TrentBest/TheSingularityWorkshop.FSM_COS/package.yml?branch=development&style=flat-square&logo=github)](https://github.com/TrentBest/TheSingularityWorkshop.FSM_COS/actions/workflows/package.yml)
 [![NuGet version](https://img.shields.io/nuget/v/TheSingularityWorkshop.FSM_COS?style=flat-square&logo=nuget&logoColor=white)](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS)
 [![NuGet downloads](https://img.shields.io/nuget/dt/TheSingularityWorkshop.FSM_COS?logo=nuget&style=flat-square)](https://www.nuget.org/packages/TheSingularityWorkshop.FSM_COS)
